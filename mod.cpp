@@ -1,0 +1,11 @@
+name = "Recondo Wars";
+author = "GoonSix";
+picture = "mod.paa";
+logoSmall = "mod.paa";
+logo = "mod.paa";
+logoOver = "mod.paa";
+tooltip = "Recondo Wars";
+tooltipOwned = "Recondo Wars";
+overview = "Mission scripts converted into Eden Editor modules for easy mission making.";
+action = "";
+actionName = "";

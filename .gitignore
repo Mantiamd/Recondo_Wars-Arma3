@@ -1,0 +1,25 @@
+# Arma 3 Build Output
+*.pbo
+*.bisign
+*.biprivatekey
+keys/
+
+# Arma 3 Tools temp files
+*.bak
+*.log
+*.tmp
+temp/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# IDE/Editor
+.vscode/
+*.code-workspace
+.idea/
+
+# Misc
+*.zip
+*.rar
+*.7z
