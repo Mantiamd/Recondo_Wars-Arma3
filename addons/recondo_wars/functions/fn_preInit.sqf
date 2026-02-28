@@ -11,8 +11,8 @@ RECONDO_WARS_VERSION = "1.0.0";
 
 // AI Tweaks globals
 RECONDO_AITWEAKS_CONFIGURED_UNITS = [];
-RECONDO_AITWEAKS_SETTINGS = nil;
-RECONDO_AITWEAKS_INITIALIZED = nil;
+RECONDO_AITWEAKS_INSTANCES = [];
+RECONDO_AITWEAKS_EH_REGISTERED = false;
 
 // Player Options globals
 RECONDO_PLAYEROPTIONS_SETTINGS = nil;
@@ -237,5 +237,14 @@ RECONDO_RP_TERMINAL_OBJECTS = [];             // Objects with unlock terminal AC
 RECONDO_RP_INITIALIZED = nil;                 // Prevent duplicate init
 RECONDO_RP_KILL_HANDLER = nil;                // EntityKilled handler ID
 RECONDO_RP_DEATH_HANDLER = nil;               // Player death handler ID
+
+// Custom Site Spawn globals
+RECONDO_CSS_INSTANCES = [];
+RECONDO_CSS_SPAWNED_OBJECTS = [];
+RECONDO_CSS_TRIGGERS = [];
+RECONDO_CSS_NIGHT_LIGHT_BUILDINGS = [];
+RECONDO_CSS_ACTIVE_LIGHTS = [];
+RECONDO_CSS_NIGHT_LIGHTS_ENABLED = false;
+RECONDO_CSS_NIGHT_LIGHT_LOOP_STARTED = false;
 
 diag_log format ["[RECONDO_WARS] PreInit complete. Version: %1", RECONDO_WARS_VERSION];

@@ -6,6 +6,8 @@
         Reads module attributes, selects outpost markers, spawns compositions,
         and broadcasts configuration to all clients for ACE interactions.
         Supports bidirectional teleportation between base and outposts.
+        Supports destroyable outposts — if a key object in the composition
+        is destroyed, the outpost is permanently disabled on next mission restart.
     
     Parameters:
         0: OBJECT - Logic module
@@ -50,6 +52,10 @@ private _compositionPath = _logic getVariable ["compositionpath", "compositions"
 private _compositionListRaw = _logic getVariable ["compositionlist", ""];
 private _useModCompositions = _logic getVariable ["usemodcompositions", false];
 private _clearRadius = _logic getVariable ["clearradius", 15];
+
+// Destruction Settings
+private _destroyableClassname = _logic getVariable ["destroyableclassname", ""];
+_destroyableClassname = _destroyableClassname trim [" ", 0];
 
 // Persistence Settings
 private _enablePersistence = _logic getVariable ["enablepersistence", true];
@@ -108,7 +114,7 @@ if (_debugLogging) then {
 
 private _settings = createHashMapFromArray [
     ["instanceId", _instanceId],
-    ["allowedSideNum", _sideNum],  // Store number for serialization (SIDE types don't survive publicVariable)
+    ["allowedSideNum", _sideNum],
     ["actionText", _actionText],
     ["returnText", _returnText],
     ["cooldown", _cooldown],
@@ -122,6 +128,7 @@ private _settings = createHashMapFromArray [
     ["compositionList", _compositionList],
     ["useModCompositions", _useModCompositions],
     ["clearRadius", _clearRadius],
+    ["destroyableClassname", _destroyableClassname],
     ["enablePersistence", _enablePersistence],
     ["debugLogging", _debugLogging],
     ["debugMarkers", _debugMarkers],
@@ -137,20 +144,22 @@ RECONDO_OUTPOSTTELE_INSTANCES pushBack _settings;
 private _persistenceKey = format ["OUTPOSTTELE_%1", _instanceId];
 private _savedMarkers = [];
 private _savedCompositionMap = [];
+private _savedDestroyedMarkers = [];
 
 if (_enablePersistence) then {
     _savedMarkers = [_persistenceKey + "_MARKERS"] call Recondo_fnc_getSaveData;
     _savedCompositionMap = [_persistenceKey + "_COMPOSITIONS"] call Recondo_fnc_getSaveData;
+    _savedDestroyedMarkers = [_persistenceKey + "_DESTROYED"] call Recondo_fnc_getSaveData;
     
     if (isNil "_savedMarkers") then { _savedMarkers = [] };
     if (isNil "_savedCompositionMap") then { _savedCompositionMap = [] };
+    if (isNil "_savedDestroyedMarkers") then { _savedDestroyedMarkers = [] };
 };
 
 private _selectedMarkers = [];
-private _compositionMap = [];  // [[markerId, compositionName], ...]
+private _compositionMap = [];
 
 if (count _savedMarkers > 0 && _enablePersistence) then {
-    // Use saved state
     _selectedMarkers = _savedMarkers;
     _compositionMap = _savedCompositionMap;
     
@@ -158,16 +167,12 @@ if (count _savedMarkers > 0 && _enablePersistence) then {
         diag_log format ["[RECONDO_OUTPOSTTELE] Loaded %1 saved outpost markers", count _selectedMarkers];
     };
 } else {
-    // Fresh selection
     if (_markerMode == 0) then {
-        // Specific markers mode
         _selectedMarkers = _markerList;
     } else {
-        // Random selection mode
         _selectedMarkers = [_markerPrefix, _randomCount, _debugLogging] call Recondo_fnc_selectOutpostMarkers;
     };
     
-    // Assign compositions to markers
     if (_enableCompositions && count _compositionList > 0) then {
         {
             private _composition = "";
@@ -180,7 +185,6 @@ if (count _savedMarkers > 0 && _enablePersistence) then {
         } forEach _selectedMarkers;
     };
     
-    // Save to persistence
     if (_enablePersistence) then {
         [_persistenceKey + "_MARKERS", _selectedMarkers] call Recondo_fnc_setSaveData;
         [_persistenceKey + "_COMPOSITIONS", _compositionMap] call Recondo_fnc_setSaveData;
@@ -193,6 +197,28 @@ if (count _savedMarkers > 0 && _enablePersistence) then {
 };
 
 // ========================================
+// FILTER OUT DESTROYED OUTPOSTS
+// ========================================
+
+private _activeMarkers = [];
+
+if (count _savedDestroyedMarkers > 0) then {
+    {
+        if (_x in _savedDestroyedMarkers) then {
+            if (_debugLogging) then {
+                diag_log format ["[RECONDO_OUTPOSTTELE] Skipping destroyed outpost marker: %1", _x];
+            };
+        } else {
+            _activeMarkers pushBack _x;
+        };
+    } forEach _selectedMarkers;
+    
+    diag_log format ["[RECONDO_OUTPOSTTELE] Filtered %1 destroyed outposts. %2 active remain.", count _savedDestroyedMarkers, count _activeMarkers];
+} else {
+    _activeMarkers = +_selectedMarkers;
+};
+
+// ========================================
 // BUILD OUTPOST DATA
 // ========================================
 
@@ -202,19 +228,19 @@ private _outpostData = [];
     private _markerId = _x;
     private _markerPos = getMarkerPos _markerId;
     
-    // Skip invalid markers
     if (_markerPos isEqualTo [0,0,0]) then {
         diag_log format ["[RECONDO_OUTPOSTTELE] WARNING: Invalid marker '%1' - skipping", _markerId];
         continue;
     };
     
-    // Get display name (use custom name or marker name)
+    // Find the original index in _selectedMarkers for display name matching
+    private _originalIndex = _selectedMarkers find _markerId;
+    
     private _displayName = _markerId;
-    if (_forEachIndex < count _displayNames && {(_displayNames select _forEachIndex) != ""}) then {
-        _displayName = _displayNames select _forEachIndex;
+    if (_originalIndex >= 0 && {_originalIndex < count _displayNames} && {(_displayNames select _originalIndex) != ""}) then {
+        _displayName = _displayNames select _originalIndex;
     };
     
-    // Find composition for this marker
     private _composition = "";
     {
         if ((_x select 0) == _markerId) exitWith {
@@ -228,7 +254,8 @@ private _outpostData = [];
         ["displayName", _displayName],
         ["position", _markerPos],
         ["composition", _composition],
-        ["hasComposition", _composition != ""]
+        ["hasComposition", _composition != ""],
+        ["destroyed", false]
     ];
     
     _outpostData pushBack _outpost;
@@ -237,7 +264,7 @@ private _outpostData = [];
     if (_debugLogging) then {
         diag_log format ["[RECONDO_OUTPOSTTELE] Registered outpost: %1 at %2", _displayName, _markerPos];
     };
-} forEach _selectedMarkers;
+} forEach _activeMarkers;
 
 // ========================================
 // REGISTER BASE OBJECTS
@@ -246,13 +273,12 @@ private _outpostData = [];
 {
     private _baseData = createHashMapFromArray [
         ["instanceId", _instanceId],
-        ["netId", netId _x],  // Store netId instead of object reference
+        ["netId", netId _x],
         ["position", getPosATL _x]
     ];
     
     RECONDO_OUTPOSTTELE_BASE_OBJECTS pushBack _baseData;
     
-    // Store instance ID on object for client reference
     _x setVariable ["RECONDO_OUTPOSTTELE_INSTANCE", _instanceId, true];
     _x setVariable ["RECONDO_OUTPOSTTELE_SETTINGS", _settings, true];
     
@@ -269,6 +295,9 @@ if (_enableCompositions && count _compositionMap > 0) then {
     {
         _x params ["_markerId", "_composition"];
         
+        // Only spawn compositions for active (non-destroyed) markers
+        if (!(_markerId in _activeMarkers)) then { continue };
+        
         if (_composition != "") then {
             [_settings, _markerId, _composition] call Recondo_fnc_spawnOutpostComposition;
         };
@@ -280,7 +309,6 @@ if (_enableCompositions && count _compositionMap > 0) then {
 // ========================================
 
 if (_debugMarkers) then {
-    // Mark outposts
     {
         private _markerId = _x get "markerId";
         private _displayName = _x get "displayName";
@@ -292,7 +320,6 @@ if (_debugMarkers) then {
         _debugMarker setMarkerColor "ColorBlue";
         _debugMarker setMarkerText format ["Outpost: %1", _displayName];
         
-        // Draw radius
         private _radiusMarker = createMarker [format ["RECONDO_OUTPOST_RADIUS_%1", _markerId], _pos];
         _radiusMarker setMarkerShape "ELLIPSE";
         _radiusMarker setMarkerSize [_outpostRadius, _outpostRadius];
@@ -300,7 +327,6 @@ if (_debugMarkers) then {
         _radiusMarker setMarkerColor "ColorBlue";
     } forEach _outpostData;
     
-    // Mark base teleporters
     {
         private _pos = getPosATL _x;
         private _debugMarker = createMarker [format ["RECONDO_BASE_DEBUG_%1", _forEachIndex], _pos];
@@ -323,7 +349,8 @@ publicVariable "RECONDO_OUTPOSTTELE_BASE_OBJECTS";
 // LOG INITIALIZATION
 // ========================================
 
-diag_log format ["[RECONDO_OUTPOSTTELE] Initialized: %1 outposts, %2 base teleporters", count _outpostData, count _baseObjects];
+diag_log format ["[RECONDO_OUTPOSTTELE] Initialized: %1 outposts (%2 destroyed/filtered), %3 base teleporters", 
+    count _outpostData, count _savedDestroyedMarkers, count _baseObjects];
 
 if (_debugLogging) then {
     diag_log "[RECONDO_OUTPOSTTELE] === Module Settings ===";
@@ -331,6 +358,9 @@ if (_debugLogging) then {
     diag_log format ["[RECONDO_OUTPOSTTELE] Allowed Side: %1", _allowedSide];
     diag_log format ["[RECONDO_OUTPOSTTELE] Marker Mode: %1", if (_markerMode == 0) then { "Specific" } else { "Random" }];
     diag_log format ["[RECONDO_OUTPOSTTELE] Selected Markers: %1", _selectedMarkers];
+    diag_log format ["[RECONDO_OUTPOSTTELE] Active Markers: %1", _activeMarkers];
+    diag_log format ["[RECONDO_OUTPOSTTELE] Destroyed Markers: %1", _savedDestroyedMarkers];
+    diag_log format ["[RECONDO_OUTPOSTTELE] Destroyable Classname: %1", if (_destroyableClassname != "") then { _destroyableClassname } else { "NONE (destruction disabled)" }];
     diag_log format ["[RECONDO_OUTPOSTTELE] Compositions Enabled: %1", _enableCompositions];
     diag_log format ["[RECONDO_OUTPOSTTELE] Outpost Radius: %1m", _outpostRadius];
     diag_log format ["[RECONDO_OUTPOSTTELE] Cooldown: %1s", _cooldown];

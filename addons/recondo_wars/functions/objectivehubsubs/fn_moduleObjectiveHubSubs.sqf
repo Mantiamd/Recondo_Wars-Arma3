@@ -461,7 +461,7 @@ publicVariable "RECONDO_HUBSUBS_ACTIVE";
 
 if (_enableSmellHints) then {
     {
-        _x params ["_hubMarker", "_composition", "_subSiteMarkers", "_subSiteComps", "_isDestroyed"];
+        _x params ["_instanceId", "_hubMarker", "_compData", "_subSiteMarkers", "_isDestroyed"];
         
         // Only create smell triggers for active (not destroyed) hubs
         if (!_isDestroyed) then {

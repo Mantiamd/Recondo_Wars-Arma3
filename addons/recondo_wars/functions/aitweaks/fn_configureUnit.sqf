@@ -10,25 +10,23 @@
     Parameters:
         0: OBJECT - Unit to configure
         1: STRING - Unit type: "base", "elite", or "aa"
+        2: HASHMAP - Settings hashmap for the instance
         
     Returns:
         Nothing
         
     Example:
-        [_unit, "base"] call Recondo_fnc_configureUnit;
-        [_unit, "elite"] call Recondo_fnc_configureUnit;
-        [_unit, "aa"] call Recondo_fnc_configureUnit;
+        [_unit, "base", _settings] call Recondo_fnc_configureUnit;
 */
 
-params [["_unit", objNull, [objNull]], ["_unitType", "base", [""]]];
+params [["_unit", objNull, [objNull]], ["_unitType", "base", [""]], ["_settings", createHashMap, [createHashMap]]];
 
 if (isNull _unit) exitWith {};
 
-private _settings = RECONDO_AITWEAKS_SETTINGS;
 private _debug = _settings get "enableDebug";
 
 if (_debug) then {
-    diag_log format ["[RECONDO_AITWEAKS] Configuring unit: %1 (%2) as %3", _unit, typeOf _unit, _unitType];
+    diag_log format ["[RECONDO_AITWEAKS] Configuring unit: %1 (%2) as %3 for side %4", _unit, typeOf _unit, _unitType, _settings get "targetSideValue"];
 };
 
 // Apply skills based on unit type
@@ -39,11 +37,11 @@ private _enableSkills = switch (_unitType) do {
 };
 
 if (_enableSkills) then {
-    [_unit, _unitType] call Recondo_fnc_applySkills;
+    [_unit, _unitType, _settings] call Recondo_fnc_applySkills;
 };
 
 // Apply behavior settings
-[_unit, _unitType] call Recondo_fnc_setupBehavior;
+[_unit, _unitType, _settings] call Recondo_fnc_setupBehavior;
 
 // Remove items if enabled for this category
 private _removeGrenades = switch (_unitType) do {
@@ -53,7 +51,7 @@ private _removeGrenades = switch (_unitType) do {
 };
 
 if (_removeGrenades) then {
-    [_unit, _unitType] call Recondo_fnc_removeItems;
+    [_unit, _unitType, _settings] call Recondo_fnc_removeItems;
 };
 
 // Disable AI features based on category
@@ -92,7 +90,7 @@ private _disableAutoCombat = switch (_unitType) do {
 };
 if (_disableAutoCombat) then { _unit disableAI "AUTOCOMBAT"; };
 
-// Apply flashlights if enabled (add always, enable based on light level dynamically)
+// Apply flashlights if enabled
 private _enableFlashlights = switch (_unitType) do {
     case "elite": { _settings get "eliteEnableFlashlights" };
     case "aa": { _settings get "aaEnableFlashlights" };
@@ -111,20 +109,15 @@ if (_enableFlashlights) then {
         default { _settings get "baseFlashlightClass" };
     };
     
-    // Check if unit has a primary weapon
     private _primaryWeapon = primaryWeapon _unit;
     if (_primaryWeapon == "") then {
         if (_debug) then {
             diag_log format ["[RECONDO_AITWEAKS] Flashlight skipped for %1 - no primary weapon", _unit];
         };
     } else {
-        // Always add flashlight attachment
         _unit addPrimaryWeaponItem _flashlightClass;
-        
-        // Mark unit as having flashlight for the monitoring loop
         _unit setVariable ["RECONDO_AITWEAKS_hasFlashlight", true, true];
         
-        // Set initial state based on current light level
         private _isDark = sunOrMoon < 0.5;
         if (_isDark) then {
             _unit enableGunLights "forceOn";

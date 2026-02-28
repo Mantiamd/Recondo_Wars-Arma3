@@ -9,25 +9,22 @@
     Parameters:
         0: OBJECT - Unit to remove items from
         1: STRING - Unit type: "base", "elite", or "aa"
+        2: HASHMAP - Settings hashmap for the instance
         
     Returns:
         Nothing
 */
 
-params [["_unit", objNull, [objNull]], ["_unitType", "base", [""]]];
+params [["_unit", objNull, [objNull]], ["_unitType", "base", [""]], ["_settings", createHashMap, [createHashMap]]];
 
 if (isNull _unit) exitWith {};
 
-private _settings = RECONDO_AITWEAKS_SETTINGS;
-
-// Get the grenades list for this unit type
 private _grenadesToRemove = switch (_unitType) do {
     case "elite": { _settings get "eliteGrenadesArray" };
     case "aa": { _settings get "aaGrenadesArray" };
     default { _settings get "baseGrenadesArray" };
 };
 
-// Remove each grenade type
 {
     _unit removeMagazines _x;
 } forEach _grenadesToRemove;

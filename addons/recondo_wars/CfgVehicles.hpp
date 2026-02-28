@@ -40,7 +40,7 @@ class CfgVehicles {
         icon = "\recondo_wars\images\icons\AI_Tweaks.paa";
         
         class ModuleDescription: ModuleDescription {
-            description = "Configures AI skill levels, behavior, and equipment. Base settings apply to all units except those defined as Elite Soldiers or AA Gunners.";
+            description = "Configures AI skill levels, behavior, and equipment per side. Place one module per side you want to tweak. Base settings apply to all units except those defined as Elite Soldiers or AA Gunners.";
             sync[] = {};
         };
         
@@ -4833,8 +4833,8 @@ class CfgVehicles {
             };
             class CustomActiveCompositions {
                 displayName = "CUSTOM - Active Compositions";
-                tooltip = "Names of your custom composition files (without .sqe extension), one per line. Random selection per objective.";
-                control = "EditMulti5";
+                tooltip = "Names of your custom composition files (with or without .sqe extension), one per line or comma-separated. Random selection per objective.";
+                control = "EditCodeMulti5";
                 property = "Recondo_ObjDestroy_CustomActiveComps";
                 expression = "_this setVariable ['customactivecomps', _value, true];";
                 typeName = "STRING";
@@ -4843,8 +4843,8 @@ class CfgVehicles {
             };
             class CustomDestroyedCompositions {
                 displayName = "CUSTOM - Destroyed Compositions";
-                tooltip = "Names of custom destroyed variant composition files (without .sqe), one per line. Leave empty to spawn nothing after destruction.";
-                control = "EditMulti5";
+                tooltip = "Names of custom destroyed variant composition files (with or without .sqe extension), one per line or comma-separated. Leave empty to spawn nothing after destruction.";
+                control = "EditCodeMulti5";
                 property = "Recondo_ObjDestroy_CustomDestroyedComps";
                 expression = "_this setVariable ['customdestroyedcomps', _value, true];";
                 typeName = "STRING";
@@ -5423,7 +5423,7 @@ class CfgVehicles {
             };
             class CustomActiveCompositions {
                 displayName = "CUSTOM - Active Compositions";
-                tooltip = "Your custom composition names for active hubs (without .sqe extension). One per line or comma-separated.";
+                tooltip = "Your custom composition names for active hubs (with or without .sqe extension). One per line or comma-separated.";
                 control = "EditCodeMulti5";
                 property = "Recondo_HubSubs_CustomActiveComps";
                 expression = "_this setVariable ['customactivecomps', _value, true];";
@@ -5433,7 +5433,7 @@ class CfgVehicles {
             };
             class CustomDestroyedCompositions {
                 displayName = "CUSTOM - Destroyed Compositions";
-                tooltip = "Your custom composition names for destroyed hubs. One per line or comma-separated.";
+                tooltip = "Your custom composition names for destroyed hubs (with or without .sqe extension). One per line or comma-separated.";
                 control = "EditCodeMulti5";
                 property = "Recondo_HubSubs_CustomDestroyedComps";
                 expression = "_this setVariable ['customdestroyedcomps', _value, true];";
@@ -6113,7 +6113,7 @@ class CfgVehicles {
             };
             class CustomActiveCompositions {
                 displayName = "CUSTOM - Composition List";
-                tooltip = "List of your custom composition filenames (with .sqe extension).\nComma-separated. These are added to the pool alongside checked compositions above.";
+                tooltip = "List of your custom composition filenames (with or without .sqe extension).\nOne per line or comma-separated. These are added to the pool alongside checked compositions above.";
                 control = "EditCodeMulti5";
                 property = "Recondo_HVT_CustomActiveComps";
                 expression = "_this setVariable ['customactivecomps', _value, true];";
@@ -6864,7 +6864,7 @@ class CfgVehicles {
             };
             class CustomActiveCompositions {
                 displayName = "CUSTOM - Composition List";
-                tooltip = "List of your custom composition filenames (with .sqe extension).\nComma-separated. These are added to the pool alongside checked compositions above.";
+                tooltip = "List of your custom composition filenames (with or without .sqe extension).\nOne per line or comma-separated. These are added to the pool alongside checked compositions above.";
                 control = "EditCodeMulti5";
                 property = "Recondo_Hostage_CustomActiveComps";
                 expression = "_this setVariable ['customactivecomps', _value, true];";
@@ -7395,7 +7395,7 @@ class CfgVehicles {
             };
             class CustomActiveCompositions {
                 displayName = "Active Compositions";
-                tooltip = "List of custom composition filenames for active jammers. One per line or comma-separated. These must have matching destroyed versions with '_destroyed' suffix.";
+                tooltip = "List of custom composition filenames for active jammers (with or without .sqe extension). One per line or comma-separated. These must have matching destroyed versions with '_destroyed' suffix.";
                 control = "EditCodeMulti5";
                 property = "Recondo_Jammer_CustomActiveComps";
                 expression = "_this setVariable ['customactivecomps', _value, true];";
@@ -7405,7 +7405,7 @@ class CfgVehicles {
             };
             class CustomDestroyedCompositions {
                 displayName = "Destroyed Compositions";
-                tooltip = "List of custom composition filenames for destroyed jammers. Should match the order of Active Compositions. If empty, '_destroyed' suffix is auto-appended to active names.";
+                tooltip = "List of custom composition filenames for destroyed jammers (with or without .sqe extension). Should match the order of Active Compositions. If empty, '_destroyed' suffix is auto-appended to active names.";
                 control = "EditCodeMulti5";
                 property = "Recondo_Jammer_CustomDestroyedComps";
                 expression = "_this setVariable ['customdestroyedcomps', _value, true];";
@@ -9841,6 +9841,20 @@ class CfgVehicles {
             };
             
             // ========================================
+            // DESTRUCTION SETTINGS
+            // ========================================
+            class DestroyableClassname {
+                displayName = "DESTRUCTION - Destroyable Object Classname";
+                tooltip = "Classname of an object within the composition that can be destroyed by the enemy. When destroyed, the outpost is permanently disabled on next mission restart. Leave empty to disable destruction.";
+                control = "Edit";
+                property = "Recondo_OutpostTele_DestroyableClassname";
+                expression = "_this setVariable ['destroyableclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_OutpostTele_Destruction";
+            };
+            
+            // ========================================
             // PERSISTENCE SETTINGS
             // ========================================
             class EnablePersistence {
@@ -10798,8 +10812,8 @@ class CfgVehicles {
             };
             class CustomCompositions {
                 displayName = "CUSTOM - Composition List";
-                tooltip = "Your custom composition filenames (without .sqe). One per line. These are added to checked compositions above.";
-                control = "EditMulti5";
+                tooltip = "Your custom composition filenames (with or without .sqe extension). One per line or comma-separated. These are added to checked compositions above.";
+                control = "EditCodeMulti5";
                 property = "Recondo_CampsRandom_CustomComps";
                 expression = "_this setVariable ['customcompositions', _value, true];";
                 typeName = "STRING";
@@ -12484,6 +12498,343 @@ class CfgVehicles {
                 expression = "_this setVariable ['debuglogging', _value, true];";
                 typeName = "BOOL";
                 defaultValue = "false";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    //==========================================
+    // CUSTOM SITE SPAWN MODULE
+    //==========================================
+    class Recondo_Module_CustomSiteSpawn: Module_F {
+        scope = 2;
+        displayName = "Custom Site Spawn";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Modules";
+        function = "Recondo_fnc_moduleCustomSiteSpawn";
+        functionPriority = 1;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 1;
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\default_ca.paa";
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Spawns custom compositions from mission folder at map markers with optional garrison AI, patrols, and persistence.";
+            sync[] = {};
+        };
+        
+        class Attributes: AttributesBase {
+            
+            // ========================================
+            // GENERAL SETTINGS
+            // ========================================
+            class SiteName {
+                displayName = "Site Name";
+                tooltip = "Descriptive name for this site type (used in logging and persistence keys).";
+                control = "Edit";
+                property = "Recondo_CSS_SiteName";
+                expression = "_this setVariable ['sitename', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Custom Site""";
+                category = "Recondo_CSS_General";
+            };
+            class MarkerPrefix {
+                displayName = "Marker Prefix";
+                tooltip = "Prefix for invisible map markers where sites can spawn. All markers starting with this prefix will be detected.";
+                control = "Edit";
+                property = "Recondo_CSS_MarkerPrefix";
+                expression = "_this setVariable ['markerprefix', _value, true];";
+                typeName = "STRING";
+                defaultValue = """SITE_""";
+                category = "Recondo_CSS_General";
+            };
+            class ActiveCount {
+                displayName = "Active Site Count";
+                tooltip = "Number of markers to randomly select as active sites. If more than available markers, all markers will be used.";
+                control = "Edit";
+                property = "Recondo_CSS_ActiveCount";
+                expression = "_this setVariable ['activecount', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "3";
+                category = "Recondo_CSS_General";
+            };
+            class EnablePersistence {
+                displayName = "Enable Persistence";
+                tooltip = "When enabled, selected markers are saved and reused across mission restarts. When disabled, markers are randomly re-selected each time.";
+                control = "Checkbox";
+                property = "Recondo_CSS_EnablePersistence";
+                expression = "_this setVariable ['enablepersistence', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_CSS_General";
+            };
+            
+            // ========================================
+            // COMPOSITION SETTINGS
+            // ========================================
+            class CompositionPath {
+                displayName = "Composition Folder Path";
+                tooltip = "Path to compositions folder relative to mission root.";
+                control = "Edit";
+                property = "Recondo_CSS_CompositionPath";
+                expression = "_this setVariable ['compositionpath', _value, true];";
+                typeName = "STRING";
+                defaultValue = """compositions""";
+                category = "Recondo_CSS_Compositions";
+            };
+            class CompositionList {
+                displayName = "Composition Files";
+                tooltip = "List of composition filenames (with or without .sqe extension). One per line or comma-separated. A random composition is selected per site.";
+                control = "EditCodeMulti5";
+                property = "Recondo_CSS_CompositionList";
+                expression = "_this setVariable ['compositionlist', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CSS_Compositions";
+            };
+            class ClearRadius {
+                displayName = "Terrain Clear Radius";
+                tooltip = "Radius (meters) around each marker to hide terrain objects before spawning the composition. Set to 0 to skip terrain clearing.";
+                control = "Edit";
+                property = "Recondo_CSS_ClearRadius";
+                expression = "_this setVariable ['clearradius', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "25";
+                category = "Recondo_CSS_Compositions";
+            };
+            class DisableSimulation {
+                displayName = "Disable Simulation on Objects";
+                tooltip = "Disables physics simulation on spawned composition objects for better performance. Recommended for static decorative objects.";
+                control = "Checkbox";
+                property = "Recondo_CSS_DisableSimulation";
+                expression = "_this setVariable ['disablesimulation', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_CSS_Compositions";
+            };
+            
+            // ========================================
+            // SPAWNING SETTINGS
+            // ========================================
+            class SpawnMode {
+                displayName = "Spawn Mode";
+                tooltip = "Immediate: spawns all sites on mission start. Proximity: spawns when the defined side enters the trigger radius.";
+                control = "Combo";
+                property = "Recondo_CSS_SpawnMode";
+                expression = "_this setVariable ['spawnmode', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                class values {
+                    class Immediate {
+                        name = "Immediate (Mission Start)";
+                        value = 0;
+                    };
+                    class Proximity {
+                        name = "Proximity Trigger";
+                        value = 1;
+                    };
+                };
+                category = "Recondo_CSS_Spawning";
+            };
+            class TriggerRadius {
+                displayName = "Trigger Radius (meters)";
+                tooltip = "Distance at which the composition spawns when using Proximity mode.";
+                control = "Edit";
+                property = "Recondo_CSS_TriggerRadius";
+                expression = "_this setVariable ['triggerradius', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "800";
+                category = "Recondo_CSS_Spawning";
+            };
+            class TriggerSide {
+                displayName = "Trigger Side";
+                tooltip = "Which side activates the proximity trigger.";
+                control = "Combo";
+                property = "Recondo_CSS_TriggerSide";
+                expression = "_this setVariable ['triggerside', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "1";
+                class values {
+                    class East {
+                        name = "EAST (OPFOR)";
+                        value = 0;
+                    };
+                    class West {
+                        name = "WEST (BLUFOR)";
+                        value = 1;
+                    };
+                    class Guer {
+                        name = "GUER (Independent)";
+                        value = 2;
+                    };
+                    class Any {
+                        name = "ANY";
+                        value = 3;
+                    };
+                };
+                category = "Recondo_CSS_Spawning";
+            };
+            
+            // ========================================
+            // GARRISON AI
+            // ========================================
+            class GarrisonClassnames {
+                displayName = "Garrison Unit Classnames";
+                tooltip = "Comma-separated list of unit classnames for garrison AI. Leave empty for no garrison.";
+                control = "EditCodeMulti5";
+                property = "Recondo_CSS_GarrisonClassnames";
+                expression = "_this setVariable ['garrisonclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CSS_Garrison";
+            };
+            class GarrisonCount {
+                displayName = "Garrison Count";
+                tooltip = "Number of garrison units to spawn at each site.";
+                control = "Edit";
+                property = "Recondo_CSS_GarrisonCount";
+                expression = "_this setVariable ['garrisoncount', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "4";
+                category = "Recondo_CSS_Garrison";
+            };
+            class GarrisonSide {
+                displayName = "Garrison Side";
+                tooltip = "Side of spawned garrison units.";
+                control = "Combo";
+                property = "Recondo_CSS_GarrisonSide";
+                expression = "_this setVariable ['garrisonside', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                class values {
+                    class East {
+                        name = "EAST (OPFOR)";
+                        value = 0;
+                    };
+                    class West {
+                        name = "WEST (BLUFOR)";
+                        value = 1;
+                    };
+                    class Guer {
+                        name = "GUER (Independent)";
+                        value = 2;
+                    };
+                };
+                category = "Recondo_CSS_Garrison";
+            };
+            
+            // ========================================
+            // PATROL AI
+            // ========================================
+            class EnablePatrols {
+                displayName = "Enable Patrols";
+                tooltip = "Spawn patrol groups that roam around the site.";
+                control = "Checkbox";
+                property = "Recondo_CSS_EnablePatrols";
+                expression = "_this setVariable ['enablepatrols', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_CSS_Patrols";
+            };
+            class PatrolClassnames {
+                displayName = "Patrol Unit Classnames";
+                tooltip = "Comma-separated list of unit classnames for patrol groups. If empty, uses garrison classnames.";
+                control = "EditCodeMulti5";
+                property = "Recondo_CSS_PatrolClassnames";
+                expression = "_this setVariable ['patrolclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CSS_Patrols";
+            };
+            class PatrolCount {
+                displayName = "Number of Patrol Groups";
+                tooltip = "Number of patrol groups to spawn per site.";
+                control = "Edit";
+                property = "Recondo_CSS_PatrolCount";
+                expression = "_this setVariable ['patrolcount', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "1";
+                category = "Recondo_CSS_Patrols";
+            };
+            class PatrolSize {
+                displayName = "Patrol Group Size";
+                tooltip = "Number of units per patrol group.";
+                control = "Edit";
+                property = "Recondo_CSS_PatrolSize";
+                expression = "_this setVariable ['patrolsize', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "3";
+                category = "Recondo_CSS_Patrols";
+            };
+            class PatrolRadius {
+                displayName = "Patrol Radius (meters)";
+                tooltip = "Distance from site center that patrols will roam.";
+                control = "Edit";
+                property = "Recondo_CSS_PatrolRadius";
+                expression = "_this setVariable ['patrolradius', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "75";
+                category = "Recondo_CSS_Patrols";
+            };
+            class PatrolFormation {
+                displayName = "Patrol Formation";
+                tooltip = "Formation used by patrol groups.";
+                control = "Combo";
+                property = "Recondo_CSS_PatrolFormation";
+                expression = "_this setVariable ['patrolformation', _value, true];";
+                typeName = "STRING";
+                defaultValue = """WEDGE""";
+                class values {
+                    class Wedge { name = "WEDGE"; value = "WEDGE"; };
+                    class Column { name = "COLUMN"; value = "COLUMN"; };
+                    class StagColumn { name = "STAG COLUMN"; value = "STAG COLUMN"; };
+                    class Line { name = "LINE"; value = "LINE"; };
+                    class File { name = "FILE"; value = "FILE"; };
+                    class Vee { name = "VEE"; value = "VEE"; };
+                };
+                category = "Recondo_CSS_Patrols";
+            };
+            
+            // ========================================
+            // NIGHT LIGHTS
+            // ========================================
+            class EnableNightLights {
+                displayName = "Enable Night Lights";
+                tooltip = "Automatically light buildings in spawned compositions at night.";
+                control = "Checkbox";
+                property = "Recondo_CSS_EnableNightLights";
+                expression = "_this setVariable ['enablenightlights', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_CSS_NightLights";
+            };
+            
+            // ========================================
+            // DEBUG
+            // ========================================
+            class DebugLogging {
+                displayName = "Debug Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_CSS_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_CSS_Debug";
+            };
+            class DebugMarkers {
+                displayName = "Debug Map Markers";
+                tooltip = "Show debug markers on the map for all sites.";
+                control = "Checkbox";
+                property = "Recondo_CSS_DebugMarkers";
+                expression = "_this setVariable ['debugmarkers', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_CSS_Debug";
             };
             
             class ModuleDescription: ModuleDescription {};

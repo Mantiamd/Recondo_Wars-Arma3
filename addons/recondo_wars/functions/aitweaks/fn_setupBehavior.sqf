@@ -10,18 +10,16 @@
     Parameters:
         0: OBJECT - Unit to configure
         1: STRING - Unit type: "base", "elite", or "aa"
+        2: HASHMAP - Settings hashmap for the instance
         
     Returns:
         Nothing
 */
 
-params [["_unit", objNull, [objNull]], ["_unitType", "base", [""]]];
+params [["_unit", objNull, [objNull]], ["_unitType", "base", [""]], ["_settings", createHashMap, [createHashMap]]];
 
 if (isNull _unit) exitWith {};
 
-private _settings = RECONDO_AITWEAKS_SETTINGS;
-
-// Get settings based on unit type
 private _forceWalk = switch (_unitType) do {
     case "elite": { _settings get "eliteForceWalk" };
     case "aa": { _settings get "aaForceWalk" };
@@ -40,19 +38,15 @@ private _animSpeedCoef = switch (_unitType) do {
     default { _settings get "baseAnimSpeedCoef" };
 };
 
-// Apply animation speed (remoteExec for dedicated server compatibility)
 [_unit, _animSpeedCoef] remoteExec ["setAnimSpeedCoef", 0, _unit];
 
-// Force stand (continuously enforced)
 if (_forceStand) then {
     _unit setUnitPos "UP";
 };
 
-// Force walk behavior
 if (_forceWalk) then {
     _unit forceWalk true;
     
-    // Add event handlers to release walk restriction when combat starts
     _unit addEventHandler ["FiredNear", {
         params ["_unit"];
         if (_unit getVariable ["RECONDO_WALK_RELEASED", false]) exitWith {};

@@ -63,7 +63,8 @@ if (_debugLogging) then {
     private _debugLogging = _settings get "debugLogging";
     
     // Load and spawn composition
-    private _result = [_compositionPath, _composition, _markerPos, _markerDir, _debugLogging] call Recondo_fnc_loadComposition;
+    private _isModPath = _compositionPath select [0, 1] == "\";
+    private _result = [_compositionPath, _composition, _markerPos, _markerDir, _debugLogging, _isModPath] call Recondo_fnc_loadComposition;
     _result params ["_spawnedObjects", "_targetObject"];
     
     if (count _spawnedObjects == 0) exitWith {

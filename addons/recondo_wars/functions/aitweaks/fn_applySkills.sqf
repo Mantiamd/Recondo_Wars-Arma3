@@ -9,21 +9,18 @@
     Parameters:
         0: OBJECT - Unit to apply skills to
         1: STRING - Unit type: "base", "elite", or "aa"
+        2: HASHMAP - Settings hashmap for the instance
         
     Returns:
         Nothing
         
     Example:
-        [_unit, "base"] call Recondo_fnc_applySkills;
-        [_unit, "elite"] call Recondo_fnc_applySkills;
-        [_unit, "aa"] call Recondo_fnc_applySkills;
+        [_unit, "base", _settings] call Recondo_fnc_applySkills;
 */
 
-params [["_unit", objNull, [objNull]], ["_unitType", "base", [""]]];
+params [["_unit", objNull, [objNull]], ["_unitType", "base", [""]], ["_settings", createHashMap, [createHashMap]]];
 
 if (isNull _unit) exitWith {};
-
-private _settings = RECONDO_AITWEAKS_SETTINGS;
 
 switch (_unitType) do {
     case "elite": {
@@ -49,7 +46,6 @@ switch (_unitType) do {
         _unit setSkill ["reloadSpeed", _settings get "aaReloadSpeed"];
     };
     default {
-        // Base soldiers
         _unit setSkill ["aimingAccuracy", _settings get "baseAimingAccuracy"];
         _unit setSkill ["aimingShake", _settings get "baseAimingShake"];
         _unit setSkill ["aimingSpeed", _settings get "baseAimingSpeed"];

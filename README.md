@@ -5,25 +5,28 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 ## Features
 
 ### AI Systems
-- **AI Tweaks** - Configure AI skill levels, behavior, equipment removal, and mine knowledge
+- **AI Tweaks** - Configure AI skill levels, behavior, equipment removal, and mine knowledge per side (supports multiple instances for different sides)
+- **Player Options** - Configure player-specific settings and restrictions
 - **Foot Patrols** - Spawn randomized foot patrol groups with configurable routes
 - **Path Patrols** - Create patrols that follow specific marker paths
 - **Add AI Crew** - Dynamically add crew members to player vehicles
 - **Static Defense Randomized** - Spawn randomized static weapon positions
+- **Eldest Son** - Sabotaged ammunition system that poisons enemy weapons over time
+- **Limit Static Weapon Movement** - Restrict ACE carry/drag on static weapons
 
 ### Mission Objectives
 - **Objective Destroy** - Destructible target objectives with composition support
 - **Objective HVT** - High-Value Target capture/kill objectives with custom profiles
 - **Objective Hostages** - Hostage rescue objectives with AI guards
 - **Objective Jammer** - Radio jammer objectives that affect communications
-- **Objective Hub & Subs** - Connected objective systems
+- **Objective Hub & Subs** - Connected hub and sub-site objective systems
 
 ### Intel & Reconnaissance
 - **Intel System** - Collectible intelligence items from enemies and locations
 - **Intel Items** - Configure custom intel item classnames
 - **Intel Board** - Visual tracking board for collected intelligence
 - **Recon Points** - Award points for reconnaissance activities
-- **Sensors** - Deployable ground sensors for foot/vehicle detection
+- **Sensors** - Deployable ground sensors for foot/vehicle detection with persistent logging
 - **Wiretap** - Telephone pole wiretapping system
 
 ### Radio & Communications
@@ -33,24 +36,29 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 
 ### Extraction & Movement
 - **STABO Extraction** - Helicopter extraction via STABO rig with body/casualty attachment
-- **Outpost Teleport** - Base-to-outpost teleportation system
+- **Outpost Teleport** - Base-to-outpost teleportation with optional destroyable outposts and compositions
+- **Deployable Rally Point** - Player-deployable rally points with ACE interactions
 - **JIP Area** - Join-In-Progress spawn areas
 
 ### Environment & Ambiance
 - **Weather Control** - Dynamic weather and time control
 - **Ambient Sound** - Configurable ambient sound zones
-- **Civilian Systems** - Working civilians, traffic, and village populations
+- **Civilians Working** - Working civilians in fields and villages
+- **Civilian Traffic** - Ambient civilian vehicle traffic
+- **Civilian POL** - Persistent civilian pattern-of-life system
+- **Custom Site Spawn** - Spawn custom compositions at markers with garrison AI, patrols, and night lighting
+- **Camps Random** - Randomized camp placement with composition support
 
 ### Utility Modules
-- **Persistence** - Save/load mission state across sessions
+- **Persistence** - Save/load mission state across sessions with campaign ID support
 - **Intro Screen** - Mission introduction screens
-- **Terminal** - Admin terminal for mission control
+- **Terminal** - Admin terminal for mission control and persistence reset
 - **Arsenal Area** - Configurable arsenal access zones
+- **Disable Rations Area** - Zones where ACE rations are disabled
 - **Chat Control** - Control chat channel availability
 - **ACE Spectator Object** - Enter spectator mode from objects
 - **Convoy System** - Automated convoy spawning and routing
 - **Performance Monitor** - Mission performance monitoring
-- **Limit Static Weapon Movement** - Restrict ACE carry on static weapons
 
 ## Requirements
 

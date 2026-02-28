@@ -26,6 +26,7 @@ class CfgFunctions {
             class removeItems {};
             class setupBehavior {};
             class initMineKnowledge {};
+            class getAITweaksUnitType {};
         };
         
         // Player Options Module Functions
@@ -430,6 +431,7 @@ class CfgFunctions {
             class spawnOutpostComposition {};
             class teleportToOutpost {};
             class teleportToBase {};
+            class outpostDestroyed {};
         };
         
         // Side Chat and Marker Control Module Functions
@@ -570,6 +572,15 @@ class CfgFunctions {
         class StaticWeaponLimit {
             file = "\recondo_wars\functions\staticweaponlimit";
             class moduleStaticWeaponLimit {};
+        };
+        
+        // Custom Site Spawn Module Functions
+        class CustomSiteSpawn {
+            file = "\recondo_wars\functions\customsitespawn";
+            class moduleCustomSiteSpawn {};
+            class spawnCustomSite {};
+            class createCustomSiteTrigger {};
+            class updateCustomSiteNightLights {};
         };
         
     };

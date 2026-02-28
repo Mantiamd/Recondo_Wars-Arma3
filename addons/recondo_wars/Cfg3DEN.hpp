@@ -1920,6 +1920,13 @@ class Cfg3DEN {
                 class Attributes {};
             };
             
+            // Destruction Settings
+            class Recondo_OutpostTele_Destruction {
+                displayName = "Destruction";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
             // Persistence Settings
             class Recondo_OutpostTele_Persistence {
                 displayName = "Persistence";
@@ -2062,6 +2069,52 @@ class Cfg3DEN {
             
             // Debug Settings
             class Recondo_Blindfold_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            //==========================================
+            // CUSTOM SITE SPAWN MODULE CATEGORIES
+            //==========================================
+            
+            class Recondo_CSS_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_CSS_Compositions {
+                displayName = "Compositions";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_CSS_Spawning {
+                displayName = "Spawning";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_CSS_Garrison {
+                displayName = "Garrison AI";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            class Recondo_CSS_Patrols {
+                displayName = "Patrol AI";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            class Recondo_CSS_NightLights {
+                displayName = "Night Lights";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            class Recondo_CSS_Debug {
                 displayName = "Debug";
                 collapsed = 1;
                 class Attributes {};

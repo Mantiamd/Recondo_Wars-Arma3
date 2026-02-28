@@ -54,6 +54,8 @@ if (isNil "RECONDO_AITWEAKS_RESPAWN_EH") then {
 };
 
 // Debug logging
-if (!isNil "RECONDO_AITWEAKS_SETTINGS" && {RECONDO_AITWEAKS_SETTINGS get "enableDebug"}) then {
+private _anyDebug = false;
+{ if (_x get "enableDebug") exitWith { _anyDebug = true; }; } forEach (missionNamespace getVariable ["RECONDO_AITWEAKS_INSTANCES", []]);
+if (_anyDebug) then {
     diag_log format ["[RECONDO_AITWEAKS] Mine knowledge prevention initialized for player: %1", player];
 };
