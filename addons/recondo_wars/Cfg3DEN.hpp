@@ -2119,6 +2119,62 @@ class Cfg3DEN {
                 collapsed = 1;
                 class Attributes {};
             };
+            
+            //==========================================
+            // BAD CIVI MODULE CATEGORIES
+            //==========================================
+            
+            class Recondo_BC_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_BC_Weapon {
+                displayName = "Weapon";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_BC_Behavior {
+                displayName = "Behavior";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_BC_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            //==========================================
+            // DESTROY POWERGRID MODULE CATEGORIES
+            //==========================================
+            
+            class Recondo_PG_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_PG_TurnOff {
+                displayName = "Turn Off Mode";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_PG_Destroy {
+                displayName = "Destroy Mode";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_PG_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
         };
     };
     

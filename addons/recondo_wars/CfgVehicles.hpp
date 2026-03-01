@@ -12840,4 +12840,286 @@ class CfgVehicles {
             class ModuleDescription: ModuleDescription {};
         };
     };
+    
+    //==========================================
+    // BAD CIVI MODULE
+    //==========================================
+    class Recondo_Module_BadCivi: Module_F {
+        scope = 2;
+        displayName = "Bad Civi";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Modules";
+        function = "Recondo_fnc_moduleBadCivi";
+        functionPriority = 5;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 1;
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\kill_ca.paa";
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Sync to one or more AI units. Strips their weapons so they appear unarmed. When the configured side enters detection range, each unit independently rolls a chance to pull a concealed weapon and switch to combat. Supports multiple modules.";
+            sync[] = {};
+        };
+        
+        class Attributes: AttributesBase {
+            
+            // ========================================
+            // GENERAL SETTINGS
+            // ========================================
+            class TriggerSide {
+                displayName = "Trigger Side";
+                tooltip = "Which side's presence triggers the weapon pull.";
+                control = "Combo";
+                property = "Recondo_BC_TriggerSide";
+                expression = "_this setVariable ['triggerside', _value, true];";
+                typeName = "STRING";
+                defaultValue = """WEST""";
+                class values {
+                    class West {
+                        name = "WEST (BLUFOR)";
+                        value = "WEST";
+                    };
+                    class East {
+                        name = "EAST (OPFOR)";
+                        value = "EAST";
+                    };
+                    class Guer {
+                        name = "GUER (Independent)";
+                        value = "GUER";
+                    };
+                    class Any {
+                        name = "ANY";
+                        value = "ANY";
+                    };
+                };
+                category = "Recondo_BC_General";
+            };
+            class DetectionDistance {
+                displayName = "Detection Distance (meters)";
+                tooltip = "How close the trigger side must be before the unit may pull a weapon.";
+                control = "Edit";
+                property = "Recondo_BC_DetectionDistance";
+                expression = "_this setVariable ['detectiondistance', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "5";
+                category = "Recondo_BC_General";
+            };
+            class Chance {
+                displayName = "Chance (%)";
+                tooltip = "Percent chance (0-100) each unit pulls a weapon when triggered. If the roll fails, it will try again the next time the side enters the radius.";
+                control = "Edit";
+                property = "Recondo_BC_Chance";
+                expression = "_this setVariable ['chance', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "50";
+                category = "Recondo_BC_General";
+            };
+            
+            // ========================================
+            // WEAPON SETTINGS
+            // ========================================
+            class WeaponClassname {
+                displayName = "Weapon Classname";
+                tooltip = "Classname of the weapon the unit pulls out.";
+                control = "Edit";
+                property = "Recondo_BC_WeaponClassname";
+                expression = "_this setVariable ['weaponclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """hgun_Pistol_01_F""";
+                category = "Recondo_BC_Weapon";
+            };
+            class MagazineClassname {
+                displayName = "Magazine Classname";
+                tooltip = "Classname of the compatible magazine for the weapon.";
+                control = "Edit";
+                property = "Recondo_BC_MagazineClassname";
+                expression = "_this setVariable ['magazineclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """10Rnd_9x21_Mag""";
+                category = "Recondo_BC_Weapon";
+            };
+            class MagazineCount {
+                displayName = "Magazine Count";
+                tooltip = "Number of magazines to add when the weapon is given.";
+                control = "Edit";
+                property = "Recondo_BC_MagazineCount";
+                expression = "_this setVariable ['magazinecount', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "1";
+                category = "Recondo_BC_Weapon";
+            };
+            
+            // ========================================
+            // BEHAVIOR SETTINGS
+            // ========================================
+            class DisableMovement {
+                displayName = "Disable Movement";
+                tooltip = "Disables the unit's movement AI at init so they stay in place until triggered. Movement is re-enabled when they pull a weapon.";
+                control = "Checkbox";
+                property = "Recondo_BC_DisableMovement";
+                expression = "_this setVariable ['disablemovement', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_BC_Behavior";
+            };
+            class ForceStanding {
+                displayName = "Force Standing";
+                tooltip = "Forces the unit to stand upright at init.";
+                control = "Checkbox";
+                property = "Recondo_BC_ForceStanding";
+                expression = "_this setVariable ['forcestanding', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_BC_Behavior";
+            };
+            
+            // ========================================
+            // DEBUG
+            // ========================================
+            class DebugLogging {
+                displayName = "Debug Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_BC_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_BC_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    //==========================================
+    // DESTROY POWERGRID MODULE
+    //==========================================
+    class Recondo_Module_DestroyPowergrid: Module_F {
+        scope = 2;
+        displayName = "Destroy Powergrid";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Modules";
+        function = "Recondo_fnc_moduleDestroyPowergrid";
+        functionPriority = 5;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 1;
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\destroy_ca.paa";
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Turns off or destroys lights within a radius by interacting with or destroying a synced object. Sync to a world object in Eden. Supports multiple instances for different locations.";
+            sync[] = {};
+        };
+        
+        class Attributes: AttributesBase {
+            
+            // ========================================
+            // GENERAL SETTINGS
+            // ========================================
+            class Mode {
+                displayName = "Mode";
+                tooltip = "Turn Off Power: adds an ACE interaction to toggle power on/off (reversible, objects intact). Destroy Object: destroying the synced object permanently kills power (lamps physically damaged).";
+                control = "Combo";
+                property = "Recondo_PG_Mode";
+                expression = "_this setVariable ['mode', _value, true];";
+                typeName = "STRING";
+                defaultValue = """turnoff""";
+                class values {
+                    class TurnOff {
+                        name = "Turn Off Power (ACE Action)";
+                        value = "turnoff";
+                    };
+                    class Destroy {
+                        name = "Destroy Object";
+                        value = "destroy";
+                    };
+                    class Both {
+                        name = "Both (ACE Action + Destroy)";
+                        value = "both";
+                    };
+                };
+                category = "Recondo_PG_General";
+            };
+            class EffectRadius {
+                displayName = "Effect Radius (meters)";
+                tooltip = "Radius around the synced object in which lights will be turned off or destroyed. All objects with light sources within this radius are affected.";
+                control = "Edit";
+                property = "Recondo_PG_EffectRadius";
+                expression = "_this setVariable ['effectradius', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "300";
+                category = "Recondo_PG_General";
+            };
+            class AdditionalClassnames {
+                displayName = "Additional Object Classnames";
+                tooltip = "Extra object classnames to target beyond the built-in lamp and powerline classes (Lamps_Base_F, PowerLines_base_F, Land_PowerPoleWooden_L_F). One per line or comma-separated. Only relevant for Destroy mode physical damage — switchLight is applied to ALL objects regardless.";
+                control = "EditCodeMulti5";
+                property = "Recondo_PG_AdditionalClassnames";
+                expression = "_this setVariable ['additionalclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_PG_General";
+            };
+            
+            // ========================================
+            // TURN OFF MODE SETTINGS
+            // ========================================
+            class ActionText {
+                displayName = "ACE Action Text — Turn Off";
+                tooltip = "Display text for the ACE interaction to turn off power. Only used in Turn Off Power mode.";
+                control = "Edit";
+                property = "Recondo_PG_ActionText";
+                expression = "_this setVariable ['actiontext', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Turn Off Power""";
+                category = "Recondo_PG_TurnOff";
+            };
+            class RestoreActionText {
+                displayName = "ACE Action Text — Turn On";
+                tooltip = "Display text for the ACE interaction to restore power. Only used in Turn Off Power mode.";
+                control = "Edit";
+                property = "Recondo_PG_RestoreActionText";
+                expression = "_this setVariable ['restoreactiontext', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Turn On Power""";
+                category = "Recondo_PG_TurnOff";
+            };
+            
+            // ========================================
+            // DESTROY MODE SETTINGS
+            // ========================================
+            class EnablePersistence {
+                displayName = "Enable Persistence";
+                tooltip = "When enabled, the destroyed state is saved and restored on mission restart. Only used in Destroy Object mode.";
+                control = "Checkbox";
+                property = "Recondo_PG_EnablePersistence";
+                expression = "_this setVariable ['enablepersistence', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_PG_Destroy";
+            };
+            
+            // ========================================
+            // DEBUG
+            // ========================================
+            class DebugLogging {
+                displayName = "Debug Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_PG_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_PG_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
 };

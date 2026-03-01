@@ -208,6 +208,15 @@ if (!isNil "RECONDO_CSS_INSTANCES") then {
     } forEach RECONDO_CSS_INSTANCES;
 };
 
+// Destroy Powergrid
+if (!isNil "RECONDO_POWERGRID_INSTANCES") then {
+    {
+        private _id = _x get "instanceId";
+        missionProfileNamespace setVariable [[format ["POWERGRID_%1_DESTROYED", _id]] call _fnc_getTag, nil];
+        if (_debug) then { diag_log format ["[RECONDO_PERSISTENCE] Deleted: POWERGRID_%1", _id]; };
+    } forEach RECONDO_POWERGRID_INSTANCES;
+};
+
 // ========================================
 // FINALIZE
 // ========================================

@@ -583,5 +583,22 @@ class CfgFunctions {
             class updateCustomSiteNightLights {};
         };
         
+        // Bad Civi Module Functions
+        class BadCivi {
+            file = "\recondo_wars\functions\badcivi";
+            class moduleBadCivi {};
+            class setupBadCivi {};
+        };
+        
+        // Destroy Powergrid Module Functions
+        class DestroyPowergrid {
+            file = "\recondo_wars\functions\destroypowergrid";
+            class moduleDestroyPowergrid {};
+            class addPowergridActionClient {};
+            class togglePowergridLights {};
+            class applyLightsLocal {};
+            class handlePowergridDestroyed {};
+        };
+        
     };
 };

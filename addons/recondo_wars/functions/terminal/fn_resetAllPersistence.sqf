@@ -266,6 +266,18 @@ if (!isNil "RECONDO_CSS_INSTANCES") then {
 };
 
 // ========================================
+// DESTROY POWERGRID (per-instance)
+// ========================================
+
+if (!isNil "RECONDO_POWERGRID_INSTANCES") then {
+    {
+        private _instanceId = _x get "instanceId";
+        missionProfileNamespace setVariable [[format ["POWERGRID_%1_DESTROYED", _instanceId]] call _fnc_getTag, nil];
+        diag_log format ["[RECONDO_TERMINAL] Cleared: powergrid '%1'", _instanceId];
+    } forEach RECONDO_POWERGRID_INSTANCES;
+};
+
+// ========================================
 // FINALIZE
 // ========================================
 

@@ -247,4 +247,12 @@ RECONDO_CSS_ACTIVE_LIGHTS = [];
 RECONDO_CSS_NIGHT_LIGHTS_ENABLED = false;
 RECONDO_CSS_NIGHT_LIGHT_LOOP_STARTED = false;
 
+// Bad Civi global variables
+RECONDO_BADCIVI_INSTANCES = [];                // Array of module instances with settings
+RECONDO_BADCIVI_TRIGGERS = [];                 // Created triggers (for cleanup reference)
+
+// Destroy Powergrid global variables
+RECONDO_POWERGRID_INSTANCES = [];              // Array of module instances with settings
+RECONDO_POWERGRID_STATES = createHashMap;      // instanceId -> "ON" or "OFF"
+
 diag_log format ["[RECONDO_WARS] PreInit complete. Version: %1", RECONDO_WARS_VERSION];

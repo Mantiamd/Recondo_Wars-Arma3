@@ -12,6 +12,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **Add AI Crew** - Dynamically add crew members to player vehicles
 - **Static Defense Randomized** - Spawn randomized static weapon positions
 - **Eldest Son** - Sabotaged ammunition system that poisons enemy weapons over time
+- **Bad Civi** - Sync to AI units to create concealed-weapon civilians that pull a weapon when a configured side gets close, with configurable chance, distance, and weapon type
 - **Limit Static Weapon Movement** - Restrict ACE carry/drag on static weapons
 
 ### Mission Objectives
@@ -48,6 +49,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **Civilian POL** - Persistent civilian pattern-of-life system
 - **Custom Site Spawn** - Spawn custom compositions at markers with garrison AI, patrols, and night lighting
 - **Camps Random** - Randomized camp placement with composition support
+- **Destroy Powergrid** - Sync to a world object to turn off or destroy all lights within a configurable radius via ACE interaction or object destruction, with optional persistence
 
 ### Utility Modules
 - **Persistence** - Save/load mission state across sessions with campaign ID support
