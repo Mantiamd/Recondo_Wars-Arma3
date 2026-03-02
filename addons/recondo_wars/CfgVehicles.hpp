@@ -6571,6 +6571,96 @@ class CfgVehicles {
                 category = "Recondo_HVT_Debug";
             };
             
+            // ========================================
+            // BAD CIVI SETTINGS
+            // ========================================
+            class BadCiviMax {
+                displayName = "Max Bad Civis";
+                tooltip = "Maximum number of bad civis at the real HVT location. Set to 0 to disable. Each slot rolls the spawn chance independently.";
+                control = "Edit";
+                property = "Recondo_HVT_BadCiviMax";
+                expression = "_this setVariable ['badcivimax', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                category = "Recondo_HVT_BadCivi";
+            };
+            class BadCiviSpawnChance {
+                displayName = "Spawn Chance (%)";
+                tooltip = "Percent chance (0-100) each bad civi slot actually spawns a unit.";
+                control = "Edit";
+                property = "Recondo_HVT_BadCiviSpawnChance";
+                expression = "_this setVariable ['badcivispawnchance', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "50";
+                category = "Recondo_HVT_BadCivi";
+            };
+            class BadCiviPullChance {
+                displayName = "Weapon Pull Chance (%)";
+                tooltip = "Percent chance (0-100) a spawned bad civi pulls their weapon when the trigger side enters detection range. Retries on failure.";
+                control = "Edit";
+                property = "Recondo_HVT_BadCiviPullChance";
+                expression = "_this setVariable ['badcivipullchance', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "100";
+                category = "Recondo_HVT_BadCivi";
+            };
+            class BadCiviDetectionDistance {
+                displayName = "Detection Distance (meters)";
+                tooltip = "How close the trigger side must be before the bad civi may pull a weapon.";
+                control = "Edit";
+                property = "Recondo_HVT_BadCiviDetectionDistance";
+                expression = "_this setVariable ['badcividetectiondistance', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "5";
+                category = "Recondo_HVT_BadCivi";
+            };
+            class BadCiviTriggerSide {
+                displayName = "Trigger Side";
+                tooltip = "Which side's presence triggers the weapon pull.";
+                control = "Combo";
+                property = "Recondo_HVT_BadCiviTriggerSide";
+                expression = "_this setVariable ['badcivitriggerside', _value, true];";
+                typeName = "STRING";
+                defaultValue = """WEST""";
+                class values {
+                    class West { name = "WEST (BLUFOR)"; value = "WEST"; };
+                    class East { name = "EAST (OPFOR)"; value = "EAST"; };
+                    class Guer { name = "GUER (Independent)"; value = "GUER"; };
+                    class Any { name = "ANY"; value = "ANY"; };
+                };
+                category = "Recondo_HVT_BadCivi";
+            };
+            class BadCiviClassname {
+                displayName = "Unit Classname";
+                tooltip = "Classname of the civilian unit to spawn as a bad civi.";
+                control = "Edit";
+                property = "Recondo_HVT_BadCiviClassname";
+                expression = "_this setVariable ['badciviclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """C_man_1""";
+                category = "Recondo_HVT_BadCivi";
+            };
+            class BadCiviWeapon {
+                displayName = "Weapon Classname";
+                tooltip = "Classname of the weapon the bad civi pulls out.";
+                control = "Edit";
+                property = "Recondo_HVT_BadCiviWeapon";
+                expression = "_this setVariable ['badciviweapon', _value, true];";
+                typeName = "STRING";
+                defaultValue = """hgun_Pistol_01_F""";
+                category = "Recondo_HVT_BadCivi";
+            };
+            class BadCiviMagazine {
+                displayName = "Magazine Classname";
+                tooltip = "Classname of the magazine for the bad civi's weapon.";
+                control = "Edit";
+                property = "Recondo_HVT_BadCiviMagazine";
+                expression = "_this setVariable ['badcivimagazine', _value, true];";
+                typeName = "STRING";
+                defaultValue = """10Rnd_9x21_Mag""";
+                category = "Recondo_HVT_BadCivi";
+            };
+            
             class ModuleDescription: ModuleDescription {};
         };
     };
@@ -7250,6 +7340,96 @@ class CfgVehicles {
                 typeName = "STRING";
                 defaultValue = """You catch the faint smell of sweat and fear...,The air carries a hint of desperation...,A stale human odor drifts from nearby...,You sense the presence of captives somewhere close.""";
                 category = "Recondo_Hostage_SmellHints";
+            };
+            
+            // ========================================
+            // BAD CIVI SETTINGS
+            // ========================================
+            class BadCiviMax {
+                displayName = "Max Bad Civis";
+                tooltip = "Maximum number of bad civis at each real hostage location. Set to 0 to disable. Each slot rolls the spawn chance independently.";
+                control = "Edit";
+                property = "Recondo_Hostage_BadCiviMax";
+                expression = "_this setVariable ['badcivimax', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                category = "Recondo_Hostage_BadCivi";
+            };
+            class BadCiviSpawnChance {
+                displayName = "Spawn Chance (%)";
+                tooltip = "Percent chance (0-100) each bad civi slot actually spawns a unit.";
+                control = "Edit";
+                property = "Recondo_Hostage_BadCiviSpawnChance";
+                expression = "_this setVariable ['badcivispawnchance', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "50";
+                category = "Recondo_Hostage_BadCivi";
+            };
+            class BadCiviPullChance {
+                displayName = "Weapon Pull Chance (%)";
+                tooltip = "Percent chance (0-100) a spawned bad civi pulls their weapon when the trigger side enters detection range. Retries on failure.";
+                control = "Edit";
+                property = "Recondo_Hostage_BadCiviPullChance";
+                expression = "_this setVariable ['badcivipullchance', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "100";
+                category = "Recondo_Hostage_BadCivi";
+            };
+            class BadCiviDetectionDistance {
+                displayName = "Detection Distance (meters)";
+                tooltip = "How close the trigger side must be before the bad civi may pull a weapon.";
+                control = "Edit";
+                property = "Recondo_Hostage_BadCiviDetectionDistance";
+                expression = "_this setVariable ['badcividetectiondistance', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "5";
+                category = "Recondo_Hostage_BadCivi";
+            };
+            class BadCiviTriggerSide {
+                displayName = "Trigger Side";
+                tooltip = "Which side's presence triggers the weapon pull.";
+                control = "Combo";
+                property = "Recondo_Hostage_BadCiviTriggerSide";
+                expression = "_this setVariable ['badcivitriggerside', _value, true];";
+                typeName = "STRING";
+                defaultValue = """WEST""";
+                class values {
+                    class West { name = "WEST (BLUFOR)"; value = "WEST"; };
+                    class East { name = "EAST (OPFOR)"; value = "EAST"; };
+                    class Guer { name = "GUER (Independent)"; value = "GUER"; };
+                    class Any { name = "ANY"; value = "ANY"; };
+                };
+                category = "Recondo_Hostage_BadCivi";
+            };
+            class BadCiviClassname {
+                displayName = "Unit Classname";
+                tooltip = "Classname of the civilian unit to spawn as a bad civi.";
+                control = "Edit";
+                property = "Recondo_Hostage_BadCiviClassname";
+                expression = "_this setVariable ['badciviclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """C_man_1""";
+                category = "Recondo_Hostage_BadCivi";
+            };
+            class BadCiviWeapon {
+                displayName = "Weapon Classname";
+                tooltip = "Classname of the weapon the bad civi pulls out.";
+                control = "Edit";
+                property = "Recondo_Hostage_BadCiviWeapon";
+                expression = "_this setVariable ['badciviweapon', _value, true];";
+                typeName = "STRING";
+                defaultValue = """hgun_Pistol_01_F""";
+                category = "Recondo_Hostage_BadCivi";
+            };
+            class BadCiviMagazine {
+                displayName = "Magazine Classname";
+                tooltip = "Classname of the magazine for the bad civi's weapon.";
+                control = "Edit";
+                property = "Recondo_Hostage_BadCiviMagazine";
+                expression = "_this setVariable ['badcivimagazine', _value, true];";
+                typeName = "STRING";
+                defaultValue = """10Rnd_9x21_Mag""";
+                category = "Recondo_Hostage_BadCivi";
             };
             
             class ModuleDescription: ModuleDescription {};
@@ -13117,6 +13297,233 @@ class CfgVehicles {
                 typeName = "BOOL";
                 defaultValue = "false";
                 category = "Recondo_PG_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    //==========================================
+    // POO SITE HUNT MODULE
+    //==========================================
+    class Recondo_Module_POOSiteHunt: Module_F {
+        scope = 2;
+        displayName = "POO Site Hunt";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Modules";
+        function = "Recondo_fnc_modulePOOSiteHunt";
+        functionPriority = 5;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 1;
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\attack_ca.paa";
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Selects random POO (Point of Origin) sites from map markers. When a trigger side approaches, an artillery piece spawns with crew and begins firing at a randomly assigned target marker. Supports persistence and multiple instances.";
+            sync[] = {};
+        };
+        
+        class Attributes: AttributesBase {
+            
+            // ========================================
+            // GENERAL SETTINGS
+            // ========================================
+            class ObjectiveName {
+                displayName = "Objective Name";
+                tooltip = "Unique name for this POO site hunt instance. Used for persistence keys and logging. Must be unique per module instance.";
+                control = "Edit";
+                property = "Recondo_POO_ObjectiveName";
+                expression = "_this setVariable ['objectivename', _value, true];";
+                typeName = "STRING";
+                defaultValue = """POO Site""";
+                category = "Recondo_POO_General";
+            };
+            class POOMarkerPrefix {
+                displayName = "POO Site Marker Prefix";
+                tooltip = "Prefix for the map markers that define possible artillery spawn locations (e.g. POO_ matches POO_1, POO_2, etc.).";
+                control = "Edit";
+                property = "Recondo_POO_POOMarkerPrefix";
+                expression = "_this setVariable ['poomarkerprefix', _value, true];";
+                typeName = "STRING";
+                defaultValue = """POO_""";
+                category = "Recondo_POO_General";
+            };
+            class TargetMarkerPrefix {
+                displayName = "Target Marker Prefix";
+                tooltip = "Prefix for the map markers that define where the artillery fires toward (e.g. ARTY_TGT_ matches ARTY_TGT_1, ARTY_TGT_2, etc.).";
+                control = "Edit";
+                property = "Recondo_POO_TargetMarkerPrefix";
+                expression = "_this setVariable ['targetmarkerprefix', _value, true];";
+                typeName = "STRING";
+                defaultValue = """ARTY_TGT_""";
+                category = "Recondo_POO_General";
+            };
+            class NumActiveSites {
+                displayName = "Number of Active Sites";
+                tooltip = "How many POO sites to randomly select from the marker pool. Once one is destroyed, a new one does NOT take its place.";
+                control = "Edit";
+                property = "Recondo_POO_NumActiveSites";
+                expression = "_this setVariable ['numactivesites', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "1";
+                category = "Recondo_POO_General";
+            };
+            class EnablePersistence {
+                displayName = "Enable Persistence";
+                tooltip = "Save selected sites and destroyed state across mission restarts. Requires the Persistence module.";
+                control = "Checkbox";
+                property = "Recondo_POO_EnablePersistence";
+                expression = "_this setVariable ['enablepersistence', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_POO_General";
+            };
+            
+            // ========================================
+            // SPAWNING SETTINGS
+            // ========================================
+            class TriggerSide {
+                displayName = "Trigger Side";
+                tooltip = "Which side's presence triggers the POO site spawn.";
+                control = "Combo";
+                property = "Recondo_POO_TriggerSide";
+                expression = "_this setVariable ['triggerside', _value, true];";
+                typeName = "STRING";
+                defaultValue = """WEST""";
+                class values {
+                    class West {
+                        name = "WEST (BLUFOR)";
+                        value = "WEST";
+                    };
+                    class East {
+                        name = "EAST (OPFOR)";
+                        value = "EAST";
+                    };
+                    class Guer {
+                        name = "GUER (Independent)";
+                        value = "GUER";
+                    };
+                    class Any {
+                        name = "ANY";
+                        value = "ANY";
+                    };
+                };
+                category = "Recondo_POO_Spawning";
+            };
+            class TriggerRadius {
+                displayName = "Trigger Radius (meters)";
+                tooltip = "How close the trigger side must be to a POO site marker before the artillery spawns.";
+                control = "Edit";
+                property = "Recondo_POO_TriggerRadius";
+                expression = "_this setVariable ['triggerradius', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "800";
+                category = "Recondo_POO_Spawning";
+            };
+            class TerrainClearRadius {
+                displayName = "Terrain Clear Radius (meters)";
+                tooltip = "Radius around the marker to hide terrain objects (trees, rocks) before spawning the artillery. Set to 0 to disable.";
+                control = "Edit";
+                property = "Recondo_POO_TerrainClearRadius";
+                expression = "_this setVariable ['terrainclearradius', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "15";
+                category = "Recondo_POO_Spawning";
+            };
+            
+            // ========================================
+            // ARTILLERY SETTINGS
+            // ========================================
+            class WeaponClassname {
+                displayName = "Static Weapon Classname";
+                tooltip = "Classname of the static artillery or mortar to spawn at each POO site.";
+                control = "Edit";
+                property = "Recondo_POO_WeaponClassname";
+                expression = "_this setVariable ['weaponclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """vn_o_pl_mortar_type63""";
+                category = "Recondo_POO_Artillery";
+            };
+            class CrewClassname {
+                displayName = "Crew Classname";
+                tooltip = "Classname for the 2 crew members (gunner + loader) assigned to the static weapon.";
+                control = "Edit";
+                property = "Recondo_POO_CrewClassname";
+                expression = "_this setVariable ['crewclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """vn_o_men_nva_65_inf_02""";
+                category = "Recondo_POO_Artillery";
+            };
+            class CrewSide {
+                displayName = "Crew Side";
+                tooltip = "Side of the spawned crew units.";
+                control = "Combo";
+                property = "Recondo_POO_CrewSide";
+                expression = "_this setVariable ['crewside', _value, true];";
+                typeName = "STRING";
+                defaultValue = """EAST""";
+                class values {
+                    class East {
+                        name = "EAST (OPFOR)";
+                        value = "EAST";
+                    };
+                    class West {
+                        name = "WEST (BLUFOR)";
+                        value = "WEST";
+                    };
+                    class Guer {
+                        name = "GUER (Independent)";
+                        value = "GUER";
+                    };
+                };
+                category = "Recondo_POO_Artillery";
+            };
+            class FiringInterval {
+                displayName = "Firing Interval (seconds)";
+                tooltip = "Time in seconds between each artillery round fired.";
+                control = "Edit";
+                property = "Recondo_POO_FiringInterval";
+                expression = "_this setVariable ['firinginterval', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "5";
+                category = "Recondo_POO_Artillery";
+            };
+            class InvulnTime {
+                displayName = "Invulnerability Time (seconds)";
+                tooltip = "Duration in seconds that the weapon and crew are invulnerable after spawning.";
+                control = "Edit";
+                property = "Recondo_POO_InvulnTime";
+                expression = "_this setVariable ['invulntime', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "20";
+                category = "Recondo_POO_Artillery";
+            };
+            
+            // ========================================
+            // DEBUG
+            // ========================================
+            class DebugLogging {
+                displayName = "Debug Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_POO_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_POO_Debug";
+            };
+            class DebugMarkers {
+                displayName = "Debug Markers";
+                tooltip = "Show active POO sites and trigger radii as markers on the map.";
+                control = "Checkbox";
+                property = "Recondo_POO_DebugMarkers";
+                expression = "_this setVariable ['debugmarkers', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_POO_Debug";
             };
             
             class ModuleDescription: ModuleDescription {};

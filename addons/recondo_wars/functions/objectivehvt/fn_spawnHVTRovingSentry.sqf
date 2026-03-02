@@ -93,6 +93,7 @@ private _spawnPos = _buildingPositions select 0;
 // Create the sentry unit
 private _sentry = _sentryGroup createUnit [_unitType, _spawnPos, [], 0, "NONE"];
 _sentry setPosATL _spawnPos;
+[_sentry] joinSilent _sentryGroup;
 
 // Force standing and walking
 _sentry setUnitPos "UP";

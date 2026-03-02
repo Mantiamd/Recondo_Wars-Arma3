@@ -208,6 +208,19 @@ if (!isNil "RECONDO_CSS_INSTANCES") then {
     } forEach RECONDO_CSS_INSTANCES;
 };
 
+// POO Site Hunt
+if (!isNil "RECONDO_POO_INSTANCES") then {
+    {
+        private _name = _x get "objectiveName";
+        { missionProfileNamespace setVariable [[_x] call _fnc_getTag, nil]; } forEach [
+            format ["POO_%1_ACTIVE", _name],
+            format ["POO_%1_TARGETS", _name],
+            format ["POO_%1_DESTROYED", _name]
+        ];
+        if (_debug) then { diag_log format ["[RECONDO_PERSISTENCE] Deleted: POO_%1", _name]; };
+    } forEach RECONDO_POO_INSTANCES;
+};
+
 // Destroy Powergrid
 if (!isNil "RECONDO_POWERGRID_INSTANCES") then {
     {

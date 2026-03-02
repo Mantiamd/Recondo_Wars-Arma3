@@ -17,10 +17,11 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 
 ### Mission Objectives
 - **Objective Destroy** - Destructible target objectives with composition support
-- **Objective HVT** - High-Value Target capture/kill objectives with custom profiles
-- **Objective Hostages** - Hostage rescue objectives with AI guards
+- **Objective HVT** - High-Value Target capture/kill objectives with custom profiles, optional Bad Civi spawns at real HVT locations, wandering civilians, and roving sentries
+- **Objective Hostages** - Hostage rescue objectives with AI guards, optional Bad Civi spawns at real hostage locations, and wandering civilians
 - **Objective Jammer** - Radio jammer objectives that affect communications
 - **Objective Hub & Subs** - Connected hub and sub-site objective systems
+- **POO Site Hunt** - Randomized Point-of-Origin artillery hunt with configurable marker pools, proximity-triggered spawning, persistent destruction tracking, and terrain clearing
 
 ### Intel & Reconnaissance
 - **Intel System** - Collectible intelligence items from enemies and locations

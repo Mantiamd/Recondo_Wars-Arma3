@@ -118,6 +118,12 @@ _aiTrigger setTriggerStatements [
         private _pos = getMarkerPos _marker;
         [_settings, _marker, _pos] call Recondo_fnc_spawnHVTAI;
         [_settings, _marker, _pos, _hostagesAtMarker] call Recondo_fnc_spawnHostages;
+        if ((_settings getOrDefault ['badCiviMax', 0]) > 0) then {
+            [{ params ['_s', '_m', '_p']; [_s, _m, _p] call Recondo_fnc_spawnBadCivis; }, [_settings, _marker, _pos], 1] call CBA_fnc_waitAndExecute;
+        };
+        if (_settings get 'enableCivilians') then {
+            [{ params ['_s', '_m', '_p']; [_s, _m, _p] call Recondo_fnc_spawnHVTCivilians; }, [_settings, _marker, _pos], 6] call CBA_fnc_waitAndExecute;
+        };
         if (_settings get 'enableAnimals') then {
             [{ params ['_s', '_m', '_p']; [_s, _m, _p] call Recondo_fnc_spawnHVTAnimals; }, [_settings, _marker, _pos], 1] call CBA_fnc_waitAndExecute;
         };

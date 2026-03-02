@@ -65,7 +65,6 @@ _trigger setVariable ["RECONDO_JAMMER_debugLogging", _debugLogging];
 
 // Trigger condition and activation - each player only gets the hint once per marker
 _trigger setTriggerStatements [
-    "this",
     "
         private _marker = thisTrigger getVariable 'RECONDO_JAMMER_marker';
         private _messages = thisTrigger getVariable 'RECONDO_JAMMER_smellMessages';
@@ -84,7 +83,9 @@ _trigger setTriggerStatements [
                 };
             };
         } forEach thisList;
+        false
     ",
+    "",
     ""
 ];
 

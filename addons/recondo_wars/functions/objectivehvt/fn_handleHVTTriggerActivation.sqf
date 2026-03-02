@@ -127,6 +127,12 @@ _aiTrigger setTriggerStatements [
             } else {
                 diag_log format ['[RECONDO_HVT] HVT already captured, not spawning unit at %1', _marker];
             };
+            if ((_settings getOrDefault ['badCiviMax', 0]) > 0) then {
+                [{
+                    params ['_settings', '_marker', '_pos'];
+                    [_settings, _marker, _pos] call Recondo_fnc_spawnBadCivis;
+                }, [_settings, _marker, _pos], 6] call CBA_fnc_waitAndExecute;
+            };
         };
         
         deleteVehicle thisTrigger;

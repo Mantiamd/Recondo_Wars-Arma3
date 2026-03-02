@@ -84,6 +84,22 @@ if (_enableNightLights) then {
     [_settings, _marker, _pos, _hostagesAtMarker] call Recondo_fnc_spawnHostages;
 }, [_settings, _marker, _markerPos, _hostagesAtMarker], 5] call CBA_fnc_waitAndExecute;
 
+// Spawn bad civis at real locations
+if ((_settings getOrDefault ["badCiviMax", 0]) > 0) then {
+    [{
+        params ["_settings", "_marker", "_pos"];
+        [_settings, _marker, _pos] call Recondo_fnc_spawnBadCivis;
+    }, [_settings, _marker, _markerPos], 5] call CBA_fnc_waitAndExecute;
+};
+
+// Spawn civilians if enabled
+if (_settings get "enableCivilians") then {
+    [{
+        params ["_settings", "_marker", "_pos"];
+        [_settings, _marker, _pos] call Recondo_fnc_spawnHVTCivilians;
+    }, [_settings, _marker, _markerPos], 6] call CBA_fnc_waitAndExecute;
+};
+
 if (_debugLogging) then {
     diag_log format ["[RECONDO_HOSTAGE] Queued composition, AI, and %1 hostages at %2", count _hostagesAtMarker, _marker];
 };

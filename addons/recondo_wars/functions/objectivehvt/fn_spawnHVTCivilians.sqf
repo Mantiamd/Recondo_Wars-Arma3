@@ -100,15 +100,12 @@ for "_i" from 1 to _civilianCount do {
         private _civilian = _civilianGroup createUnit [_civilianType, _spawnPos, [], 0, "NONE"];
         _civilian setPosATL _spawnPos;
         
-        // Set behavior - will flee when combat starts
         _civilian setBehaviour "CARELESS";
         _civilian allowFleeing 1;
         _civilian setUnitPos "UP";
         
-        // Remove weapons if any
         removeAllWeapons _civilian;
         
-        // Force unarmed civilian idle animation
         [_civilian, "AmovPercMstpSnonWnonDnon"] remoteExec ["switchMove", 0, true];
         
         _spawnedCivilians pushBack _civilian;
@@ -122,6 +119,55 @@ for "_i" from 1 to _civilianCount do {
 // Store reference
 private _varName = format ["RECONDO_HVT_%1_civilians", _marker];
 missionNamespace setVariable [_varName, _spawnedCivilians, true];
+
+// Start wandering for each civilian (if building positions available)
+if (count _buildingPositions >= 2) then {
+    {
+        private _civilian = _x;
+        private _allPositions = +_buildingPositions;
+
+        [_civilian, _allPositions, _debugLogging] spawn {
+            params ["_unit", "_positions", "_debug"];
+
+            _positions = _positions call BIS_fnc_arrayShuffle;
+            private _posCount = count _positions;
+            private _currentIndex = 0;
+
+            sleep (5 + random 10);
+
+            while {alive _unit} do {
+                if (_unit getVariable ["ace_captives_isHandcuffed", false]) exitWith {};
+
+                private _targetPos = _positions select _currentIndex;
+                _unit doMove _targetPos;
+
+                private _startTime = diag_tickTime;
+                waitUntil {
+                    sleep 0.5;
+                    !alive _unit ||
+                    {_unit getVariable ["ace_captives_isHandcuffed", false]} ||
+                    {_unit distance _targetPos < 2} ||
+                    {diag_tickTime - _startTime > 60}
+                };
+
+                if (!alive _unit) exitWith {};
+                if (_unit getVariable ["ace_captives_isHandcuffed", false]) exitWith {};
+
+                sleep (8 + random 12);
+
+                _currentIndex = (_currentIndex + 1) mod _posCount;
+            };
+
+            if (_debug) then {
+                diag_log format ["[RECONDO_HVT] Civilian %1 wander loop ended", _unit];
+            };
+        };
+    } forEach _spawnedCivilians;
+
+    if (_debugLogging) then {
+        diag_log format ["[RECONDO_HVT] Started wandering for %1 civilians with %2 positions", count _spawnedCivilians, count _buildingPositions];
+    };
+};
 
 if (_debugLogging) then {
     diag_log format ["[RECONDO_HVT] Finished spawning %1 civilians at %2", count _spawnedCivilians, _marker];

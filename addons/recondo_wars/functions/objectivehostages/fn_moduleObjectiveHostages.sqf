@@ -116,6 +116,16 @@ private _enableSmellHints = _logic getVariable ["enablesmellhints", true];
 private _smellHintRadius = _logic getVariable ["smellhintradius", 200];
 private _smellHintMessagesRaw = _logic getVariable ["smellhintmessages", "You catch the faint smell of sweat and fear...,The air carries a hint of desperation...,A stale human odor drifts from nearby...,You sense the presence of captives somewhere close."];
 
+// Bad Civi
+private _badCiviMax = _logic getVariable ["badcivimax", 0];
+private _badCiviSpawnChance = _logic getVariable ["badcivispawnchance", 50];
+private _badCiviPullChance = _logic getVariable ["badcivipullchance", 100];
+private _badCiviDetectionDistance = _logic getVariable ["badcividetectiondistance", 5];
+private _badCiviTriggerSide = _logic getVariable ["badcivitriggerside", "WEST"];
+private _badCiviClassname = _logic getVariable ["badciviclassname", "C_man_1"];
+private _badCiviWeapon = _logic getVariable ["badciviweapon", "hgun_Pistol_01_F"];
+private _badCiviMagazine = _logic getVariable ["badcivimagazine", "10Rnd_9x21_Mag"];
+
 // ========================================
 // PROFILE SYSTEM (required - all checked profiles are used)
 // ========================================
@@ -379,7 +389,15 @@ private _settings = createHashMapFromArray [
     ["enableSmellHints", _enableSmellHints],
     ["smellHintRadius", _smellHintRadius],
     ["smellHintMessages", ((_smellHintMessagesRaw splitString ",") apply { _x trim [" ", 0] }) select { _x != "" }],
-    ["makeInvincible", _makeInvincible]
+    ["makeInvincible", _makeInvincible],
+    ["badCiviMax", _badCiviMax],
+    ["badCiviSpawnChance", _badCiviSpawnChance],
+    ["badCiviPullChance", _badCiviPullChance],
+    ["badCiviDetectionDistance", _badCiviDetectionDistance],
+    ["badCiviTriggerSide", _badCiviTriggerSide],
+    ["badCiviClassname", _badCiviClassname],
+    ["badCiviWeapon", _badCiviWeapon],
+    ["badCiviMagazine", _badCiviMagazine]
 ];
 
 RECONDO_HOSTAGE_INSTANCES pushBack _settings;

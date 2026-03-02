@@ -1570,6 +1570,13 @@ class Cfg3DEN {
                 class Attributes {};
             };
             
+            // Bad Civi
+            class Recondo_HVT_BadCivi {
+                displayName = "Bad Civi";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
             // Debug
             class Recondo_HVT_Debug {
                 displayName = "Debug";
@@ -1664,6 +1671,13 @@ class Cfg3DEN {
             // Intel
             class Recondo_Hostage_Intel {
                 displayName = "Intel Integration";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            // Bad Civi
+            class Recondo_Hostage_BadCivi {
+                displayName = "Bad Civi";
                 collapsed = 1;
                 class Attributes {};
             };
@@ -2143,6 +2157,34 @@ class Cfg3DEN {
             };
             
             class Recondo_BC_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            //==========================================
+            // POO SITE HUNT MODULE CATEGORIES
+            //==========================================
+            
+            class Recondo_POO_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_POO_Spawning {
+                displayName = "Spawning";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_POO_Artillery {
+                displayName = "Artillery";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_POO_Debug {
                 displayName = "Debug";
                 collapsed = 1;
                 class Attributes {};

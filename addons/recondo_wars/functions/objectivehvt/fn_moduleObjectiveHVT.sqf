@@ -119,6 +119,16 @@ private _debugMarkers = _logic getVariable ["debugmarkers", false];
 // Invincibility
 private _makeInvincible = _logic getVariable ["makeinvincible", false];
 
+// Bad Civi
+private _badCiviMax = _logic getVariable ["badcivimax", 0];
+private _badCiviSpawnChance = _logic getVariable ["badcivispawnchance", 50];
+private _badCiviPullChance = _logic getVariable ["badcivipullchance", 100];
+private _badCiviDetectionDistance = _logic getVariable ["badcividetectiondistance", 5];
+private _badCiviTriggerSide = _logic getVariable ["badcivitriggerside", "WEST"];
+private _badCiviClassname = _logic getVariable ["badciviclassname", "C_man_1"];
+private _badCiviWeapon = _logic getVariable ["badciviweapon", "hgun_Pistol_01_F"];
+private _badCiviMagazine = _logic getVariable ["badcivimagazine", "10Rnd_9x21_Mag"];
+
 // ========================================
 // PROFILE SYSTEM (required - one random profile selected)
 // ========================================
@@ -323,7 +333,15 @@ private _settings = createHashMapFromArray [
     ["intelConfirmMessage", _intelConfirmMessage],
     ["debugLogging", _debugLogging],
     ["debugMarkers", _debugMarkers],
-    ["makeInvincible", _makeInvincible]
+    ["makeInvincible", _makeInvincible],
+    ["badCiviMax", _badCiviMax],
+    ["badCiviSpawnChance", _badCiviSpawnChance],
+    ["badCiviPullChance", _badCiviPullChance],
+    ["badCiviDetectionDistance", _badCiviDetectionDistance],
+    ["badCiviTriggerSide", _badCiviTriggerSide],
+    ["badCiviClassname", _badCiviClassname],
+    ["badCiviWeapon", _badCiviWeapon],
+    ["badCiviMagazine", _badCiviMagazine]
 ];
 
 RECONDO_HVT_INSTANCES pushBack _settings;
@@ -468,6 +486,22 @@ if (!_isCaptured) then {
     if (_spawnMode == "immediate") then {
         // Spawn HVT location immediately
         [_settings, _hvtMarker, _hvtComposition, true, _hvtCompIsModPath] call Recondo_fnc_spawnHVTComposition;
+        
+        // Spawn bad civis at real HVT location after composition sets up
+        if (_badCiviMax > 0) then {
+            [{
+                params ["_settings", "_marker", "_pos"];
+                [_settings, _marker, _pos] call Recondo_fnc_spawnBadCivis;
+            }, [_settings, _hvtMarker, getMarkerPos _hvtMarker], 6] call CBA_fnc_waitAndExecute;
+        };
+
+        // Spawn civilians at HVT location
+        if (_enableCivilians) then {
+            [{
+                params ["_settings", "_marker", "_pos"];
+                [_settings, _marker, _pos] call Recondo_fnc_spawnHVTCivilians;
+            }, [_settings, _hvtMarker, getMarkerPos _hvtMarker], 6] call CBA_fnc_waitAndExecute;
+        };
     } else {
         // Create proximity trigger for HVT location
         [_settings, _hvtMarker, _hvtComposition, true, _hvtCompIsModPath] call Recondo_fnc_createHVTTrigger;
@@ -505,6 +539,14 @@ if (!_isCaptured) then {
                 private _pos = getMarkerPos _marker;
                 [_settings, _marker, _pos] call Recondo_fnc_spawnHVTAI;
             }, [_settings, _decoyMarker], 5] call CBA_fnc_waitAndExecute;
+        };
+
+        // Spawn civilians at decoy location
+        if (_enableCivilians) then {
+            [{
+                params ["_settings", "_marker", "_pos"];
+                [_settings, _marker, _pos] call Recondo_fnc_spawnHVTCivilians;
+            }, [_settings, _decoyMarker, getMarkerPos _decoyMarker], 6] call CBA_fnc_waitAndExecute;
         };
     } else {
         // Create proximity trigger for decoy

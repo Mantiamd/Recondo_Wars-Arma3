@@ -101,6 +101,7 @@ for "_i" from 1 to _garrisonCount do {
         // Create the unit
         private _unit = _garrisonGroup createUnit [_unitType, _spawnPos, [], 0, "NONE"];
         _unit setPosATL _spawnPos;
+        [_unit] joinSilent _garrisonGroup;
         
         // Force standing position
         _unit setUnitPos "UP";

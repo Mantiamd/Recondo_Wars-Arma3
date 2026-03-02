@@ -251,6 +251,12 @@ RECONDO_CSS_NIGHT_LIGHT_LOOP_STARTED = false;
 RECONDO_BADCIVI_INSTANCES = [];                // Array of module instances with settings
 RECONDO_BADCIVI_TRIGGERS = [];                 // Created triggers (for cleanup reference)
 
+// POO Site Hunt global variables
+RECONDO_POO_INSTANCES = [];                   // Array of module instances with settings
+RECONDO_POO_ACTIVE = [];                      // Active sites: [instanceId, markerId, targetMarker, status]
+RECONDO_POO_DESTROYED = [];                   // Destroyed POO site marker IDs
+RECONDO_POO_TRIGGERS = [];                    // Proximity triggers
+
 // Destroy Powergrid global variables
 RECONDO_POWERGRID_INSTANCES = [];              // Array of module instances with settings
 RECONDO_POWERGRID_STATES = createHashMap;      // instanceId -> "ON" or "OFF"

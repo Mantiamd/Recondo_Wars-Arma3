@@ -266,6 +266,20 @@ if (!isNil "RECONDO_CSS_INSTANCES") then {
 };
 
 // ========================================
+// POO SITE HUNT (per-instance)
+// ========================================
+
+if (!isNil "RECONDO_POO_INSTANCES") then {
+    {
+        private _objectiveName = _x get "objectiveName";
+        missionProfileNamespace setVariable [[format ["POO_%1_ACTIVE", _objectiveName]] call _fnc_getTag, nil];
+        missionProfileNamespace setVariable [[format ["POO_%1_TARGETS", _objectiveName]] call _fnc_getTag, nil];
+        missionProfileNamespace setVariable [[format ["POO_%1_DESTROYED", _objectiveName]] call _fnc_getTag, nil];
+        diag_log format ["[RECONDO_TERMINAL] Cleared: POO site hunt '%1'", _objectiveName];
+    } forEach RECONDO_POO_INSTANCES;
+};
+
+// ========================================
 // DESTROY POWERGRID (per-instance)
 // ========================================
 

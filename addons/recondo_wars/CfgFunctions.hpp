@@ -588,6 +588,17 @@ class CfgFunctions {
             file = "\recondo_wars\functions\badcivi";
             class moduleBadCivi {};
             class setupBadCivi {};
+            class spawnBadCivis {};
+        };
+        
+        // POO Site Hunt Module Functions
+        class POOSiteHunt {
+            file = "\recondo_wars\functions\poositehunt";
+            class modulePOOSiteHunt {};
+            class createPOOTrigger {};
+            class spawnPOOSite {};
+            class startArtilleryFire {};
+            class handlePOODestroyed {};
         };
         
         // Destroy Powergrid Module Functions
