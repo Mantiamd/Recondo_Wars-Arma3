@@ -1,7 +1,22 @@
 class CfgFactionClasses {
     class NO_CATEGORY;
-    class Recondo_Modules: NO_CATEGORY {
-        displayName = "Recondo Wars";
+    class Recondo_Main: NO_CATEGORY {
+        displayName = "RW - Main";
+        priority = 5;
+        side = 7;
+    };
+    class Recondo_Objectives: NO_CATEGORY {
+        displayName = "RW - Objectives";
+        priority = 4;
+        side = 7;
+    };
+    class Recondo_Misc: NO_CATEGORY {
+        displayName = "RW - Misc";
+        priority = 3;
+        side = 7;
+    };
+    class Recondo_Tools: NO_CATEGORY {
+        displayName = "RW - Tools";
         priority = 2;
         side = 7;
     };
@@ -29,7 +44,7 @@ class CfgVehicles {
         displayName = "AI Tweaks";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Main";
         function = "Recondo_fnc_moduleAITweaks";
         functionPriority = 1;
         isGlobal = 0;
@@ -846,7 +861,7 @@ class CfgVehicles {
         displayName = "Player Options";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Main";
         function = "Recondo_fnc_modulePlayerOptions";
         functionPriority = 1;
         isGlobal = 0;
@@ -1123,7 +1138,7 @@ class CfgVehicles {
         displayName = "ACE Arsenal Area";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Main";
         function = "Recondo_fnc_moduleArsenalArea";
         functionPriority = 1;
         isGlobal = 0;
@@ -1262,7 +1277,7 @@ class CfgVehicles {
         displayName = "Disable ACE Rations Area";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Main";
         function = "Recondo_fnc_moduleDisableRationsArea";
         functionPriority = 1;
         isGlobal = 0;
@@ -1334,7 +1349,7 @@ class CfgVehicles {
         displayName = "JIP to Group Leader Area";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Main";
         function = "Recondo_fnc_moduleJIPArea";
         functionPriority = 1;
         isGlobal = 0;
@@ -1406,7 +1421,7 @@ class CfgVehicles {
         displayName = "ACE Spectator Object";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Main";
         function = "Recondo_fnc_moduleSpectatorObject";
         functionPriority = 1;
         isGlobal = 0;
@@ -1544,7 +1559,7 @@ class CfgVehicles {
         displayName = "Persistence System";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Main";
         function = "Recondo_fnc_modulePersistence";
         functionPriority = 0;
         isGlobal = 0;
@@ -1682,7 +1697,7 @@ class CfgVehicles {
         displayName = "Static Defense Randomized";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleStaticDefenseRandomized";
         functionPriority = 5;
         isGlobal = 0;
@@ -1810,7 +1825,7 @@ class CfgVehicles {
         displayName = "Foot Patrols";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleFootPatrols";
         functionPriority = 5;
         isGlobal = 0;
@@ -2106,7 +2121,7 @@ class CfgVehicles {
         displayName = "Add AI Crew";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Misc";
         function = "Recondo_fnc_moduleAddAICrew";
         functionPriority = 5;
         isGlobal = 0;
@@ -2316,7 +2331,7 @@ class CfgVehicles {
         displayName = "STABO Extraction";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Misc";
         function = "Recondo_fnc_moduleSTABO";
         functionPriority = 5;
         isGlobal = 0;
@@ -2484,7 +2499,7 @@ class CfgVehicles {
         displayName = "Path Patrols";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_modulePathPatrols";
         functionPriority = 5;
         isGlobal = 0;
@@ -2667,7 +2682,7 @@ class CfgVehicles {
         displayName = "RW Radio";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Main";
         function = "Recondo_fnc_moduleRWRadio";
         functionPriority = 5;
         isGlobal = 0;
@@ -3071,7 +3086,7 @@ class CfgVehicles {
         displayName = "Trackers";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleTrackers";
         functionPriority = 5;
         isGlobal = 0;
@@ -3450,7 +3465,7 @@ class CfgVehicles {
         displayName = "Reinforcement Waves";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleReinforcementWaves";
         functionPriority = 5;
         isGlobal = 0;
@@ -3852,7 +3867,7 @@ class CfgVehicles {
         displayName = "Intel System";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleIntel";
         functionPriority = 1;
         isGlobal = 0;
@@ -3969,7 +3984,7 @@ class CfgVehicles {
         displayName = "Intel - Items";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleIntelItems";
         functionPriority = 3;
         isGlobal = 0;
@@ -4177,7 +4192,7 @@ class CfgVehicles {
         displayName = "Intel - Board";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleIntelBoard";
         functionPriority = 3;
         isGlobal = 0;
@@ -4307,7 +4322,7 @@ class CfgVehicles {
         displayName = "Wiretap System";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleWiretap";
         functionPriority = 5;
         isGlobal = 0;
@@ -4681,7 +4696,7 @@ class CfgVehicles {
         displayName = "Objective - Destroy";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleObjectiveDestroy";
         functionPriority = 4;
         isGlobal = 0;
@@ -5183,7 +5198,7 @@ class CfgVehicles {
         displayName = "Terminal";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Tools";
         function = "Recondo_fnc_moduleTerminal";
         functionPriority = 10;
         isGlobal = 0;
@@ -5252,7 +5267,7 @@ class CfgVehicles {
         displayName = "Objective - Hub & Subs";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleObjectiveHubSubs";
         functionPriority = 4;
         isGlobal = 0;
@@ -5920,7 +5935,7 @@ class CfgVehicles {
         displayName = "Objective - HVT";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleObjectiveHVT";
         functionPriority = 4;
         isGlobal = 0;
@@ -6685,7 +6700,7 @@ class CfgVehicles {
         displayName = "Objective - Hostages";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleObjectiveHostages";
         functionPriority = 5;
         isGlobal = 0;
@@ -7456,7 +7471,7 @@ class CfgVehicles {
         displayName = "Objective - Jamming ACRE";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleObjectiveJammer";
         functionPriority = 4;
         isGlobal = 0;
@@ -7974,7 +7989,7 @@ class CfgVehicles {
         displayName = "Weather Control";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Main";
         function = "Recondo_fnc_moduleWeather";
         functionPriority = 1;
         isGlobal = 0;
@@ -8100,7 +8115,7 @@ class CfgVehicles {
         displayName = "Intro Screen";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Tools";
         function = "Recondo_fnc_moduleIntroScreen";
         functionPriority = 10;
         isGlobal = 0;
@@ -8319,7 +8334,7 @@ class CfgVehicles {
         displayName = "Performance Monitoring";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Tools";
         function = "Recondo_fnc_modulePerfMonitor";
         functionPriority = 1;
         isGlobal = 0;
@@ -8441,7 +8456,7 @@ class CfgVehicles {
         displayName = "Ambient Sound Triggers";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Misc";
         function = "Recondo_fnc_moduleAmbientSound";
         functionPriority = 5;
         isGlobal = 0;
@@ -8680,7 +8695,7 @@ class CfgVehicles {
         displayName = "Side Chat and Marker Control";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Misc";
         function = "Recondo_fnc_moduleChatControl";
         functionPriority = 1;
         isGlobal = 0;
@@ -9488,7 +9503,7 @@ class CfgVehicles {
         displayName = "Convoy System";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleConvoySystem";
         functionPriority = 5;
         isGlobal = 0;
@@ -9842,7 +9857,7 @@ class CfgVehicles {
         displayName = "Base to Outpost Tele";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Misc";
         function = "Recondo_fnc_moduleOutpostTele";
         functionPriority = 1;
         isGlobal = 0;
@@ -10095,7 +10110,7 @@ class CfgVehicles {
         displayName = "Civilians Working Fields";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Misc";
         function = "Recondo_fnc_moduleCiviliansWorking";
         functionPriority = 5;
         isGlobal = 0;
@@ -10316,7 +10331,7 @@ class CfgVehicles {
         displayName = "Civilian Traffic";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Misc";
         function = "Recondo_fnc_moduleCivilianTraffic";
         functionPriority = 5;
         isGlobal = 0;
@@ -10541,7 +10556,7 @@ class CfgVehicles {
         displayName = "Civilian - Patterns of Life";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Misc";
         function = "Recondo_fnc_moduleCivilianPOL";
         functionPriority = 3;
         isGlobal = 0;
@@ -10898,7 +10913,7 @@ class CfgVehicles {
         displayName = "Camps - Random";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleCampsRandom";
         functionPriority = 5;
         isGlobal = 0;
@@ -11346,7 +11361,7 @@ class CfgVehicles {
         displayName = "Player Limitations";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Main";
         function = "Recondo_fnc_modulePlayerLimitations";
         functionPriority = 1;
         isGlobal = 0;
@@ -11557,7 +11572,7 @@ class CfgVehicles {
         displayName = "Player Intel Drops";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Main";
         function = "Recondo_fnc_modulePlayerIntelDrops";
         functionPriority = 1;
         isGlobal = 0;
@@ -11656,7 +11671,7 @@ class CfgVehicles {
         displayName = "Eldest Son (Ammo Sabotage)";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleEldestSon";
         functionPriority = 1;
         isGlobal = 0;
@@ -11766,7 +11781,7 @@ class CfgVehicles {
         displayName = "Deployable Rallypoint";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Main";
         function = "Recondo_fnc_moduleDeployableRallypoint";
         functionPriority = 1;
         isGlobal = 0;
@@ -12077,7 +12092,7 @@ class CfgVehicles {
         displayName = "Recon Points System";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Misc";
         function = "Recondo_fnc_moduleReconPoints";
         functionPriority = 1;
         isGlobal = 0;
@@ -12375,7 +12390,7 @@ class CfgVehicles {
         scope = 2;
         displayName = "Sensors";
         icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\listen_ca.paa";
-        category = "Recondo_Modules";
+        category = "Recondo_Misc";
         function = "Recondo_fnc_moduleSensors";
         functionPriority = 5;
         isGlobal = 1;
@@ -12654,7 +12669,7 @@ class CfgVehicles {
         displayName = "Limit Static Weapon Movement";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Misc";
         function = "Recondo_fnc_moduleStaticWeaponLimit";
         functionPriority = 1;
         isGlobal = 0;
@@ -12703,7 +12718,7 @@ class CfgVehicles {
         displayName = "Custom Site Spawn";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleCustomSiteSpawn";
         functionPriority = 1;
         isGlobal = 0;
@@ -13040,7 +13055,7 @@ class CfgVehicles {
         displayName = "Bad Civi";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleBadCivi";
         functionPriority = 5;
         isGlobal = 0;
@@ -13193,7 +13208,7 @@ class CfgVehicles {
         displayName = "Destroy Powergrid";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_moduleDestroyPowergrid";
         functionPriority = 5;
         isGlobal = 0;
@@ -13322,7 +13337,7 @@ class CfgVehicles {
         displayName = "POO Site Hunt";
         author = "GoonSix";
         vehicleClass = "Modules";
-        category = "Recondo_Modules";
+        category = "Recondo_Objectives";
         function = "Recondo_fnc_modulePOOSiteHunt";
         functionPriority = 5;
         isGlobal = 0;
