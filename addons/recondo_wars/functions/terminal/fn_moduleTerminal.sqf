@@ -29,6 +29,13 @@ if (!_activated) exitWith {
 private _terminalName = _logic getVariable ["terminalname", "Command Terminal"];
 private _debugLogging = _logic getVariable ["debuglogging", false];
 
+private _masterDebug = _logic getVariable ["masterdebug", false];
+if (_masterDebug) then {
+    RECONDO_MASTER_DEBUG = true;
+    publicVariable "RECONDO_MASTER_DEBUG";
+    diag_log "[RECONDO_TERMINAL] Master Debug enabled - all modules will log debug info";
+};
+
 // ========================================
 // FIND SYNCED OBJECTS
 // ========================================

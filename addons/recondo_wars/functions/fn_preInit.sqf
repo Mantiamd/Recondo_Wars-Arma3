@@ -7,7 +7,8 @@
         Runs on all machines via CBA extended event handlers.
 */
 
-RECONDO_WARS_VERSION = "1.0.0";
+RECONDO_WARS_VERSION = "1.1.0";
+RECONDO_MASTER_DEBUG = false;
 
 // AI Tweaks globals
 RECONDO_AITWEAKS_CONFIGURED_UNITS = [];

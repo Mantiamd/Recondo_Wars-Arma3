@@ -76,6 +76,13 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 2. Use Arma 3 Tools to build the PBO, or copy the `addons` folder to your Arma 3 mods directory
 3. Enable the mod in Arma 3 launcher
 
+## Documentation
+
+- **[Quick Start Guide](docs/QUICK_START.md)** - Step-by-step guide to setting up your first mission
+- All module attributes have detailed tooltips with examples visible in Eden Editor
+- Enable **Master Debug** on the Terminal module to turn on debug logging for all systems at once
+- On mission start, any configuration issues (like missing markers) will be displayed via system chat
+
 ## Usage
 
 All features are accessed through **Eden Editor modules**:
@@ -84,6 +91,7 @@ All features are accessed through **Eden Editor modules**:
 2. Place modules from the "Recondo Wars" category
 3. Configure module attributes in the module's properties
 4. Some modules require synchronization with objects or units
+5. Hover over any attribute to see its tooltip with description and examples
 
 ## Building
 

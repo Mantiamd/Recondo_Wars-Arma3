@@ -6,6 +6,13 @@
         Handles client-side initialization after mission start.
 */
 
+// Display version to all players on mission start
+if (hasInterface) then {
+    [{
+        systemChat format ["Recondo Wars v%1 loaded", RECONDO_WARS_VERSION];
+    }, [], 5] call CBA_fnc_waitAndExecute;
+};
+
 // AI Tweaks: Mine knowledge system needs to run on clients with interface
 if (hasInterface && {!isNil "RECONDO_AITWEAKS_MINE_KNOWLEDGE_ENABLED"} && {RECONDO_AITWEAKS_MINE_KNOWLEDGE_ENABLED}) then {
     call Recondo_fnc_initMineKnowledge;
@@ -86,6 +93,13 @@ if (hasInterface) then {
     
     // Initialize Player Limitations (client-side inventory enforcement)
     [] call Recondo_fnc_initPlayerLimitations;
+};
+
+// Server-side module validation (delayed to allow all modules to initialize)
+if (isServer) then {
+    [{
+        [] call Recondo_fnc_validateModules;
+    }, [], 15] call CBA_fnc_waitAndExecute;
 };
 
 diag_log "[RECONDO_WARS] PostInit complete";

@@ -329,7 +329,7 @@ class CfgVehicles {
             };
             class Elite_AimingAccuracy {
                 displayName = "Aiming Accuracy";
-                tooltip = "How accurately the AI aims.";
+                tooltip = "How accurately the AI aims. 0 = very inaccurate, 1 = perfect aim.";
                 control = "Slider";
                 property = "Recondo_AITweaks_Elite_AimingAccuracy";
                 expression = "_this setVariable ['elite_aimingaccuracy', _value, true];";
@@ -341,7 +341,7 @@ class CfgVehicles {
             };
             class Elite_AimingShake {
                 displayName = "Aiming Shake";
-                tooltip = "How much the AI's aim shakes.";
+                tooltip = "How much the AI's aim shakes. 0 = lots of shake, 1 = steady aim.";
                 control = "Slider";
                 property = "Recondo_AITweaks_Elite_AimingShake";
                 expression = "_this setVariable ['elite_aimingshake', _value, true];";
@@ -353,7 +353,7 @@ class CfgVehicles {
             };
             class Elite_AimingSpeed {
                 displayName = "Aiming Speed";
-                tooltip = "How quickly AI acquires targets.";
+                tooltip = "How quickly AI acquires targets. 0 = slow, 1 = instant.";
                 control = "Slider";
                 property = "Recondo_AITweaks_Elite_AimingSpeed";
                 expression = "_this setVariable ['elite_aimingspeed', _value, true];";
@@ -365,7 +365,7 @@ class CfgVehicles {
             };
             class Elite_SpotDistance {
                 displayName = "Spot Distance";
-                tooltip = "How far AI can detect enemies.";
+                tooltip = "How far AI can detect enemies. 0 = short range, 1 = maximum range.";
                 control = "Slider";
                 property = "Recondo_AITweaks_Elite_SpotDistance";
                 expression = "_this setVariable ['elite_spotdistance', _value, true];";
@@ -377,7 +377,7 @@ class CfgVehicles {
             };
             class Elite_SpotTime {
                 displayName = "Spot Time";
-                tooltip = "How quickly AI spots enemies.";
+                tooltip = "How quickly AI spots enemies. 0 = slow, 1 = instant detection.";
                 control = "Slider";
                 property = "Recondo_AITweaks_Elite_SpotTime";
                 expression = "_this setVariable ['elite_spottime', _value, true];";
@@ -389,7 +389,7 @@ class CfgVehicles {
             };
             class Elite_Courage {
                 displayName = "Courage";
-                tooltip = "AI willingness to engage and resist suppression.";
+                tooltip = "AI willingness to engage and resist suppression. 0 = cowardly, 1 = fearless.";
                 control = "Slider";
                 property = "Recondo_AITweaks_Elite_Courage";
                 expression = "_this setVariable ['elite_courage', _value, true];";
@@ -401,7 +401,7 @@ class CfgVehicles {
             };
             class Elite_Commanding {
                 displayName = "Commanding";
-                tooltip = "AI leadership ability and group coordination.";
+                tooltip = "AI leadership ability and group coordination. 0 = poor, 1 = excellent.";
                 control = "Slider";
                 property = "Recondo_AITweaks_Elite_Commanding";
                 expression = "_this setVariable ['elite_commanding', _value, true];";
@@ -413,7 +413,7 @@ class CfgVehicles {
             };
             class Elite_General {
                 displayName = "General";
-                tooltip = "Overall AI intelligence.";
+                tooltip = "Overall AI intelligence. 0 = dumb, 1 = smart.";
                 control = "Slider";
                 property = "Recondo_AITweaks_Elite_General";
                 expression = "_this setVariable ['elite_general', _value, true];";
@@ -425,7 +425,7 @@ class CfgVehicles {
             };
             class Elite_ReloadSpeed {
                 displayName = "Reload Speed";
-                tooltip = "How fast AI reloads weapons.";
+                tooltip = "How fast AI reloads weapons. 0 = slow, 1 = fast.";
                 control = "Slider";
                 property = "Recondo_AITweaks_Elite_ReloadSpeed";
                 expression = "_this setVariable ['elite_reloadspeed', _value, true];";
@@ -437,7 +437,7 @@ class CfgVehicles {
             };
             class Elite_ForceWalk {
                 displayName = "Force Walk";
-                tooltip = "Force AI to walk instead of run.";
+                tooltip = "Force AI to walk instead of run. Released when combat starts.";
                 control = "Checkbox";
                 property = "Recondo_AITweaks_Elite_ForceWalk";
                 expression = "_this setVariable ['elite_forcewalk', _value, true];";
@@ -447,7 +447,7 @@ class CfgVehicles {
             };
             class Elite_ForceStand {
                 displayName = "Force Stand";
-                tooltip = "Force AI to remain standing.";
+                tooltip = "Force AI to remain standing (no prone or crouch).";
                 control = "Checkbox";
                 property = "Recondo_AITweaks_Elite_ForceStand";
                 expression = "_this setVariable ['elite_forcestand', _value, true];";
@@ -457,7 +457,7 @@ class CfgVehicles {
             };
             class Elite_AnimSpeedCoef {
                 displayName = "Animation Speed";
-                tooltip = "Animation speed multiplier.";
+                tooltip = "Animation speed multiplier. 1.0 = normal, 1.5 = 50% faster.";
                 control = "Slider";
                 property = "Recondo_AITweaks_Elite_AnimSpeedCoef";
                 expression = "_this setVariable ['elite_animspeedcoef', _value, true];";
@@ -489,7 +489,7 @@ class CfgVehicles {
             };
             class Elite_DisableNVG {
                 displayName = "Disable NVG Usage";
-                tooltip = "Prevent AI from using NVGs.";
+                tooltip = "Prevent AI from using night vision goggles.";
                 control = "Checkbox";
                 property = "Recondo_AITweaks_Elite_DisableNVG";
                 expression = "_this setVariable ['elite_disablenvg', _value, true];";
@@ -499,7 +499,7 @@ class CfgVehicles {
             };
             class Elite_DisableSuppression {
                 displayName = "Disable Suppression";
-                tooltip = "Prevent AI from being suppressed.";
+                tooltip = "Prevent AI from being affected by suppressive fire.";
                 control = "Checkbox";
                 property = "Recondo_AITweaks_Elite_DisableSuppression";
                 expression = "_this setVariable ['elite_disablesuppression', _value, true];";
@@ -509,7 +509,7 @@ class CfgVehicles {
             };
             class Elite_DisableAutoCombat {
                 displayName = "Disable Auto Combat";
-                tooltip = "Prevent AI from auto combat mode.";
+                tooltip = "Prevent AI from automatically switching to combat mode.";
                 control = "Checkbox";
                 property = "Recondo_AITweaks_Elite_DisableAutoCombat";
                 expression = "_this setVariable ['elite_disableautocombat', _value, true];";
@@ -519,7 +519,7 @@ class CfgVehicles {
             };
             class Elite_RemoveGrenades {
                 displayName = "Remove Grenades";
-                tooltip = "Remove grenades from inventory.";
+                tooltip = "Remove specified grenades/throwables from AI inventory.";
                 control = "Checkbox";
                 property = "Recondo_AITweaks_Elite_RemoveGrenades";
                 expression = "_this setVariable ['elite_removegrenades', _value, true];";
@@ -581,7 +581,7 @@ class CfgVehicles {
             };
             class AA_AimingAccuracy {
                 displayName = "Aiming Accuracy";
-                tooltip = "How accurately the AI aims.";
+                tooltip = "How accurately the AI aims. 0 = very inaccurate, 1 = perfect aim.";
                 control = "Slider";
                 property = "Recondo_AITweaks_AA_AimingAccuracy";
                 expression = "_this setVariable ['aa_aimingaccuracy', _value, true];";
@@ -593,7 +593,7 @@ class CfgVehicles {
             };
             class AA_AimingShake {
                 displayName = "Aiming Shake";
-                tooltip = "How much the AI's aim shakes.";
+                tooltip = "How much the AI's aim shakes. 0 = lots of shake, 1 = steady aim.";
                 control = "Slider";
                 property = "Recondo_AITweaks_AA_AimingShake";
                 expression = "_this setVariable ['aa_aimingshake', _value, true];";
@@ -605,7 +605,7 @@ class CfgVehicles {
             };
             class AA_AimingSpeed {
                 displayName = "Aiming Speed";
-                tooltip = "How quickly AI acquires targets.";
+                tooltip = "How quickly AI acquires targets. 0 = slow, 1 = instant.";
                 control = "Slider";
                 property = "Recondo_AITweaks_AA_AimingSpeed";
                 expression = "_this setVariable ['aa_aimingspeed', _value, true];";
@@ -617,7 +617,7 @@ class CfgVehicles {
             };
             class AA_SpotDistance {
                 displayName = "Spot Distance";
-                tooltip = "How far AI can detect enemies.";
+                tooltip = "How far AI can detect enemies. 0 = short range, 1 = maximum range.";
                 control = "Slider";
                 property = "Recondo_AITweaks_AA_SpotDistance";
                 expression = "_this setVariable ['aa_spotdistance', _value, true];";
@@ -629,7 +629,7 @@ class CfgVehicles {
             };
             class AA_SpotTime {
                 displayName = "Spot Time";
-                tooltip = "How quickly AI spots enemies.";
+                tooltip = "How quickly AI spots enemies. 0 = slow, 1 = instant detection.";
                 control = "Slider";
                 property = "Recondo_AITweaks_AA_SpotTime";
                 expression = "_this setVariable ['aa_spottime', _value, true];";
@@ -641,7 +641,7 @@ class CfgVehicles {
             };
             class AA_Courage {
                 displayName = "Courage";
-                tooltip = "AI willingness to engage.";
+                tooltip = "AI willingness to engage and resist suppression. 0 = cowardly, 1 = fearless.";
                 control = "Slider";
                 property = "Recondo_AITweaks_AA_Courage";
                 expression = "_this setVariable ['aa_courage', _value, true];";
@@ -653,7 +653,7 @@ class CfgVehicles {
             };
             class AA_Commanding {
                 displayName = "Commanding";
-                tooltip = "AI leadership ability.";
+                tooltip = "AI leadership ability and group coordination. 0 = poor, 1 = excellent.";
                 control = "Slider";
                 property = "Recondo_AITweaks_AA_Commanding";
                 expression = "_this setVariable ['aa_commanding', _value, true];";
@@ -665,7 +665,7 @@ class CfgVehicles {
             };
             class AA_General {
                 displayName = "General";
-                tooltip = "Overall AI intelligence.";
+                tooltip = "Overall AI intelligence. 0 = dumb, 1 = smart.";
                 control = "Slider";
                 property = "Recondo_AITweaks_AA_General";
                 expression = "_this setVariable ['aa_general', _value, true];";
@@ -677,7 +677,7 @@ class CfgVehicles {
             };
             class AA_ReloadSpeed {
                 displayName = "Reload Speed";
-                tooltip = "How fast AI reloads weapons.";
+                tooltip = "How fast AI reloads weapons. 0 = slow, 1 = fast.";
                 control = "Slider";
                 property = "Recondo_AITweaks_AA_ReloadSpeed";
                 expression = "_this setVariable ['aa_reloadspeed', _value, true];";
@@ -689,7 +689,7 @@ class CfgVehicles {
             };
             class AA_ForceWalk {
                 displayName = "Force Walk";
-                tooltip = "Force AI to walk instead of run.";
+                tooltip = "Force AI to walk instead of run. Released when combat starts.";
                 control = "Checkbox";
                 property = "Recondo_AITweaks_AA_ForceWalk";
                 expression = "_this setVariable ['aa_forcewalk', _value, true];";
@@ -699,7 +699,7 @@ class CfgVehicles {
             };
             class AA_ForceStand {
                 displayName = "Force Stand";
-                tooltip = "Force AI to remain standing.";
+                tooltip = "Force AI to remain standing (no prone or crouch).";
                 control = "Checkbox";
                 property = "Recondo_AITweaks_AA_ForceStand";
                 expression = "_this setVariable ['aa_forcestand', _value, true];";
@@ -709,7 +709,7 @@ class CfgVehicles {
             };
             class AA_AnimSpeedCoef {
                 displayName = "Animation Speed";
-                tooltip = "Animation speed multiplier.";
+                tooltip = "Animation speed multiplier. 1.0 = normal, 1.5 = 50% faster.";
                 control = "Slider";
                 property = "Recondo_AITweaks_AA_AnimSpeedCoef";
                 expression = "_this setVariable ['aa_animspeedcoef', _value, true];";
@@ -741,7 +741,7 @@ class CfgVehicles {
             };
             class AA_DisableNVG {
                 displayName = "Disable NVG Usage";
-                tooltip = "Prevent AI from using NVGs.";
+                tooltip = "Prevent AI from using night vision goggles.";
                 control = "Checkbox";
                 property = "Recondo_AITweaks_AA_DisableNVG";
                 expression = "_this setVariable ['aa_disablenvg', _value, true];";
@@ -751,7 +751,7 @@ class CfgVehicles {
             };
             class AA_DisableSuppression {
                 displayName = "Disable Suppression";
-                tooltip = "Prevent AI from being suppressed.";
+                tooltip = "Prevent AI from being affected by suppressive fire.";
                 control = "Checkbox";
                 property = "Recondo_AITweaks_AA_DisableSuppression";
                 expression = "_this setVariable ['aa_disablesuppression', _value, true];";
@@ -761,7 +761,7 @@ class CfgVehicles {
             };
             class AA_DisableAutoCombat {
                 displayName = "Disable Auto Combat";
-                tooltip = "Prevent AI from auto combat mode.";
+                tooltip = "Prevent AI from automatically switching to combat mode.";
                 control = "Checkbox";
                 property = "Recondo_AITweaks_AA_DisableAutoCombat";
                 expression = "_this setVariable ['aa_disableautocombat', _value, true];";
@@ -771,7 +771,7 @@ class CfgVehicles {
             };
             class AA_RemoveGrenades {
                 displayName = "Remove Grenades";
-                tooltip = "Remove grenades from inventory.";
+                tooltip = "Remove specified grenades/throwables from AI inventory.";
                 control = "Checkbox";
                 property = "Recondo_AITweaks_AA_RemoveGrenades";
                 expression = "_this setVariable ['aa_removegrenades', _value, true];";
@@ -1741,7 +1741,7 @@ class CfgVehicles {
             // STATIC WEAPON SETTINGS
             class StaticClassnames {
                 displayName = "STATIC - Weapon Classnames";
-                tooltip = "Comma-separated list of static weapon classnames. One will be randomly selected per spawn point.";
+                tooltip = "Comma-separated list of static weapon classnames. One will be randomly selected per spawn point. Example: vn_o_60_mortar,vn_o_hmg_dshkm";
                 control = "EditMulti3";
                 property = "Recondo_SDR_StaticClassnames";
                 expression = "_this setVariable ['staticclassnames', _value, true];";
@@ -1753,7 +1753,7 @@ class CfgVehicles {
             // UNIT SETTINGS
             class UnitClassnames {
                 displayName = "UNITS - Gunner Classnames";
-                tooltip = "Comma-separated list of AI unit classnames to garrison the statics. One will be randomly selected per spawn point.";
+                tooltip = "Comma-separated list of AI unit classnames to garrison the statics. Example: vn_o_men_nva_01,vn_o_men_nva_02";
                 control = "EditMulti3";
                 property = "Recondo_SDR_UnitClassnames";
                 expression = "_this setVariable ['unitclassnames', _value, true];";
@@ -1869,7 +1869,7 @@ class CfgVehicles {
             // UNIT SETTINGS
             class UnitClassnames {
                 displayName = "UNITS - Classnames";
-                tooltip = "Comma-separated list of AI unit classnames. Units will be randomly selected for each patrol.";
+                tooltip = "Comma-separated list of AI unit classnames. Units will be randomly selected for each patrol. Example: vn_o_men_nva_01,vn_o_men_nva_02";
                 control = "EditMulti3";
                 property = "Recondo_FP_UnitClassnames";
                 expression = "_this setVariable ['unitclassnames', _value, true];";
@@ -2012,7 +2012,7 @@ class CfgVehicles {
             // TRIGGER SETTINGS
             class TriggerActivationSide {
                 displayName = "TRIGGER - Activation Side";
-                tooltip = "Which side will trigger patrol spawns when entering the area.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Combo";
                 property = "Recondo_FP_TriggerSide";
                 expression = "_this setVariable ['triggerside', _value, true];";
@@ -2553,7 +2553,7 @@ class CfgVehicles {
             // UNIT SETTINGS
             class UnitClassnames {
                 displayName = "UNITS - Classnames";
-                tooltip = "Comma-separated list of AI unit classnames. Units will be randomly selected for each patrol.";
+                tooltip = "Comma-separated list of AI unit classnames. Units will be randomly selected for each patrol. Example: vn_o_men_nva_01,vn_o_men_nva_02";
                 control = "EditMulti3";
                 property = "Recondo_PP_UnitClassnames";
                 expression = "_this setVariable ['unitclassnames', _value, true];";
@@ -2585,7 +2585,7 @@ class CfgVehicles {
             // TRIGGER SETTINGS
             class TriggerActivationSide {
                 displayName = "TRIGGER - Activation Side";
-                tooltip = "Which side will trigger patrol spawns when entering the area.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Combo";
                 property = "Recondo_PP_TriggerSide";
                 expression = "_this setVariable ['triggerside', _value, true];";
@@ -2970,7 +2970,7 @@ class CfgVehicles {
             };
             class NoCountMarkerPrefix {
                 displayName = "No-Count Marker Prefix";
-                tooltip = "Markers with this prefix define safe zones where radio use won't count.";
+                tooltip = "Markers with this prefix define safe zones where radio use won't count. Example: SAFEZONE_";
                 control = "Edit";
                 property = "Recondo_RWR_NoCountPrefix";
                 expression = "_this setVariable ['nocountprefix', _value, true];";
@@ -3176,7 +3176,7 @@ class CfgVehicles {
             };
             class NoFootprintPrefix {
                 displayName = "No Footprint Marker Prefix";
-                tooltip = "Prefix for markers that define safe zones where footprints are not created.";
+                tooltip = "Prefix for markers that define safe zones where footprints are not created. Example: NOFP_";
                 control = "Edit";
                 property = "Recondo_Trackers_NoFootprintPrefix";
                 expression = "_this setVariable ['nofootprintprefix', _value, true];";
@@ -3339,7 +3339,7 @@ class CfgVehicles {
             };
             class DogDetectionDay {
                 displayName = "Day Detection Range (m)";
-                tooltip = "Dog detection range during daytime.";
+                tooltip = "Dog detection range during daytime in meters.";
                 control = "Edit";
                 property = "Recondo_Trackers_DogDetectionDay";
                 expression = "_this setVariable ['dogdetectionday', parseNumber _value, true];";
@@ -3349,7 +3349,7 @@ class CfgVehicles {
             };
             class DogDetectionNight {
                 displayName = "Night Detection Range (m)";
-                tooltip = "Dog detection range during nighttime.";
+                tooltip = "Dog detection range during nighttime in meters.";
                 control = "Edit";
                 property = "Recondo_Trackers_DogDetectionNight";
                 expression = "_this setVariable ['dogdetectionnight', parseNumber _value, true];";
@@ -3707,7 +3707,7 @@ class CfgVehicles {
             };
             class DogDetectionDay {
                 displayName = "Day Detection Range (m)";
-                tooltip = "Dog detection range during daytime.";
+                tooltip = "Dog detection range during daytime in meters.";
                 control = "Edit";
                 property = "Recondo_RW_DogDetectionDay";
                 expression = "_this setVariable ['dogdetectionday', parseNumber _value, true];";
@@ -3717,7 +3717,7 @@ class CfgVehicles {
             };
             class DogDetectionNight {
                 displayName = "Night Detection Range (m)";
-                tooltip = "Dog detection range during nighttime.";
+                tooltip = "Dog detection range during nighttime in meters.";
                 control = "Edit";
                 property = "Recondo_RW_DogDetectionNight";
                 expression = "_this setVariable ['dogdetectionnight', parseNumber _value, true];";
@@ -4915,7 +4915,7 @@ class CfgVehicles {
             };
             class TriggerSide {
                 displayName = "Trigger Side";
-                tooltip = "Which side triggers the spawn.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Combo";
                 property = "Recondo_ObjDestroy_TriggerSide";
                 expression = "_this setVariable ['triggerside', _value, true];";
@@ -5214,6 +5214,17 @@ class CfgVehicles {
                 category = "Recondo_Terminal_General";
             };
             
+            class MasterDebug {
+                displayName = "GENERAL - Master Debug";
+                tooltip = "Enable debug logging for ALL Recondo Wars modules at once. Overrides individual module debug settings. Useful for beta testing.";
+                control = "Checkbox";
+                property = "Recondo_Terminal_MasterDebug";
+                expression = "_this setVariable ['masterdebug', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Terminal_General";
+            };
+            
             // ========================================
             // DEBUG SETTINGS
             // ========================================
@@ -5505,7 +5516,7 @@ class CfgVehicles {
             };
             class HubTriggerSide {
                 displayName = "Hub Trigger Side";
-                tooltip = "Side that triggers hub spawning.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Combo";
                 property = "Recondo_HubSubs_HubTriggerSide";
                 expression = "_this setVariable ['hubtriggerside', _value, true];";
@@ -6181,7 +6192,7 @@ class CfgVehicles {
             };
             class TriggerSide {
                 displayName = "Trigger Side";
-                tooltip = "Side that triggers spawning.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Combo";
                 property = "Recondo_HVT_TriggerSide";
                 expression = "_this setVariable ['triggerside', _value, true];";
@@ -6616,7 +6627,7 @@ class CfgVehicles {
             };
             class BadCiviTriggerSide {
                 displayName = "Trigger Side";
-                tooltip = "Which side's presence triggers the weapon pull.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Combo";
                 property = "Recondo_HVT_BadCiviTriggerSide";
                 expression = "_this setVariable ['badcivitriggerside', _value, true];";
@@ -7022,7 +7033,7 @@ class CfgVehicles {
             };
             class TriggerSide {
                 displayName = "Trigger Side";
-                tooltip = "Side that triggers spawning.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Combo";
                 property = "Recondo_Hostage_TriggerSide";
                 expression = "_this setVariable ['triggerside', _value, true];";
@@ -7387,7 +7398,7 @@ class CfgVehicles {
             };
             class BadCiviTriggerSide {
                 displayName = "Trigger Side";
-                tooltip = "Which side's presence triggers the weapon pull.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Combo";
                 property = "Recondo_Hostage_BadCiviTriggerSide";
                 expression = "_this setVariable ['badcivitriggerside', _value, true];";
@@ -7690,7 +7701,7 @@ class CfgVehicles {
             };
             class TriggerSide {
                 displayName = "Trigger Side";
-                tooltip = "Which side activates the proximity triggers.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Combo";
                 property = "Recondo_Jammer_TriggerSide";
                 expression = "_this setVariable ['triggerside', _value, true];";
@@ -8486,7 +8497,7 @@ class CfgVehicles {
             };
             class TriggerSide {
                 displayName = "Trigger Side";
-                tooltip = "Which side's units will activate the trigger.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Combo";
                 property = "Recondo_Ambient_TriggerSide";
                 expression = "_this setVariable ['triggerside', _value, true];";
@@ -9680,7 +9691,7 @@ class CfgVehicles {
             // ========================================
             class MaxSpeed {
                 displayName = "BEHAVIOR - Max Speed (km/h)";
-                tooltip = "Maximum speed of the convoy.";
+                tooltip = "Maximum speed of the convoy in km/h.";
                 control = "Edit";
                 property = "Recondo_Convoy_MaxSpeed";
                 expression = "_this setVariable ['maxspeed', parseNumber _value, true];";
@@ -10158,7 +10169,7 @@ class CfgVehicles {
             };
             class TriggerSide {
                 displayName = "Trigger Side";
-                tooltip = "Which side's units trigger the civilian spawn.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Combo";
                 property = "Recondo_CivWorking_TriggerSide";
                 expression = "_this setVariable ['triggerside', _value, true];";
@@ -10330,7 +10341,7 @@ class CfgVehicles {
             // ========================================
             class MarkerPrefix {
                 displayName = "GENERAL - Marker Prefix";
-                tooltip = "Prefix for map markers defining traffic zones. All markers starting with this prefix become active zones.";
+                tooltip = "Prefix for map markers defining traffic zones. All markers starting with this prefix become active zones. Example: TRAFFIC_";
                 control = "Edit";
                 property = "Recondo_CivTraffic_MarkerPrefix";
                 expression = "_this setVariable ['markerprefix', _value, true];";
@@ -10641,7 +10652,7 @@ class CfgVehicles {
             };
             class TriggerSide {
                 displayName = "Trigger Side";
-                tooltip = "Which side triggers civilian spawning. WEST, EAST, GUER, CIV, or ANYPLAYER.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Edit";
                 property = "Recondo_CivPOL_TriggerSide";
                 expression = "_this setVariable ['triggerside', _value, true];";
@@ -11033,7 +11044,7 @@ class CfgVehicles {
             
             class TriggerSide {
                 displayName = "Trigger Side";
-                tooltip = "Which side activates proximity triggers.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Combo";
                 property = "Recondo_CampsRandom_TriggerSide";
                 expression = "_this setVariable ['triggerside', _value, true];";
@@ -12724,7 +12735,7 @@ class CfgVehicles {
             };
             class MarkerPrefix {
                 displayName = "Marker Prefix";
-                tooltip = "Prefix for invisible map markers where sites can spawn. All markers starting with this prefix will be detected.";
+                tooltip = "Prefix for invisible map markers where sites can spawn. All markers starting with this prefix will be detected. Example: SITE_";
                 control = "Edit";
                 property = "Recondo_CSS_MarkerPrefix";
                 expression = "_this setVariable ['markerprefix', _value, true];";
@@ -12832,7 +12843,7 @@ class CfgVehicles {
             };
             class TriggerSide {
                 displayName = "Trigger Side";
-                tooltip = "Which side activates the proximity trigger.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Combo";
                 property = "Recondo_CSS_TriggerSide";
                 expression = "_this setVariable ['triggerside', _value, true];";
@@ -13051,7 +13062,7 @@ class CfgVehicles {
             // ========================================
             class TriggerSide {
                 displayName = "Trigger Side";
-                tooltip = "Which side's presence triggers the weapon pull.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Combo";
                 property = "Recondo_BC_TriggerSide";
                 expression = "_this setVariable ['triggerside', _value, true];";
@@ -13387,7 +13398,7 @@ class CfgVehicles {
             // ========================================
             class TriggerSide {
                 displayName = "Trigger Side";
-                tooltip = "Which side's presence triggers the POO site spawn.";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
                 control = "Combo";
                 property = "Recondo_POO_TriggerSide";
                 expression = "_this setVariable ['triggerside', _value, true];";
@@ -13439,7 +13450,7 @@ class CfgVehicles {
             // ========================================
             class WeaponClassname {
                 displayName = "Static Weapon Classname";
-                tooltip = "Classname of the static artillery or mortar to spawn at each POO site.";
+                tooltip = "Classname of the static artillery or mortar to spawn at each POO site. Example: vn_o_60_mortar";
                 control = "Edit";
                 property = "Recondo_POO_WeaponClassname";
                 expression = "_this setVariable ['weaponclassname', _value, true];";

@@ -8,6 +8,7 @@ class CfgFunctions {
             class preInit {};
             class postInit {};
             class parseClassnames {};
+            class validateModules {};
         };
         
         // Centralized Simulation Monitoring System Functions
