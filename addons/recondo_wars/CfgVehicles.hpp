@@ -52,7 +52,7 @@ class CfgVehicles {
         isDisposable = 0;
         is3DEN = 0;
         curatorCanAttach = 1;
-        icon = "\recondo_wars\images\icons\AI_Tweaks.paa";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\target_ca.paa";
         
         class ModuleDescription: ModuleDescription {
             description = "Configures AI skill levels, behavior, and equipment per side. Place one module per side you want to tweak. Base settings apply to all units except those defined as Elite Soldiers or AA Gunners.";
@@ -869,7 +869,7 @@ class CfgVehicles {
         isDisposable = 0;
         is3DEN = 0;
         curatorCanAttach = 1;
-        icon = "\recondo_wars\images\icons\Player_Settings.paa";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\use_ca.paa";
         
         class ModuleDescription: ModuleDescription {
             description = "Configures player graphics restrictions, traits, forced faces, and ACE rations settings.";
@@ -1146,7 +1146,7 @@ class CfgVehicles {
         isDisposable = 0;
         is3DEN = 0;
         curatorCanAttach = 1;
-        icon = "\recondo_wars\images\icons\Arsenal_Area.paa";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\rearm_ca.paa";
         
         class ModuleDescription: ModuleDescription {
             description = "Creates an area where authorized players can access an ACE Arsenal. Items available are determined by a reference ammo box.";
@@ -1278,6 +1278,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Main";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\heal_ca.paa";
         function = "Recondo_fnc_moduleDisableRationsArea";
         functionPriority = 1;
         isGlobal = 0;
@@ -1350,6 +1351,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Main";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa";
         function = "Recondo_fnc_moduleJIPArea";
         functionPriority = 1;
         isGlobal = 0;
@@ -1422,6 +1424,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Main";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\scout_ca.paa";
         function = "Recondo_fnc_moduleSpectatorObject";
         functionPriority = 1;
         isGlobal = 0;
@@ -1560,6 +1563,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Main";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\box_ca.paa";
         function = "Recondo_fnc_modulePersistence";
         functionPriority = 0;
         isGlobal = 0;
@@ -1698,6 +1702,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\defend_ca.paa";
         function = "Recondo_fnc_moduleStaticDefenseRandomized";
         functionPriority = 5;
         isGlobal = 0;
@@ -1826,6 +1831,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\walk_ca.paa";
         function = "Recondo_fnc_moduleFootPatrols";
         functionPriority = 5;
         isGlobal = 0;
@@ -2129,7 +2135,7 @@ class CfgVehicles {
         isDisposable = 0;
         is3DEN = 0;
         curatorCanAttach = 1;
-        icon = "\recondo_wars\images\icons\Add_AI_Crew.paa";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\getin_ca.paa";
         
         class ModuleDescription: ModuleDescription {
             description = "Adds ACE self-interaction options to request/remove AI crew for synced vehicles. Sync this module to vehicles that should have crew management capability.";
@@ -2332,6 +2338,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Misc";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\heli_ca.paa";
         function = "Recondo_fnc_moduleSTABO";
         functionPriority = 5;
         isGlobal = 0;
@@ -2500,6 +2507,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\run_ca.paa";
         function = "Recondo_fnc_modulePathPatrols";
         functionPriority = 5;
         isGlobal = 0;
@@ -2683,6 +2691,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Main";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\radio_ca.paa";
         function = "Recondo_fnc_moduleRWRadio";
         functionPriority = 5;
         isGlobal = 0;
@@ -3087,6 +3096,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\search_ca.paa";
         function = "Recondo_fnc_moduleTrackers";
         functionPriority = 5;
         isGlobal = 0;
@@ -3466,6 +3476,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\attack_ca.paa";
         function = "Recondo_fnc_moduleReinforcementWaves";
         functionPriority = 5;
         isGlobal = 0;
@@ -3868,6 +3879,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\intel_ca.paa";
         function = "Recondo_fnc_moduleIntel";
         functionPriority = 1;
         isGlobal = 0;
@@ -3985,6 +3997,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\intel_ca.paa";
         function = "Recondo_fnc_moduleIntelItems";
         functionPriority = 3;
         isGlobal = 0;
@@ -4193,6 +4206,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\whiteboard_ca.paa";
         function = "Recondo_fnc_moduleIntelBoard";
         functionPriority = 3;
         isGlobal = 0;
@@ -4323,6 +4337,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\listen_ca.paa";
         function = "Recondo_fnc_moduleWiretap";
         functionPriority = 5;
         isGlobal = 0;
@@ -4697,6 +4712,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\destroy_ca.paa";
         function = "Recondo_fnc_moduleObjectiveDestroy";
         functionPriority = 4;
         isGlobal = 0;
@@ -5199,6 +5215,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Tools";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\use_ca.paa";
         function = "Recondo_fnc_moduleTerminal";
         functionPriority = 10;
         isGlobal = 0;
@@ -5268,6 +5285,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\destroy_ca.paa";
         function = "Recondo_fnc_moduleObjectiveHubSubs";
         functionPriority = 4;
         isGlobal = 0;
@@ -5936,6 +5954,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\kill_ca.paa";
         function = "Recondo_fnc_moduleObjectiveHVT";
         functionPriority = 4;
         isGlobal = 0;
@@ -6701,6 +6720,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa";
         function = "Recondo_fnc_moduleObjectiveHostages";
         functionPriority = 5;
         isGlobal = 0;
@@ -7472,6 +7492,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\radio_ca.paa";
         function = "Recondo_fnc_moduleObjectiveJammer";
         functionPriority = 4;
         isGlobal = 0;
@@ -7990,6 +8011,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Main";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\navigate_ca.paa";
         function = "Recondo_fnc_moduleWeather";
         functionPriority = 1;
         isGlobal = 0;
@@ -8116,6 +8138,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Tools";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\whiteboard_ca.paa";
         function = "Recondo_fnc_moduleIntroScreen";
         functionPriority = 10;
         isGlobal = 0;
@@ -8335,6 +8358,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Tools";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\repair_ca.paa";
         function = "Recondo_fnc_modulePerfMonitor";
         functionPriority = 1;
         isGlobal = 0;
@@ -8457,6 +8481,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Misc";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\listen_ca.paa";
         function = "Recondo_fnc_moduleAmbientSound";
         functionPriority = 5;
         isGlobal = 0;
@@ -8696,6 +8721,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Misc";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\talk_ca.paa";
         function = "Recondo_fnc_moduleChatControl";
         functionPriority = 1;
         isGlobal = 0;
@@ -9504,6 +9530,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\car_ca.paa";
         function = "Recondo_fnc_moduleConvoySystem";
         functionPriority = 5;
         isGlobal = 0;
@@ -9858,6 +9885,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Misc";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\move_ca.paa";
         function = "Recondo_fnc_moduleOutpostTele";
         functionPriority = 1;
         isGlobal = 0;
@@ -10121,7 +10149,7 @@ class CfgVehicles {
         canSetArea = 1;
         canSetAreaShape = 0;
         canSetAreaHeight = 0;
-        icon = "\a3\modules_f\data\iconTaskSetState_ca.paa";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\walk_ca.paa";
         
         class AttributeValues {
             size3[] = {50, 50, -1};
@@ -10342,7 +10370,7 @@ class CfgVehicles {
         canSetArea = 0;
         canSetAreaShape = 0;
         canSetAreaHeight = 0;
-        icon = "\a3\modules_f\data\iconTaskSetState_ca.paa";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\car_ca.paa";
         
         class ModuleDescription: ModuleDescription {
             description = "Spawns civilian vehicles that drive around on roads within marker-defined zones. Vehicles spawn when players approach and despawn when players leave the area. Civilians react to player interaction and gunfire.";
@@ -10565,7 +10593,7 @@ class CfgVehicles {
         is3DEN = 0;
         curatorCanAttach = 0;
         canSetArea = 0;
-        icon = "\a3\modules_f\data\iconTaskSetState_ca.paa";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa";
         
         class ModuleDescription: ModuleDescription {
             description = "Creates realistic civilian daily routines in villages. Civilians have homes, jobs (farming, fishing), daily schedules, and night lights. They flee from combat. Players can interact and occasionally receive intel documents.";
@@ -10914,6 +10942,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\default_ca.paa";
         function = "Recondo_fnc_moduleCampsRandom";
         functionPriority = 5;
         isGlobal = 0;
@@ -11369,7 +11398,7 @@ class CfgVehicles {
         isDisposable = 0;
         is3DEN = 0;
         curatorCanAttach = 1;
-        icon = "\a3\modules_f\data\iconTaskSetState_ca.paa";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\danger_ca.paa";
         
         class ModuleDescription: ModuleDescription {
             description = "Limits player inventory items for balancing purposes. Periodically checks player inventories and removes excess items that exceed configured limits. Supports wildcard pattern matching for item classnames.";
@@ -11580,7 +11609,7 @@ class CfgVehicles {
         isDisposable = 0;
         is3DEN = 0;
         curatorCanAttach = 1;
-        icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\intel_ca.paa";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\intel_ca.paa";
         
         class ModuleDescription: ModuleDescription {
             description = "When configured players die, intel items are added to their body for enemies to collect. Integrates with the Intel module for turn-in and reveals.";
@@ -11679,7 +11708,7 @@ class CfgVehicles {
         isDisposable = 0;
         is3DEN = 0;
         curatorCanAttach = 1;
-        icon = "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\destroy_ca.paa";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\mine_ca.paa";
         
         class ModuleDescription: ModuleDescription {
             description = "Operation Eldest Son - Sabotaged enemy ammunition. Players place 'poison' items in dead enemy bodies. Each item increases the chance that enemy weapons explode when fired. Simulates booby-trapped ammo supply.";
@@ -11782,6 +11811,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Main";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\move_ca.paa";
         function = "Recondo_fnc_moduleDeployableRallypoint";
         functionPriority = 1;
         isGlobal = 0;
@@ -12101,7 +12131,7 @@ class CfgVehicles {
         is3DEN = 0;
         curatorCanAttach = 0;
         canSetArea = 0;
-        icon = "\a3\ui_f\data\igui\cfg\actions\arrow_up_gs.paa";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\scout_ca.paa";
         
         class ModuleDescription: ModuleDescription {
             description = "Point-based progression system. Players earn Recon Points by completing objectives (HVT captures, hostage rescues, intel turn-ins, etc.) and enemy kills. Points can be spent at Unlock Terminals to permanently unlock gear items. Sync objects to this module to create Unlock Terminals.";
@@ -12677,7 +12707,7 @@ class CfgVehicles {
         isDisposable = 0;
         is3DEN = 0;
         curatorCanAttach = 0;
-        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\default_ca.paa";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\defend_ca.paa";
         
         class ModuleDescription: ModuleDescription {
             description = "Disables ACE carry on specified static weapons while keeping drag enabled. Works with ACE CSW assembled weapons.";

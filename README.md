@@ -88,10 +88,11 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 All features are accessed through **Eden Editor modules**:
 
 1. Open Eden Editor
-2. Place modules from the "Recondo Wars" category
-3. Configure module attributes in the module's properties
-4. Some modules require synchronization with objects or units
-5. Hover over any attribute to see its tooltip with description and examples
+2. Place modules from the organized categories: **RW - Main**, **RW - Objectives**, **RW - Misc**, and **RW - Tools**
+3. Each module has a distinct icon for quick visual identification
+4. Configure module attributes in the module's properties
+5. Some modules require synchronization with objects or units
+6. Hover over any attribute to see its tooltip with description and examples
 
 ## Building
 
