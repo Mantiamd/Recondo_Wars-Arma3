@@ -612,5 +612,24 @@ class CfgFunctions {
             class handlePowergridDestroyed {};
         };
         
+        // Objective Photographs Module Functions
+        class ObjectivePhotographs {
+            file = "\recondo_wars\functions\objectivephotographs";
+            class moduleObjectivePhotographs {};
+            class spawnPhotoObjective {};
+            class spawnPhotoAI {};
+            class createPhotoTrigger {};
+            class initPhotoCamera {};
+            class handlePhotoTaken {};
+            class handlePhotoComplete {};
+            class addPhotoTurnIn {};
+            class addPhotoTurnInClient {};
+            class handlePhotoTurnIn {};
+            class getPhotoObjectiveCount {};
+            class createPhotoSmellTrigger { file = "\recondo_wars\functions\objectivephotographs\fn_createSmellTrigger.sqf"; };
+            class showPhotoSmellHint { file = "\recondo_wars\functions\objectivephotographs\fn_showSmellHint.sqf"; };
+            class updatePhotoNightLights { file = "\recondo_wars\functions\objectivephotographs\fn_updateNightLights.sqf"; };
+        };
+        
     };
 };

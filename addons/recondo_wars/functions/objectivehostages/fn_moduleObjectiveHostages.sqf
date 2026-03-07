@@ -35,6 +35,9 @@ private _profileHostage1 = _logic getVariable ["profile_hostage1", false];
 private _profileHostage2 = _logic getVariable ["profile_hostage2", false];
 private _profileHostage3 = _logic getVariable ["profile_hostage3", false];
 private _profileHostageARVN = _logic getVariable ["profile_hostage_arvn", false];
+private _profileHostageCalloway = _logic getVariable ["profile_hostage_calloway", false];
+private _profileHostageVandermeer = _logic getVariable ["profile_hostage_vandermeer", false];
+private _profileHostageGreer = _logic getVariable ["profile_hostage_greer", false];
 
 // General
 private _objectiveName = _logic getVariable ["objectivename", "Hostage Rescue"];
@@ -60,6 +63,14 @@ private _compVCcamp1 = _logic getVariable ["comp_vc_camp1", false];
 private _compVCcamp2 = _logic getVariable ["comp_vc_camp2", false];
 private _compVCPOWcamp1 = _logic getVariable ["comp_vc_pow_camp1", false];
 private _compVCPOWcamp2 = _logic getVariable ["comp_vc_pow_camp2", false];
+private _compShack1 = _logic getVariable ["comp_shack_1", false];
+private _compShack2 = _logic getVariable ["comp_shack_2", false];
+private _compShack3 = _logic getVariable ["comp_shack_3", false];
+private _compShack4 = _logic getVariable ["comp_shack_4", false];
+private _compShack5 = _logic getVariable ["comp_shack_5", false];
+private _compShack6 = _logic getVariable ["comp_shack_6", false];
+private _compShack7 = _logic getVariable ["comp_shack_7", false];
+private _compShack8 = _logic getVariable ["comp_shack_8", false];
 private _customCompPath = _logic getVariable ["customcomppath", "compositions"];
 private _customActiveCompsRaw = _logic getVariable ["customactivecomps", ""];
 private _clearRadius = _logic getVariable ["clearradius", 25];
@@ -136,6 +147,9 @@ if (_profileHostage1) then { _profilePoolList pushBack "Hostage1.sqf"; };
 if (_profileHostage2) then { _profilePoolList pushBack "Hostage2.sqf"; };
 if (_profileHostage3) then { _profilePoolList pushBack "Hostage3.sqf"; };
 if (_profileHostageARVN) then { _profilePoolList pushBack "Hostage_ARVN.sqf"; };
+if (_profileHostageCalloway) then { _profilePoolList pushBack "Hostage_Calloway.sqf"; };
+if (_profileHostageVandermeer) then { _profilePoolList pushBack "Hostage_Vandermeer.sqf"; };
+if (_profileHostageGreer) then { _profilePoolList pushBack "Hostage_Greer.sqf"; };
 
 // Validate - at least one profile must be selected
 if (count _profilePoolList == 0) exitWith {
@@ -216,6 +230,14 @@ if (_compVCcamp1) then { _compositionPool pushBack ["VC_camp1.sqe", true]; };
 if (_compVCcamp2) then { _compositionPool pushBack ["VC_camp2.sqe", true]; };
 if (_compVCPOWcamp1) then { _compositionPool pushBack ["VC_POW_camp1.sqe", true]; };
 if (_compVCPOWcamp2) then { _compositionPool pushBack ["VC_POW_camp2.sqe", true]; };
+if (_compShack1) then { _compositionPool pushBack ["Shack_1.sqe", true]; };
+if (_compShack2) then { _compositionPool pushBack ["Shack_2.sqe", true]; };
+if (_compShack3) then { _compositionPool pushBack ["Shack_3.sqe", true]; };
+if (_compShack4) then { _compositionPool pushBack ["Shack_4.sqe", true]; };
+if (_compShack5) then { _compositionPool pushBack ["Shack_5.sqe", true]; };
+if (_compShack6) then { _compositionPool pushBack ["Shack_6.sqe", true]; };
+if (_compShack7) then { _compositionPool pushBack ["Shack_7.sqe", true]; };
+if (_compShack8) then { _compositionPool pushBack ["Shack_8.sqe", true]; };
 
 // Parse and add custom compositions from mission folder
 private _customCompositions = [_customActiveCompsRaw] call _fnc_parseClassnames;

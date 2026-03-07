@@ -4300,6 +4300,16 @@ class CfgVehicles {
                 defaultValue = "true";
                 category = "Recondo_IntelBoard_Display";
             };
+            class EnablePhotos {
+                displayName = "Show Photograph Objectives";
+                tooltip = "Show Reconnaissance Photo objectives on the Intel Board.";
+                control = "Checkbox";
+                property = "Recondo_IntelBoard_EnablePhotos";
+                expression = "_this setVariable ['enablephotos', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_IntelBoard_Display";
+            };
             class ShowRevealedLocations {
                 displayName = "Show Revealed Locations";
                 tooltip = "Show grid references for targets that have been revealed through intel.";
@@ -4848,7 +4858,107 @@ class CfgVehicles {
                 defaultValue = "false";
                 category = "Recondo_ObjDestroy_CompPool";
             };
-            
+            class Comp_NVABivouac1 {
+                displayName = "NVA_Bivouac_1";
+                tooltip = "Enable this composition in the selection pool (NVA_Bivouac_1.sqe / Bivouac_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_ObjDestroy_Comp_NVABivouac1";
+                expression = "_this setVariable ['comp_nva_bivouac_1', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_ObjDestroy_CompPool";
+            };
+            class Comp_NVAVCBivouac2 {
+                displayName = "NVA_VC_Bivouac_2";
+                tooltip = "Enable this composition in the selection pool (NVA_VC_Bivouac_2.sqe / Bivouac_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_ObjDestroy_Comp_NVAVCBivouac2";
+                expression = "_this setVariable ['comp_nva_vc_bivouac_2', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_ObjDestroy_CompPool";
+            };
+            class Comp_Bivouac3 {
+                displayName = "Bivouac_3";
+                tooltip = "Enable this composition in the selection pool (Bivouac_3.sqe / Bivouac_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_ObjDestroy_Comp_Bivouac3";
+                expression = "_this setVariable ['comp_bivouac_3', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_ObjDestroy_CompPool";
+            };
+            class Comp_NVABivouac4 {
+                displayName = "NVA_Bivouac_4";
+                tooltip = "Enable this composition in the selection pool (NVA_Bivouac_4.sqe / Bivouac_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_ObjDestroy_Comp_NVABivouac4";
+                expression = "_this setVariable ['comp_nva_bivouac_4', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_ObjDestroy_CompPool";
+            };
+            class Comp_NVABivouac5 {
+                displayName = "NVA_Bivouac_5";
+                tooltip = "Enable this composition in the selection pool (NVA_Bivouac_5.sqe / Bivouac_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_ObjDestroy_Comp_NVABivouac5";
+                expression = "_this setVariable ['comp_nva_bivouac_5', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_ObjDestroy_CompPool";
+            };
+            class Comp_Bivouac6 {
+                displayName = "Bivouac_6";
+                tooltip = "Enable this composition in the selection pool (Bivouac_6.sqe / Bivouac_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_ObjDestroy_Comp_Bivouac6";
+                expression = "_this setVariable ['comp_bivouac_6', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_ObjDestroy_CompPool";
+            };
+            class Comp_Bivouac7 {
+                displayName = "Bivouac_7";
+                tooltip = "Enable this composition in the selection pool (Bivouac_7.sqe / Bivouac_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_ObjDestroy_Comp_Bivouac7";
+                expression = "_this setVariable ['comp_bivouac_7', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_ObjDestroy_CompPool";
+            };
+            class Comp_Bivouac8 {
+                displayName = "Bivouac_8";
+                tooltip = "Enable this composition in the selection pool (Bivouac_8.sqe / Bivouac_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_ObjDestroy_Comp_Bivouac8";
+                expression = "_this setVariable ['comp_bivouac_8', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_ObjDestroy_CompPool";
+            };
+            class Comp_NVABivouac9 {
+                displayName = "NVA_Bivouac_9";
+                tooltip = "Enable this composition in the selection pool (NVA_Bivouac_9.sqe / Bivouac_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_ObjDestroy_Comp_NVABivouac9";
+                expression = "_this setVariable ['comp_nva_bivouac_9', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_ObjDestroy_CompPool";
+            };
+            class Comp_Bivouac10 {
+                displayName = "Bivouac_10";
+                tooltip = "Enable this composition in the selection pool (Bivouac_10.sqe / Bivouac_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_ObjDestroy_Comp_Bivouac10";
+                expression = "_this setVariable ['comp_bivouac_10', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_ObjDestroy_CompPool";
+            };
+
             // ========================================
             // CUSTOM COMPOSITIONS
             // ========================================
@@ -6014,7 +6124,27 @@ class CfgVehicles {
                 defaultValue = "false";
                 category = "Recondo_HVT_ProfilePool";
             };
-            
+            class Profile_VCResupplyCoord {
+                displayName = "VC Resupply Coordinator (Trần Bảo Lâm)";
+                tooltip = "Enable this HVT profile. Vietcong logistics cadre managing resupply through rivers and mangroves.";
+                control = "Checkbox";
+                property = "Recondo_HVT_Profile_VCResupplyCoord";
+                expression = "_this setVariable ['profile_vc_resupplycoord', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HVT_ProfilePool";
+            };
+            class Profile_VCSpy {
+                displayName = "VC Spy (Nguyễn Văn Phú)";
+                tooltip = "Enable this HVT profile. Vietcong intelligence operative gathering intel on US/ARVN troop movements.";
+                control = "Checkbox";
+                property = "Recondo_HVT_Profile_VCSpy";
+                expression = "_this setVariable ['profile_vc_spy', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HVT_ProfilePool";
+            };
+
             // ========================================
             // GENERAL SETTINGS
             // ========================================
@@ -6138,6 +6268,86 @@ class CfgVehicles {
                 control = "Checkbox";
                 property = "Recondo_HVT_Comp_VC_POW_camp2";
                 expression = "_this setVariable ['comp_vc_pow_camp2', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HVT_CompositionPool";
+            };
+            class Comp_Shack_1 {
+                displayName = "Shack_1";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_HVT_Comp_Shack_1";
+                expression = "_this setVariable ['comp_shack_1', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HVT_CompositionPool";
+            };
+            class Comp_Shack_2 {
+                displayName = "Shack_2";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_HVT_Comp_Shack_2";
+                expression = "_this setVariable ['comp_shack_2', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HVT_CompositionPool";
+            };
+            class Comp_Shack_3 {
+                displayName = "Shack_3";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_HVT_Comp_Shack_3";
+                expression = "_this setVariable ['comp_shack_3', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HVT_CompositionPool";
+            };
+            class Comp_Shack_4 {
+                displayName = "Shack_4";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_HVT_Comp_Shack_4";
+                expression = "_this setVariable ['comp_shack_4', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HVT_CompositionPool";
+            };
+            class Comp_Shack_5 {
+                displayName = "Shack_5";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_HVT_Comp_Shack_5";
+                expression = "_this setVariable ['comp_shack_5', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HVT_CompositionPool";
+            };
+            class Comp_Shack_6 {
+                displayName = "Shack_6";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_HVT_Comp_Shack_6";
+                expression = "_this setVariable ['comp_shack_6', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HVT_CompositionPool";
+            };
+            class Comp_Shack_7 {
+                displayName = "Shack_7";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_HVT_Comp_Shack_7";
+                expression = "_this setVariable ['comp_shack_7', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HVT_CompositionPool";
+            };
+            class Comp_Shack_8 {
+                displayName = "Shack_8";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_HVT_Comp_Shack_8";
+                expression = "_this setVariable ['comp_shack_8', _value, true];";
                 typeName = "BOOL";
                 defaultValue = "false";
                 category = "Recondo_HVT_CompositionPool";
@@ -6780,7 +6990,37 @@ class CfgVehicles {
                 defaultValue = "false";
                 category = "Recondo_Hostage_ProfilePool";
             };
-            
+            class Profile_Calloway {
+                displayName = "CPT Calloway (USMC AH-1 Pilot)";
+                tooltip = "Enable this hostage profile. USMC AH-1G Cobra pilot shot down over Quang Tri province.";
+                control = "Checkbox";
+                property = "Recondo_Hostage_Profile_Calloway";
+                expression = "_this setVariable ['profile_hostage_calloway', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hostage_ProfilePool";
+            };
+            class Profile_Vandermeer {
+                displayName = "MAJ Vandermeer (USAF A-1 Pilot)";
+                tooltip = "Enable this hostage profile. USAF A-1H Skyraider pilot shot down over the Oscar-8 target box.";
+                control = "Checkbox";
+                property = "Recondo_Hostage_Profile_Vandermeer";
+                expression = "_this setVariable ['profile_hostage_vandermeer', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hostage_ProfilePool";
+            };
+            class Profile_Greer {
+                displayName = "WO1 Greer (Army UH-1 Pilot)";
+                tooltip = "Enable this hostage profile. US Army UH-1D pilot shot down in the A Shau Valley.";
+                control = "Checkbox";
+                property = "Recondo_Hostage_Profile_Greer";
+                expression = "_this setVariable ['profile_hostage_greer', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hostage_ProfilePool";
+            };
+
             // ========================================
             // GENERAL SETTINGS
             // ========================================
@@ -6980,6 +7220,86 @@ class CfgVehicles {
                 control = "Checkbox";
                 property = "Recondo_Hostage_Comp_VC_POW_camp2";
                 expression = "_this setVariable ['comp_vc_pow_camp2', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hostage_CompositionPool";
+            };
+            class Comp_Shack_1 {
+                displayName = "Shack_1";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_Hostage_Comp_Shack_1";
+                expression = "_this setVariable ['comp_shack_1', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hostage_CompositionPool";
+            };
+            class Comp_Shack_2 {
+                displayName = "Shack_2";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_Hostage_Comp_Shack_2";
+                expression = "_this setVariable ['comp_shack_2', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hostage_CompositionPool";
+            };
+            class Comp_Shack_3 {
+                displayName = "Shack_3";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_Hostage_Comp_Shack_3";
+                expression = "_this setVariable ['comp_shack_3', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hostage_CompositionPool";
+            };
+            class Comp_Shack_4 {
+                displayName = "Shack_4";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_Hostage_Comp_Shack_4";
+                expression = "_this setVariable ['comp_shack_4', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hostage_CompositionPool";
+            };
+            class Comp_Shack_5 {
+                displayName = "Shack_5";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_Hostage_Comp_Shack_5";
+                expression = "_this setVariable ['comp_shack_5', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hostage_CompositionPool";
+            };
+            class Comp_Shack_6 {
+                displayName = "Shack_6";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_Hostage_Comp_Shack_6";
+                expression = "_this setVariable ['comp_shack_6', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hostage_CompositionPool";
+            };
+            class Comp_Shack_7 {
+                displayName = "Shack_7";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_Hostage_Comp_Shack_7";
+                expression = "_this setVariable ['comp_shack_7', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hostage_CompositionPool";
+            };
+            class Comp_Shack_8 {
+                displayName = "Shack_8";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_Hostage_Comp_Shack_8";
+                expression = "_this setVariable ['comp_shack_8', _value, true];";
                 typeName = "BOOL";
                 defaultValue = "false";
                 category = "Recondo_Hostage_CompositionPool";
@@ -13582,6 +13902,535 @@ class CfgVehicles {
                 category = "Recondo_POO_Debug";
             };
             
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+
+    // =====================================================================
+    // OBJECTIVE - PHOTOGRAPHS MODULE
+    // Photo reconnaissance objectives using SOG PF camera
+    // =====================================================================
+    class Recondo_Module_ObjectivePhotographs: Module_F {
+        scope = 2;
+        displayName = "Objective - Photographs";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\scout_ca.paa";
+        function = "Recondo_fnc_moduleObjectivePhotographs";
+        functionPriority = 4;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        canSetArea = 0;
+
+        class ModuleDescription: ModuleDescription {
+            description = "Spawns photo reconnaissance objectives at invisible map markers. Players must photograph a target object within the composition using the SOG Prairie Fire camera. Photos can be turned in at the Intel module for location reveals. Supports persistence.";
+            sync[] = {"Recondo_Module_Intel"};
+        };
+
+        class Attributes: AttributesBase {
+
+            // ========================================
+            // GENERAL SETTINGS
+            // ========================================
+            class ObjectiveName {
+                displayName = "GENERAL - Objective Name";
+                tooltip = "Name of this photo objective (e.g., 'SAM Site Recon', 'Enemy HQ Photograph').";
+                control = "Edit";
+                property = "Recondo_Photo_Name";
+                expression = "_this setVariable ['objectivename', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Recon Photo""";
+                category = "Recondo_Photo_General";
+            };
+            class ObjectiveDescription {
+                displayName = "Objective Description";
+                tooltip = "Description shown on Intel Board for this objective type.";
+                control = "EditMulti5";
+                property = "Recondo_Photo_Description";
+                expression = "_this setVariable ['objectivedesc', _value, true];";
+                typeName = "STRING";
+                defaultValue = """A site requiring photographic reconnaissance.""";
+                category = "Recondo_Photo_General";
+            };
+            class IntelBoardCategoryName {
+                displayName = "Intel Board Category Name";
+                tooltip = "Custom category name on the Intel Board. Leave blank for default ('RECONNAISSANCE PHOTOS').";
+                control = "Edit";
+                property = "Recondo_Photo_IntelBoardCategoryName";
+                expression = "_this setVariable ['intelboardcategoryname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Photo_General";
+            };
+            class MarkerPrefix {
+                displayName = "Marker Prefix";
+                tooltip = "Prefix for invisible map markers. Example: PHOTO_ will find PHOTO_1, PHOTO_2, etc.";
+                control = "Edit";
+                property = "Recondo_Photo_MarkerPrefix";
+                expression = "_this setVariable ['markerprefix', _value, true];";
+                typeName = "STRING";
+                defaultValue = """PHOTO_""";
+                category = "Recondo_Photo_General";
+            };
+            class SpawnPercentage {
+                displayName = "Spawn Percentage";
+                tooltip = "Percentage of available markers that will have objectives (0-100%).";
+                control = "Slider";
+                property = "Recondo_Photo_SpawnPercentage";
+                expression = "_this setVariable ['spawnpercentage', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.5";
+                sliderRange[] = {0, 1};
+                sliderStep = 0.05;
+                category = "Recondo_Photo_General";
+            };
+
+            // ========================================
+            // COMPOSITION POOL (Mod Bundled)
+            // ========================================
+            class Comp_MassGrave1 {
+                displayName = "COMPOSITIONS - Mass Grave 1";
+                tooltip = "Enable the Mass Grave 1 composition. Target: Land_Grave_11_F";
+                control = "Checkbox";
+                property = "Recondo_Photo_Comp_MassGrave1";
+                expression = "_this setVariable ['comp_massgrave1', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Photo_Composition";
+            };
+            class Comp_Bulldozer1 {
+                displayName = "Bulldozer 1";
+                tooltip = "Enable the Bulldozer 1 composition. Target: Land_vn_bulldozer_01_abandoned_f";
+                control = "Checkbox";
+                property = "Recondo_Photo_Comp_Bulldozer1";
+                expression = "_this setVariable ['comp_bulldozer1', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Photo_Composition";
+            };
+            class Comp_NVALogisticTrucks1 {
+                displayName = "NVA Logistic Trucks 1";
+                tooltip = "Enable the NVA Logistic Trucks 1 composition. Target: vn_o_wheeled_z157_02";
+                control = "Checkbox";
+                property = "Recondo_Photo_Comp_NVALogisticTrucks1";
+                expression = "_this setVariable ['comp_nvalogistictrucks1', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Photo_Composition";
+            };
+            class Comp_Device1 {
+                displayName = "Device 1";
+                tooltip = "Enable the Device 1 composition. Target: Land_Device_assembled_F";
+                control = "Checkbox";
+                property = "Recondo_Photo_Comp_Device1";
+                expression = "_this setVariable ['comp_device1', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Photo_Composition";
+            };
+            class Comp_NVASAM1 {
+                displayName = "NVA SAM 1";
+                tooltip = "Enable the NVA SAM 1 composition. Target: vn_sa2";
+                control = "Checkbox";
+                property = "Recondo_Photo_Comp_NVASAM1";
+                expression = "_this setVariable ['comp_nvasam1', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Photo_Composition";
+            };
+
+            // ========================================
+            // CUSTOM COMPOSITIONS
+            // ========================================
+            class CustomCompositionPath {
+                displayName = "CUSTOM - Folder Path";
+                tooltip = "Relative path to custom composition folder in the mission directory.";
+                control = "Edit";
+                property = "Recondo_Photo_CustomCompPath";
+                expression = "_this setVariable ['customcomppath', _value, true];";
+                typeName = "STRING";
+                defaultValue = """compositions""";
+                category = "Recondo_Photo_Composition";
+            };
+            class CustomActiveCompositions {
+                displayName = "Custom Composition Filenames";
+                tooltip = "Custom .sqe filenames from mission folder. One per line or comma-separated.";
+                control = "EditCodeMulti5";
+                property = "Recondo_Photo_CustomActiveComps";
+                expression = "_this setVariable ['customactivecomps', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Photo_Composition";
+            };
+            class CustomTargetClassname {
+                displayName = "Custom Target Classname";
+                tooltip = "Classname of the target object within custom compositions. Any object in the world matching this classname near an active marker can be photographed.";
+                control = "Edit";
+                property = "Recondo_Photo_CustomTargetClassname";
+                expression = "_this setVariable ['customtargetclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Photo_Composition";
+            };
+            class ClearRadius {
+                displayName = "Terrain Clear Radius";
+                tooltip = "Radius in meters to clear terrain objects around each composition.";
+                control = "Edit";
+                property = "Recondo_Photo_ClearRadius";
+                expression = "_this setVariable ['clearradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """25""";
+                category = "Recondo_Photo_Composition";
+            };
+            class DisableSimulation {
+                displayName = "Disable Simulation on Composition";
+                tooltip = "Disable physics simulation on composition objects for performance.";
+                control = "Checkbox";
+                property = "Recondo_Photo_DisableSimulation";
+                expression = "_this setVariable ['disablesimulation', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_Photo_Composition";
+            };
+
+            // ========================================
+            // PHOTOGRAPHY SETTINGS
+            // ========================================
+            class MaxPhotoDistance {
+                displayName = "PHOTOGRAPHY - Max Distance";
+                tooltip = "Maximum distance in meters for a valid photo (zoom-adjusted). Zooming in effectively increases range.";
+                control = "Edit";
+                property = "Recondo_Photo_MaxDistance";
+                expression = "_this setVariable ['maxphotodistance', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """100""";
+                category = "Recondo_Photo_Photography";
+            };
+            class MinPhotoDistance {
+                displayName = "Min Distance";
+                tooltip = "Minimum distance in meters. Too close and the photo won't be valid.";
+                control = "Edit";
+                property = "Recondo_Photo_MinDistance";
+                expression = "_this setVariable ['minphotodistance', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """1""";
+                category = "Recondo_Photo_Photography";
+            };
+            class RewardItemClassname {
+                displayName = "Reward Item Classname";
+                tooltip = "Item classname given to the player after a successful photo. This item is turned in at the Intel object.";
+                control = "Edit";
+                property = "Recondo_Photo_RewardItem";
+                expression = "_this setVariable ['rewarditemclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """vn_b_item_map""";
+                category = "Recondo_Photo_Photography";
+            };
+            class SuccessMessage {
+                displayName = "Success Message";
+                tooltip = "Message shown to the player on a successful photo.";
+                control = "Edit";
+                property = "Recondo_Photo_SuccessMsg";
+                expression = "_this setVariable ['successmessage', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Photo captured! You received a reconnaissance photograph.""";
+                category = "Recondo_Photo_Photography";
+            };
+            class FailMessage {
+                displayName = "Fail Message";
+                tooltip = "Message shown when the photo does not capture a valid target.";
+                control = "Edit";
+                property = "Recondo_Photo_FailMsg";
+                expression = "_this setVariable ['failmessage', _value, true];";
+                typeName = "STRING";
+                defaultValue = """No valid target in view. Ensure the target is clearly visible.""";
+                category = "Recondo_Photo_Photography";
+            };
+
+            // ========================================
+            // SPAWNING SETTINGS
+            // ========================================
+            class SpawnMode {
+                displayName = "SPAWNING - Spawn Mode";
+                tooltip = "Immediate spawns at mission start. Proximity spawns when players approach.";
+                control = "Combo";
+                property = "Recondo_Photo_SpawnMode";
+                expression = "_this setVariable ['spawnmode', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "1";
+                category = "Recondo_Photo_Spawning";
+                class Values {
+                    class Immediate { name = "Immediate (Mission Start)"; value = 0; };
+                    class Proximity { name = "Proximity Trigger"; value = 1; default = 1; };
+                };
+            };
+            class TriggerRadius {
+                displayName = "Trigger Radius";
+                tooltip = "Radius in meters for composition spawn trigger (proximity mode).";
+                control = "Edit";
+                property = "Recondo_Photo_TriggerRadius";
+                expression = "_this setVariable ['triggerradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """500""";
+                category = "Recondo_Photo_Spawning";
+            };
+            class TriggerSide {
+                displayName = "Trigger Side";
+                tooltip = "Which side's presence activates this trigger. Choose the side that should interact with this system.";
+                control = "Combo";
+                property = "Recondo_Photo_TriggerSide";
+                expression = "_this setVariable ['triggerside', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "1";
+                category = "Recondo_Photo_Spawning";
+                class Values {
+                    class East { name = "OPFOR"; value = 0; };
+                    class West { name = "BLUFOR"; value = 1; default = 1; };
+                    class Guer { name = "Independent"; value = 2; };
+                    class Any { name = "Any"; value = 3; };
+                };
+            };
+            class SimulationDistance {
+                displayName = "AI Simulation Distance";
+                tooltip = "Distance in meters at which AI simulation is enabled/disabled for performance. 0 = always active.";
+                control = "Edit";
+                property = "Recondo_Photo_SimulationDistance";
+                expression = "_this setVariable ['simulationdistance', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """1000""";
+                category = "Recondo_Photo_Spawning";
+            };
+
+            // ========================================
+            // GARRISON AI SETTINGS
+            // ========================================
+            class SentryClassnames {
+                displayName = "GARRISON AI - Sentry Classnames";
+                tooltip = "Comma-separated list of AI unit classnames for garrison sentries. Leave empty for no garrison.";
+                control = "EditCodeMulti5";
+                property = "Recondo_Photo_SentryClassnames";
+                expression = "_this setVariable ['sentryclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Photo_GarrisonAI";
+            };
+            class SentryMinCount {
+                displayName = "Sentry Min Count";
+                tooltip = "Minimum number of garrison sentries per location.";
+                control = "Edit";
+                property = "Recondo_Photo_SentryMinCount";
+                expression = "_this setVariable ['sentrymincount', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """2""";
+                category = "Recondo_Photo_GarrisonAI";
+            };
+            class SentryMaxCount {
+                displayName = "Sentry Max Count";
+                tooltip = "Maximum number of garrison sentries per location.";
+                control = "Edit";
+                property = "Recondo_Photo_SentryMaxCount";
+                expression = "_this setVariable ['sentrymaxcount', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """4""";
+                category = "Recondo_Photo_GarrisonAI";
+            };
+            class SentrySide {
+                displayName = "AI Side";
+                tooltip = "Side of garrison and patrol AI units.";
+                control = "Combo";
+                property = "Recondo_Photo_SentrySide";
+                expression = "_this setVariable ['sentryside', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                category = "Recondo_Photo_GarrisonAI";
+                class Values {
+                    class East { name = "OPFOR"; value = 0; default = 1; };
+                    class West { name = "BLUFOR"; value = 1; };
+                    class Guer { name = "Independent"; value = 2; };
+                };
+            };
+
+            // ========================================
+            // PATROL AI SETTINGS
+            // ========================================
+            class PatrolClassnames {
+                displayName = "PATROL AI - Patrol Classnames";
+                tooltip = "Comma-separated list of AI unit classnames for patrols. Leave empty for no patrols.";
+                control = "EditCodeMulti5";
+                property = "Recondo_Photo_PatrolClassnames";
+                expression = "_this setVariable ['patrolclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Photo_PatrolAI";
+            };
+            class PatrolCount {
+                displayName = "Patrol Groups";
+                tooltip = "Number of patrol groups to spawn per location.";
+                control = "Edit";
+                property = "Recondo_Photo_PatrolCount";
+                expression = "_this setVariable ['patrolcount', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """1""";
+                category = "Recondo_Photo_PatrolAI";
+            };
+            class PatrolMinSize {
+                displayName = "Patrol Min Size";
+                tooltip = "Minimum units per patrol group.";
+                control = "Edit";
+                property = "Recondo_Photo_PatrolMinSize";
+                expression = "_this setVariable ['patrolminsize', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """2""";
+                category = "Recondo_Photo_PatrolAI";
+            };
+            class PatrolMaxSize {
+                displayName = "Patrol Max Size";
+                tooltip = "Maximum units per patrol group.";
+                control = "Edit";
+                property = "Recondo_Photo_PatrolMaxSize";
+                expression = "_this setVariable ['patrolmaxsize', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """4""";
+                category = "Recondo_Photo_PatrolAI";
+            };
+            class PatrolRadius {
+                displayName = "Patrol Radius";
+                tooltip = "Radius in meters that patrols move around the objective.";
+                control = "Edit";
+                property = "Recondo_Photo_PatrolRadius";
+                expression = "_this setVariable ['patrolradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """50""";
+                category = "Recondo_Photo_PatrolAI";
+            };
+            class PatrolFormation {
+                displayName = "Patrol Formation";
+                tooltip = "Formation used by patrol groups.";
+                control = "Combo";
+                property = "Recondo_Photo_PatrolFormation";
+                expression = "_this setVariable ['patrolformation', _value, true];";
+                typeName = "STRING";
+                defaultValue = """WEDGE""";
+                category = "Recondo_Photo_PatrolAI";
+                class Values {
+                    class Wedge { name = "Wedge"; value = "WEDGE"; default = 1; };
+                    class Column { name = "Column"; value = "COLUMN"; };
+                    class Line { name = "Line"; value = "LINE"; };
+                    class Stag { name = "Staggered Column"; value = "STAG COLUMN"; };
+                    class File { name = "File"; value = "FILE"; };
+                };
+            };
+
+            // ========================================
+            // INTEL SETTINGS
+            // ========================================
+            class IntelWeight {
+                displayName = "INTEL - Intel Weight";
+                tooltip = "How many intel turn-ins are needed on average to reveal this target (higher = harder to reveal).";
+                control = "Edit";
+                property = "Recondo_Photo_IntelWeight";
+                expression = "_this setVariable ['intelweight', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """5""";
+                category = "Recondo_Photo_Intel";
+            };
+            class IntelRevealMessagesDoc {
+                displayName = "Intel Reveal Messages (Document)";
+                tooltip = "Messages shown when intel reveals this location via document turn-in. One per line.";
+                control = "EditCodeMulti5";
+                property = "Recondo_Photo_IntelRevealMessagesDoc";
+                expression = "_this setVariable ['intelrevealmessagesdoc', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Photo_Intel";
+            };
+            class IntelRevealMessagesPOW {
+                displayName = "Intel Reveal Messages (POW)";
+                tooltip = "Messages shown when intel reveals this location via POW interrogation. One per line.";
+                control = "EditCodeMulti5";
+                property = "Recondo_Photo_IntelRevealMessagesPOW";
+                expression = "_this setVariable ['intelrevealmessagespow', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Photo_Intel";
+            };
+
+            // ========================================
+            // NIGHT LIGHTS
+            // ========================================
+            class EnableNightLights {
+                displayName = "VISUAL - Enable Night Lights";
+                tooltip = "Attach lights to buildings in spawned compositions during nighttime.";
+                control = "Checkbox";
+                property = "Recondo_Photo_NightLights";
+                expression = "_this setVariable ['enablenightlights', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_Photo_Visual";
+            };
+
+            // ========================================
+            // SMELL HINTS
+            // ========================================
+            class EnableSmellHints {
+                displayName = "HINTS - Enable Smell Hints";
+                tooltip = "Show atmospheric hint messages when players approach objective locations.";
+                control = "Checkbox";
+                property = "Recondo_Photo_SmellHints";
+                expression = "_this setVariable ['enablesmellhints', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_Photo_Hints";
+            };
+            class SmellHintRadius {
+                displayName = "Smell Hint Radius";
+                tooltip = "Radius in meters for the smell hint trigger.";
+                control = "Edit";
+                property = "Recondo_Photo_SmellHintRadius";
+                expression = "_this setVariable ['smellhintradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """200""";
+                category = "Recondo_Photo_Hints";
+            };
+            class SmellHintMessages {
+                displayName = "Smell Hint Messages";
+                tooltip = "Comma-separated list of hint messages. One is randomly selected per player.";
+                control = "EditCodeMulti5";
+                property = "Recondo_Photo_SmellHintMessages";
+                expression = "_this setVariable ['smellhintmessages', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Something feels out of place here...,You notice unusual activity in the area...,There are signs of enemy presence nearby...,The area looks like it could be worth investigating.""";
+                category = "Recondo_Photo_Hints";
+            };
+
+            // ========================================
+            // DEBUG SETTINGS
+            // ========================================
+            class DebugLogging {
+                displayName = "DEBUG - Enable Debug Logging";
+                tooltip = "Log detailed debug info to RPT.";
+                control = "Checkbox";
+                property = "Recondo_Photo_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Photo_Debug";
+            };
+            class DebugMarkers {
+                displayName = "Enable Debug Markers";
+                tooltip = "Show debug markers on the map for all photo objective locations.";
+                control = "Checkbox";
+                property = "Recondo_Photo_DebugMarkers";
+                expression = "_this setVariable ['debugmarkers', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Photo_Debug";
+            };
+
             class ModuleDescription: ModuleDescription {};
         };
     };

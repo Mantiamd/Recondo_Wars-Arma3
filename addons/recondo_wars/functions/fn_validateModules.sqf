@@ -38,7 +38,8 @@ private _fnc_warn = {
     ["RECONDO_HUBSUBS_INSTANCES", "markerPrefix", "Objective Hub & Subs", "markerPrefix"],
     ["RECONDO_JAMMER_INSTANCES", "markerPrefix", "Objective Jammer", "markerPrefix"],
     ["RECONDO_CAMPSRANDOM_INSTANCES", "markerPrefix", "Camps Random", "markerPrefix"],
-    ["RECONDO_POO_INSTANCES", "markerPrefix", "POO Site Hunt", "markerPrefix"]
+    ["RECONDO_POO_INSTANCES", "markerPrefix", "POO Site Hunt", "markerPrefix"],
+    ["RECONDO_PHOTO_INSTANCES", "markerPrefix", "Objective Photographs", "markerPrefix"]
 ];
 
 // Check HVT instances

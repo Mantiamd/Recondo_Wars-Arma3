@@ -40,6 +40,16 @@ private _compCache3 = _logic getVariable ["comp_cache3", false];
 private _compCache4 = _logic getVariable ["comp_cache4", false];
 private _compCache5 = _logic getVariable ["comp_cache5", false];
 private _compAACache1 = _logic getVariable ["comp_aacache1", false];
+private _compNVABivouac1 = _logic getVariable ["comp_nva_bivouac_1", false];
+private _compNVAVCBivouac2 = _logic getVariable ["comp_nva_vc_bivouac_2", false];
+private _compBivouac3 = _logic getVariable ["comp_bivouac_3", false];
+private _compNVABivouac4 = _logic getVariable ["comp_nva_bivouac_4", false];
+private _compNVABivouac5 = _logic getVariable ["comp_nva_bivouac_5", false];
+private _compBivouac6 = _logic getVariable ["comp_bivouac_6", false];
+private _compBivouac7 = _logic getVariable ["comp_bivouac_7", false];
+private _compBivouac8 = _logic getVariable ["comp_bivouac_8", false];
+private _compNVABivouac9 = _logic getVariable ["comp_nva_bivouac_9", false];
+private _compBivouac10 = _logic getVariable ["comp_bivouac_10", false];
 private _customCompPath = _logic getVariable ["customcomppath", "compositions"];
 private _customActiveCompsRaw = _logic getVariable ["customactivecomps", ""];
 private _customDestroyedCompsRaw = _logic getVariable ["customdestroyedcomps", ""];
@@ -107,6 +117,16 @@ if (_compCache3) then { _compositionPool pushBack ["Cache_3.sqe", "Cache_3_destr
 if (_compCache4) then { _compositionPool pushBack ["Cache_4.sqe", "Cache_4_destroyed.sqe", true]; };
 if (_compCache5) then { _compositionPool pushBack ["Cache_5.sqe", "Cache_5_destroyed.sqe", true]; };
 if (_compAACache1) then { _compositionPool pushBack ["AAcache1.sqe", "AAcache1_destroyed.sqe", true]; };
+if (_compNVABivouac1) then { _compositionPool pushBack ["NVA_Bivouac_1.sqe", "Bivouac_destroyed.sqe", true]; };
+if (_compNVAVCBivouac2) then { _compositionPool pushBack ["NVA_VC_Bivouac_2.sqe", "Bivouac_destroyed.sqe", true]; };
+if (_compBivouac3) then { _compositionPool pushBack ["Bivouac_3.sqe", "Bivouac_destroyed.sqe", true]; };
+if (_compNVABivouac4) then { _compositionPool pushBack ["NVA_Bivouac_4.sqe", "Bivouac_destroyed.sqe", true]; };
+if (_compNVABivouac5) then { _compositionPool pushBack ["NVA_Bivouac_5.sqe", "Bivouac_destroyed.sqe", true]; };
+if (_compBivouac6) then { _compositionPool pushBack ["Bivouac_6.sqe", "Bivouac_destroyed.sqe", true]; };
+if (_compBivouac7) then { _compositionPool pushBack ["Bivouac_7.sqe", "Bivouac_destroyed.sqe", true]; };
+if (_compBivouac8) then { _compositionPool pushBack ["Bivouac_8.sqe", "Bivouac_destroyed.sqe", true]; };
+if (_compNVABivouac9) then { _compositionPool pushBack ["NVA_Bivouac_9.sqe", "Bivouac_destroyed.sqe", true]; };
+if (_compBivouac10) then { _compositionPool pushBack ["Bivouac_10.sqe", "Bivouac_destroyed.sqe", true]; };
 
 // Parse custom compositions from mission folder
 private _customActiveComps = ((_customActiveCompsRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" && !(_x select [0, 2] == "//") };

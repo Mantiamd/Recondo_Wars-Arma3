@@ -2217,6 +2217,61 @@ class Cfg3DEN {
                 collapsed = 1;
                 class Attributes {};
             };
+            
+            //==========================================
+            // OBJECTIVE - PHOTOGRAPHS CATEGORIES
+            //==========================================
+            
+            class Recondo_Photo_General {
+                displayName = "General";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_Photo_Composition {
+                displayName = "Compositions";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_Photo_Photography {
+                displayName = "Photography";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_Photo_Spawning {
+                displayName = "Spawning";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_Photo_GarrisonAI {
+                displayName = "Garrison AI";
+                collapsed = 1;
+                class Attributes {};
+            };
+            class Recondo_Photo_PatrolAI {
+                displayName = "Patrol AI";
+                collapsed = 1;
+                class Attributes {};
+            };
+            class Recondo_Photo_Intel {
+                displayName = "Intel";
+                collapsed = 1;
+                class Attributes {};
+            };
+            class Recondo_Photo_Visual {
+                displayName = "Visual";
+                collapsed = 1;
+                class Attributes {};
+            };
+            class Recondo_Photo_Hints {
+                displayName = "Hints";
+                collapsed = 1;
+                class Attributes {};
+            };
+            class Recondo_Photo_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
         };
     };
     

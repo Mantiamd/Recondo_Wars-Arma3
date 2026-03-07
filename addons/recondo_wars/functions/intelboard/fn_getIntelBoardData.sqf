@@ -31,6 +31,7 @@ private _enableHostages = _settings getOrDefault ["enableHostages", true];
 private _enableDestroy = _settings getOrDefault ["enableDestroy", true];
 private _enableHubSubs = _settings getOrDefault ["enableHubSubs", true];
 private _enableJammer = _settings getOrDefault ["enableJammer", true];
+private _enablePhotos = _settings getOrDefault ["enablePhotos", true];
 private _showRevealedLocations = _settings getOrDefault ["showRevealedLocations", true];
 private _debugLogging = _settings getOrDefault ["debugLogging", false];
 
@@ -325,6 +326,58 @@ if (_enableJammer && !isNil "RECONDO_JAMMER_INSTANCES" && {count RECONDO_JAMMER_
 };
 
 // ========================================
+// PHOTOGRAPH OBJECTIVES
+// ========================================
+
+if (_enablePhotos && !isNil "RECONDO_PHOTO_INSTANCES" && {count RECONDO_PHOTO_INSTANCES > 0}) then {
+    {
+        private _photoSettings = _x;
+        private _objectiveName = _photoSettings get "objectiveName";
+        private _objectiveDescription = _photoSettings getOrDefault ["objectiveDesc", ""];
+        private _categoryName = _photoSettings getOrDefault ["intelBoardCategoryName", ""];
+        private _instanceId = _photoSettings get "instanceId";
+        
+        if (_categoryName == "") then {
+            _categoryName = "RECONNAISSANCE PHOTOS";
+        };
+        
+        private _counts = [_objectiveName] call Recondo_fnc_getPhotoObjectiveCount;
+        _counts params ["_remaining", "_total"];
+        private _isComplete = _remaining == 0;
+        
+        private _revealedLocation = "";
+        if (_showRevealedLocations && !isNil "RECONDO_INTEL_REVEALED") then {
+            private _targetId = format ["%1_%2", _instanceId, (_photoSettings get "markerPrefix")];
+            {
+                _x params ["_type", "_id", "_pos", "_data"];
+                if (_type == "photograph" && {(_data getOrDefault ["name", ""]) == _objectiveName}) exitWith {
+                    _revealedLocation = [_pos] call Recondo_fnc_posToGrid;
+                };
+            } forEach RECONDO_INTEL_REVEALED;
+        };
+        
+        private _targetData = createHashMapFromArray [
+            ["id", format ["photo_%1", _forEachIndex]],
+            ["type", "photograph"],
+            ["name", _objectiveName],
+            ["displayName", _objectiveName],
+            ["photo", ""],
+            ["background", _objectiveDescription],
+            ["status", if (_isComplete) then { format ["COMPLETE (%1/%1)", _total] } else { format ["%1/%2 REMAINING", _remaining, _total] }],
+            ["statusColor", if (_isComplete) then { [0.5, 0.8, 0.5, 1] } else { [1, 0.8, 0, 1] }],
+            ["location", _revealedLocation],
+            ["complete", _isComplete],
+            ["objectiveName", _objectiveName]
+        ];
+        
+        [_categoryName, "photograph", _targetData] call _fnc_addToCategory;
+        _totalTargets = _totalTargets + 1;
+        if (!_isComplete) then { _remainingTargets = _remainingTargets + 1 };
+        
+    } forEach RECONDO_PHOTO_INSTANCES;
+};
+
+// ========================================
 // CONVERT CATEGORIES MAP TO ARRAY
 // ========================================
 
@@ -337,8 +390,8 @@ private _categories = values _categoriesMap;
 
 private _typePriority = createHashMapFromArray [
     ["hvt", 1],
-    ["hostage", 2]
-    // Other types default to 100, sorted alphabetically after priority types
+    ["hostage", 2],
+    ["photograph", 3]
 ];
 
 _categories = [_categories, [], {

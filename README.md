@@ -16,9 +16,10 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **Limit Static Weapon Movement** - Restrict ACE carry/drag on static weapons
 
 ### Mission Objectives
-- **Objective Destroy** - Destructible target objectives with composition support
+- **Objective Destroy** - Destructible target objectives with composition support (6 cache + 10 bivouac compositions)
 - **Objective HVT** - High-Value Target capture/kill objectives with custom profiles, optional Bad Civi spawns at real HVT locations, wandering civilians, and roving sentries
 - **Objective Hostages** - Hostage rescue objectives with AI guards, optional Bad Civi spawns at real hostage locations, and wandering civilians
+- **Objective Photographs** - Reconnaissance photography objectives using the SOG PF camera system with configurable compositions, target validation, and Intel Board integration
 - **Objective Jammer** - Radio jammer objectives that affect communications
 - **Objective Hub & Subs** - Connected hub and sub-site objective systems
 - **POO Site Hunt** - Randomized Point-of-Origin artillery hunt with configurable marker pools, proximity-triggered spawning, persistent destruction tracking, and terrain clearing
