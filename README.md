@@ -106,6 +106,15 @@ To build the PBO:
 
 **GoonSix**
 
+## Special Thanks
+
+- The unnamed group of elite Arma 3 operators that have inspired so many of these modules, tested, and make playing Arma 3 enjoyable. Without them I wouldn't be taking the time to create any of this.
+- **Dexter** - For the ideas and knowledge on so many of the tools used to create this, as well as bouncing ideas off of and brainstorming how to achieve things within Arma.
+- **THEDUDE** - Contributing ideas for many of these modules but mostly for his contributions to the SOG PF community with his RTBF SOG Gear and Terrains. These modules were designed with the intent of using on his terrains — they truly change the way Arma plays.
+- **RTBF** - Contributing a lot of ideas, feedback, and testing.
+- **Moon** - Testing and troubleshooting from a mission maker's perspective using these modules within the Eden Editor.
+- **Miller** - Contributing to some of the compositions used within the objective modules.
+
 ## License
 
 This project is for personal/community use. Please contact the author for redistribution permissions.
