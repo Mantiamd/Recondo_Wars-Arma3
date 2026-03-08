@@ -106,6 +106,8 @@ To build the PBO:
 
 **GoonSix**
 
+Want to support continued development? [Buy me a coffee or Baja Blast on Patreon!](https://patreon.com/GoonSix)
+
 ## Special Thanks
 
 - The unnamed group of elite Arma 3 operators that have inspired so many of these modules, tested, and make playing Arma 3 enjoyable. Without them I wouldn't be taking the time to create any of this.

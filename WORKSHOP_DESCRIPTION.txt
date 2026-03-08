@@ -1,0 +1,114 @@
+[h1]DESCRIPTION[/h1]
+
+Recondo Wars is a comprehensive Arma 3 mod designed for SOG Prairie Fire operations. It provides a full suite of Eden Editor modules for mission makers to create immersive reconnaissance and special operations missions — from HVT hunts and hostage rescues to radio jamming, recon photography, and intel collection.
+
+[i]Designed for use with CBA, ACE3, and SOG Prairie Fire. All features are configured through Eden Editor modules with detailed tooltips.[/i]
+
+[hr][/hr]
+
+[h1]FEATURES[/h1]
+
+[b]AI Systems[/b]
+[list]
+[*] [b]AI Tweaks[/b] — Configure AI skill levels, behavior, equipment removal, and mine knowledge per side. Supports multiple instances for different sides.
+[*] [b]Player Options[/b] — Configure player-specific settings and restrictions.
+[*] [b]Foot Patrols[/b] — Spawn randomized foot patrol groups with configurable routes and classnames.
+[*] [b]Path Patrols[/b] — Create patrols that follow specific marker-defined paths.
+[*] [b]Add AI Crew[/b] — Dynamically add crew members to player vehicles.
+[*] [b]Static Defense Randomized[/b] — Spawn randomized static weapon positions at markers.
+[*] [b]Eldest Son[/b] — Sabotaged ammunition system that poisons enemy weapons over time.
+[*] [b]Bad Civi[/b] — Concealed-weapon civilians that pull a weapon when a configured side gets close.
+[*] [b]Limit Static Weapon Movement[/b] — Restrict ACE carry/drag on static weapons.
+[/list]
+
+[b]Mission Objectives[/b]
+[list]
+[*] [b]Objective Destroy[/b] — Destructible target objectives with 16 built-in compositions (caches and bivouacs) plus custom composition support. Compositions swap to destroyed variants when the target is eliminated.
+[*] [b]Objective HVT[/b] — High-Value Target capture/kill objectives with named profiles, custom loadouts, photos, and backgrounds. Includes decoy locations, garrison AI, roving sentries, and optional Bad Civi spawns.
+[*] [b]Objective Hostages[/b] — Hostage rescue objectives with named hostage profiles, ACE captive integration, configurable distribution modes, garrison AI, and turn-in mechanics. Includes 7 built-in hostage profiles.
+[*] [b]Objective Photographs[/b] — Reconnaissance photography objectives using the SOG Prairie Fire camera. Players must photograph target objects at randomized locations and turn in the photos. Includes 5 default compositions and Intel Board integration.
+[*] [b]Objective Jammer[/b] — ACRE radio jamming objectives. When the jammer object is destroyed, jamming stops. Configurable jam radius, strength, and affected side.
+[*] [b]Objective Hub & Subs[/b] — Connected hub and sub-site objective systems for complex multi-location missions.
+[*] [b]POO Site Hunt[/b] — Randomized Point-of-Origin artillery site hunt with proximity-triggered spawning and persistent destruction tracking.
+[/list]
+
+[b]Intel & Reconnaissance[/b]
+[list]
+[*] [b]Intel System[/b] — Collectible intelligence items from enemies and locations that reveal objective positions.
+[*] [b]Intel Items[/b] — Configure custom intel item classnames and drop chances.
+[*] [b]Intel Board[/b] — Visual tracking board displaying all collected intelligence, objective status, and reconnaissance photos.
+[*] [b]Recon Points[/b] — Award points for reconnaissance activities like spotting enemies and completing objectives.
+[*] [b]Sensors[/b] — Deployable ground sensors that detect foot and vehicle traffic with persistent logging.
+[*] [b]Wiretap[/b] — Telephone pole wiretapping system for gathering intel.
+[/list]
+
+[b]Radio & Communications[/b]
+[list]
+[*] [b]RW Radio[/b] — Radio transmission system with battery management and triangulation mechanics.
+[*] [b]Trackers[/b] — Enemy tracker teams with dogs that follow player footprints.
+[*] [b]Reinforcement Waves[/b] — Dynamic enemy reinforcement spawning triggered by combat or alerts.
+[/list]
+
+[b]Extraction & Movement[/b]
+[list]
+[*] [b]STABO Extraction[/b] — Helicopter extraction via STABO rig with body and casualty attachment support.
+[*] [b]Outpost Teleport[/b] — Base-to-outpost teleportation with optional destroyable outposts and compositions.
+[*] [b]Deployable Rally Point[/b] — Player-deployable rally points with ACE interactions.
+[*] [b]JIP Area[/b] — Join-In-Progress spawn areas for late-joining players.
+[/list]
+
+[b]Environment & Ambiance[/b]
+[list]
+[*] [b]Weather Control[/b] — Dynamic weather and time-of-day control.
+[*] [b]Ambient Sound[/b] — Configurable ambient sound zones for atmosphere.
+[*] [b]Civilians Working[/b] — Working civilians in fields and villages.
+[*] [b]Civilian Traffic[/b] — Ambient civilian vehicle traffic on roads.
+[*] [b]Civilian POL[/b] — Persistent civilian pattern-of-life system.
+[*] [b]Custom Site Spawn[/b] — Spawn custom compositions at markers with garrison AI, patrols, and night lighting.
+[*] [b]Camps Random[/b] — Randomized camp placement with composition support.
+[*] [b]Destroy Powergrid[/b] — Turn off or destroy all lights within a configurable radius via ACE interaction or object destruction.
+[/list]
+
+[b]Utility Modules[/b]
+[list]
+[*] [b]Persistence[/b] — Save and load mission state across sessions with campaign ID support.
+[*] [b]Intro Screen[/b] — Configurable mission introduction screens.
+[*] [b]Terminal[/b] — Admin terminal for mission control, persistence reset, and master debug toggle.
+[*] [b]Arsenal Area[/b] — Configurable arsenal access zones.
+[*] [b]Disable Rations Area[/b] — Zones where ACE rations are disabled.
+[*] [b]Chat Control[/b] — Control chat channel availability.
+[*] [b]ACE Spectator Object[/b] — Enter spectator mode from objects.
+[*] [b]Convoy System[/b] — Automated convoy spawning and routing.
+[*] [b]Performance Monitor[/b] — Mission performance monitoring tools.
+[/list]
+
+[hr][/hr]
+
+[h1]REQUIREMENTS[/h1]
+
+[list]
+[*] Arma 3 (v2.10+)
+[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=450814997]CBA_A3[/url]
+[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=463939057]ACE3[/url]
+[*] [url=https://store.steampowered.com/app/1227700/Arma_3_Creator_DLC_SOG_Prairie_Fire/]S.O.G. Prairie Fire[/url] (recommended)
+[/list]
+
+[hr][/hr]
+
+[h1]SETUP[/h1]
+
+[list]
+[*] Subscribe to the mod and enable it in the Arma 3 Launcher along with required dependencies.
+[*] Open Eden Editor and place modules from the organized categories: [b]RW - Main[/b], [b]RW - Objectives[/b], [b]RW - Misc[/b], and [b]RW - Tools[/b].
+[*] Each module has a distinct icon for quick visual identification.
+[*] Configure module attributes in the module's properties — hover over any attribute for a detailed tooltip with examples.
+[*] Some modules require synchronization with objects or units (e.g., sync Intel to objective modules).
+[*] Enable [b]Master Debug[/b] on the Terminal module to turn on debug logging for all systems at once.
+[*] See the README on GitHub for the full Quick Start Guide and detailed documentation.
+[/list]
+
+[hr][/hr]
+
+[h1]SUPPORT MY PATREON![/h1]
+
+Want to help keep me off the overtime list at work and spending more time on Arma 3 modding? [url=https://patreon.com/GoonSix]Buy me a coffee or Baja Blast![/url]
