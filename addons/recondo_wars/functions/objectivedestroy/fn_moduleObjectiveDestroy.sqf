@@ -238,7 +238,7 @@ publicVariable "RECONDO_OBJDESTROY_INSTANCES";
 // LOAD PERSISTENCE DATA
 // ========================================
 
-private _persistenceKey = format ["OBJDESTROY_%1", _objectiveName];
+private _persistenceKey = format ["OBJDESTROY_%1_%2", _markerPrefix, _objectiveName];
 private _savedActiveMarkers = [_persistenceKey + "_ACTIVE"] call Recondo_fnc_getSaveData;
 private _savedDestroyedMarkers = [_persistenceKey + "_DESTROYED"] call Recondo_fnc_getSaveData;
 private _savedCompositionMap = [_persistenceKey + "_COMPMAP"] call Recondo_fnc_getSaveData;

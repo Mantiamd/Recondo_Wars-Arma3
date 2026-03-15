@@ -23,10 +23,11 @@ params [
 
 if (isNil "_settings" || _markerId == "") exitWith {};
 
-private _instanceId       = _settings get "instanceId";
-private _objectiveName    = _settings get "objectiveName";
+private _instanceId        = _settings get "instanceId";
+private _objectiveName     = _settings get "objectiveName";
+private _pooMarkerPrefix   = _settings get "pooMarkerPrefix";
 private _enablePersistence = _settings get "enablePersistence";
-private _debugLogging     = _settings get "debugLogging";
+private _debugLogging      = _settings get "debugLogging";
 
 // ========================================
 // UPDATE GLOBAL TRACKING
@@ -50,7 +51,7 @@ publicVariable "RECONDO_POO_ACTIVE";
 // ========================================
 
 if (_enablePersistence) then {
-    private _persistenceKey = format ["POO_%1", _objectiveName];
+    private _persistenceKey = format ["POO_%1_%2", _pooMarkerPrefix, _objectiveName];
     private _savedDestroyed = [_persistenceKey + "_DESTROYED"] call Recondo_fnc_getSaveData;
 
     if (isNil "_savedDestroyed") then { _savedDestroyed = [] };

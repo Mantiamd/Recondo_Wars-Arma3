@@ -162,7 +162,7 @@ if (_debugLogging) then {
 };
 
 // Check for saved profile (persistence)
-private _profilePersistenceKey = format ["HVT_%1_PROFILE", _objectiveName];
+private _profilePersistenceKey = format ["HVT_%1_%2_PROFILE", _markerPrefix, _objectiveName];
 private _savedProfileFile = [_profilePersistenceKey, ""] call Recondo_fnc_getSaveData;
 
 private _profileToLoad = [];
@@ -390,7 +390,7 @@ if (!_linkedToIntel) then {
 // PERSISTENCE - LOAD SAVED DATA
 // ========================================
 
-private _persistenceKey = format ["HVT_%1", _objectiveName];
+private _persistenceKey = format ["HVT_%1_%2", _markerPrefix, _objectiveName];
 private _savedHVTMarker = [_persistenceKey + "_HVTMARKER"] call Recondo_fnc_getSaveData;
 private _savedDecoyMarkers = [_persistenceKey + "_DECOYMARKERS"] call Recondo_fnc_getSaveData;
 private _savedCompositions = [_persistenceKey + "_COMPOSITIONS"] call Recondo_fnc_getSaveData;

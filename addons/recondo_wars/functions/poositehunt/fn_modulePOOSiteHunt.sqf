@@ -30,18 +30,19 @@ if (!_activated) exitWith {
 private _objectiveName     = _logic getVariable ["objectivename", "POO Site"];
 private _pooMarkerPrefix   = _logic getVariable ["poomarkerprefix", "POO_"];
 private _targetMarkerPrefix = _logic getVariable ["targetmarkerprefix", "ARTY_TGT_"];
-private _numActiveSites    = _logic getVariable ["numactivesites", 1];
+private _numActiveSites    = parseNumber str (_logic getVariable ["numactivesites", 1]);
+if (_numActiveSites < 1) then { _numActiveSites = 1 };
 private _enablePersistence = _logic getVariable ["enablepersistence", false];
 
 private _triggerSideStr    = _logic getVariable ["triggerside", "WEST"];
-private _triggerRadius     = _logic getVariable ["triggerradius", 800];
-private _terrainClearRadius = _logic getVariable ["terrainclearradius", 15];
+private _triggerRadius     = parseNumber str (_logic getVariable ["triggerradius", 800]);
+private _terrainClearRadius = parseNumber str (_logic getVariable ["terrainclearradius", 15]);
 
 private _weaponClassname   = _logic getVariable ["weaponclassname", "vn_o_pl_mortar_type63"];
 private _crewClassname     = _logic getVariable ["crewclassname", "vn_o_men_nva_65_inf_02"];
 private _crewSideStr       = _logic getVariable ["crewside", "EAST"];
-private _firingInterval    = _logic getVariable ["firinginterval", 5];
-private _invulnTime        = _logic getVariable ["invulntime", 20];
+private _firingInterval    = parseNumber str (_logic getVariable ["firinginterval", 5]);
+private _invulnTime        = parseNumber str (_logic getVariable ["invulntime", 20]);
 
 private _debugLogging      = _logic getVariable ["debuglogging", false];
 private _debugMarkers      = _logic getVariable ["debugmarkers", false];
@@ -125,7 +126,7 @@ if (_debugLogging) then {
 // LOAD PERSISTENCE DATA
 // ========================================
 
-private _persistenceKey = format ["POO_%1", _objectiveName];
+private _persistenceKey = format ["POO_%1_%2", _pooMarkerPrefix, _objectiveName];
 private _savedActive = [];
 private _savedTargets = [];
 private _savedDestroyed = [];

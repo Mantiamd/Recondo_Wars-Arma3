@@ -60,7 +60,8 @@ publicVariable "RECONDO_OBJDESTROY_ACTIVE";
 // SAVE TO PERSISTENCE
 // ========================================
 
-private _persistenceKey = format ["OBJDESTROY_%1", _objectiveName];
+private _markerPrefix = if (isNil "_settings") then { "CACHE_" } else { _settings getOrDefault ["markerPrefix", "CACHE_"] };
+private _persistenceKey = format ["OBJDESTROY_%1_%2", _markerPrefix, _objectiveName];
 private _savedDestroyed = [_persistenceKey + "_DESTROYED"] call Recondo_fnc_getSaveData;
 
 if (isNil "_savedDestroyed") then { _savedDestroyed = [] };

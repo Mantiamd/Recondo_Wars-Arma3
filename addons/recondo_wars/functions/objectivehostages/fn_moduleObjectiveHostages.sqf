@@ -448,7 +448,7 @@ if (!_linkedToIntel) then {
 // PERSISTENCE - LOAD SAVED DATA
 // ========================================
 
-private _persistenceKey = format ["HOSTAGE_%1", _objectiveName];
+private _persistenceKey = format ["HOSTAGE_%1_%2", _markerPrefix, _objectiveName];
 private _savedHostageMarkers = [_persistenceKey + "_HOSTAGEMARKERS"] call Recondo_fnc_getSaveData;
 private _savedDecoyMarkers = [_persistenceKey + "_DECOYMARKERS"] call Recondo_fnc_getSaveData;
 private _savedCompositions = [_persistenceKey + "_COMPOSITIONS"] call Recondo_fnc_getSaveData;

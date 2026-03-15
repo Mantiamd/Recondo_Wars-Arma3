@@ -74,7 +74,8 @@ publicVariable "RECONDO_HOSTAGE_RESCUED";
 
 // Save to persistence
 if (!isNil "_settings") then {
-    private _persistenceKey = format ["HOSTAGE_%1", _objectiveName];
+    private _markerPrefix = _settings getOrDefault ["markerPrefix", "HOSTAGE_"];
+    private _persistenceKey = format ["HOSTAGE_%1_%2", _markerPrefix, _objectiveName];
     [_persistenceKey + "_RESCUED", RECONDO_HOSTAGE_RESCUED] call Recondo_fnc_setSaveData;
     saveMissionProfileNamespace;
     

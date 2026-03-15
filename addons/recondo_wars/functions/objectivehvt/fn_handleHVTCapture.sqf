@@ -70,7 +70,8 @@ publicVariable "RECONDO_HVT_UNITS";
 
 // Save to persistence
 if (!isNil "_settings") then {
-    private _persistenceKey = format ["HVT_%1", _objectiveName];
+    private _markerPrefix = _settings getOrDefault ["markerPrefix", "HVT_"];
+    private _persistenceKey = format ["HVT_%1_%2", _markerPrefix, _objectiveName];
     [_persistenceKey + "_CAPTURED", true] call Recondo_fnc_setSaveData;
     saveMissionProfileNamespace;
     
