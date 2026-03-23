@@ -121,7 +121,7 @@ while {alive _dog} do {
         
         if (_timeSinceDetection > 10) then {
             [_dog] call _fnc_playDetectionSound;
-            _dog setVariable ["RECONDO_TRACKERS_lastDetectionTime", time, true];
+            _dog setVariable ["RECONDO_TRACKERS_lastDetectionTime", time];
             _trackerGroup setBehaviour "COMBAT";
             
             if (_debugLogging) then {
@@ -144,7 +144,7 @@ while {alive _dog} do {
                 if (count _nearbyPlayers > 0) then {
                     [_dog, _aggressiveSounds] remoteExec ["RECONDO_TRACKERS_fnc_playSound", _nearbyPlayers];
                 };
-                _dog setVariable ["RECONDO_TRACKERS_lastDetectionTime", time, true];
+                _dog setVariable ["RECONDO_TRACKERS_lastDetectionTime", time];
             };
             
             if (_last_anim != "Dog_Sprint") then { 

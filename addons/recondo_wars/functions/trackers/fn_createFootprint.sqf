@@ -37,7 +37,6 @@ if ([_pos] call Recondo_fnc_isInNoFootprintZone) exitWith {
 // Format: [position, time, groupIdString, trackerGroups[]]
 private _footprint = [_pos, time, _groupIdStr, []];
 RECONDO_TRACKERS_FOOTPRINTS pushBack _footprint;
-publicVariable "RECONDO_TRACKERS_FOOTPRINTS";
 
 // Create debug marker if enabled
 if (_debugMarkers) then {

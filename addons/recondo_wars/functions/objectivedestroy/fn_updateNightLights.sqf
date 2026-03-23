@@ -80,7 +80,7 @@ diag_log "[RECONDO_OBJDESTROY] Starting night lights update loop";
                     _light lightAttachObject [_building, [0, 0, 2.5]];
                     
                     // Store reference
-                    _building setVariable ["RECONDO_OBJDESTROY_Light", _light, true];
+                    _building setVariable ["RECONDO_OBJDESTROY_Light", _light];
                     
                     // Track globally
                     RECONDO_OBJDESTROY_ACTIVE_LIGHTS pushBack _light;
@@ -92,7 +92,7 @@ diag_log "[RECONDO_OBJDESTROY] Starting night lights update loop";
                     RECONDO_OBJDESTROY_ACTIVE_LIGHTS = RECONDO_OBJDESTROY_ACTIVE_LIGHTS - [_existingLight];
                     
                     deleteVehicle _existingLight;
-                    _building setVariable ["RECONDO_OBJDESTROY_Light", objNull, true];
+                    _building setVariable ["RECONDO_OBJDESTROY_Light", objNull];
                 };
             };
         };

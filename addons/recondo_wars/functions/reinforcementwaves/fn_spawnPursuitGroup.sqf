@@ -68,19 +68,19 @@ if (isNull _pursuitGroup) exitWith {
 };
 
 // Set group variables
-_pursuitGroup setVariable ["RECONDO_RW_moduleId", _moduleId, true];
-_pursuitGroup setVariable ["RECONDO_RW_targetGroup", _targetGroup, true];
-_pursuitGroup setVariable ["RECONDO_RW_targetGroupId", groupId _targetGroup, true];
-_pursuitGroup setVariable ["RECONDO_RW_waveNumber", _waveNumber, true];
-_pursuitGroup setVariable ["RECONDO_RW_isMainGroup", false, true];
-_pursuitGroup setVariable ["RECONDO_RW_isFlanker", false, true];
-_pursuitGroup setVariable ["RECONDO_RW_isPursuit", true, true];
-_pursuitGroup setVariable ["RECONDO_RW_partyId", _partyId, true];
-_pursuitGroup setVariable ["RECONDO_RW_originPos", _spawnPos, true];
-_pursuitGroup setVariable ["RECONDO_RW_initialTargetPos", _initialTargetPos, true];
-_pursuitGroup setVariable ["RECONDO_RW_moduleSettings", _moduleSettings, true];
-_pursuitGroup setVariable ["RECONDO_RW_hasDog", false, true]; // No dogs in pursuit waves
-_pursuitGroup setVariable ["RECONDO_RW_useSounds", false, true]; // No sounds in pursuit waves
+_pursuitGroup setVariable ["RECONDO_RW_moduleId", _moduleId];
+_pursuitGroup setVariable ["RECONDO_RW_targetGroup", _targetGroup];
+_pursuitGroup setVariable ["RECONDO_RW_targetGroupId", groupId _targetGroup];
+_pursuitGroup setVariable ["RECONDO_RW_waveNumber", _waveNumber];
+_pursuitGroup setVariable ["RECONDO_RW_isMainGroup", false];
+_pursuitGroup setVariable ["RECONDO_RW_isFlanker", false];
+_pursuitGroup setVariable ["RECONDO_RW_isPursuit", true];
+_pursuitGroup setVariable ["RECONDO_RW_partyId", _partyId];
+_pursuitGroup setVariable ["RECONDO_RW_originPos", _spawnPos];
+_pursuitGroup setVariable ["RECONDO_RW_initialTargetPos", _initialTargetPos];
+_pursuitGroup setVariable ["RECONDO_RW_moduleSettings", _moduleSettings];
+_pursuitGroup setVariable ["RECONDO_RW_hasDog", false];
+_pursuitGroup setVariable ["RECONDO_RW_useSounds", false];
 
 // Calculate group size
 private _groupSize = _pursuitMinSize + floor random ((_pursuitMaxSize - _pursuitMinSize) + 1);

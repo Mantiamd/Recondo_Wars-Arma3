@@ -80,7 +80,7 @@ diag_log "[RECONDO_HOSTAGE] Starting night lights update loop";
                     _light lightAttachObject [_building, [0, 0, 2.5]];
                     
                     // Store reference
-                    _building setVariable ["RECONDO_HOSTAGE_Light", _light, true];
+                    _building setVariable ["RECONDO_HOSTAGE_Light", _light];
                     
                     // Track globally
                     RECONDO_HOSTAGE_ACTIVE_LIGHTS pushBack _light;
@@ -92,7 +92,7 @@ diag_log "[RECONDO_HOSTAGE] Starting night lights update loop";
                     RECONDO_HOSTAGE_ACTIVE_LIGHTS = RECONDO_HOSTAGE_ACTIVE_LIGHTS - [_existingLight];
                     
                     deleteVehicle _existingLight;
-                    _building setVariable ["RECONDO_HOSTAGE_Light", objNull, true];
+                    _building setVariable ["RECONDO_HOSTAGE_Light", objNull];
                 };
             };
         };

@@ -140,8 +140,6 @@ addMissionEventHandler ["EntityKilled", {
         };
     };
     
-    // Update public variable
-    publicVariable "RECONDO_PERSISTENCE_PLAYER_STATS";
 }];
 
 // Track disconnects
@@ -164,8 +162,6 @@ addMissionEventHandler ["HandleDisconnect", {
         diag_log format ["[RECONDO_PERSISTENCE] %1 disconnected. Total disconnects: %2", _name, _disconnects + 1];
     };
     
-    publicVariable "RECONDO_PERSISTENCE_PLAYER_STATS";
-    
     false // Don't prevent default disconnect handling
 }];
 
@@ -180,8 +176,6 @@ addMissionEventHandler ["PlayerConnected", {
     
     // Create or update player entry
     [_uid, _name] call RECONDO_fnc_getPlayerStats;
-    
-    publicVariable "RECONDO_PERSISTENCE_PLAYER_STATS";
 }];
 
 if (_debug) then {

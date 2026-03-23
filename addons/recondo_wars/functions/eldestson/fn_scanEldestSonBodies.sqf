@@ -108,7 +108,7 @@ while {true} do {
             _body removeItem _foundClassname;
             
             // Mark body as processed (only when poison found and consumed)
-            _body setVariable ["RECONDO_ELDESTSON_PROCESSED", true, true];
+            _body setVariable ["RECONDO_ELDESTSON_PROCESSED", true];
             
             _itemsFound = _itemsFound + 1;
             

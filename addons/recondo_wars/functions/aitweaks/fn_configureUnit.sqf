@@ -116,7 +116,7 @@ if (_enableFlashlights) then {
         };
     } else {
         _unit addPrimaryWeaponItem _flashlightClass;
-        _unit setVariable ["RECONDO_AITWEAKS_hasFlashlight", true, true];
+        _unit setVariable ["RECONDO_AITWEAKS_hasFlashlight", true];
         
         private _isDark = sunOrMoon < 0.5;
         if (_isDark) then {
@@ -133,8 +133,8 @@ if (_enableFlashlights) then {
 };
 
 // Mark as configured (broadcast to all machines)
-_unit setVariable ["RECONDO_AI_CONFIGURED", true, true];
-_unit setVariable ["RECONDO_AI_TYPE", _unitType, true];
+_unit setVariable ["RECONDO_AI_CONFIGURED", true];
+_unit setVariable ["RECONDO_AI_TYPE", _unitType];
 RECONDO_AITWEAKS_CONFIGURED_UNITS pushBack _unit;
 
 // Cleanup when unit is deleted

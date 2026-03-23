@@ -34,7 +34,7 @@ private _markerPos = getMarkerPos _markerId;
 
 // Initialize simulation state
 private _simStateVar = format ["RECONDO_CAMPS_%1_simEnabled", _markerId];
-missionNamespace setVariable [_simStateVar, false, true];
+missionNamespace setVariable [_simStateVar, false];
 
 if (_debugLogging) then {
     diag_log format ["[RECONDO_CAMPS] Creating simulation monitor for %1, distance: %2m", _markerId, _simulationDistance];
@@ -95,7 +95,7 @@ if (_debugLogging) then {
             };
         } forEach _units;
         
-        missionNamespace setVariable [_simStateVar, true, true];
+        missionNamespace setVariable [_simStateVar, true];
         
         if (_debug) then {
             diag_log format ["[RECONDO_CAMPS] Simulation ENABLED for %1 - players in range", _markerId];
@@ -139,7 +139,7 @@ if (_debugLogging) then {
                     [_x, _anim] remoteExec ["switchMove", 0, true];
                     
                     // Mark as sitting again
-                    _x setVariable ["RECONDO_CAMPS_sitting", true, true];
+                    _x setVariable ["RECONDO_CAMPS_sitting", true];
                 };
             } forEach _units;
             
@@ -174,7 +174,7 @@ if (_debugLogging) then {
             }, [_objects, _units, _debug, _markerId], 1] call CBA_fnc_waitAndExecute;
         };
         
-        missionNamespace setVariable [_simStateVar, false, true];
+        missionNamespace setVariable [_simStateVar, false];
     };
     
 }, 2, [_markerId, _simulationDistance, _markerPos, _debugLogging, _sentryAnimations]] call CBA_fnc_addPerFrameHandler;

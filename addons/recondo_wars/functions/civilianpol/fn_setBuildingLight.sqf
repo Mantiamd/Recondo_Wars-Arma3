@@ -49,7 +49,7 @@ if (_lightOn) then {
         _light lightAttachObject [_building, [0, 0, 2.5]];
         
         // Store reference
-        _building setVariable ["RECONDO_CIVPOL_Light", _light, true];
+        _building setVariable ["RECONDO_CIVPOL_Light", _light];
         
         // Track globally
         RECONDO_CIVPOL_ACTIVE_LIGHTS pushBack _light;
@@ -70,7 +70,7 @@ if (_lightOn) then {
         RECONDO_CIVPOL_ACTIVE_LIGHTS = RECONDO_CIVPOL_ACTIVE_LIGHTS - [_existingLight];
         
         deleteVehicle _existingLight;
-        _building setVariable ["RECONDO_CIVPOL_Light", objNull, true];
+        _building setVariable ["RECONDO_CIVPOL_Light", objNull];
         
         private _debugLogging = RECONDO_CIVPOL_SETTINGS getOrDefault ["debugLogging", false];
         if (_debugLogging) then {

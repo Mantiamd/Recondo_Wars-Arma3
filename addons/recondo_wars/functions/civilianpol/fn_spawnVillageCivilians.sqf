@@ -100,13 +100,13 @@ if (_debugLogging) then {
         _civilian setSpeedMode "LIMITED";
         
         // Store civilian data
-        _civilian setVariable ["RECONDO_CIVPOL_VillageMarker", _markerName, true];
-        _civilian setVariable ["RECONDO_CIVPOL_HomePos", _homePos, true];
-        _civilian setVariable ["RECONDO_CIVPOL_HomeBuilding", _building, true];
-        _civilian setVariable ["RECONDO_CIVPOL_Job", _job, true];
-        _civilian setVariable ["RECONDO_CIVPOL_State", "IDLE", true];
-        _civilian setVariable ["RECONDO_CIVPOL_GaveDocuments", false, true];
-        _civilian setVariable ["RECONDO_CIVPOL_Index", _forEachIndex, true];
+        _civilian setVariable ["RECONDO_CIVPOL_VillageMarker", _markerName];
+        _civilian setVariable ["RECONDO_CIVPOL_HomePos", _homePos];
+        _civilian setVariable ["RECONDO_CIVPOL_HomeBuilding", _building];
+        _civilian setVariable ["RECONDO_CIVPOL_Job", _job];
+        _civilian setVariable ["RECONDO_CIVPOL_State", "IDLE"];
+        _civilian setVariable ["RECONDO_CIVPOL_GaveDocuments", false];
+        _civilian setVariable ["RECONDO_CIVPOL_Index", _forEachIndex];
         
         // Add event handlers
         private _killedEH = _civilian addEventHandler ["Killed", {

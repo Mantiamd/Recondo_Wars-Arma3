@@ -27,10 +27,8 @@ RECONDO_TRACKERS_FOOTPRINTS = RECONDO_TRACKERS_FOOTPRINTS select {
     (_currentTime - _footprintTime) <= _footprintLifetime
 };
 
-// If any were removed, sync
+// If any were removed, clean up debug markers
 if (count RECONDO_TRACKERS_FOOTPRINTS != _originalCount) then {
-    publicVariable "RECONDO_TRACKERS_FOOTPRINTS";
-    
     // Clean up debug markers if enabled
     if (_debugMarkers) then {
         {

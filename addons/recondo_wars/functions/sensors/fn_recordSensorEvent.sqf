@@ -52,8 +52,8 @@ if (_sensorType == "foot") then {
 private _logEntry = [_timestamp, _eventText, _grid];
 _sensorData pushBack _logEntry;
 
-_sensor setVariable ["RECONDO_SENSOR_DATA", _sensorData, true];
-_sensor setVariable ["RECONDO_SENSOR_LAST_LOG", serverTime, true];
+_sensor setVariable ["RECONDO_SENSOR_DATA", _sensorData];
+_sensor setVariable ["RECONDO_SENSOR_LAST_LOG", serverTime];
 
 [_sensor, _sensorType, _eventText, _grid] call Recondo_fnc_sendSensorNotification;
 

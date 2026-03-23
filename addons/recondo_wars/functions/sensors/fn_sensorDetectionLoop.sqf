@@ -50,7 +50,7 @@ private _debugLogging = _settings getOrDefault ["debugLogging", false];
 private _debugMarkers = _settings getOrDefault ["debugMarkers", false];
 
 private _grid = mapGridPosition _pos;
-_sensor setVariable ["RECONDO_SENSOR_GRID", _grid, true];
+_sensor setVariable ["RECONDO_SENSOR_GRID", _grid];
 
 private _detectionSideStr = switch (_detectionSide) do {
     case east: { "EAST" };
@@ -64,11 +64,11 @@ _trigger setTriggerArea [_detectionRadius, _detectionRadius, 0, false];
 _trigger setTriggerInterval _detectionInterval;
 _trigger setTriggerActivation [_detectionSideStr, "PRESENT", true];
 
-_trigger setVariable ["RECONDO_SENSOR_OBJECT", _sensor, true];
-_trigger setVariable ["RECONDO_SENSOR_TYPE", _sensorType, true];
-_trigger setVariable ["RECONDO_SENSOR_ID", _sensorId, true];
+_trigger setVariable ["RECONDO_SENSOR_OBJECT", _sensor];
+_trigger setVariable ["RECONDO_SENSOR_TYPE", _sensorType];
+_trigger setVariable ["RECONDO_SENSOR_ID", _sensorId];
 
-_sensor setVariable ["RECONDO_SENSOR_TRIGGER", _trigger, true];
+_sensor setVariable ["RECONDO_SENSOR_TRIGGER", _trigger];
 
 if (_sensorType == "foot") then {
     _trigger setTriggerStatements [
@@ -86,7 +86,7 @@ if (_sensorType == "foot") then {
 
 private _deployed = missionNamespace getVariable ["RECONDO_SENSORS_DEPLOYED", []];
 _deployed pushBack [_sensor, _sensorType, _sensorId, _pos, _ownerSide];
-missionNamespace setVariable ["RECONDO_SENSORS_DEPLOYED", _deployed, true];
+missionNamespace setVariable ["RECONDO_SENSORS_DEPLOYED", _deployed];
 
 if (!_isLoading) then {
     [_sensorType, _ownerSide, 1] call Recondo_fnc_getSensorCount;
@@ -106,7 +106,7 @@ if (_debugMarkers) then {
     _iconMarker setMarkerColor (if (_sensorType == "foot") then { "ColorGreen" } else { "ColorBlue" });
     _iconMarker setMarkerText format ["ID_%1 (%2)", _sensorId, toUpper _sensorType];
     
-    _sensor setVariable ["RECONDO_SENSOR_MARKERS", [_marker, _iconMarker], true];
+    _sensor setVariable ["RECONDO_SENSOR_MARKERS", [_marker, _iconMarker]];
 };
 
 if (_debugLogging) then {
