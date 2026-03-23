@@ -32,7 +32,7 @@ if (_debugLogging) then {
 };
 
 // Set terminate flag (this will cause all behavior loops to exit)
-_leaderVeh setVariable ["RECONDO_CONVOY_Terminate", true, true];
+_leaderVeh setVariable ["RECONDO_CONVOY_Terminate", true];
 
 // Wait a moment for loops to exit
 sleep 0.5;

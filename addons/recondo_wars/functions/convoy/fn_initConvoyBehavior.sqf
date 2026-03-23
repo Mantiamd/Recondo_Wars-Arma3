@@ -32,7 +32,7 @@ if (_debugLogging) then {
 };
 
 // Initialize path array on leader
-_leaderVeh setVariable ["RECONDO_CONVOY_Path", [getPosATL _leaderVeh], true];
+_leaderVeh setVariable ["RECONDO_CONVOY_Path", [getPosATL _leaderVeh]];
 
 // Start path creator for leader (records breadcrumb trail)
 [_leaderVeh, _vehicles, _settings] spawn Recondo_fnc_convoyPathCreator;

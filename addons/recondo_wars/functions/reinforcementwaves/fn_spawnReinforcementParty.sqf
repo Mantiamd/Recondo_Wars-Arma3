@@ -82,16 +82,16 @@ if (isNull _mainGroup) exitWith {
 };
 
 // Set group variables
-_mainGroup setVariable ["RECONDO_RW_moduleId", _moduleId, true];
-_mainGroup setVariable ["RECONDO_RW_targetGroup", _targetGroup, true];
-_mainGroup setVariable ["RECONDO_RW_targetGroupId", groupId _targetGroup, true];
-_mainGroup setVariable ["RECONDO_RW_waveNumber", 1, true];
-_mainGroup setVariable ["RECONDO_RW_isMainGroup", true, true];
-_mainGroup setVariable ["RECONDO_RW_isFlanker", false, true];
-_mainGroup setVariable ["RECONDO_RW_partyId", _partyId, true];
-_mainGroup setVariable ["RECONDO_RW_originPos", _spawnPos, true];
-_mainGroup setVariable ["RECONDO_RW_initialTargetPos", _initialTargetPos, true];
-_mainGroup setVariable ["RECONDO_RW_moduleSettings", _moduleSettings, true];
+_mainGroup setVariable ["RECONDO_RW_moduleId", _moduleId];
+_mainGroup setVariable ["RECONDO_RW_targetGroup", _targetGroup];
+_mainGroup setVariable ["RECONDO_RW_targetGroupId", groupId _targetGroup];
+_mainGroup setVariable ["RECONDO_RW_waveNumber", 1];
+_mainGroup setVariable ["RECONDO_RW_isMainGroup", true];
+_mainGroup setVariable ["RECONDO_RW_isFlanker", false];
+_mainGroup setVariable ["RECONDO_RW_partyId", _partyId];
+_mainGroup setVariable ["RECONDO_RW_originPos", _spawnPos];
+_mainGroup setVariable ["RECONDO_RW_initialTargetPos", _initialTargetPos];
+_mainGroup setVariable ["RECONDO_RW_moduleSettings", _moduleSettings];
 
 // Calculate group size
 private _groupSize = _wave1MinSize + floor random ((_wave1MaxSize - _wave1MinSize) + 1);
@@ -128,7 +128,7 @@ RECONDO_RW_ACTIVE_GROUPS pushBack _mainGroup;
 
 // Determine if this group has a dog
 private _hasDog = random 1 < _dogSpawnChance;
-_mainGroup setVariable ["RECONDO_RW_hasDog", _hasDog, true];
+_mainGroup setVariable ["RECONDO_RW_hasDog", _hasDog];
 
 // Create tracker dog if enabled
 if (_hasDog) then {
@@ -178,11 +178,11 @@ if (_enableFlankers) then {
 // Link all groups for convergence
 private _allLinkedGroups = [_mainGroup, _leftFlanker, _rightFlanker] select {!isNull _x};
 {
-    _x setVariable ["RECONDO_RW_linkedGroups", _allLinkedGroups, true];
+    _x setVariable ["RECONDO_RW_linkedGroups", _allLinkedGroups];
 } forEach _allLinkedGroups;
 
-_mainGroup setVariable ["RECONDO_RW_leftFlanker", _leftFlanker, true];
-_mainGroup setVariable ["RECONDO_RW_rightFlanker", _rightFlanker, true];
+_mainGroup setVariable ["RECONDO_RW_leftFlanker", _leftFlanker];
+_mainGroup setVariable ["RECONDO_RW_rightFlanker", _rightFlanker];
 
 // ========================================
 // ADD DETECTION HANDLERS FOR NEXT WAVE

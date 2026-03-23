@@ -95,7 +95,9 @@ if (!isNil "RECONDO_INTEL_LOG") then {
         ["source", "turn_in"]
     ];
     RECONDO_INTEL_LOG pushBack _logEntry;
-    publicVariable "RECONDO_INTEL_LOG";
+    // Broadcast only the new entry; clients append locally via event handler
+    RECONDO_INTEL_LOG_LATEST = _logEntry;
+    publicVariable "RECONDO_INTEL_LOG_LATEST";
 };
 
 // Check if all objectives complete

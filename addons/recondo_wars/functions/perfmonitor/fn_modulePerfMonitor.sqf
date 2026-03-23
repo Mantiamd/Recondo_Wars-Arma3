@@ -92,7 +92,7 @@ diag_log format [
 // INITIALIZE ON ALL CLIENTS
 // ========================================
 // This adds ACE actions for admin players
-[[], "Recondo_fnc_initPerfMonitor", true, true] call BIS_fnc_MP;
+[] remoteExecCall ["Recondo_fnc_initPerfMonitor", 0, true];
 
 // ========================================
 // AUTO-START IF ENABLED (SERVER-SIDE)

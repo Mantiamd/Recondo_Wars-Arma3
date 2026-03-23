@@ -100,6 +100,17 @@ RECONDO_INTEL_COMPLETED = [];  // Completed target IDs
 RECONDO_INTEL_ITEMS = [];  // Valid intel item classnames
 RECONDO_INTEL_TURNIN_OBJECTS = [];  // Objects with turn-in ACE actions
 RECONDO_INTEL_LOG = [];  // Intel reveal history log: [{message, timestamp, targetType, targetName, grid, source}]
+RECONDO_INTEL_LOG_LATEST = nil;  // Latest log entry (delta broadcast to avoid sending full log)
+
+// Client-side handler: append new entries broadcast via RECONDO_INTEL_LOG_LATEST
+if (!isServer) then {
+    "RECONDO_INTEL_LOG_LATEST" addPublicVariableEventHandler {
+        params ["_varName", "_value"];
+        if (!isNil "_value") then {
+            RECONDO_INTEL_LOG pushBack _value;
+        };
+    };
+};
 
 // Intel Items globals
 RECONDO_INTELITEMS_SETTINGS = nil;  // Module settings hashmap

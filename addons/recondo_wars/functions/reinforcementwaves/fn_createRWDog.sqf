@@ -70,22 +70,22 @@ if (isNull _dog) exitWith {
 };
 
 // Store dog variables
-_dog setVariable ["RECONDO_RW_isDog", true, true];
-_dog setVariable ["RECONDO_RW_moduleId", _moduleId, true];
-_dog setVariable ["RECONDO_RW_detectionDay", _dogDetectionDay, true];
-_dog setVariable ["RECONDO_RW_detectionNight", _dogDetectionNight, true];
-_dog setVariable ["RECONDO_RW_leadDistance", _dogLeadDistance, true];
-_dog setVariable ["RECONDO_RW_harassmentRange", _dogHarassmentRange, true];
-_dog setVariable ["RECONDO_RW_detectionSounds", _dogDetectionSounds, true];
-_dog setVariable ["RECONDO_RW_deathSounds", _dogDeathSounds, true];
-_dog setVariable ["RECONDO_RW_targetSide", _targetSide, true];
+_dog setVariable ["RECONDO_RW_isDog", true];
+_dog setVariable ["RECONDO_RW_moduleId", _moduleId];
+_dog setVariable ["RECONDO_RW_detectionDay", _dogDetectionDay];
+_dog setVariable ["RECONDO_RW_detectionNight", _dogDetectionNight];
+_dog setVariable ["RECONDO_RW_leadDistance", _dogLeadDistance];
+_dog setVariable ["RECONDO_RW_harassmentRange", _dogHarassmentRange];
+_dog setVariable ["RECONDO_RW_detectionSounds", _dogDetectionSounds];
+_dog setVariable ["RECONDO_RW_deathSounds", _dogDeathSounds];
+_dog setVariable ["RECONDO_RW_targetSide", _targetSide];
 
 // Link dog to group
-_group setVariable ["RECONDO_RW_dog", _dog, true];
+_group setVariable ["RECONDO_RW_dog", _dog];
 
 // Create bullet magnet for the dog
 private _bulletMagnet = [_dog, _reinforcementSide] call Recondo_fnc_assignDogBulletMagnet;
-_dog setVariable ["RECONDO_RW_bulletMagnet", _bulletMagnet, true];
+_dog setVariable ["RECONDO_RW_bulletMagnet", _bulletMagnet];
 
 // Add death event handler
 _dog addEventHandler ["Killed", {
@@ -106,8 +106,8 @@ _dog addEventHandler ["Killed", {
     // Update group variable
     private _group = group _unit;
     if (!isNull _group) then {
-        _group setVariable ["RECONDO_RW_dog", objNull, true];
-        _group setVariable ["RECONDO_RW_hasDog", false, true];
+        _group setVariable ["RECONDO_RW_dog", objNull];
+        _group setVariable ["RECONDO_RW_hasDog", false];
     };
 }];
 

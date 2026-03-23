@@ -45,19 +45,17 @@ private _debugLogging = if (isNil "_settings") then { false } else { _settings g
 // Add to destroyed list
 if (!(_markerId in RECONDO_JAMMER_DESTROYED)) then {
     RECONDO_JAMMER_DESTROYED pushBack _markerId;
-    publicVariable "RECONDO_JAMMER_DESTROYED";
 };
 
-// Update active objectives array
+// Update active objectives array (server-only tracking)
 {
     _x params ["_instId", "_mrkId", "_comp", "_status"];
     if (_mrkId == _markerId) then {
         _x set [3, "destroyed"];
     };
 } forEach RECONDO_JAMMER_ACTIVE;
-publicVariable "RECONDO_JAMMER_ACTIVE";
 
-// Update active jammer data (for client jamming loops)
+// Update active jammer data (clients need this for jamming loops)
 {
     if ((_x get "markerId") == _markerId) then {
         _x set ["active", false];
@@ -65,9 +63,8 @@ publicVariable "RECONDO_JAMMER_ACTIVE";
 } forEach RECONDO_JAMMER_ACTIVE_DATA;
 publicVariable "RECONDO_JAMMER_ACTIVE_DATA";
 
-// Remove from jammer objects tracking
+// Remove from jammer objects tracking (server-only)
 RECONDO_JAMMER_OBJECTS deleteAt _markerId;
-publicVariable "RECONDO_JAMMER_OBJECTS";
 
 // ========================================
 // SAVE TO PERSISTENCE

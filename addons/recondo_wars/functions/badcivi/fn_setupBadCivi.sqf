@@ -72,7 +72,7 @@ if (_debugLogging) then {
 
 private _netId = _unit call BIS_fnc_netId;
 
-private _trigger = createTrigger ["EmptyDetector", getPos _unit, false];
+private _trigger = createTrigger ["EmptyDetector", getPos _unit, true];
 _trigger setTriggerArea [_detectionDistance, _detectionDistance, 0, false, 100];
 
 private _sideStr = switch (toUpper _triggerSide) do {

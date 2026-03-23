@@ -29,8 +29,8 @@ if (isNull _vehicle || isNull _leaderVeh || isNil "_settings") exitWith {
 private _debugLogging = _settings get "debugLogging";
 
 // Initialize vehicle state
-_vehicle setVariable ["RECONDO_CONVOY_DriverIncapacitated", false, true];
-_vehicle setVariable ["RECONDO_CONVOY_VehicleIncapacitated", false, true];
+_vehicle setVariable ["RECONDO_CONVOY_DriverIncapacitated", false];
+_vehicle setVariable ["RECONDO_CONVOY_VehicleIncapacitated", false];
 
 if (_debugLogging) then {
     diag_log format ["[RECONDO_CONVOY] DriverMonitor started for %1", typeOf _vehicle];
@@ -39,7 +39,7 @@ if (_debugLogging) then {
 while {!(_leaderVeh getVariable ["RECONDO_CONVOY_Terminate", false])} do {
     // Check if vehicle is still valid
     if (isNull _vehicle || !alive _vehicle || !canMove _vehicle) exitWith {
-        _vehicle setVariable ["RECONDO_CONVOY_VehicleIncapacitated", true, true];
+        _vehicle setVariable ["RECONDO_CONVOY_VehicleIncapacitated", true];
         
         if (_debugLogging) then {
             diag_log format ["[RECONDO_CONVOY] DriverMonitor: Vehicle %1 destroyed/immobile", typeOf _vehicle];
@@ -52,7 +52,7 @@ while {!(_leaderVeh getVariable ["RECONDO_CONVOY_Terminate", false])} do {
         (lifeState _driver) in ["INCAPACITATED", "DEAD"];
     
     if (_driverIncapacitated) then {
-        _vehicle setVariable ["RECONDO_CONVOY_DriverIncapacitated", true, true];
+        _vehicle setVariable ["RECONDO_CONVOY_DriverIncapacitated", true];
         
         if (_debugLogging) then {
             diag_log format ["[RECONDO_CONVOY] DriverMonitor: Driver incapacitated in %1", typeOf _vehicle];
@@ -63,7 +63,7 @@ while {!(_leaderVeh getVariable ["RECONDO_CONVOY_Terminate", false])} do {
         
         if (count _aliveCrew == 0) then {
             // No crew left, mark vehicle as incapacitated
-            _vehicle setVariable ["RECONDO_CONVOY_VehicleIncapacitated", true, true];
+            _vehicle setVariable ["RECONDO_CONVOY_VehicleIncapacitated", true];
             
             if (_debugLogging) then {
                 diag_log format ["[RECONDO_CONVOY] DriverMonitor: No crew left in %1, marking incapacitated", typeOf _vehicle];
@@ -103,7 +103,7 @@ while {!(_leaderVeh getVariable ["RECONDO_CONVOY_Terminate", false])} do {
                 _vehicle setEffectiveCommander _replacement;
                 
                 // Clear incapacitated flag
-                _vehicle setVariable ["RECONDO_CONVOY_DriverIncapacitated", false, true];
+                _vehicle setVariable ["RECONDO_CONVOY_DriverIncapacitated", false];
                 
                 if (_debugLogging) then {
                     diag_log format ["[RECONDO_CONVOY] DriverMonitor: %1 assigned as new driver in %2", typeOf _replacement, typeOf _vehicle];

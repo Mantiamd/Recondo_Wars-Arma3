@@ -80,7 +80,10 @@ private _logEntry = createHashMapFromArray [
 ];
 
 _intelLog pushBack _logEntry;
-missionNamespace setVariable ["RECONDO_INTEL_LOG", _intelLog, true];
+missionNamespace setVariable ["RECONDO_INTEL_LOG", _intelLog];
+// Broadcast only the new entry; clients append locally via event handler
+RECONDO_INTEL_LOG_LATEST = _logEntry;
+publicVariable "RECONDO_INTEL_LOG_LATEST";
 
 ["SENSOR_LOG"] call Recondo_fnc_setSaveData;
 

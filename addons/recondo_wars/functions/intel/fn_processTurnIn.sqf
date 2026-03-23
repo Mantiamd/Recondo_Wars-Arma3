@@ -271,7 +271,9 @@ if (!_success) then {
     
     // Add to global log (newest first)
     RECONDO_INTEL_LOG insert [0, [_logEntry]];
-    publicVariable "RECONDO_INTEL_LOG";
+    // Broadcast only the new entry; clients append locally via event handler
+    RECONDO_INTEL_LOG_LATEST = _logEntry;
+    publicVariable "RECONDO_INTEL_LOG_LATEST";
     
     // Save to persistence
     private _enablePersistence = if (isNil "RECONDO_INTEL_SETTINGS") then { false } else { RECONDO_INTEL_SETTINGS getOrDefault ["enablePersistence", true] };

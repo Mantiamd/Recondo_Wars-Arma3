@@ -186,7 +186,6 @@ if (_debugLogging) then {
             
             // Track jammer object globally
             RECONDO_JAMMER_OBJECTS set [_markerId, _jammerObject];
-            publicVariable "RECONDO_JAMMER_OBJECTS";
             
             // Add killed event handler
             _jammerObject addEventHandler ["Killed", {

@@ -313,7 +313,6 @@ if (_linkedToIntel) then {
     if (!_isCompleted) then {
         // Register marker data for camera system (classname-based matching)
         RECONDO_PHOTO_MARKER_DATA pushBack [_markerId, getMarkerPos _markerId, _targetClassname, _instanceId, _clearRadius * 2];
-        publicVariable "RECONDO_PHOTO_MARKER_DATA";
 
         if (_spawnMode == 0) then {
             [_settings, _markerId, _activeComp, _isModPath] call Recondo_fnc_spawnPhotoObjective;
@@ -332,6 +331,7 @@ if (_linkedToIntel) then {
     };
 } forEach _compositionMap;
 
+publicVariable "RECONDO_PHOTO_MARKER_DATA";
 publicVariable "RECONDO_PHOTO_ACTIVE";
 
 // ========================================

@@ -40,20 +40,20 @@ if (isNull _flankerGroup) exitWith {
 };
 
 // Set group variables
-_flankerGroup setVariable ["RECONDO_RW_moduleId", _moduleId, true];
-_flankerGroup setVariable ["RECONDO_RW_targetGroup", _targetGroup, true];
-_flankerGroup setVariable ["RECONDO_RW_targetGroupId", groupId _targetGroup, true];
-_flankerGroup setVariable ["RECONDO_RW_waveNumber", 1, true];
-_flankerGroup setVariable ["RECONDO_RW_isMainGroup", false, true];
-_flankerGroup setVariable ["RECONDO_RW_isFlanker", true, true];
-_flankerGroup setVariable ["RECONDO_RW_flankerSide", _side, true];
-_flankerGroup setVariable ["RECONDO_RW_mainGroup", _mainGroup, true];
-_flankerGroup setVariable ["RECONDO_RW_partyId", _partyId, true];
-_flankerGroup setVariable ["RECONDO_RW_originPos", _spawnPos, true];
-_flankerGroup setVariable ["RECONDO_RW_moduleSettings", _moduleSettings, true];
-_flankerGroup setVariable ["RECONDO_RW_lateralOffset", _flankerLateralOffset, true];
-_flankerGroup setVariable ["RECONDO_RW_forwardOffset", _flankerForwardOffset, true];
-_flankerGroup setVariable ["RECONDO_RW_hasDog", false, true]; // Flankers don't get dogs
+_flankerGroup setVariable ["RECONDO_RW_moduleId", _moduleId];
+_flankerGroup setVariable ["RECONDO_RW_targetGroup", _targetGroup];
+_flankerGroup setVariable ["RECONDO_RW_targetGroupId", groupId _targetGroup];
+_flankerGroup setVariable ["RECONDO_RW_waveNumber", 1];
+_flankerGroup setVariable ["RECONDO_RW_isMainGroup", false];
+_flankerGroup setVariable ["RECONDO_RW_isFlanker", true];
+_flankerGroup setVariable ["RECONDO_RW_flankerSide", _side];
+_flankerGroup setVariable ["RECONDO_RW_mainGroup", _mainGroup];
+_flankerGroup setVariable ["RECONDO_RW_partyId", _partyId];
+_flankerGroup setVariable ["RECONDO_RW_originPos", _spawnPos];
+_flankerGroup setVariable ["RECONDO_RW_moduleSettings", _moduleSettings];
+_flankerGroup setVariable ["RECONDO_RW_lateralOffset", _flankerLateralOffset];
+_flankerGroup setVariable ["RECONDO_RW_forwardOffset", _flankerForwardOffset];
+_flankerGroup setVariable ["RECONDO_RW_hasDog", false];
 
 // Calculate group size
 private _groupSize = _flankerMinSize + floor random ((_flankerMaxSize - _flankerMinSize) + 1);

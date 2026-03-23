@@ -136,9 +136,9 @@ for "_i" from 0 to (_vehicleCount - 1) do {
     _vehicles pushBack _vehicle;
     
     // Store convoy info on vehicle
-    _vehicle setVariable ["RECONDO_CONVOY_Vehicle", true, true];
-    _vehicle setVariable ["RECONDO_CONVOY_Index", _i, true];
-    _vehicle setVariable ["RECONDO_CONVOY_Group", _group, true];
+    _vehicle setVariable ["RECONDO_CONVOY_Vehicle", true];
+    _vehicle setVariable ["RECONDO_CONVOY_Index", _i];
+    _vehicle setVariable ["RECONDO_CONVOY_Group", _group];
     
     // Get crew positions
     private _crewPositions = fullCrew [_vehicle, "", true];
@@ -220,18 +220,18 @@ _group setFormation "COLUMN";
 } forEach _vehicles;
 
 // Store convoy info on leader
-_leaderVeh setVariable ["RECONDO_CONVOY_Stopped", false, true];
-_leaderVeh setVariable ["RECONDO_CONVOY_Terminate", false, true];
-_leaderVeh setVariable ["RECONDO_CONVOY_Path", [_startPos], true];
-_leaderVeh setVariable ["RECONDO_CONVOY_Vehicles", _vehicles, true];
-_leaderVeh setVariable ["RECONDO_CONVOY_Settings", _settings, true];
-_leaderVeh setVariable ["RECONDO_CONVOY_Destination", _destMarker, true];
-_leaderVeh setVariable ["RECONDO_CONVOY_DestType", _destType, true];
-_leaderVeh setVariable ["RECONDO_CONVOY_DirectRoute", !_hasObjective, true];
+_leaderVeh setVariable ["RECONDO_CONVOY_Stopped", false];
+_leaderVeh setVariable ["RECONDO_CONVOY_Terminate", false];
+_leaderVeh setVariable ["RECONDO_CONVOY_Path", [_startPos]];
+_leaderVeh setVariable ["RECONDO_CONVOY_Vehicles", _vehicles];
+_leaderVeh setVariable ["RECONDO_CONVOY_Settings", _settings];
+_leaderVeh setVariable ["RECONDO_CONVOY_Destination", _destMarker];
+_leaderVeh setVariable ["RECONDO_CONVOY_DestType", _destType];
+_leaderVeh setVariable ["RECONDO_CONVOY_DirectRoute", !_hasObjective];
 
 // Store on group for easy access
-_group setVariable ["RECONDO_CONVOY_LeaderVeh", _leaderVeh, true];
-_group setVariable ["RECONDO_CONVOY_Vehicles", _vehicles, true];
+_group setVariable ["RECONDO_CONVOY_LeaderVeh", _leaderVeh];
+_group setVariable ["RECONDO_CONVOY_Vehicles", _vehicles];
 
 // ========================================
 // CREATE WAYPOINTS
@@ -256,11 +256,11 @@ if (_hasObjective) then {
                 private _vehicles = (group this) getVariable ['RECONDO_CONVOY_Vehicles', []];
                 if (count _vehicles > 0) then {
                     private _leaderVeh = _vehicles select 0;
-                    _leaderVeh setVariable ['RECONDO_CONVOY_Stopped', true, true];
+                    _leaderVeh setVariable ['RECONDO_CONVOY_Stopped', true];
                     [{
                         params ['_leaderVeh'];
                         if (!isNull _leaderVeh) then {
-                            _leaderVeh setVariable ['RECONDO_CONVOY_Stopped', false, true];
+                            _leaderVeh setVariable ['RECONDO_CONVOY_Stopped', false];
                         };
                     }, [_leaderVeh], %1] call CBA_fnc_waitAndExecute;
                 };
@@ -362,7 +362,7 @@ if (_debugMarkers) then {
         _debugMkr setMarkerText "Convoy -> Direct";
     };
     
-    _leaderVeh setVariable ["RECONDO_CONVOY_DebugMarker", _debugMkrName, true];
+    _leaderVeh setVariable ["RECONDO_CONVOY_DebugMarker", _debugMkrName];
 };
 
 // Return convoy data

@@ -85,16 +85,17 @@ if (_enableHVT && !isNil "RECONDO_HVT_INSTANCES" && {count RECONDO_HVT_INSTANCES
         _counts params ["_remaining", "_total"];
         private _isCaptured = _remaining == 0;
         
-        // Check if location is revealed
+        // Check if location is revealed for the player's group
         private _revealedLocation = "";
-        if (_showRevealedLocations && !isNil "RECONDO_INTEL_REVEALED") then {
-            private _targetId = format ["%1_%2", _instanceId, (_hvtSettings get "markerPrefix")];
+        if (_showRevealedLocations && !isNil "RECONDO_INTEL_REVEALED" && !isNil "RECONDO_INTEL_TARGETS") then {
+            private _groupId = groupId (group player);
+            private _revealedForGroup = RECONDO_INTEL_REVEALED getOrDefault [_groupId, []];
             {
                 _x params ["_type", "_id", "_pos", "_data"];
-                if (_type == "hvt" && {(_data getOrDefault ["hvtName", ""]) == _hvtName}) exitWith {
+                if (_type == "hvt" && {_id in _revealedForGroup} && {(_data getOrDefault ["hvtName", ""]) == _hvtName}) exitWith {
                     _revealedLocation = [_pos] call Recondo_fnc_posToGrid;
                 };
-            } forEach RECONDO_INTEL_REVEALED;
+            } forEach RECONDO_INTEL_TARGETS;
         };
         
         private _targetData = createHashMapFromArray [
@@ -165,15 +166,17 @@ if (_enableHostages && !isNil "RECONDO_HOSTAGE_INSTANCES" && {count RECONDO_HOST
                 _hostageBackground = _hostageBackgrounds select _hostageIndex;
             };
             
-            // Check if location is revealed
+            // Check if location is revealed for the player's group
             private _revealedLocation = "";
-            if (_showRevealedLocations && _marker != "" && !isNil "RECONDO_INTEL_REVEALED") then {
+            if (_showRevealedLocations && _marker != "" && !isNil "RECONDO_INTEL_REVEALED" && !isNil "RECONDO_INTEL_TARGETS") then {
+                private _groupId = groupId (group player);
+                private _revealedForGroup = RECONDO_INTEL_REVEALED getOrDefault [_groupId, []];
                 {
                     _x params ["_type", "_id", "_pos", "_data"];
-                    if (_type == "hostage" && {_marker == (_data getOrDefault ["marker", ""])}) exitWith {
+                    if (_type == "hostage" && {_id in _revealedForGroup} && {_marker == (_data getOrDefault ["marker", ""])}) exitWith {
                         _revealedLocation = [_pos] call Recondo_fnc_posToGrid;
                     };
-                } forEach RECONDO_INTEL_REVEALED;
+                } forEach RECONDO_INTEL_TARGETS;
             };
             
             private _targetData = createHashMapFromArray [
@@ -346,14 +349,15 @@ if (_enablePhotos && !isNil "RECONDO_PHOTO_INSTANCES" && {count RECONDO_PHOTO_IN
         private _isComplete = _remaining == 0;
         
         private _revealedLocation = "";
-        if (_showRevealedLocations && !isNil "RECONDO_INTEL_REVEALED") then {
-            private _targetId = format ["%1_%2", _instanceId, (_photoSettings get "markerPrefix")];
+        if (_showRevealedLocations && !isNil "RECONDO_INTEL_REVEALED" && !isNil "RECONDO_INTEL_TARGETS") then {
+            private _groupId = groupId (group player);
+            private _revealedForGroup = RECONDO_INTEL_REVEALED getOrDefault [_groupId, []];
             {
                 _x params ["_type", "_id", "_pos", "_data"];
-                if (_type == "photograph" && {(_data getOrDefault ["name", ""]) == _objectiveName}) exitWith {
+                if (_type == "photograph" && {_id in _revealedForGroup} && {(_data getOrDefault ["name", ""]) == _objectiveName}) exitWith {
                     _revealedLocation = [_pos] call Recondo_fnc_posToGrid;
                 };
-            } forEach RECONDO_INTEL_REVEALED;
+            } forEach RECONDO_INTEL_TARGETS;
         };
         
         private _targetData = createHashMapFromArray [

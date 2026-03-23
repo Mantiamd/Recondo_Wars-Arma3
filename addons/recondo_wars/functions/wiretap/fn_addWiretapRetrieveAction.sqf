@@ -17,7 +17,7 @@ params [["_pole", objNull, [objNull]]];
 if (isNull _pole) exitWith {};
 
 // Wait for settings to be available
-waitUntil { !isNil "RECONDO_WIRETAP_SETTINGS" };
+waitUntil { sleep 0.5; !isNil "RECONDO_WIRETAP_SETTINGS" };
 
 private _actionRetrieve = RECONDO_WIRETAP_SETTINGS get "actionRetrieve";
 private _actionCheckTime = RECONDO_WIRETAP_SETTINGS get "actionCheckTime";

@@ -140,7 +140,8 @@ if (count _sentryClassnames > 0) then {
                             _unit doMove _finalPos;
                             _unit setSpeedMode "LIMITED";
                             
-                            waitUntil { sleep 1; unitReady _unit || !alive _unit || time > (time + 20) };
+                            private _timeout = time + 20;
+                            waitUntil { sleep 1; unitReady _unit || !alive _unit || time > _timeout };
                             doStop _unit;
                         };
                     };

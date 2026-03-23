@@ -79,8 +79,8 @@ diag_log "[RECONDO_JAMMER] Starting night lights update loop";
                     // Attach to building, offset upward into the structure
                     _light lightAttachObject [_building, [0, 0, 2.5]];
                     
-                    // Store reference
-                    _building setVariable ["RECONDO_JAMMER_Light", _light, true];
+                    // Store reference (server-only, no broadcast needed)
+                    _building setVariable ["RECONDO_JAMMER_Light", _light];
                     
                     // Track globally
                     RECONDO_JAMMER_ACTIVE_LIGHTS pushBack _light;
@@ -92,7 +92,7 @@ diag_log "[RECONDO_JAMMER] Starting night lights update loop";
                     RECONDO_JAMMER_ACTIVE_LIGHTS = RECONDO_JAMMER_ACTIVE_LIGHTS - [_existingLight];
                     
                     deleteVehicle _existingLight;
-                    _building setVariable ["RECONDO_JAMMER_Light", objNull, true];
+                    _building setVariable ["RECONDO_JAMMER_Light", objNull];
                 };
             };
         };

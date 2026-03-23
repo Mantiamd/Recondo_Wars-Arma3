@@ -43,7 +43,7 @@ if (_debugMarkers) then {
     for "_i" from 0 to (_convoyLength - 2) do {
         _drawObjects pushBack [];
     };
-    _leaderVeh setVariable ["RECONDO_CONVOY_DrawObjects", _drawObjects, true];
+    _leaderVeh setVariable ["RECONDO_CONVOY_DrawObjects", _drawObjects];
 };
 
 while {!(_leaderVeh getVariable ["RECONDO_CONVOY_Terminate", false])} do {
@@ -81,7 +81,7 @@ while {!(_leaderVeh getVariable ["RECONDO_CONVOY_Terminate", false])} do {
     };
     
     // Store updated path
-    _leaderVeh setVariable ["RECONDO_CONVOY_Path", _path, true];
+    _leaderVeh setVariable ["RECONDO_CONVOY_Path", _path];
     
     // Create vehicle-specific paths for each follower
     for "_i" from 1 to (_convoyLength - 1) do {
@@ -163,7 +163,7 @@ while {!(_leaderVeh getVariable ["RECONDO_CONVOY_Terminate", false])} do {
                             } forEach _obstacles;
                             
                             // Remember where we cleared so we don't spam
-                            _vehicle setVariable ["RECONDO_CONVOY_LastClearPos", _vehPos, true];
+                            _vehicle setVariable ["RECONDO_CONVOY_LastClearPos", _vehPos];
                             
                             if (_debugLogging) then {
                                 diag_log format ["[RECONDO_CONVOY] PathCreator: Vehicle %1 stuck - cleared %2 obstacles at %3", 
@@ -212,7 +212,7 @@ while {!(_leaderVeh getVariable ["RECONDO_CONVOY_Terminate", false])} do {
                             } forEach _obstacles;
                             
                             // Remember where we cleared so we don't spam
-                            _vehicle setVariable ["RECONDO_CONVOY_LastClearPos", _vehPos, true];
+                            _vehicle setVariable ["RECONDO_CONVOY_LastClearPos", _vehPos];
                             
                             if (_debugLogging) then {
                                 diag_log format ["[RECONDO_CONVOY] PathCreator: Vehicle %1 stuck (no path) - cleared %2 obstacles at %3", 
@@ -258,7 +258,7 @@ while {!(_leaderVeh getVariable ["RECONDO_CONVOY_Terminate", false])} do {
                 };
                 
                 _drawObjects set [_i - 1, _newObjects];
-                _leaderVeh setVariable ["RECONDO_CONVOY_DrawObjects", _drawObjects, true];
+                _leaderVeh setVariable ["RECONDO_CONVOY_DrawObjects", _drawObjects];
             };
         };
     };

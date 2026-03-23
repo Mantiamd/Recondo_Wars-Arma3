@@ -17,7 +17,7 @@
 if (!hasInterface) exitWith {};
 
 // Wait for player and settings to be available
-waitUntil {!isNull player && {!isNil "RECONDO_RWR_SETTINGS"}};
+waitUntil {sleep 0.5; !isNull player && {!isNil "RECONDO_RWR_SETTINGS"}};
 
 private _settings = RECONDO_RWR_SETTINGS;
 private _debug = _settings get "enableDebug";

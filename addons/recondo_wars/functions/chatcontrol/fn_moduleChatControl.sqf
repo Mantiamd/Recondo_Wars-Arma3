@@ -216,6 +216,6 @@ if (_debugLogging) then {
 // ========================================
 
 // Apply to all current clients
-[[], "Recondo_fnc_applyChatSettings", true, true] call BIS_fnc_MP;
+[] remoteExecCall ["Recondo_fnc_applyChatSettings", 0, true];
 
 diag_log "[RECONDO_CHATCONTROL] Module initialized - settings broadcast to clients";
