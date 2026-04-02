@@ -1,6 +1,6 @@
 # Recondo Wars - Quick Start Guide
 
-This guide walks you through setting up a basic mission using Recondo Wars modules. By the end, you'll have a working mission with an HVT objective, AI patrols, persistence, and an admin terminal.
+This guide walks you through setting up a basic mission using Recondo Wars modules. By the end, you'll have a working mission with objectives, an intel board, AI patrols, persistence, and an admin terminal.
 
 ## Prerequisites
 
@@ -18,12 +18,29 @@ Open Eden Editor and place these modules from the **Recondo Wars** category:
 2. Set a **Campaign Name** (e.g., "MyFirstMission") - this is used as the save identifier
 3. Leave other settings at defaults
 
-### Terminal (Recommended)
+> **Note:** The Persistence System is standalone — it does **not** need to be synced to anything. Just place it and configure the campaign name.
+
+### Intel System (Required for intel flow)
+1. Place an **Intel System** module
+2. **Sync** any objective modules to the Intel System (drag a line from each objective module to the Intel System)
+3. This is what allows turned-in intel to be processed and displayed
+
+> **Important:** Without the Intel System, objectives like Photographs, HVT, Hostages, etc. will not generate intel logs when items are turned in.
+
+### Intel Board (Displays collected intel)
+1. Place an **Intel Board** module
+2. Place a map board object (e.g., SOG PF map board, whiteboard, or any object) near your player spawn
+3. **Sync** the Intel Board module to the map board object (drag a line from module to object)
+4. During the mission, ACE-interact with the map board to view collected intelligence and mission status
+
+> **Common mistake:** Do not confuse the Intel Board with the Terminal. The **Intel Board** is for viewing collected intel. The **Terminal** is for admin functions only (see below).
+
+### Terminal (Recommended for admins)
 1. Place a **Terminal** module
-2. Place a map object (e.g., a table or laptop) near your player spawn
+2. Place an object (e.g., a table or laptop) near your player spawn — this should be a **different object** than your Intel Board
 3. **Sync** the Terminal module to the object (drag a line from module to object)
 4. **Sync** the Terminal module to the Persistence module (drag a line between them)
-5. During the mission, ACE-interact with the object to access admin functions
+5. During the mission, ACE-interact with the object to access admin functions (save, reset persistence, check mission status)
 
 > **Tip:** Enable **Master Debug** on the Terminal module during testing. This turns on debug logging for ALL modules at once.
 
@@ -54,11 +71,25 @@ If your HVT module uses prefix `HVT_`:
    - **Proximity**: Compositions spawn when players approach (better for performance)
 6. Under **Garrison AI**, set classnames for guards (e.g., `vn_o_men_nva_01,vn_o_men_nva_02`)
 7. Under **HVT Settings**, set the number of decoy locations
+8. **Sync** the Objective HVT module to the **Intel System** module
+
+### Objective Photographs (Example)
+1. Place an **Objective - Photographs** module
+2. Set **Marker Prefix** (e.g., `PHOTO_`) to match your markers
+3. Place markers where recon targets should appear: `PHOTO_1`, `PHOTO_2`, etc.
+4. Configure composition pool and spawning settings
+5. **Sync** the Objective Photographs module to the **Intel System** module
+6. Players use the SOG PF camera to photograph targets, then turn in film at an Intel turn-in point
+7. Turned-in intel will appear on the **Intel Board**
+
+### Connecting Objectives to Intel
+All objective modules should be **synced to the Intel System** module. This is what enables intel to flow from completed objectives into the Intel Board display. Without this link, intel logs will not appear when items are turned in.
 
 ### Other Objectives Follow the Same Pattern
 - **Objective Destroy**: Prefix markers (e.g., `CACHE_1`, `CACHE_2`), set target classname
 - **Objective Hostages**: Prefix markers (e.g., `HOSTAGE_1`, `HOSTAGE_2`), configure hostage profiles
 - **Objective Jammer**: Prefix markers (e.g., `JAMMER_1`, `JAMMER_2`), set jammer classname
+- **Objective Photographs**: Prefix markers (e.g., `PHOTO_1`, `PHOTO_2`), configure camera/photo settings
 
 ## Step 4: Add AI Patrols
 
@@ -111,6 +142,11 @@ Use the module's **AI Side** or **Garrison AI Side** setting. If using unit clas
 - Persistence saves automatically at the configured interval
 - Use the Terminal to manually trigger saves or reset persistence
 
+### Intel Board not showing logs
+- Make sure you placed an **Intel Board** module (not a Terminal module) and synced it to a map board object
+- Make sure your objective modules are synced to the **Intel System** module
+- The **Terminal** module is for admin functions only — it will not display collected intel
+
 ## Module Reference
 
 For detailed information on each module's attributes, hover over any setting in Eden Editor to see its tooltip with descriptions and examples.
@@ -121,6 +157,7 @@ For detailed information on each module's attributes, hover over any setting in 
 | Objective Destroy | `CACHE_` | CACHE_1, CACHE_2 |
 | Objective HVT | `HVT_` | HVT_1, HVT_2 |
 | Objective Hostages | `HOSTAGE_` | HOSTAGE_1, HOSTAGE_2 |
+| Objective Photographs | `PHOTO_` | PHOTO_1, PHOTO_2 |
 | Objective Jammer | `JAMMER_` | JAMMER_1, JAMMER_2 |
 | Objective Hub & Subs | `HUB_` | HUB_1, HUB_1a, HUB_1b |
 | Foot Patrols | `PATROL_` | PATROL_1, PATROL_2 |
@@ -132,15 +169,21 @@ For detailed information on each module's attributes, hover over any setting in 
 | Custom Site Spawn | `SITE_` | SITE_1, SITE_2 |
 
 ### Modules That Sync to Objects
-| Module | Sync To |
-|--------|---------|
-| Terminal | Any object + Persistence module |
-| Bad Civi | AI unit(s) |
-| Destroy Powergrid | World object with lights |
-| ACE Arsenal Area | Object or area |
-| ACE Spectator Object | Object |
-| STABO Extraction | Helicopter(s) |
-| Intel Board | Object (whiteboard, etc.) |
+| Module | Sync To | Purpose |
+|--------|---------|---------|
+| Intel Board | Map board object | View collected intel via ACE interaction |
+| Terminal | Any object + Persistence module | Admin functions (save, reset, status) |
+| Bad Civi | AI unit(s) | Designate units as concealed-weapon civilians |
+| Destroy Powergrid | World object with lights | Toggleable/destroyable light source |
+| ACE Arsenal Area | Object or area | Arsenal access point |
+| ACE Spectator Object | Object | Enter spectator mode |
+| STABO Extraction | Helicopter(s) | Designate extraction helicopters |
+
+### Modules That Sync to Other Modules
+| Module | Sync To | Purpose |
+|--------|---------|---------|
+| Objective modules | Intel System | Enables intel flow from objectives to Intel Board |
+| Terminal | Persistence System | Enables admin save/reset controls |
 
 ### Multi-Instance Modules
 These modules can be placed multiple times:
