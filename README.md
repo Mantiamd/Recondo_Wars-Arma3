@@ -36,6 +36,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **RW Radio** - Radio transmission system with battery management and triangulation
 - **Trackers** - Enemy tracker teams with dogs that follow player footprints
 - **Reinforcement Waves** - Dynamic enemy reinforcement spawning
+- **QRF Mounted** - Vehicle-mounted quick reaction force that spawns at the nearest road when the QRF side detects the target side. Randomly selects vehicles from a pool (configurable min/max count), fills crew and cargo, moves to the detected target, and dismounts cargo passengers at a configurable distance while drivers and gunners remain mounted
 
 ### Extraction & Movement
 - **STABO Extraction** - Helicopter extraction via STABO rig with body/casualty attachment
@@ -52,9 +53,14 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **Custom Site Spawn** - Spawn custom compositions at markers with garrison AI, patrols, and night lighting
 - **Camps Random** - Randomized camp placement with composition support
 - **Destroy Powergrid** - Sync to a world object to turn off or destroy all lights within a configurable radius via ACE interaction or object destruction, with optional persistence
+- **Hanoi Hannah Loudspeakers** - Spawn propaganda loudspeakers at marker positions with configurable volume, distance, cooldown, and an ACE "Rip Out Wires" interaction that awards Recon Points. Extends the [Hanoi Hannah Loudspeakers Mod](https://steamcommunity.com/sharedfiles/filedetails/?id=3696734884) (required dependency for this module)
+- **Village Uprising** - Civilians at village markers wander peacefully until a configured side enters the detection radius, then rally to a point, arm up, switch sides, and attack. Each village triggers independently. Supports multiple areas via paired village/rally markers
 
 ### Utility Modules
 - **Persistence** - Save/load mission state across sessions with campaign ID support
+- **Player Persistence** - Save and restore player positions, directions, and full loadouts across sessions. Tracks specified playable units by Eden variable name with configurable restore delay. Saves immediately on disconnect
+- **Vehicle Persistence** - Save and restore synchronized vehicle positions across sessions. Destroyed vehicles are removed on load
+- **Inventory Persistence** - Save and restore full cargo contents (weapons, magazines, items, backpacks) of synchronized containers and vehicles across sessions
 - **Intro Screen** - Mission introduction screens
 - **Terminal** - Admin terminal for mission control and persistence reset
 - **Arsenal Area** - Configurable arsenal access zones
@@ -70,6 +76,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - [CBA_A3](https://steamcommunity.com/sharedfiles/filedetails/?id=450814997)
 - [ACE3](https://steamcommunity.com/sharedfiles/filedetails/?id=463939057)
 - [SOG Prairie Fire](https://store.steampowered.com/app/1227700/Arma_3_Creator_DLC_SOG_Prairie_Fire/) (recommended)
+- [Hanoi Hannah Loudspeakers Mod](https://steamcommunity.com/sharedfiles/filedetails/?id=3696734884) (required for Hanoi Hannah module only)
 
 ## Installation
 

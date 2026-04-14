@@ -65,6 +65,12 @@ private _cargoClassnames = [_cargoClassnamesStr] call Recondo_fnc_parseClassname
 _settings set ["cargoClassnames", _cargoClassnames];
 _settings set ["fillCargo", _logic getVariable ["fillcargo", true]];
 
+// Vehicle Cargo Settings
+_settings set ["clearVehicleInventory", _logic getVariable ["clearvehicleinventory", true]];
+private _vehicleCargoStr = _logic getVariable ["vehiclecargoclassnames", ""];
+private _vehicleCargoItems = [_vehicleCargoStr] call Recondo_fnc_parseClassnames;
+_settings set ["vehicleCargoItems", _vehicleCargoItems];
+
 // Convoy Behavior Settings
 _settings set ["maxSpeed", _logic getVariable ["maxspeed", 40]];
 _settings set ["separation", _logic getVariable ["separation", 25]];

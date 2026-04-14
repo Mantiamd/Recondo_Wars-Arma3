@@ -953,6 +953,13 @@ class Cfg3DEN {
                 class Attributes {};
             };
             
+            // Access Control
+            class Recondo_Terminal_Access {
+                displayName = "Access Control";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
             // Debug
             class Recondo_Terminal_Debug {
                 displayName = "Debug";
@@ -1990,6 +1997,13 @@ class Cfg3DEN {
                 class Attributes {};
             };
             
+            // Vehicle Cargo
+            class Recondo_Convoy_VehicleCargo {
+                displayName = "Vehicle Cargo";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
             // Convoy Behavior
             class Recondo_Convoy_Behavior {
                 displayName = "Convoy Behavior";
@@ -2268,6 +2282,141 @@ class Cfg3DEN {
                 class Attributes {};
             };
             class Recondo_Photo_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            //==========================================
+            // HANOI HANNAH LOUDSPEAKERS MODULE CATEGORIES
+            //==========================================
+            
+            class Recondo_Hannah_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_Hannah_Sound {
+                displayName = "Sound Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_Hannah_Original {
+                displayName = "Original Mod";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_Hannah_Rewards {
+                displayName = "Rewards";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_Hannah_Persistence {
+                displayName = "Persistence";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            class Recondo_Hannah_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            //==========================================
+            // QRF MOUNTED MODULE CATEGORIES
+            //==========================================
+            class Recondo_QRF_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_QRF_Detection {
+                displayName = "Detection Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_QRF_Vehicles {
+                displayName = "Vehicles";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_QRF_Units {
+                displayName = "Units";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_QRF_Spawn {
+                displayName = "Spawn Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_QRF_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            //==========================================
+            // VILLAGE UPRISING MODULE CATEGORIES
+            //==========================================
+            class Recondo_Uprising_Area {
+                displayName = "Area Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_Uprising_Civilians {
+                displayName = "Civilian Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_Uprising_Trigger {
+                displayName = "Trigger Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_Uprising_Combat {
+                displayName = "Combat Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_Uprising_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            //==========================================
+            // PLAYER PERSISTENCE MODULE CATEGORIES
+            //==========================================
+            class Recondo_PlayerPersist_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_PlayerPersist_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            //==========================================
+            // VEHICLE PERSISTENCE MODULE CATEGORIES
+            //==========================================
+            class Recondo_VehPersist_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            //==========================================
+            // INVENTORY PERSISTENCE MODULE CATEGORIES
+            //==========================================
+            class Recondo_InvPersist_Debug {
                 displayName = "Debug";
                 collapsed = 1;
                 class Attributes {};

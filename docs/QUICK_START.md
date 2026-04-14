@@ -8,6 +8,7 @@ This guide walks you through setting up a basic mission using Recondo Wars modul
 - [CBA_A3](https://steamcommunity.com/sharedfiles/filedetails/?id=450814997)
 - [ACE3](https://steamcommunity.com/sharedfiles/filedetails/?id=463939057)
 - Recondo Wars mod loaded
+- [Hanoi Hannah Loudspeakers Mod](https://steamcommunity.com/sharedfiles/filedetails/?id=3696734884) (required only if using the Hanoi Hannah module)
 
 ## Step 1: Place Core Modules
 
@@ -167,12 +168,17 @@ For detailed information on each module's attributes, hover over any setting in 
 | Outpost Teleport | `Outpost_` | Outpost_1, Outpost_2 |
 | POO Site Hunt | `POO_` | POO_1, POO_2 |
 | Custom Site Spawn | `SITE_` | SITE_1, SITE_2 |
+| Hanoi Hannah | `HANNAH_` | HANNAH_1, HANNAH_2 |
+| Village Uprising (Village) | `UPRISING_` | UPRISING_1, UPRISING_2 |
+| Village Uprising (Rally) | `RALLY_` | RALLY_1, RALLY_2 |
 
 ### Modules That Sync to Objects
 | Module | Sync To | Purpose |
 |--------|---------|---------|
 | Intel Board | Map board object | View collected intel via ACE interaction |
 | Terminal | Any object + Persistence module | Admin functions (save, reset, status) |
+| Vehicle Persistence | Vehicle(s) | Save/restore vehicle positions across sessions |
+| Inventory Persistence | Container(s) or vehicle(s) | Save/restore cargo contents across sessions |
 | Bad Civi | AI unit(s) | Designate units as concealed-weapon civilians |
 | Destroy Powergrid | World object with lights | Toggleable/destroyable light source |
 | ACE Arsenal Area | Object or area | Arsenal access point |
@@ -185,6 +191,11 @@ For detailed information on each module's attributes, hover over any setting in 
 | Objective modules | Intel System | Enables intel flow from objectives to Intel Board |
 | Terminal | Persistence System | Enables admin save/reset controls |
 
+### Modules That Require External Mods
+| Module | Required Mod | Workshop Link |
+|--------|-------------|---------------|
+| Hanoi Hannah | Hanoi Hannah Loudspeakers Mod | [Steam Workshop #3696734884](https://steamcommunity.com/sharedfiles/filedetails/?id=3696734884) |
+
 ### Multi-Instance Modules
 These modules can be placed multiple times:
 - AI Tweaks (one per side)
@@ -194,3 +205,4 @@ These modules can be placed multiple times:
 - Bad Civi, POO Site Hunt, Destroy Powergrid
 - Reinforcement Waves
 - Ambient Sound, Civilians Working
+- Village Uprising, Hanoi Hannah

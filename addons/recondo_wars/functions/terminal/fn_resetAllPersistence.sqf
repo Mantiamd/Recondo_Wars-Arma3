@@ -292,6 +292,41 @@ if (!isNil "RECONDO_POWERGRID_INSTANCES") then {
 };
 
 // ========================================
+// HANOI HANNAH (per-instance by prefix)
+// ========================================
+
+if (!isNil "RECONDO_HANNAH_SETTINGS") then {
+    private _prefix = RECONDO_HANNAH_SETTINGS getOrDefault ["markerPrefix", ""];
+    if (_prefix != "") then {
+        private _hannahKey = format ["HANNAH_%1", _prefix];
+        missionProfileNamespace setVariable [[_hannahKey + "_SELECTED"] call _fnc_getTag, nil];
+        missionProfileNamespace setVariable [[_hannahKey + "_DISABLED"] call _fnc_getTag, nil];
+        diag_log format ["[RECONDO_TERMINAL] Cleared: hanoi hannah '%1'", _prefix];
+    };
+};
+
+// ========================================
+// PLAYER PERSISTENCE
+// ========================================
+
+missionProfileNamespace setVariable [["PLAYER_PERSIST_DATA"] call _fnc_getTag, nil];
+diag_log "[RECONDO_TERMINAL] Cleared: player persistence data";
+
+// ========================================
+// VEHICLE PERSISTENCE
+// ========================================
+
+missionProfileNamespace setVariable [["VEHICLE_PERSIST_DATA"] call _fnc_getTag, nil];
+diag_log "[RECONDO_TERMINAL] Cleared: vehicle persistence data";
+
+// ========================================
+// INVENTORY PERSISTENCE
+// ========================================
+
+missionProfileNamespace setVariable [["INVENTORY_PERSIST_DATA"] call _fnc_getTag, nil];
+diag_log "[RECONDO_TERMINAL] Cleared: inventory persistence data";
+
+// ========================================
 // FINALIZE
 // ========================================
 

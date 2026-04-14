@@ -75,6 +75,33 @@ if (_settings get "savePlayerStats") then {
     [] call Recondo_fnc_loadPlayerStats;
 };
 
+// Load Player Persistence data
+if (RECONDO_PLAYER_PERSISTENCE_ENABLED) then {
+    [] call Recondo_fnc_loadPlayers;
+};
+
+// Load Vehicle Persistence data
+if (count RECONDO_VEHICLE_PERSISTENCE_UNITS > 0) then {
+    [] call Recondo_fnc_loadVehicles;
+} else {
+    [{
+        count RECONDO_VEHICLE_PERSISTENCE_UNITS > 0
+    }, {
+        [] call Recondo_fnc_loadVehicles;
+    }, [], 30] call CBA_fnc_waitUntilAndExecute;
+};
+
+// Load Inventory Persistence data
+if (count RECONDO_INVENTORY_PERSISTENCE_CONTAINERS > 0) then {
+    [] call Recondo_fnc_loadInventories;
+} else {
+    [{
+        count RECONDO_INVENTORY_PERSISTENCE_CONTAINERS > 0
+    }, {
+        [] call Recondo_fnc_loadInventories;
+    }, [], 30] call CBA_fnc_waitUntilAndExecute;
+};
+
 private _elapsed = diag_tickTime - _startTime;
 
 // Log completion

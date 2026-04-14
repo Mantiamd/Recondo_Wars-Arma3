@@ -631,5 +631,53 @@ class CfgFunctions {
             class updatePhotoNightLights { file = "\recondo_wars\functions\objectivephotographs\fn_updateNightLights.sqf"; };
         };
         
+        // Hanoi Hannah Loudspeakers Module Functions
+        class HanoiHannah {
+            file = "\recondo_wars\functions\hanoihannah";
+            class moduleHanoiHannah {};
+            class spawnHannahSpeaker {};
+            class handleSpeakerDisabled {};
+        };
+        
+        // QRF Mounted Module Functions
+        class QRFMounted {
+            file = "\recondo_wars\functions\qrfmounted";
+            class moduleQRFMounted {};
+            class qrfDetectionLoop {};
+            class spawnQRFMounted {};
+        };
+        
+        // Village Uprising Module Functions
+        class VillageUprising {
+            file = "\recondo_wars\functions\villageuprising";
+            class moduleVillageUprising {};
+            class spawnUprisingCivilians {};
+            class triggerUprising {};
+        };
+        
+        // Player Persistence Module Functions
+        class PlayerPersistence {
+            file = "\recondo_wars\functions\playerpersistence";
+            class modulePlayerPersistence {};
+            class savePlayers {};
+            class loadPlayers {};
+        };
+        
+        // Vehicle Persistence Module Functions
+        class VehiclePersistence {
+            file = "\recondo_wars\functions\vehiclepersistence";
+            class moduleVehiclePersistence {};
+            class saveVehicles {};
+            class loadVehicles {};
+        };
+        
+        // Inventory Persistence Module Functions
+        class InventoryPersistence {
+            file = "\recondo_wars\functions\inventorypersistence";
+            class moduleInventoryPersistence {};
+            class saveInventories {};
+            class loadInventories {};
+        };
+        
     };
 };

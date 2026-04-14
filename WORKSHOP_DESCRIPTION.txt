@@ -47,6 +47,7 @@ Recondo Wars is a comprehensive Arma 3 mod designed for SOG Prairie Fire operati
 [*] [b]RW Radio[/b] — Radio transmission system with battery management and triangulation mechanics.
 [*] [b]Trackers[/b] — Enemy tracker teams with dogs that follow player footprints.
 [*] [b]Reinforcement Waves[/b] — Dynamic enemy reinforcement spawning triggered by combat or alerts.
+[*] [b]QRF Mounted[/b] — Vehicle-mounted quick reaction force. When the QRF side detects the target side, vehicles spawn at the nearest road, move towards the threat, and cargo passengers dismount at a configurable distance while drivers and gunners stay mounted.
 [/list]
 
 [b]Extraction & Movement[/b]
@@ -67,11 +68,16 @@ Recondo Wars is a comprehensive Arma 3 mod designed for SOG Prairie Fire operati
 [*] [b]Custom Site Spawn[/b] — Spawn custom compositions at markers with garrison AI, patrols, and night lighting.
 [*] [b]Camps Random[/b] — Randomized camp placement with composition support.
 [*] [b]Destroy Powergrid[/b] — Turn off or destroy all lights within a configurable radius via ACE interaction or object destruction.
+[*] [b]Hanoi Hannah Loudspeakers[/b] — Spawn propaganda loudspeakers at marker positions with configurable volume, distance, and cooldown. ACE "Rip Out Wires" interaction awards Recon Points. Requires [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3696734884]Hanoi Hannah Loudspeakers Mod[/url].
+[*] [b]Village Uprising[/b] — Civilians wander peacefully at village markers until a configured side enters the detection radius. They then rally, arm up, switch sides, and attack. Each village triggers independently.
 [/list]
 
 [b]Utility Modules[/b]
 [list]
 [*] [b]Persistence[/b] — Save and load mission state across sessions with campaign ID support.
+[*] [b]Player Persistence[/b] — Save and restore player positions, directions, and full loadouts across sessions. Tracks units by Eden variable name with configurable restore delay.
+[*] [b]Vehicle Persistence[/b] — Save and restore vehicle positions across sessions. Destroyed vehicles are removed on load.
+[*] [b]Inventory Persistence[/b] — Save and restore full cargo contents of containers and vehicles across sessions.
 [*] [b]Intro Screen[/b] — Configurable mission introduction screens.
 [*] [b]Terminal[/b] — Admin terminal for mission control, persistence reset, and master debug toggle.
 [*] [b]Arsenal Area[/b] — Configurable arsenal access zones.
@@ -91,6 +97,7 @@ Recondo Wars is a comprehensive Arma 3 mod designed for SOG Prairie Fire operati
 [*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=450814997]CBA_A3[/url]
 [*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=463939057]ACE3[/url]
 [*] [url=https://store.steampowered.com/app/1227700/Arma_3_Creator_DLC_SOG_Prairie_Fire/]S.O.G. Prairie Fire[/url] (recommended)
+[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3696734884]Hanoi Hannah Loudspeakers Mod[/url] (required for Hanoi Hannah module only)
 [/list]
 
 [hr][/hr]

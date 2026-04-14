@@ -132,7 +132,7 @@ if (_debugLogging) then {
         } forEach _detectorUnits;
         
         if (!_triggered) then {
-            sleep 2; // Check every 2 seconds
+            sleep 5;
         };
     };
     

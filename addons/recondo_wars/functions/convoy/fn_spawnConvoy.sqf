@@ -54,6 +54,8 @@ private _driverClassnames = _settings get "driverClassnames";
 private _gunnerClassnames = _settings get "gunnerClassnames";
 private _cargoClassnames = _settings get "cargoClassnames";
 private _fillCargo = _settings get "fillCargo";
+private _clearVehicleInventory = _settings get "clearVehicleInventory";
+private _vehicleCargoItems = _settings get "vehicleCargoItems";
 private _stopAtObjective = _settings get "stopAtObjective";
 private _stopDuration = _settings get "stopDuration";
 
@@ -139,6 +141,40 @@ for "_i" from 0 to (_vehicleCount - 1) do {
     _vehicle setVariable ["RECONDO_CONVOY_Vehicle", true];
     _vehicle setVariable ["RECONDO_CONVOY_Index", _i];
     _vehicle setVariable ["RECONDO_CONVOY_Group", _group];
+    
+    // Handle vehicle cargo inventory
+    if (_clearVehicleInventory) then {
+        clearWeaponCargoGlobal _vehicle;
+        clearMagazineCargoGlobal _vehicle;
+        clearItemCargoGlobal _vehicle;
+        clearBackpackCargoGlobal _vehicle;
+    };
+    
+    if (count _vehicleCargoItems > 0) then {
+        {
+            private _class = _x;
+            if (isClass (configFile >> "CfgMagazines" >> _class)) then {
+                _vehicle addMagazineCargoGlobal [_class, 1];
+            } else {
+                if (isClass (configFile >> "CfgWeapons" >> _class)) then {
+                    private _type = getNumber (configFile >> "CfgWeapons" >> _class >> "type");
+                    if (_type in [1, 2, 4]) then {
+                        _vehicle addWeaponCargoGlobal [_class, 1];
+                    } else {
+                        _vehicle addItemCargoGlobal [_class, 1];
+                    };
+                } else {
+                    if (isClass (configFile >> "CfgVehicles" >> _class)) then {
+                        _vehicle addBackpackCargoGlobal [_class, 1];
+                    } else {
+                        if (_debugLogging) then {
+                            diag_log format ["[RECONDO_CONVOY] WARNING: Unknown cargo classname '%1', skipping", _class];
+                        };
+                    };
+                };
+            };
+        } forEach _vehicleCargoItems;
+    };
     
     // Get crew positions
     private _crewPositions = fullCrew [_vehicle, "", true];

@@ -73,6 +73,21 @@ if (!isNil "RECONDO_CIVPOL_PERSISTENCE_ENABLED" && {RECONDO_CIVPOL_PERSISTENCE_E
     [] call Recondo_fnc_saveCivilianPOL;
 };
 
+// Save Player Persistence data if module is active
+if (RECONDO_PLAYER_PERSISTENCE_ENABLED) then {
+    [] call Recondo_fnc_savePlayers;
+};
+
+// Save Vehicle Persistence data if module has registered vehicles
+if (count RECONDO_VEHICLE_PERSISTENCE_UNITS > 0) then {
+    [] call Recondo_fnc_saveVehicles;
+};
+
+// Save Inventory Persistence data if module has registered containers
+if (count RECONDO_INVENTORY_PERSISTENCE_CONTAINERS > 0) then {
+    [] call Recondo_fnc_saveInventories;
+};
+
 // Commit to disk
 saveMissionProfileNamespace;
 

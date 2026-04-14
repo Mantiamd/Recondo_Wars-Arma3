@@ -5368,6 +5368,30 @@ class CfgVehicles {
             };
             
             // ========================================
+            // ACCESS SETTINGS
+            // ========================================
+            class EnableRoleAccess {
+                displayName = "ACCESS - Enable Role-Based Access";
+                tooltip = "When enabled, players with specified unit classnames can access the terminal in addition to server admins. Admins always have access regardless of this setting.";
+                control = "Checkbox";
+                property = "Recondo_Terminal_EnableRoleAccess";
+                expression = "_this setVariable ['enableroleaccess', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Terminal_Access";
+            };
+            class AllowedClassnames {
+                displayName = "Allowed Unit Classnames";
+                tooltip = "Unit classnames that can access the terminal. One per line or comma-separated. Only used if role-based access is enabled. Example: vn_b_men_sog_02,vn_b_men_sog_05";
+                control = "EditCodeMulti5";
+                property = "Recondo_Terminal_AllowedClassnames";
+                expression = "_this setVariable ['allowedclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Terminal_Access";
+            };
+            
+            // ========================================
             // DEBUG SETTINGS
             // ========================================
             class DebugLogging {
@@ -10049,6 +10073,30 @@ class CfgVehicles {
             };
             
             // ========================================
+            // VEHICLE CARGO SETTINGS
+            // ========================================
+            class ClearVehicleInventory {
+                displayName = "VEHICLE CARGO - Clear Default Inventory";
+                tooltip = "Clear all default cargo (weapons, magazines, items, backpacks) from each vehicle before adding custom items.";
+                control = "Checkbox";
+                property = "Recondo_Convoy_ClearVehicleInventory";
+                expression = "_this setVariable ['clearvehicleinventory', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_Convoy_VehicleCargo";
+            };
+            class VehicleCargoClassnames {
+                displayName = "Cargo Item Classnames";
+                tooltip = "Comma-separated list of classnames to add to each vehicle's inventory. Supports weapons, magazines, items, and backpacks. Each classname is added with a quantity of 1. The system auto-detects the item type.";
+                control = "EditMulti3";
+                property = "Recondo_Convoy_VehicleCargoClassnames";
+                expression = "_this setVariable ['vehiclecargoclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Convoy_VehicleCargo";
+            };
+            
+            // ========================================
             // CONVOY BEHAVIOR SETTINGS
             // ========================================
             class MaxSpeed {
@@ -14431,6 +14479,795 @@ class CfgVehicles {
                 category = "Recondo_Photo_Debug";
             };
 
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    //==========================================
+    // HANOI HANNAH LOUDSPEAKERS MODULE
+    // Extension of the Hanoi Hannah Loudspeakers Mod
+    // Requires: https://steamcommunity.com/sharedfiles/filedetails/?id=3696734884
+    //==========================================
+    class Recondo_Module_HanoiHannah: Module_F {
+        scope = 2;
+        displayName = "Hanoi Hannah Loudspeakers";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Misc";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\listen_ca.paa";
+        function = "Recondo_fnc_moduleHanoiHannah";
+        functionPriority = 5;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        canSetArea = 0;
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Spawns loudspeakers at invisible map markers. Players can disable speakers via ACE interaction to earn Recon Points. Requires the Hanoi Hannah Loudspeakers mod.";
+            sync[] = {};
+        };
+        
+        class Attributes: AttributesBase {
+            
+            // ========================================
+            // GENERAL SETTINGS
+            // ========================================
+            class MarkerPrefix {
+                displayName = "GENERAL - Marker Prefix";
+                tooltip = "Prefix for invisible map markers. Example: 'HANNAH_' will find HANNAH_1, HANNAH_2, etc.";
+                control = "Edit";
+                property = "Recondo_Hannah_MarkerPrefix";
+                expression = "_this setVariable ['markerprefix', _value, true];";
+                typeName = "STRING";
+                defaultValue = """HANNAH_""";
+                category = "Recondo_Hannah_General";
+            };
+            class SpawnPercentage {
+                displayName = "Spawn Percentage";
+                tooltip = "Percentage of available markers that will have speakers spawned (0-100%).";
+                control = "Slider";
+                property = "Recondo_Hannah_SpawnPercentage";
+                expression = "_this setVariable ['spawnpercentage', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.5";
+                sliderRange[] = {0, 1};
+                sliderStep = 0.05;
+                category = "Recondo_Hannah_General";
+            };
+            
+            // ========================================
+            // SOUND SETTINGS
+            // ========================================
+            class Volume {
+                displayName = "SOUND - Volume";
+                tooltip = "Speaker volume multiplier (0.0 - 5.0).";
+                control = "Slider";
+                property = "Recondo_Hannah_Volume";
+                expression = "_this setVariable ['volume', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "1";
+                sliderRange[] = {0, 5};
+                sliderStep = 0.1;
+                category = "Recondo_Hannah_Sound";
+            };
+            class Distance {
+                displayName = "Audible Distance";
+                tooltip = "Maximum distance in meters the speaker can be heard.";
+                control = "Edit";
+                property = "Recondo_Hannah_Distance";
+                expression = "_this setVariable ['distance', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """300""";
+                category = "Recondo_Hannah_Sound";
+            };
+            class Cooldown {
+                displayName = "Broadcast Cooldown";
+                tooltip = "Time in seconds between broadcasts.";
+                control = "Edit";
+                property = "Recondo_Hannah_Cooldown";
+                expression = "_this setVariable ['cooldown', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """120""";
+                category = "Recondo_Hannah_Sound";
+            };
+            class RandomDelay {
+                displayName = "Random Start Delay";
+                tooltip = "Maximum random delay in seconds before first broadcast. Each speaker gets a random value between 0 and this. Prevents all speakers from broadcasting simultaneously.";
+                control = "Edit";
+                property = "Recondo_Hannah_RandomDelay";
+                expression = "_this setVariable ['randomdelay', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """30""";
+                category = "Recondo_Hannah_Sound";
+            };
+            class UseCustomSound {
+                displayName = "Use Custom Sound";
+                tooltip = "When enabled, plays a custom .ogg file from the mission folder instead of the original Hanoi Hannah broadcast sound.";
+                control = "Checkbox";
+                property = "Recondo_Hannah_UseCustomSound";
+                expression = "_this setVariable ['usecustomsound', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hannah_Sound";
+            };
+            class CustomSoundPath {
+                displayName = "Custom Sound Path";
+                tooltip = "Relative path to a custom .ogg file in the mission folder. Only used if 'Use Custom Sound' is enabled. Example: 'sounds\custom_broadcast.ogg'";
+                control = "Edit";
+                property = "Recondo_Hannah_CustomSoundPath";
+                expression = "_this setVariable ['customsoundpath', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Hannah_Sound";
+            };
+            
+            // ========================================
+            // ORIGINAL MOD SETTINGS
+            // ========================================
+            class DisableOriginal {
+                displayName = "ORIGINAL MOD - Disable Vanilla Speakers";
+                tooltip = "Disables the original Hanoi Hannah mod's hardcoded speaker spawning on supported maps (Cam Lao Nam, The Bra, Khe Sanh). Recommended when using this module.";
+                control = "Checkbox";
+                property = "Recondo_Hannah_DisableOriginal";
+                expression = "_this setVariable ['disableoriginal', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_Hannah_Original";
+            };
+            
+            // ========================================
+            // REWARDS SETTINGS
+            // ========================================
+            class ReconPointsAward {
+                displayName = "REWARDS - Recon Points";
+                tooltip = "Recon Points awarded to the group when a speaker is disabled via 'Rip Out Wires'. Set to 0 to disable.";
+                control = "Edit";
+                property = "Recondo_Hannah_ReconPointsAward";
+                expression = "_this setVariable ['reconpointsaward', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """10""";
+                category = "Recondo_Hannah_Rewards";
+            };
+            
+            // ========================================
+            // PERSISTENCE SETTINGS
+            // ========================================
+            class EnablePersistence {
+                displayName = "PERSISTENCE - Enable Persistence";
+                tooltip = "When enabled, disabled speakers remain disabled across server restarts. Requires the Persistence module.";
+                control = "Checkbox";
+                property = "Recondo_Hannah_EnablePersistence";
+                expression = "_this setVariable ['enablepersistence', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hannah_Persistence";
+            };
+            
+            // ========================================
+            // DEBUG SETTINGS
+            // ========================================
+            class DebugLogging {
+                displayName = "DEBUG - Enable Debug Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_Hannah_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hannah_Debug";
+            };
+            class DebugMarkers {
+                displayName = "Enable Debug Markers";
+                tooltip = "Show debug markers on the map for all speaker locations.";
+                control = "Checkbox";
+                property = "Recondo_Hannah_DebugMarkers";
+                expression = "_this setVariable ['debugmarkers', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hannah_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    //==========================================
+    // VILLAGE UPRISING MODULE
+    //==========================================
+    class Recondo_Module_VillageUprising: Module_F {
+        scope = 2;
+        displayName = "Village Uprising";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Misc";
+        icon = "\\a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\danger_ca.paa";
+        function = "Recondo_fnc_moduleVillageUprising";
+        functionPriority = 5;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        canSetArea = 0;
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Spawns civilians at invisible map markers. When a configured side enters the detection radius, civilians rally to a paired marker, arm up, change sides, and attack. Each site triggers independently.";
+            sync[] = {};
+        };
+        
+        class Attributes: AttributesBase {
+            // ========================================
+            // AREA SETTINGS
+            // ========================================
+            class MarkerPrefix {
+                displayName = "AREA - Village Marker Prefix";
+                tooltip = "Prefix for invisible map markers where civilians spawn. Example: 'UPRISING_' will find UPRISING_1, UPRISING_2, etc.";
+                control = "Edit";
+                property = "Recondo_Uprising_MarkerPrefix";
+                expression = "_this setVariable ['markerprefix', _value, true];";
+                typeName = "STRING";
+                defaultValue = """UPRISING_""";
+                category = "Recondo_Uprising_Area";
+            };
+            class RallyPrefix {
+                displayName = "Rally Marker Prefix";
+                tooltip = "Prefix for rally point markers. Paired by number with village markers. E.g. village 'UPRISING_1' pairs with rally 'RALLY_1'. If a rally marker is missing, civilians arm in place.";
+                control = "Edit";
+                property = "Recondo_Uprising_RallyPrefix";
+                expression = "_this setVariable ['rallyprefix', _value, true];";
+                typeName = "STRING";
+                defaultValue = """RALLY_""";
+                category = "Recondo_Uprising_Area";
+            };
+            class SpawnRadius {
+                displayName = "Spawn Radius";
+                tooltip = "Radius in meters around the village marker where civilians spawn and wander.";
+                control = "Edit";
+                property = "Recondo_Uprising_SpawnRadius";
+                expression = "_this setVariable ['spawnradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """50""";
+                category = "Recondo_Uprising_Area";
+            };
+            
+            // ========================================
+            // CIVILIAN SETTINGS
+            // ========================================
+            class CivsPerSite {
+                displayName = "CIVILIANS - Civilians Per Site";
+                tooltip = "Number of civilians to spawn at each village marker.";
+                control = "Edit";
+                property = "Recondo_Uprising_CivsPerSite";
+                expression = "_this setVariable ['civspersite', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """5""";
+                category = "Recondo_Uprising_Civilians";
+            };
+            class CivClassnames {
+                displayName = "Civilian Classnames";
+                tooltip = "Unit classnames for civilians. One per line or comma-separated. A random classname is picked for each civilian.";
+                control = "EditCodeMulti5";
+                property = "Recondo_Uprising_CivClassnames";
+                expression = "_this setVariable ['civclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Uprising_Civilians";
+            };
+            
+            // ========================================
+            // TRIGGER SETTINGS
+            // ========================================
+            class TriggerSide {
+                displayName = "TRIGGER - Detection Side";
+                tooltip = "Side that triggers the uprising when detected within the spawn distance. The civilians will rise up against this side.";
+                control = "Combo";
+                property = "Recondo_Uprising_TriggerSide";
+                expression = "_this setVariable ['triggerside', _value, true];";
+                typeName = "STRING";
+                defaultValue = """WEST""";
+                class values {
+                    class WEST { name = "BLUFOR (West)"; value = "WEST"; default = 1; };
+                    class EAST { name = "OPFOR (East)"; value = "EAST"; };
+                    class GUER { name = "Independent"; value = "GUER"; };
+                    class ANY { name = "Any Side"; value = "ANY"; };
+                };
+                category = "Recondo_Uprising_Trigger";
+            };
+            class SpawnDistance {
+                displayName = "Spawn Distance";
+                tooltip = "Distance in meters from the village marker at which the detection side's presence causes civilians to spawn and begin wandering. Should be >= Detection Radius.";
+                control = "Edit";
+                property = "Recondo_Uprising_SpawnDistance";
+                expression = "_this setVariable ['spawndistance', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """300""";
+                category = "Recondo_Uprising_Trigger";
+            };
+            class DetectionRadius {
+                displayName = "Detection Radius";
+                tooltip = "Radius in meters used for the OPFOR awareness check. When any OPFOR unit within this radius detects the trigger side (knowsAbout), civilians rally, arm up, and attack.";
+                control = "Edit";
+                property = "Recondo_Uprising_DetectionRadius";
+                expression = "_this setVariable ['detectionradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """200""";
+                category = "Recondo_Uprising_Trigger";
+            };
+            
+            // ========================================
+            // COMBAT SETTINGS
+            // ========================================
+            class CombatSide {
+                displayName = "COMBAT - Combat Side";
+                tooltip = "Side the civilians switch to after arming. This determines who they fight for.";
+                control = "Combo";
+                property = "Recondo_Uprising_CombatSide";
+                expression = "_this setVariable ['combatside', _value, true];";
+                typeName = "STRING";
+                defaultValue = """EAST""";
+                class values {
+                    class EAST { name = "OPFOR (East)"; value = "EAST"; default = 1; };
+                    class WEST { name = "BLUFOR (West)"; value = "WEST"; };
+                    class GUER { name = "Independent"; value = "GUER"; };
+                };
+                category = "Recondo_Uprising_Combat";
+            };
+            class WeaponClassname {
+                displayName = "Weapon Classname";
+                tooltip = "Classname of the weapon given to armed civilians. Example: 'arifle_AKS_F'";
+                control = "Edit";
+                property = "Recondo_Uprising_WeaponClassname";
+                expression = "_this setVariable ['weaponclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """arifle_AKS_F""";
+                category = "Recondo_Uprising_Combat";
+            };
+            class MagazineClassname {
+                displayName = "Magazine Classname";
+                tooltip = "Classname of the magazine for the weapon. Example: '30Rnd_545x39_Mag_Green_F'";
+                control = "Edit";
+                property = "Recondo_Uprising_MagazineClassname";
+                expression = "_this setVariable ['magazineclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """30Rnd_545x39_Mag_Green_F""";
+                category = "Recondo_Uprising_Combat";
+            };
+            class MagazineCount {
+                displayName = "Magazine Count";
+                tooltip = "Number of magazines given to each civilian.";
+                control = "Edit";
+                property = "Recondo_Uprising_MagazineCount";
+                expression = "_this setVariable ['magazinecount', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """5""";
+                category = "Recondo_Uprising_Combat";
+            };
+            class ArmingDelay {
+                displayName = "Arming Delay";
+                tooltip = "Time in seconds civilians wait at the rally point before arming and attacking.";
+                control = "Edit";
+                property = "Recondo_Uprising_ArmingDelay";
+                expression = "_this setVariable ['armingdelay', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """3""";
+                category = "Recondo_Uprising_Combat";
+            };
+            class UprisingPercent {
+                displayName = "Uprising Percent";
+                tooltip = "Percentage of civilians that will rally, arm up, and attack (0-100). Remaining civilians continue wandering as ambient population.";
+                control = "Edit";
+                property = "Recondo_Uprising_UprisingPercent";
+                expression = "_this setVariable ['uprisingpercent', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """50""";
+                category = "Recondo_Uprising_Combat";
+            };
+            
+            // ========================================
+            // DEBUG SETTINGS
+            // ========================================
+            class DebugLogging {
+                displayName = "DEBUG - Enable Debug Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_Uprising_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Uprising_Debug";
+            };
+            class DebugMarkers {
+                displayName = "Enable Debug Markers";
+                tooltip = "Show debug markers on the map for village areas, rally points, and detection radii.";
+                control = "Checkbox";
+                property = "Recondo_Uprising_DebugMarkers";
+                expression = "_this setVariable ['debugmarkers', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Uprising_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    //==========================================
+    // PLAYER PERSISTENCE MODULE
+    //==========================================
+    class Recondo_Module_PlayerPersistence: Module_F {
+        scope = 2;
+        displayName = "Player Persistence";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Main";
+        icon = "\\a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\walk_ca.paa";
+        function = "Recondo_fnc_modulePlayerPersistence";
+        functionPriority = 3;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        canSetArea = 0;
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Saves position, direction, and loadout of specified playable units across sessions. List the Eden variable names of units to track. Requires a Persistence module.";
+            sync[] = {};
+        };
+        
+        class Attributes: AttributesBase {
+            // ========================================
+            // GENERAL SETTINGS
+            // ========================================
+            class UnitNames {
+                displayName = "GENERAL - Unit Variable Names";
+                tooltip = "Eden variable names of playable units to track. One per line or comma-separated. Example: player_1,player_2,player_3";
+                control = "EditCodeMulti5";
+                property = "Recondo_PlayerPersist_UnitNames";
+                expression = "_this setVariable ['unitnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_PlayerPersist_General";
+            };
+            class RestoreDelay {
+                displayName = "Restore Delay (seconds)";
+                tooltip = "Seconds to wait after a player connects before restoring their position and loadout. Allows time for the player to fully load in. Default: 20.";
+                control = "Edit";
+                property = "Recondo_PlayerPersist_RestoreDelay";
+                expression = "_this setVariable ['restoredelay', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """20""";
+                category = "Recondo_PlayerPersist_General";
+            };
+            
+            // ========================================
+            // DEBUG SETTINGS
+            // ========================================
+            class DebugLogging {
+                displayName = "DEBUG - Enable Debug Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_PlayerPersist_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_PlayerPersist_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    //==========================================
+    // VEHICLE PERSISTENCE MODULE
+    //==========================================
+    class Recondo_Module_VehiclePersistence: Module_F {
+        scope = 2;
+        displayName = "Vehicle Persistence";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Main";
+        icon = "\\a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\getin_ca.paa";
+        function = "Recondo_fnc_moduleVehiclePersistence";
+        functionPriority = 3;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        canSetArea = 0;
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Saves positions of synchronized vehicles across sessions. Destroyed vehicles will not respawn on load. Sync to one or more vehicles. Requires a Persistence module.";
+            sync[] = {"AnyVehicle"};
+        };
+        
+        class Attributes: AttributesBase {
+            // ========================================
+            // DEBUG SETTINGS
+            // ========================================
+            class DebugLogging {
+                displayName = "DEBUG - Enable Debug Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_VehPersist_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_VehPersist_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    //==========================================
+    // QRF MOUNTED MODULE
+    // Spawns vehicle-mounted QRF when QRF Side detects Target Side
+    // Priority: 5 (Feature module)
+    // Multiple instances can be placed for different areas
+    //==========================================
+    class Recondo_Module_QRFMounted: Module_F {
+        scope = 2;
+        displayName = "QRF Mounted";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\car_ca.paa";
+        function = "Recondo_fnc_moduleQRFMounted";
+        functionPriority = 5;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Spawns a vehicle-mounted QRF group when the QRF Side detects the Target Side within the trigger radius. Vehicles spawn at the nearest road at a configurable distance and move towards the detected target. Cargo passengers dismount at a set distance and engage on foot while drivers and gunners remain mounted. One-time trigger per module instance. Multiple modules can be placed.";
+            sync[] = {};
+        };
+        
+        class Attributes: AttributesBase {
+            
+            // ========================================
+            // GENERAL SETTINGS
+            // ========================================
+            class QRFSide {
+                displayName = "GENERAL - QRF Side";
+                tooltip = "Which side the QRF units belong to. These units also serve as the detection side.";
+                control = "Combo";
+                property = "Recondo_QRF_QRFSide";
+                expression = "_this setVariable ['qrfside', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                category = "Recondo_QRF_General";
+                class Values {
+                    class East { name = "OPFOR (East)"; value = 0; };
+                    class West { name = "BLUFOR (West)"; value = 1; };
+                    class Guer { name = "Independent"; value = 2; };
+                };
+            };
+            class TargetSide {
+                displayName = "Target Side";
+                tooltip = "Which side the QRF will respond to (QRF Side units in trigger must detect this side via knowsAbout).";
+                control = "Combo";
+                property = "Recondo_QRF_TargetSide";
+                expression = "_this setVariable ['targetside', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "1";
+                category = "Recondo_QRF_General";
+                class Values {
+                    class East { name = "OPFOR (East)"; value = 0; };
+                    class West { name = "BLUFOR (West)"; value = 1; };
+                    class Guer { name = "Independent"; value = 2; };
+                };
+            };
+            
+            // ========================================
+            // DETECTION SETTINGS
+            // ========================================
+            class TriggerRadius {
+                displayName = "DETECTION - Trigger Radius (m)";
+                tooltip = "Radius around the module where QRF Side units check for Target Side detection.";
+                control = "Edit";
+                property = "Recondo_QRF_TriggerRadius";
+                expression = "_this setVariable ['triggerradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """500""";
+                category = "Recondo_QRF_Detection";
+            };
+            class DetectionThreshold {
+                displayName = "Detection Threshold (knowsAbout)";
+                tooltip = "Minimum knowsAbout value (0-4) for detection to trigger. Lower = more sensitive. Default 1.5.";
+                control = "Edit";
+                property = "Recondo_QRF_DetectionThreshold";
+                expression = "_this setVariable ['detectionthreshold', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """1.5""";
+                category = "Recondo_QRF_Detection";
+            };
+            class HeightLimit {
+                displayName = "Height Limit (m)";
+                tooltip = "Maximum altitude (ATL) for units to be considered in detection checks. Units above this height are ignored.";
+                control = "Edit";
+                property = "Recondo_QRF_HeightLimit";
+                expression = "_this setVariable ['heightlimit', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """20""";
+                category = "Recondo_QRF_Detection";
+            };
+            
+            // ========================================
+            // VEHICLE SETTINGS
+            // ========================================
+            class VehicleClassnames {
+                displayName = "VEHICLES - Vehicle Classnames (Pool)";
+                tooltip = "Comma-separated vehicle classnames. The system randomly selects vehicles from this pool based on Min/Max Vehicles.";
+                control = "EditMulti3";
+                property = "Recondo_QRF_VehicleClassnames";
+                expression = "_this setVariable ['vehicleclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_QRF_Vehicles";
+            };
+            class MinVehicles {
+                displayName = "Min Vehicles";
+                tooltip = "Minimum number of vehicles to spawn (randomly selected from the pool above).";
+                control = "Edit";
+                property = "Recondo_QRF_MinVehicles";
+                expression = "_this setVariable ['minvehicles', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """1""";
+                category = "Recondo_QRF_Vehicles";
+            };
+            class MaxVehicles {
+                displayName = "Max Vehicles";
+                tooltip = "Maximum number of vehicles to spawn (randomly selected from the pool above).";
+                control = "Edit";
+                property = "Recondo_QRF_MaxVehicles";
+                expression = "_this setVariable ['maxvehicles', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """2""";
+                category = "Recondo_QRF_Vehicles";
+            };
+            class CrewClassname {
+                displayName = "Crew Classname";
+                tooltip = "Unit classname for drivers and gunners. If empty, uses the first Unit Classname.";
+                control = "Edit";
+                property = "Recondo_QRF_CrewClassname";
+                expression = "_this setVariable ['crewclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_QRF_Vehicles";
+            };
+            class FillCargo {
+                displayName = "Fill Cargo Seats";
+                tooltip = "Fill all available cargo seats with infantry units from Unit Classnames.";
+                control = "Checkbox";
+                property = "Recondo_QRF_FillCargo";
+                expression = "_this setVariable ['fillcargo', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_QRF_Vehicles";
+            };
+            
+            // ========================================
+            // UNIT SETTINGS
+            // ========================================
+            class UnitClassnames {
+                displayName = "UNITS - Cargo Unit Classnames";
+                tooltip = "Comma-separated unit classnames for cargo passengers. Selected randomly to fill cargo seats.";
+                control = "EditMulti3";
+                property = "Recondo_QRF_UnitClassnames";
+                expression = "_this setVariable ['unitclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_QRF_Units";
+            };
+            
+            // ========================================
+            // SPAWN SETTINGS
+            // ========================================
+            class SpawnDistance {
+                displayName = "SPAWN - Spawn Distance (m)";
+                tooltip = "How far from the detected target to spawn vehicles. The nearest road to this distance is used.";
+                control = "Edit";
+                property = "Recondo_QRF_SpawnDistance";
+                expression = "_this setVariable ['spawndistance', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """1000""";
+                category = "Recondo_QRF_Spawn";
+            };
+            class SafetyDistance {
+                displayName = "Safety Distance (m)";
+                tooltip = "Minimum distance from any Target Side unit when selecting a spawn point. Prevents spawning on top of players.";
+                control = "Edit";
+                property = "Recondo_QRF_SafetyDistance";
+                expression = "_this setVariable ['safetydistance', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """300""";
+                category = "Recondo_QRF_Spawn";
+            };
+            class DismountDistance {
+                displayName = "Dismount Distance (m)";
+                tooltip = "Distance from target at which cargo passengers dismount and engage on foot. Drivers and gunners remain mounted.";
+                control = "Edit";
+                property = "Recondo_QRF_DismountDistance";
+                expression = "_this setVariable ['dismountdistance', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """200""";
+                category = "Recondo_QRF_Spawn";
+            };
+            
+            // ========================================
+            // DEBUG SETTINGS
+            // ========================================
+            class DebugMarkers {
+                displayName = "DEBUG - Enable Debug Markers";
+                tooltip = "Show debug markers for trigger radius, spawn position, and target position.";
+                control = "Checkbox";
+                property = "Recondo_QRF_DebugMarkers";
+                expression = "_this setVariable ['debugmarkers', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_QRF_Debug";
+            };
+            class DebugLogging {
+                displayName = "Enable Debug Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_QRF_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_QRF_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    //==========================================
+    // INVENTORY PERSISTENCE MODULE
+    //==========================================
+    class Recondo_Module_InventoryPersistence: Module_F {
+        scope = 2;
+        displayName = "Inventory Persistence";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Main";
+        icon = "\\a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\rearm_ca.paa";
+        function = "Recondo_fnc_moduleInventoryPersistence";
+        functionPriority = 3;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        canSetArea = 0;
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Saves the full inventory (weapons, magazines, items, backpacks) of synchronized containers and vehicles across sessions. Clears default cargo on load and restores saved state. Sync to ammo boxes, vehicles, or any object with cargo. Requires a Persistence module.";
+            sync[] = {"AnyVehicle", "AnyStaticObject"};
+        };
+        
+        class Attributes: AttributesBase {
+            // ========================================
+            // DEBUG SETTINGS
+            // ========================================
+            class DebugLogging {
+                displayName = "DEBUG - Enable Debug Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_InvPersist_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_InvPersist_Debug";
+            };
+            
             class ModuleDescription: ModuleDescription {};
         };
     };

@@ -29,6 +29,14 @@ if (!_activated) exitWith {
 private _terminalName = _logic getVariable ["terminalname", "Command Terminal"];
 private _debugLogging = _logic getVariable ["debuglogging", false];
 
+private _enableRoleAccess = _logic getVariable ["enableroleaccess", false];
+private _allowedClassnamesRaw = _logic getVariable ["allowedclassnames", ""];
+
+private _allowedClassnames = [];
+if (_enableRoleAccess && _allowedClassnamesRaw != "") then {
+    _allowedClassnames = ((_allowedClassnamesRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" };
+};
+
 private _masterDebug = _logic getVariable ["masterdebug", false];
 if (_masterDebug) then {
     RECONDO_MASTER_DEBUG = true;
@@ -71,6 +79,8 @@ if (!_linkedToPersistence) then {
 RECONDO_TERMINAL_SETTINGS = createHashMapFromArray [
     ["terminalName", _terminalName],
     ["linkedToPersistence", _linkedToPersistence],
+    ["enableRoleAccess", _enableRoleAccess],
+    ["allowedClassnames", _allowedClassnames],
     ["debugLogging", _debugLogging]
 ];
 publicVariable "RECONDO_TERMINAL_SETTINGS";
@@ -96,4 +106,5 @@ if (_debugLogging) then {
     diag_log "[RECONDO_TERMINAL] === Terminal Module Settings ===";
     diag_log format ["[RECONDO_TERMINAL] Terminal Name: %1", _terminalName];
     diag_log format ["[RECONDO_TERMINAL] Terminal Object: %1", _terminalObject];
+    diag_log format ["[RECONDO_TERMINAL] Role Access: %1 | Allowed: %2", _enableRoleAccess, _allowedClassnames];
 };

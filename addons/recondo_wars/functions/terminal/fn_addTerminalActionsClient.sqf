@@ -97,13 +97,13 @@ private _statsAction = [
 // ========================================
 
 if (_linkedToPersistence) then {
-    // Reset submenu
+    // Reset submenu (admin-only, not available to role-based access)
     private _resetAction = [
         "Recondo_Terminal_Reset",
         "Reset Mission Data",
         "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\danger_ca.paa",
         {},
-        { true },
+        { [true] call Recondo_fnc_isPlayerAdmin },
         {},
         [],
         [0, 0, 0],
