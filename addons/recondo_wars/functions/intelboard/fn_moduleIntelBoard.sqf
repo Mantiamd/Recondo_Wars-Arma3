@@ -37,6 +37,7 @@ private _enableHostages = _logic getVariable ["enablehostages", true];
 private _enableDestroy = _logic getVariable ["enabledestroy", true];
 private _enableHubSubs = _logic getVariable ["enablehubsubs", true];
 private _enableJammer = _logic getVariable ["enablejammer", true];
+private _enableSoilSample = _logic getVariable ["enablesoilsample", true];
 private _showRevealedLocations = _logic getVariable ["showrevealedlocations", true];
 
 // Debug
@@ -58,6 +59,7 @@ RECONDO_INTELBOARD_SETTINGS set ["enableHostages", _enableHostages];
 RECONDO_INTELBOARD_SETTINGS set ["enableDestroy", _enableDestroy];
 RECONDO_INTELBOARD_SETTINGS set ["enableHubSubs", _enableHubSubs];
 RECONDO_INTELBOARD_SETTINGS set ["enableJammer", _enableJammer];
+RECONDO_INTELBOARD_SETTINGS set ["enableSoilSample", _enableSoilSample];
 RECONDO_INTELBOARD_SETTINGS set ["showRevealedLocations", _showRevealedLocations];
 RECONDO_INTELBOARD_SETTINGS set ["debugLogging", _debugLogging];
 publicVariable "RECONDO_INTELBOARD_SETTINGS";

@@ -382,6 +382,87 @@ if (_enablePhotos && !isNil "RECONDO_PHOTO_INSTANCES" && {count RECONDO_PHOTO_IN
 };
 
 // ========================================
+// SOIL SAMPLE OBJECTIVES
+// ========================================
+
+private _enableSoilSample = _settings getOrDefault ["enableSoilSample", true];
+
+if (_enableSoilSample && !isNil "RECONDO_SOIL_INSTANCES" && {count RECONDO_SOIL_INSTANCES > 0}) then {
+    {
+        private _soilSettings = _x;
+        private _objectiveName = _soilSettings get "objectiveName";
+        private _objectiveDescription = _soilSettings getOrDefault ["objectiveDescription", ""];
+        private _categoryName = _soilSettings getOrDefault ["intelBoardCategoryName", ""];
+        private _samplesRequired = _soilSettings get "samplesRequired";
+        private _markerAreas = _soilSettings getOrDefault ["markerAreas", []];
+
+        if (_categoryName == "") then {
+            _categoryName = "SOIL SAMPLES";
+        };
+
+        private _turnedIn = missionNamespace getVariable ["RECONDO_SOIL_TURNED_IN", createHashMap];
+
+        if (count _markerAreas > 0) then {
+            {
+                private _markerName = _x;
+                private _objData = _turnedIn getOrDefault [_markerName, createHashMapFromArray [["turnedIn", 0], ["complete", false], ["grid", ""], ["position", [0,0,0]]]];
+                private _count = _objData get "turnedIn";
+                private _isComplete = _objData get "complete";
+                private _grid = _objData get "grid";
+
+                private _displayName = if (_grid != "") then {
+                    format ["Collect soil sample from GRID %1", _grid]
+                } else {
+                    format ["Collect soil sample (%1)", _markerName]
+                };
+
+                private _targetData = createHashMapFromArray [
+                    ["id", format ["soil_%1_%2", _forEachIndex, _markerName]],
+                    ["type", "soilsample"],
+                    ["name", _displayName],
+                    ["displayName", _displayName],
+                    ["photo", ""],
+                    ["background", _objectiveDescription],
+                    ["status", if (_isComplete) then { format ["COMPLETE (%1/%1)", _samplesRequired] } else { format ["%1/%2 COLLECTED", _count, _samplesRequired] }],
+                    ["statusColor", if (_isComplete) then { [0.5, 0.8, 0.5, 1] } else { [1, 0.8, 0, 1] }],
+                    ["location", ""],
+                    ["complete", _isComplete],
+                    ["objectiveName", _objectiveName]
+                ];
+
+                [_categoryName, "soilsample", _targetData] call _fnc_addToCategory;
+                _totalTargets = _totalTargets + 1;
+                if (!_isComplete) then { _remainingTargets = _remainingTargets + 1 };
+            } forEach _markerAreas;
+        } else {
+            private _objData = _turnedIn getOrDefault ["__GLOBAL__", createHashMapFromArray [["turnedIn", 0], ["complete", false]]];
+            private _count = _objData get "turnedIn";
+            private _isComplete = _objData get "complete";
+
+            private _displayName = "Collect soil sample from road";
+
+            private _targetData = createHashMapFromArray [
+                ["id", format ["soil_%1_global", _forEachIndex]],
+                ["type", "soilsample"],
+                ["name", _displayName],
+                ["displayName", _displayName],
+                ["photo", ""],
+                ["background", _objectiveDescription],
+                ["status", if (_isComplete) then { format ["COMPLETE (%1/%1)", _samplesRequired] } else { format ["%1/%2 COLLECTED", _count, _samplesRequired] }],
+                ["statusColor", if (_isComplete) then { [0.5, 0.8, 0.5, 1] } else { [1, 0.8, 0, 1] }],
+                ["location", ""],
+                ["complete", _isComplete],
+                ["objectiveName", _objectiveName]
+            ];
+
+            [_categoryName, "soilsample", _targetData] call _fnc_addToCategory;
+            _totalTargets = _totalTargets + 1;
+            if (!_isComplete) then { _remainingTargets = _remainingTargets + 1 };
+        };
+    } forEach RECONDO_SOIL_INSTANCES;
+};
+
+// ========================================
 // CONVERT CATEGORIES MAP TO ARRAY
 // ========================================
 
@@ -395,7 +476,8 @@ private _categories = values _categoriesMap;
 private _typePriority = createHashMapFromArray [
     ["hvt", 1],
     ["hostage", 2],
-    ["photograph", 3]
+    ["photograph", 3],
+    ["soilsample", 4]
 ];
 
 _categories = [_categories, [], {

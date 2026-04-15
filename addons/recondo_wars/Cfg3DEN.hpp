@@ -2421,6 +2421,35 @@ class Cfg3DEN {
                 collapsed = 1;
                 class Attributes {};
             };
+            
+            //==========================================
+            // SOIL SAMPLE MODULE CATEGORIES
+            //==========================================
+            class Recondo_Soil_General {
+                displayName = "General";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_Soil_Collection {
+                displayName = "Collection";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_Soil_Area {
+                displayName = "Area Restriction";
+                collapsed = 1;
+                class Attributes {};
+            };
+            class Recondo_Soil_Objective {
+                displayName = "Objective / Intel Board";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_Soil_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
         };
     };
     

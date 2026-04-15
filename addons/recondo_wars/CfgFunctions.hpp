@@ -679,5 +679,18 @@ class CfgFunctions {
             class loadInventories {};
         };
         
+        // Soil Sample Module Functions
+        class SoilSample {
+            file = "\recondo_wars\functions\soilsample";
+            class moduleSoilSample {};
+            class initSoilSampleClient {};
+            class collectSoilSample {};
+            class registerSoilCollection {};
+            class addSoilTurnIn {};
+            class addSoilTurnInClient {};
+            class soilSampleTurnIn {};
+            class getSoilObjectiveCount {};
+        };
+        
     };
 };

@@ -132,105 +132,44 @@ while {!(_leaderVeh getVariable ["RECONDO_CONVOY_Terminate", false])} do {
         };
         
         // Apply path to vehicle
-        private _minPathPoints = 3; // Minimum points needed for reliable setDriveOnPath
-        private _stuckDistance = 20; // Distance threshold to consider vehicle stuck
-        
-        if (count _vehiclePathChop >= _minPathPoints) then {
-            // Check if vehicle is stuck (speed near 0 and behind front vehicle)
-            if (speed _vehicle < 2 && _vehPos distance _frontPos > _stuckDistance) then {
-                // Vehicle has path but isn't moving - likely stuck on obstacle
-                private _driver = driver _vehicle;
-                if (!isNull _driver && alive _driver) then {
-                    
-                    // ========================================
-                    // CLEAR NEARBY TERRAIN OBSTACLES
-                    // ========================================
-                    // Only clear once per location to avoid spam
-                    private _lastClearPos = _vehicle getVariable ["RECONDO_CONVOY_LastClearPos", [0,0,0]];
-                    if (_vehPos distance _lastClearPos > 10) then {
-                        // Find trees, bushes, rocks, fences, and walls within 8m of the stuck vehicle
-                        private _obstacles = nearestTerrainObjects [_vehPos, ["TREE", "SMALL TREE", "BUSH", "ROCK", "ROCKS", "FENCE", "WALL"], 8];
-                        
-                        // Find buildings within 5m (smaller radius to avoid clearing large structures unnecessarily)
-                        private _buildings = nearestTerrainObjects [_vehPos, ["BUILDING", "HOUSE"], 5];
-                        
-                        // Combine all obstacles
-                        _obstacles append _buildings;
-                        
-                        if (count _obstacles > 0) then {
-                            {
-                                _x hideObjectGlobal true;
-                            } forEach _obstacles;
-                            
-                            // Remember where we cleared so we don't spam
-                            _vehicle setVariable ["RECONDO_CONVOY_LastClearPos", _vehPos];
-                            
-                            if (_debugLogging) then {
-                                diag_log format ["[RECONDO_CONVOY] PathCreator: Vehicle %1 stuck - cleared %2 obstacles at %3", 
-                                    _i, count _obstacles, _vehPos];
-                            };
-                        };
-                    };
-                    
-                    // Apply doMove fallback
-                    _driver doMove _frontPos;
-                    
-                    if (_debugLogging) then {
-                        diag_log format ["[RECONDO_CONVOY] PathCreator: Vehicle %1 stuck with path, forcing doMove (dist: %2m)", _i, round(_vehPos distance _frontPos)];
-                    };
-                };
-            } else {
-                _vehicle setDriveOnPath _vehiclePathChop;
-            };
+        private _minPathPoints = 3;
+        private _stuckDistance = 20;
+        private _recoverySec = 15;
+
+        // Check if vehicle is in recovery mode (doMove running, skip setDriveOnPath)
+        private _recoveryUntil = _vehicle getVariable ["RECONDO_CONVOY_RecoveryUntil", 0];
+        private _inRecovery = time < _recoveryUntil;
+
+        // If recovering and now moving again, clear recovery early
+        if (_inRecovery && speed _vehicle > 3) then {
+            _vehicle setVariable ["RECONDO_CONVOY_RecoveryUntil", 0];
+            _inRecovery = false;
+        };
+
+        if (_inRecovery) then {
+            // Skip setDriveOnPath entirely — let doMove work uncontested
         } else {
-            // Path too short or empty - use doMove fallback
-            private _driver = driver _vehicle;
-            if (!isNull _driver && alive _driver) then {
-                
-                // Check if vehicle is stuck (speed near 0 and behind front vehicle)
-                // Also clear obstacles here since we can't rely on path-following
+            if (count _vehiclePathChop >= _minPathPoints) then {
                 if (speed _vehicle < 2 && _vehPos distance _frontPos > _stuckDistance) then {
-                    
-                    // ========================================
-                    // CLEAR NEARBY TERRAIN OBSTACLES
-                    // ========================================
-                    // Only clear once per location to avoid spam
-                    private _lastClearPos = _vehicle getVariable ["RECONDO_CONVOY_LastClearPos", [0,0,0]];
-                    if (_vehPos distance _lastClearPos > 10) then {
-                        // Find trees, bushes, rocks, fences, and walls within 8m of the stuck vehicle
-                        private _obstacles = nearestTerrainObjects [_vehPos, ["TREE", "SMALL TREE", "BUSH", "ROCK", "ROCKS", "FENCE", "WALL"], 8];
-                        
-                        // Find buildings within 5m (smaller radius to avoid clearing large structures unnecessarily)
-                        private _buildings = nearestTerrainObjects [_vehPos, ["BUILDING", "HOUSE"], 5];
-                        
-                        // Combine all obstacles
-                        _obstacles append _buildings;
-                        
-                        if (count _obstacles > 0) then {
-                            {
-                                _x hideObjectGlobal true;
-                            } forEach _obstacles;
-                            
-                            // Remember where we cleared so we don't spam
-                            _vehicle setVariable ["RECONDO_CONVOY_LastClearPos", _vehPos];
-                            
-                            if (_debugLogging) then {
-                                diag_log format ["[RECONDO_CONVOY] PathCreator: Vehicle %1 stuck (no path) - cleared %2 obstacles at %3", 
-                                    _i, count _obstacles, _vehPos];
-                            };
+                    // Enter recovery: issue doMove and block setDriveOnPath for _recoverySec
+                    private _driver = driver _vehicle;
+                    if (!isNull _driver && alive _driver) then {
+                        _vehicle setVariable ["RECONDO_CONVOY_RecoveryUntil", time + _recoverySec];
+                        _driver doMove _frontPos;
+
+                        if (_debugLogging) then {
+                            diag_log format ["[RECONDO_CONVOY] PathCreator: Vehicle %1 stuck, entering %2s doMove recovery (dist: %3m)", _i, _recoverySec, round(_vehPos distance _frontPos)];
                         };
-                    };
-                    
-                    if (_debugLogging) then {
-                        diag_log format ["[RECONDO_CONVOY] PathCreator: Vehicle %1 stuck with short path, forcing doMove (dist: %2m)", _i, round(_vehPos distance _frontPos)];
                     };
                 } else {
-                    if (_debugLogging) then {
-                        diag_log format ["[RECONDO_CONVOY] PathCreator: Vehicle %1 path too short (%2 pts), using doMove fallback", _i, count _vehiclePathChop];
-                    };
+                    _vehicle setDriveOnPath _vehiclePathChop;
                 };
-                
-                _driver doMove _frontPos;
+            } else {
+                // Path too short — use doMove fallback
+                private _driver = driver _vehicle;
+                if (!isNull _driver && alive _driver) then {
+                    _driver doMove _frontPos;
+                };
             };
         };
         

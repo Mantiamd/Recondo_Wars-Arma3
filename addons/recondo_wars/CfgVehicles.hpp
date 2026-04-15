@@ -4310,6 +4310,16 @@ class CfgVehicles {
                 defaultValue = "true";
                 category = "Recondo_IntelBoard_Display";
             };
+            class EnableSoilSample {
+                displayName = "Show Soil Sample Objectives";
+                tooltip = "Show Soil Sample objectives on the Intel Board.";
+                control = "Checkbox";
+                property = "Recondo_IntelBoard_EnableSoilSample";
+                expression = "_this setVariable ['enablesoilsample', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_IntelBoard_Display";
+            };
             class ShowRevealedLocations {
                 displayName = "Show Revealed Locations";
                 tooltip = "Show grid references for targets that have been revealed through intel.";
@@ -15223,6 +15233,167 @@ class CfgVehicles {
                 typeName = "BOOL";
                 defaultValue = "false";
                 category = "Recondo_QRF_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    //==========================================
+    // SOIL SAMPLE MODULE
+    // Players collect soil samples near roads via ACE self-interaction
+    // Priority: 5 (Feature module)
+    //==========================================
+    class Recondo_Module_SoilSample: Module_F {
+        scope = 2;
+        displayName = "Soil Sample";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Misc";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\search_ca.paa";
+        function = "Recondo_fnc_moduleSoilSample";
+        functionPriority = 5;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Allows players to collect soil samples via ACE self-interaction when near a road, path, or trail. The player must carry a required item (consumed on use) and receives a sample item. Configurable cooldown and optional marker-based area restriction.";
+            sync[] = {};
+        };
+        
+        class Attributes: AttributesBase {
+            
+            // ========================================
+            // GENERAL SETTINGS
+            // ========================================
+            class RequiredItem {
+                displayName = "GENERAL - Required Item Classname";
+                tooltip = "Classname of the item the player must have in inventory to collect a sample. This item is consumed on collection.";
+                control = "Edit";
+                property = "Recondo_Soil_RequiredItem";
+                expression = "_this setVariable ['requireditem', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Soil_General";
+            };
+            class RewardItem {
+                displayName = "Reward Item Classname";
+                tooltip = "Classname of the soil sample item given to the player on successful collection.";
+                control = "Edit";
+                property = "Recondo_Soil_RewardItem";
+                expression = "_this setVariable ['rewarditem', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Soil_General";
+            };
+            
+            // ========================================
+            // COLLECTION SETTINGS
+            // ========================================
+            class RoadDistance {
+                displayName = "COLLECTION - Road Distance (m)";
+                tooltip = "Maximum distance from a road, path, or trail for collection to be available. Uses the nearRoads command.";
+                control = "Edit";
+                property = "Recondo_Soil_RoadDistance";
+                expression = "_this setVariable ['roaddistance', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """2""";
+                category = "Recondo_Soil_Collection";
+            };
+            class CollectDuration {
+                displayName = "Collection Duration (s)";
+                tooltip = "How long the ACE progress bar takes to complete the collection.";
+                control = "Edit";
+                property = "Recondo_Soil_CollectDuration";
+                expression = "_this setVariable ['collectduration', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """5""";
+                category = "Recondo_Soil_Collection";
+            };
+            class CooldownSeconds {
+                displayName = "Cooldown (s)";
+                tooltip = "Time in seconds before the player can collect another sample. Default 600 (10 minutes).";
+                control = "Edit";
+                property = "Recondo_Soil_CooldownSeconds";
+                expression = "_this setVariable ['cooldownseconds', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """600""";
+                category = "Recondo_Soil_Collection";
+            };
+            
+            // ========================================
+            // AREA RESTRICTION
+            // ========================================
+            class MarkerPrefix {
+                displayName = "AREA - Marker Prefix (optional)";
+                tooltip = "If set, players can only collect samples within these marker areas. Leave empty to allow collection near any road globally. Example: 'SOIL_' will use markers SOIL_1, SOIL_2, etc.";
+                control = "Edit";
+                property = "Recondo_Soil_MarkerPrefix";
+                expression = "_this setVariable ['markerprefix', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Soil_Area";
+            };
+            
+            // ========================================
+            // OBJECTIVE SETTINGS
+            // ========================================
+            class ObjectiveName {
+                displayName = "OBJECTIVE - Objective Name";
+                tooltip = "Display name for this objective on the Intel Board.";
+                control = "Edit";
+                property = "Recondo_Soil_ObjectiveName";
+                expression = "_this setVariable ['objectivename', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Soil Sample""";
+                category = "Recondo_Soil_Objective";
+            };
+            class ObjectiveDescription {
+                displayName = "Objective Description";
+                tooltip = "Background description shown on the Intel Board for this objective.";
+                control = "EditMulti3";
+                property = "Recondo_Soil_ObjectiveDescription";
+                expression = "_this setVariable ['objectivedescription', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Soil_Objective";
+            };
+            class IntelBoardCategoryName {
+                displayName = "Intel Board Category";
+                tooltip = "Category name on the Intel Board. Leave empty for default 'SOIL SAMPLES'. Set to group with other objectives.";
+                control = "Edit";
+                property = "Recondo_Soil_IntelBoardCategoryName";
+                expression = "_this setVariable ['intelboardcategoryname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Soil_Objective";
+            };
+            class SamplesRequired {
+                displayName = "Samples Required Per Location";
+                tooltip = "Number of soil samples that must be turned in per marker location (or globally if no markers set) to complete the objective.";
+                control = "Edit";
+                property = "Recondo_Soil_SamplesRequired";
+                expression = "_this setVariable ['samplesrequired', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """3""";
+                category = "Recondo_Soil_Objective";
+            };
+            
+            // ========================================
+            // DEBUG SETTINGS
+            // ========================================
+            class DebugLogging {
+                displayName = "DEBUG - Enable Debug Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_Soil_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Soil_Debug";
             };
             
             class ModuleDescription: ModuleDescription {};

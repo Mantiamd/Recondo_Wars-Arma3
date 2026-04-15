@@ -31,6 +31,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **Recon Points** - Award points for reconnaissance activities
 - **Sensors** - Deployable ground sensors for foot/vehicle detection with persistent logging
 - **Wiretap** - Telephone pole wiretapping system
+- **Soil Sample** - Players collect soil samples via ACE self-interaction near roads, paths, or trails. Requires a configurable item (consumed on use), gives a sample item, and integrates with the Intel Board as a turn-in objective. Supports optional marker-based area restriction with per-location grid references on the Intel Board
 
 ### Radio & Communications
 - **RW Radio** - Radio transmission system with battery management and triangulation

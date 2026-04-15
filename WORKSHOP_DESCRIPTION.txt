@@ -40,6 +40,7 @@ Recondo Wars is a comprehensive Arma 3 mod designed for SOG Prairie Fire operati
 [*] [b]Recon Points[/b] — Award points for reconnaissance activities like spotting enemies and completing objectives.
 [*] [b]Sensors[/b] — Deployable ground sensors that detect foot and vehicle traffic with persistent logging.
 [*] [b]Wiretap[/b] — Telephone pole wiretapping system for gathering intel.
+[*] [b]Soil Sample[/b] — Players collect soil samples near roads via ACE self-interaction using a required item. Samples are turned in at Intel turn-in locations. Supports optional marker-based area restriction with per-location tracking on the Intel Board.
 [/list]
 
 [b]Radio & Communications[/b]
