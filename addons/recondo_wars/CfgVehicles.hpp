@@ -13878,7 +13878,7 @@ class CfgVehicles {
                 property = "Recondo_POO_WeaponClassname";
                 expression = "_this setVariable ['weaponclassname', _value, true];";
                 typeName = "STRING";
-                defaultValue = """vn_o_pl_mortar_type63""";
+                defaultValue = """vn_o_nva_static_d44_01""";
                 category = "Recondo_POO_Artillery";
             };
             class CrewClassname {
@@ -13888,7 +13888,7 @@ class CfgVehicles {
                 property = "Recondo_POO_CrewClassname";
                 expression = "_this setVariable ['crewclassname', _value, true];";
                 typeName = "STRING";
-                defaultValue = """vn_o_men_nva_65_inf_02""";
+                defaultValue = """vn_o_men_nva_49""";
                 category = "Recondo_POO_Artillery";
             };
             class CrewSide {

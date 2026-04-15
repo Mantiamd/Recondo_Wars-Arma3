@@ -36,6 +36,7 @@ private _actionText = _logic getVariable ["actiontext", "Turn Off Power"];
 private _restoreActionText = _logic getVariable ["restoreactiontext", "Turn On Power"];
 private _enablePersistence = _logic getVariable ["enablepersistence", false];
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 // Parse additional classnames
 private _additionalClassnames = ((_additionalClassnamesRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" };

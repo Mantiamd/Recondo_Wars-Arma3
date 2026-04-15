@@ -36,6 +36,7 @@ private _collectDuration = _logic getVariable ["collectduration", 5];
 private _cooldownSeconds = _logic getVariable ["cooldownseconds", 600];
 private _markerPrefix = _logic getVariable ["markerprefix", ""];
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 // Objective settings
 private _objectiveName = _logic getVariable ["objectivename", "Soil Sample"];

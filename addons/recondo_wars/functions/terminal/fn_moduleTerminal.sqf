@@ -41,6 +41,7 @@ private _masterDebug = _logic getVariable ["masterdebug", false];
 if (_masterDebug) then {
     RECONDO_MASTER_DEBUG = true;
     publicVariable "RECONDO_MASTER_DEBUG";
+    _debugLogging = true;
     diag_log "[RECONDO_TERMINAL] Master Debug enabled - all modules will log debug info";
 };
 

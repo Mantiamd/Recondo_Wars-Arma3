@@ -40,6 +40,7 @@ if (!_activated) exitWith {};
 // ========================================
 
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 // Channel names for logging
 private _channelNames = ["Global", "Side", "Command", "Group", "Vehicle", "Direct"];

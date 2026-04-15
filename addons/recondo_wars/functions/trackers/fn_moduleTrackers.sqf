@@ -68,6 +68,7 @@ private _dogHarassmentRange = _logic getVariable ["dogharassmentrange", 5];
 // Debug Settings
 private _debugMarkers = _logic getVariable ["debugmarkers", false];
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 // Target Filter Settings
 private _targetFilterHeight = _logic getVariable ["targetfilterheight", 60];

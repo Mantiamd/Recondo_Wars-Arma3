@@ -55,6 +55,7 @@ private _armingDelay = _logic getVariable ["armingdelay", 3];
 private _uprisingPercent = _logic getVariable ["uprisingpercent", 50];
 
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 private _debugMarkers = _logic getVariable ["debugmarkers", false];
 
 // ========================================

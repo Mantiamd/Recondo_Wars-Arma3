@@ -55,6 +55,7 @@ private _enablePersistence = _logic getVariable ["enablepersistence", false];
 private _reconPointsAward = _logic getVariable ["reconpointsaward", 10];
 
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 private _debugMarkers = _logic getVariable ["debugmarkers", false];
 
 // ========================================

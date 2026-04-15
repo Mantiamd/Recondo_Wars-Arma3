@@ -35,6 +35,7 @@ private _settings = createHashMap;
 
 // Debug
 _settings set ["enableDebug", _logic getVariable ["enabledebug", false]];
+if (RECONDO_MASTER_DEBUG) then { _settings set ["enableDebug", true]; };
 private _debug = _settings get "enableDebug";
 
 // Side setting (0=OPFOR, 1=BLUFOR, 2=Independent, 3=Civilian, 4=Any)

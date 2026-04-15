@@ -38,6 +38,7 @@ private _targetSideNum = _logic getVariable ["targetside", 0];
 private _intelItemsConfigRaw = _logic getVariable ["intelitemsconfig", ""];
 private _takeActionText = _logic getVariable ["takeactiontext", "Take %1"];
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 // POW Settings
 private _enablePOW = _logic getVariable ["enablepow", false];

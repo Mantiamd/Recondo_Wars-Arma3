@@ -58,6 +58,7 @@ _settings set ["groundRequestMaxHeight", _logic getVariable ["groundrequestmaxhe
 
 // Debug
 _settings set ["enableDebug", _logic getVariable ["enabledebug", false]];
+if (RECONDO_MASTER_DEBUG) then { _settings set ["enableDebug", true]; };
 
 private _debug = _settings get "enableDebug";
 

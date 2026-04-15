@@ -29,6 +29,7 @@ private _adminOnly = _logic getVariable ["adminonly", true];
 private _enableTimeControl = _logic getVariable ["enabletimecontrol", true];
 private _defaultTimeNum = _logic getVariable ["defaulttime", 0];
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 // Convert default time number to preset name
 private _defaultTime = switch (_defaultTimeNum) do {

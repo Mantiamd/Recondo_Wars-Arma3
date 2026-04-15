@@ -30,6 +30,7 @@ private _settings = createHashMap;
 
 // Debug
 _settings set ["enableDebug", _logic getVariable ["enabledebug", false]];
+if (RECONDO_MASTER_DEBUG) then { _settings set ["enableDebug", true]; };
 private _debug = _settings get "enableDebug";
 
 if (_debug) then {

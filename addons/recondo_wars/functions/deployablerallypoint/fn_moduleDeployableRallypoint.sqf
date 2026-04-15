@@ -76,6 +76,7 @@ private _enablePersistence = _logic getVariable ["enablepersistence", true];
 
 // Debug
 private _enableDebug = _logic getVariable ["enabledebug", false];
+if (RECONDO_MASTER_DEBUG) then { _enableDebug = true; };
 private _enableDebugMarkers = _logic getVariable ["enabledebugmarkers", false];
 
 // ========================================

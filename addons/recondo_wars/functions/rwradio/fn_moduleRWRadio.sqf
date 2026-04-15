@@ -76,6 +76,7 @@ _settings set ["noCountRadius", _logic getVariable ["nocountradius", 500]];
 
 // Debug
 _settings set ["enableDebug", _logic getVariable ["enabledebug", false]];
+if (RECONDO_MASTER_DEBUG) then { _settings set ["enableDebug", true]; };
 
 // Store settings globally
 RECONDO_RWR_SETTINGS = _settings;

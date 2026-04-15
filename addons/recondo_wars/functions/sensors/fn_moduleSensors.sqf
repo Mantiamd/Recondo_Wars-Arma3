@@ -49,6 +49,7 @@ private _notificationClassnamesRaw = _logic getVariable ["notificationclassnames
 private _notificationFrequency = _logic getVariable ["notificationfrequency", 30];
 
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 private _debugMarkers = _logic getVariable ["debugmarkers", false];
 
 // ========================================

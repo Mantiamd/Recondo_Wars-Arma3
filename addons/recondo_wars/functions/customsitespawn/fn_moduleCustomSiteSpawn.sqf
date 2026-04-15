@@ -53,6 +53,7 @@ private _patrolFormation = _logic getVariable ["patrolformation", "WEDGE"];
 private _enableNightLights = _logic getVariable ["enablenightlights", true];
 
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 private _debugMarkers = _logic getVariable ["debugmarkers", false];
 
 // ========================================

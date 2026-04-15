@@ -42,6 +42,7 @@ private _autoStart = _logic getVariable ["autostart", false];
 private _logToRPT = _logic getVariable ["logtorpt", true];
 private _showLocalOnly = _logic getVariable ["showlocalonly", false];
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 // ========================================
 // VALIDATE SETTINGS

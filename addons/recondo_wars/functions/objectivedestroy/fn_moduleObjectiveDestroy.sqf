@@ -80,6 +80,7 @@ private _intelRevealMessagesDocRaw = _logic getVariable ["intelrevealmessagesdoc
 private _intelRevealMessagesPOWRaw = _logic getVariable ["intelrevealmessagespow", ""];
 
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 private _debugMarkers = _logic getVariable ["debugmarkers", false];
 
 // Night Lights

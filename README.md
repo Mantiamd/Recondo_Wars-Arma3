@@ -85,6 +85,15 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 2. Use Arma 3 Tools to build the PBO, or copy the `addons` folder to your Arma 3 mods directory
 3. Enable the mod in Arma 3 launcher
 
+## Persistence Data Storage
+
+Persistence data (Persistence, Player Persistence, Vehicle Persistence, Inventory Persistence, and other modules with save/load support) is stored using Arma 3's `missionProfileNamespace` and written to disk via `saveMissionProfileNamespace`.
+
+- **Dedicated server**: Data is saved in the server's profile directory, typically `Users\<user>\Documents\Arma 3 - Other Profiles\<serverProfile>\vars.Arma3Profile` (or wherever the `-profiles` startup parameter points)
+- **Local/hosted**: Data is saved in your Arma 3 player profile directory
+- Data is tied to the **mission filename** — renaming the mission file will effectively reset all persistence
+- Use the **Terminal** module's "Reset All Persistence" action to clear saved data without changing the mission file
+
 ## Documentation
 
 - **[Quick Start Guide](docs/QUICK_START.md)** - Step-by-step guide to setting up your first mission
@@ -109,6 +118,52 @@ To build the PBO:
 1. Use Arma 3 Tools - Addon Builder
 2. Point to the `addons/recondo_wars` folder
 3. Build to your mod output directory
+
+## FAQ
+
+**Q: Where is persistence data saved on a dedicated server?**
+Persistence data is stored in the server's profile directory using `missionProfileNamespace`. The file is typically located at `<serverProfile>\vars.Arma3Profile`, where `<serverProfile>` is the path set by the `-profiles` startup parameter. See the [Persistence Data Storage](#persistence-data-storage) section above for full details.
+
+**Q: How do I reset persistence data?**
+There are two ways:
+1. **In-game**: Use the Terminal module's ACE interaction and select "Reset All Persistence." This clears all saved data for every persistence system (mission state, player positions, vehicle positions, and container inventories).
+2. **Manually**: Rename or delete the mission file. Since persistence data is tied to the mission filename, a new name starts fresh.
+
+**Q: Which modules require mods beyond CBA and ACE?**
+| Module | Required Mod | Notes |
+|--------|-------------|-------|
+| Hanoi Hannah Loudspeakers | [Hanoi Hannah Loudspeakers Mod](https://steamcommunity.com/sharedfiles/filedetails/?id=3696734884) | Hard dependency — module will not function without it |
+| RW Radio | [ACRE2](https://steamcommunity.com/sharedfiles/filedetails/?id=751965892) | Hard dependency — radio system built on ACRE2 |
+| AI Tweaks | [LAMBS Danger](https://steamcommunity.com/sharedfiles/filedetails/?id=1858075458) | Soft dependency — LAMBS features only apply if loaded |
+| POO Site Hunt | [SOG Prairie Fire](https://store.steampowered.com/app/1227700/Arma_3_Creator_DLC_SOG_Prairie_Fire/) | Default classnames are SOG assets; replace in module attributes if not using SOG |
+| Objective HVT / Hostages | [SOG Prairie Fire](https://store.steampowered.com/app/1227700/Arma_3_Creator_DLC_SOG_Prairie_Fire/) | Default compositions use SOG assets; fully configurable via module attributes |
+
+All other modules work with only CBA and ACE.
+
+**Q: My module isn't doing anything and there are no errors in the RPT.**
+Common causes:
+- **Missing sync**: Modules like Vehicle Persistence, Inventory Persistence, Terminal, and Convoy require objects to be **synchronized** (synced) to them in Eden Editor. Without synced objects, the module has nothing to act on.
+- **Empty attribute fields**: Required fields like vehicle classnames, unit classnames, or marker prefixes left blank will silently disable the module.
+- **Marker naming**: Modules that use markers (Convoy, Village Uprising, Path Patrols, etc.) require exact marker name formatting. Check the module tooltip for the expected naming convention (e.g., `CONVOY_1_1`, `CONVOY_1_2`, not `CONVOY1`).
+- **Enable debug logging**: Check the module's Debug Logging checkbox, or enable **Master Debug** on the Terminal module to turn on logging for all modules at once. Then review the RPT for diagnostic messages.
+
+**Q: Does this work on a dedicated server?**
+Yes. All modules are designed for dedicated server use. AI logic runs on the server where the AI is local. Client-side features (ACE interactions, UI elements) are distributed via `remoteExec`. Persistence saves on the server and restores on reconnect/JIP.
+
+**Q: Can I place multiple instances of the same module?**
+Many modules support multiple instances:
+- AI Tweaks (one per side), Foot Patrols, Path Patrols
+- Objective Destroy, HVT, Hostages, Jammer, Photographs, Hub & Subs
+- Camps Random, Custom Site Spawn, Bad Civi, POO Site Hunt
+- Reinforcement Waves, QRF Mounted
+- Ambient Sound, Civilians Working, Village Uprising, Hanoi Hannah
+- Soil Sample, Destroy Powergrid
+
+Single-instance modules (place only one):
+- Terminal, Persistence, Player Persistence, Vehicle Persistence, Inventory Persistence
+- Intel Board, Intel System, Intel Items, Recon Points
+- Weather Control, Intro Screen, Chat Control, Performance Monitor
+- Convoy System, RW Radio, Trackers, STABO, Sensors
 
 ## Author
 

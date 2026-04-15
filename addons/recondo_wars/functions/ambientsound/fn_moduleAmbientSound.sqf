@@ -49,6 +49,7 @@ private _soundVolume = _logic getVariable ["soundvolume", 1];
 private _soundOriginDistance = _logic getVariable ["soundorigindistance", 5];
 private _soundOriginHeight = _logic getVariable ["soundoriginheight", 4];
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 // Validate marker prefix
 if (_markerPrefix == "") exitWith {

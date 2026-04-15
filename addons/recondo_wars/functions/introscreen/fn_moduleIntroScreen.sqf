@@ -52,6 +52,7 @@ private _muteAudio = _logic getVariable ["muteaudio", true];
 
 // Debug
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 // ========================================
 // BUILD SETTINGS ARRAY

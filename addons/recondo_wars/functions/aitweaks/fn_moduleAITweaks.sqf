@@ -49,6 +49,7 @@ private _settings = createHashMap;
 // General
 _settings set ["targetSide", _requestedSide];
 _settings set ["enableDebug", _logic getVariable ["enabledebug", false]];
+if (RECONDO_MASTER_DEBUG) then { _settings set ["enableDebug", true]; };
 
 // ========== BASE SETTINGS ==========
 _settings set ["enableBaseSkills", _logic getVariable ["enablebaseskills", true]];

@@ -42,6 +42,7 @@ private _showRevealedLocations = _logic getVariable ["showrevealedlocations", tr
 
 // Debug
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 // ========================================
 // STORE SETTINGS GLOBALLY

@@ -31,6 +31,7 @@ RECONDO_STATICWEAPONLIMIT_INITIALIZED = true;
 
 private _classnamesRaw = _logic getVariable ["weaponclassnames", ""];
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 if (_classnamesRaw == "") exitWith {
     if (_debugLogging) then {

@@ -60,6 +60,7 @@ private _lightBrightnessMin = _logic getVariable ["lightbrightnessmin", 0.02];
 private _lightBrightnessMax = _logic getVariable ["lightbrightnessmax", 0.08];
 
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 private _debugMarkers = _logic getVariable ["debugmarkers", false];
 
 // Sleeping bag classnames (spawned under civilians when sleeping)

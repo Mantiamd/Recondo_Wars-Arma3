@@ -87,6 +87,7 @@ _settings set ["speedFreq", _logic getVariable ["speedfreq", 0.2]];
 
 // Debug Settings
 _settings set ["debugLogging", _logic getVariable ["debuglogging", false]];
+if (RECONDO_MASTER_DEBUG) then { _settings set ["debugLogging", true]; };
 _settings set ["debugMarkers", _logic getVariable ["debugmarkers", false]];
 
 private _debugLogging = _settings get "debugLogging";

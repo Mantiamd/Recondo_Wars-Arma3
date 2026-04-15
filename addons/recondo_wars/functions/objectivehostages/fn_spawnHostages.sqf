@@ -166,6 +166,11 @@ private _posIndex = 0;
                 params ["_unit", "_loadout", "_name", "_debug"];
                 sleep 3;  // Wait for unit to fully initialize
                 
+                // ACE Arsenal exports wrap the loadout as [loadoutArray, aceExtras]
+                if (count _loadout == 2 && {(_loadout select 0) isEqualType []  && {count (_loadout select 0) == 10}}) then {
+                    _loadout = _loadout select 0;
+                };
+                
                 if (!isNull _unit && alive _unit) then {
                     _unit setUnitLoadout _loadout;
                     

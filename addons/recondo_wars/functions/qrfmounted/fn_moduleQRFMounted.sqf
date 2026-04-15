@@ -48,6 +48,7 @@ private _dismountDistance = _logic getVariable ["dismountdistance", 200];
 
 private _debugMarkers = _logic getVariable ["debugmarkers", false];
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 // ========================================
 // PARSE AND VALIDATE

@@ -64,6 +64,7 @@ _settings set ["enablePersistence", _logic getVariable ["enablepersistence", fal
 
 // Debug
 _settings set ["enableDebug", _logic getVariable ["enabledebug", false]];
+if (RECONDO_MASTER_DEBUG) then { _settings set ["enableDebug", true]; };
 
 // Store settings globally
 RECONDO_FP_SETTINGS = _settings;

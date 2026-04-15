@@ -29,6 +29,7 @@ if (!_activated) exitWith {
 // ========================================
 
 private _debug = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debug = true; };
 RECONDO_INVENTORY_PERSISTENCE_DEBUG = _debug;
 
 // ========================================

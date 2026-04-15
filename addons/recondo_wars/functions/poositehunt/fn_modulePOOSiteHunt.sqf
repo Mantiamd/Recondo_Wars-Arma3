@@ -38,13 +38,14 @@ private _triggerSideStr    = _logic getVariable ["triggerside", "WEST"];
 private _triggerRadius     = parseNumber str (_logic getVariable ["triggerradius", 800]);
 private _terrainClearRadius = parseNumber str (_logic getVariable ["terrainclearradius", 15]);
 
-private _weaponClassname   = _logic getVariable ["weaponclassname", "vn_o_pl_mortar_type63"];
-private _crewClassname     = _logic getVariable ["crewclassname", "vn_o_men_nva_65_inf_02"];
+private _weaponClassname   = _logic getVariable ["weaponclassname", "vn_o_nva_static_d44_01"];
+private _crewClassname     = _logic getVariable ["crewclassname", "vn_o_men_nva_49"];
 private _crewSideStr       = _logic getVariable ["crewside", "EAST"];
 private _firingInterval    = parseNumber str (_logic getVariable ["firinginterval", 5]);
 private _invulnTime        = parseNumber str (_logic getVariable ["invulntime", 20]);
 
 private _debugLogging      = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 private _debugMarkers      = _logic getVariable ["debugmarkers", false];
 
 // ========================================

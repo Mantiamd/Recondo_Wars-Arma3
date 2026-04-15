@@ -65,6 +65,7 @@ private _allowedClassnamesRaw = _logic getVariable ["allowedclassnames", ""];
 private _restrictedText = _logic getVariable ["restrictedtext", "Only specialized personnel can operate wiretaps"];
 
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 // Parse allowed classnames
 private _allowedClassnames = [];

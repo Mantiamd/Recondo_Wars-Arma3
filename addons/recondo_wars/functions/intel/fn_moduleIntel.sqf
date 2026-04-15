@@ -38,6 +38,7 @@ private _turnInNoIntelText = _logic getVariable ["turninnointeltext", "You have 
 private _turnInNoTargetsText = _logic getVariable ["turninnotargetstext", "No actionable intelligence at this time."];
 private _enablePersistence = _logic getVariable ["enablepersistence", true];
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 // ========================================
 // PARSE INTEL ITEM CLASSNAMES

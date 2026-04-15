@@ -38,6 +38,7 @@ private _magazineCount = _logic getVariable ["magazinecount", 1];
 private _disableMovement = _logic getVariable ["disablemovement", true];
 private _forceStanding = _logic getVariable ["forcestanding", true];
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 // ========================================
 // GENERATE INSTANCE ID

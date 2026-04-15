@@ -45,6 +45,7 @@ private _propsCount = _logic getVariable ["propscount", 4];
 private _propsClassnamesRaw = _logic getVariable ["propsclassnames", "Land_WoodenCart_F,Land_Sacks_goods_F,Land_Sack_F,Land_Basket_F"];
 
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 private _debugMarkers = _logic getVariable ["debugmarkers", false];
 
 // ========================================

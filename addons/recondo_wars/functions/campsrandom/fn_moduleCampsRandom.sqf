@@ -76,6 +76,7 @@ private _smellHintMessagesRaw = _logic getVariable ["smellhintmessages", "The sm
 
 // Debug
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 private _debugMarkers = _logic getVariable ["debugmarkers", false];
 
 // ========================================

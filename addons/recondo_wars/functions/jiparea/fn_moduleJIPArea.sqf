@@ -27,6 +27,7 @@ if (!_activated) exitWith {
 
 // Get debug setting
 private _debug = _logic getVariable ["enabledebug", false];
+if (RECONDO_MASTER_DEBUG) then { _debug = true; };
 
 if (_debug) then {
     diag_log "[RECONDO_JIPAREA] Module initializing...";

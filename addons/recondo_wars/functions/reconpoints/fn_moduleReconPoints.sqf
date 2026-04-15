@@ -38,6 +38,7 @@ RECONDO_RP_INITIALIZED = true;
 // General Settings
 private _terminalName = _logic getVariable ["terminalname", "Unlock Terminal"];
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 
 // Point Rewards
 private _rewardHVT = _logic getVariable ["reward_hvt", 50];

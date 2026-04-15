@@ -54,6 +54,7 @@ private _despawnDelay = _logic getVariable ["despawndelay", 10];
 
 // Debug Settings
 private _debugLogging = _logic getVariable ["debuglogging", false];
+if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 private _debugMarkers = _logic getVariable ["debugmarkers", false];
 
 // ========================================
