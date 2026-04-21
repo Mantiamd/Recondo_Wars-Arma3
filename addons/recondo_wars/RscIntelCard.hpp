@@ -130,3 +130,15 @@ class Recondo_IntelBoard_Base {
     class ControlsBackground {};
     class Controls {};
 };
+
+class Recondo_OPORD_Base {
+    idd = 9400;
+    movingEnable = 0;
+    enableSimulation = 1;
+    
+    onLoad = "uiNamespace setVariable ['Recondo_OPORD_Display', _this select 0];";
+    onUnload = "uiNamespace setVariable ['Recondo_OPORD_Display', displayNull]; RECONDO_OPORD_OPEN = false;";
+    
+    class ControlsBackground {};
+    class Controls {};
+};

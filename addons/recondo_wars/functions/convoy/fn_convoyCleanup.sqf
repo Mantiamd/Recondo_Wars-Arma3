@@ -124,5 +124,6 @@ while {true} do {
         };
     };
     
-    sleep 10; // Check every 10 seconds
+    private _cleanupInterval = _settings get "cleanupInterval";
+    sleep _cleanupInterval;
 };

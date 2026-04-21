@@ -2019,6 +2019,11 @@ class Cfg3DEN {
             };
             
             // Debug
+            class Recondo_Convoy_Cleanup {
+                displayName = "Cleanup";
+                collapsed = 1;
+                class Attributes {};
+            };
             class Recondo_Convoy_Debug {
                 displayName = "Debug";
                 collapsed = 1;
@@ -2446,6 +2451,76 @@ class Cfg3DEN {
                 class Attributes {};
             };
             class Recondo_Soil_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            //==========================================
+            // ROLEPLAYER SOURCE MODULE CATEGORIES
+            //==========================================
+            class Recondo_RPSource_General {
+                displayName = "General";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_RPSource_Civilians {
+                displayName = "Civilian Presence";
+                collapsed = 1;
+                class Attributes {};
+            };
+            class Recondo_RPSource_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+
+            //==========================================
+            // OPORD MODULE CATEGORIES
+            //==========================================
+            class Recondo_OPORD_Context {
+                displayName = "Operation Context";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_OPORD_Sections {
+                displayName = "OPORD Sections";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_OPORD_AutoCollect {
+                displayName = "Auto-Collection Toggles";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_OPORD_Prompt {
+                displayName = "Prompt Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_OPORD_Display {
+                displayName = "OPORD Display";
+                collapsed = 1;
+                class Attributes {};
+            };
+            class Recondo_OPORD_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+        };
+    };
+    
+    // ========================================
+    // SOG PF TRACKER GROUP MODULE CATEGORIES
+    // ========================================
+    class Recondo_Module_SOGTracker {
+        class Object {
+            class Recondo_SOGTracker_General {
+                displayName = "SOG Tracker Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_SOGTracker_Debug {
                 displayName = "Debug";
                 collapsed = 1;
                 class Attributes {};

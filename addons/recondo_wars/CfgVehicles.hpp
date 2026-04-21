@@ -10227,6 +10227,30 @@ class CfgVehicles {
             };
             
             // ========================================
+            // CLEANUP SETTINGS
+            // ========================================
+            class EnableCleanup {
+                displayName = "CLEANUP - Enable Cleanup Loop";
+                tooltip = "When enabled, a background loop periodically checks for convoys that are destroyed, timed out, or have all vehicles incapacitated, and removes them. When disabled, convoys are only removed when they reach the end marker or self-terminate.";
+                control = "Checkbox";
+                property = "Recondo_Convoy_EnableCleanup";
+                expression = "_this setVariable ['enablecleanup', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_Convoy_Cleanup";
+            };
+            class CleanupInterval {
+                displayName = "Cleanup Check Interval (seconds)";
+                tooltip = "How often (in seconds) the cleanup loop checks for dead, timed-out, or completed convoys. Only used when the cleanup loop is enabled.";
+                control = "Edit";
+                property = "Recondo_Convoy_CleanupInterval";
+                expression = "_this setVariable ['cleanupinterval', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """10""";
+                category = "Recondo_Convoy_Cleanup";
+            };
+            
+            // ========================================
             // DEBUG SETTINGS
             // ========================================
             class DebugLogging {
@@ -15403,6 +15427,541 @@ class CfgVehicles {
     //==========================================
     // INVENTORY PERSISTENCE MODULE
     //==========================================
+    // ==========================================
+    // ROLEPLAYER SOURCE MODULE
+    // ==========================================
+    class Recondo_Module_RoleplayerSource: Module_F {
+        scope = 2;
+        displayName = "Roleplay SOF Source";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Tools";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa";
+        function = "Recondo_fnc_moduleRoleplayerSource";
+        functionPriority = 3;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Grants synced playable units ACE self-actions for viewing objective status, player statistics, and mission-maker-defined roleplayer instructions. Sync to playable units in Eden to designate which players receive the ROLEPLAYER Source Data self-interaction. No admin access required.";
+            sync[] = {"AnyAI", "AnyPlayer"};
+        };
+        
+        class Attributes: AttributesBase {
+            
+            class RoleplayerClassnames {
+                displayName = "Roleplayer Unit Classnames";
+                tooltip = "Comma-separated list of unit classnames that should have roleplayer access.\nAny player whose unit type matches one of these classnames will see the self-action.\n\nThis works alongside synced units — if a player is either synced OR matches a classname, they get access.\nLeave empty to use synced units only.";
+                property = "Recondo_RPSource_RoleplayerClassnames";
+                control = "EditMulti3";
+                expression = "_this setVariable ['roleplayerclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_RPSource_General";
+            };
+            
+            class AllowAllPlayers {
+                displayName = "Allow All Players";
+                tooltip = "When enabled, ALL players can see the ROLEPLAYER Source Data self-action, not just those synced to the module. Syncing units is still required for the module to initialize.";
+                property = "Recondo_RPSource_AllowAllPlayers";
+                control = "Checkbox";
+                expression = "_this setVariable ['allowallplayers', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_RPSource_General";
+            };
+            
+            class InstructionsText {
+                displayName = "Roleplayer Instructions";
+                tooltip = "Instructions and information that will be displayed to the roleplayer.\nThis text is visible to all synced players via the 'Roleplayer Instructions' self-action.\n\nExample:\nYou are a local informant working with coalition forces.\nProvide intel on enemy movements when approached by friendly teams.\nDo not engage in direct combat.";
+                property = "Recondo_RPSource_InstructionsText";
+                control = "EditCodeMulti5";
+                expression = "_this setVariable ['instructionstext', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_RPSource_General";
+            };
+            
+            // ========================================
+            // CIVILIAN PRESENCE SETTINGS
+            // ========================================
+            class CivClassnames {
+                displayName = "CIVILIANS - Civilian Classnames";
+                tooltip = "Comma-separated list of civilian unit classnames to spawn.\nLeave empty to disable the 'Populate Nearby' action.";
+                property = "Recondo_RPSource_CivClassnames";
+                control = "EditMulti3";
+                expression = "_this setVariable ['civclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_RPSource_Civilians";
+            };
+            class CivsPerSpawn {
+                displayName = "Civilians Per Spawn";
+                tooltip = "Number of civilians to spawn each time the action is used.";
+                control = "Edit";
+                property = "Recondo_RPSource_CivsPerSpawn";
+                expression = "_this setVariable ['civsperspawn', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """10""";
+                category = "Recondo_RPSource_Civilians";
+            };
+            class CivSpawnRadius {
+                displayName = "Spawn Radius (meters)";
+                tooltip = "Civilians spawn randomly within this radius of the player.";
+                control = "Edit";
+                property = "Recondo_RPSource_CivSpawnRadius";
+                expression = "_this setVariable ['civspawnradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """100""";
+                category = "Recondo_RPSource_Civilians";
+            };
+            class CivCooldown {
+                displayName = "Spawn Cooldown (seconds)";
+                tooltip = "Time the player must wait between uses of the civilian spawn action.";
+                control = "Edit";
+                property = "Recondo_RPSource_CivCooldown";
+                expression = "_this setVariable ['civcooldown', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """300""";
+                category = "Recondo_RPSource_Civilians";
+            };
+            class CivDespawnDistance {
+                displayName = "Despawn Distance (meters)";
+                tooltip = "If no player is within this distance, the despawn timer starts.";
+                control = "Edit";
+                property = "Recondo_RPSource_CivDespawnDistance";
+                expression = "_this setVariable ['civdespawndistance', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """200""";
+                category = "Recondo_RPSource_Civilians";
+            };
+            class CivDespawnTimer {
+                displayName = "Despawn Timer (seconds)";
+                tooltip = "Civilians are deleted after no player has been within the despawn distance for this many seconds.";
+                control = "Edit";
+                property = "Recondo_RPSource_CivDespawnTimer";
+                expression = "_this setVariable ['civdespawntimer', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """300""";
+                category = "Recondo_RPSource_Civilians";
+            };
+            
+            class DebugLogging {
+                displayName = "Enable Debug Logging";
+                tooltip = "Enable detailed logging to RPT for troubleshooting.";
+                property = "Recondo_RPSource_Debug";
+                control = "Checkbox";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_RPSource_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    // ==========================================
+    // OPORD GENERATOR MODULE
+    // ==========================================
+    class Recondo_Module_OPORD: Module_F {
+        scope = 2;
+        displayName = "OPORD Generator";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Tools";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\documents_ca.paa";
+        function = "Recondo_fnc_moduleOPORD";
+        functionPriority = 3;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Generates an AI-ready prompt for OPORD creation by collecting data from all placed objective and mission modules. Sync to an object (map table, clipboard, etc.) to add ACE actions for exporting the prompt and viewing an imported OPORD. Optionally loads a mission-folder SQF file to display a pre-generated OPORD to players.";
+            sync[] = {};
+        };
+        
+        class Attributes: AttributesBase {
+            
+            // ========================================
+            // OPERATION CONTEXT
+            // ========================================
+            
+            class OperationName {
+                displayName = "Operation Name";
+                tooltip = "Name of the operation.\nExample: OPERATION THUNDER STRIKE";
+                property = "Recondo_OPORD_OperationName";
+                control = "Edit";
+                expression = "_this setVariable ['operationname', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Context";
+            };
+            
+            class MissionType {
+                displayName = "Mission Type";
+                tooltip = "Type of mission for the AI to scope the OPORD around.";
+                property = "Recondo_OPORD_MissionType";
+                control = "Combo";
+                expression = "_this setVariable ['missiontype', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                category = "Recondo_OPORD_Context";
+                class values {
+                    class val0 { name = "Single Mission"; value = 0; default = 1; };
+                    class val1 { name = "Multi-Session Campaign"; value = 1; };
+                    class val2 { name = "Patrol"; value = 2; };
+                };
+            };
+            
+            class UseMissionDate {
+                displayName = "Use Mission Date/Time";
+                tooltip = "If enabled, automatically pulls the in-game date and time for the OPORD DTG.\nDisable to enter a custom date/time.";
+                property = "Recondo_OPORD_UseMissionDate";
+                control = "Checkbox";
+                expression = "_this setVariable ['usemissiondate', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_OPORD_Context";
+            };
+            
+            class CustomDateTime {
+                displayName = "Custom Date/Time (DTG)";
+                tooltip = "Custom DTG if 'Use Mission Date/Time' is disabled.\nExample: 140600H MAR 2026";
+                property = "Recondo_OPORD_CustomDateTime";
+                control = "Edit";
+                expression = "_this setVariable ['customdatetime', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Context";
+            };
+            
+            class HigherUnit {
+                displayName = "Higher Headquarters";
+                tooltip = "The higher command authority.\nExample: Joint Special Operations Command";
+                property = "Recondo_OPORD_HigherUnit";
+                control = "Edit";
+                expression = "_this setVariable ['higherunit', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Context";
+            };
+            
+            class FriendlyUnitDesignation {
+                displayName = "Friendly Unit Designation";
+                tooltip = "Short name/callsign of the player unit.\nExample: ODA 123, Recon Team PYTHON";
+                property = "Recondo_OPORD_FriendlyDesig";
+                control = "Edit";
+                expression = "_this setVariable ['friendlyunitdesignation', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Context";
+            };
+            
+            class FriendlyUnitDescription {
+                displayName = "Friendly Unit Description";
+                tooltip = "Description of the friendly unit composition.\nExample: Special Forces ODA, 12 operators with organic medical and demolitions capability";
+                property = "Recondo_OPORD_FriendlyDesc";
+                control = "EditMulti3";
+                expression = "_this setVariable ['friendlyunitdescription', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Context";
+            };
+            
+            class SupportingUnits {
+                displayName = "Supporting Units";
+                tooltip = "List of supporting units available.\nExample:\n160th SOAR (Night Stalkers)\nUN Relief (Non-combatant presence)";
+                property = "Recondo_OPORD_SupportingUnits";
+                control = "EditMulti3";
+                expression = "_this setVariable ['supportingunits', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Context";
+            };
+            
+            class AOName {
+                displayName = "Area of Operations Name";
+                tooltip = "Name of the AO.\nExample: AO COBRA";
+                property = "Recondo_OPORD_AOName";
+                control = "Edit";
+                expression = "_this setVariable ['aoname', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Context";
+            };
+            
+            class TerrainDescription {
+                displayName = "Terrain / AO Description";
+                tooltip = "Description of the terrain and operating environment. If left blank, the map name will be auto-detected.\nExample: 16km x 16km semi-arid region with 50 villages and a 20km river corridor.";
+                property = "Recondo_OPORD_TerrainDesc";
+                control = "EditMulti3";
+                expression = "_this setVariable ['terraindescription', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Context";
+            };
+            
+            // ========================================
+            // OPORD SECTIONS
+            // ========================================
+            
+            class CivilConsiderations {
+                displayName = "Civil Considerations";
+                tooltip = "Civil considerations for the AO.\nExample: Civilian population fragmented. UN convoys present. High collateral risk in populated areas.";
+                property = "Recondo_OPORD_CivilConsid";
+                control = "EditMulti3";
+                expression = "_this setVariable ['civilconsiderations', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Sections";
+            };
+            
+            class ROEText {
+                displayName = "Rules of Engagement";
+                tooltip = "Rules of engagement text to include in the OPORD.\nExample:\nPID required prior to engagement\nMinimize civilian casualties\nCAS NOT authorized near civilian structures";
+                property = "Recondo_OPORD_ROE";
+                control = "EditCodeMulti5";
+                expression = "_this setVariable ['roetext', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Sections";
+            };
+            
+            class ExecutionNotes {
+                displayName = "Execution Notes";
+                tooltip = "Additional guidance for the Execution paragraph.\nExample: Primary insertion via rotary wing to LZ HAWK. Teams split into two elements for simultaneous raid.";
+                property = "Recondo_OPORD_ExecNotes";
+                control = "EditCodeMulti5";
+                expression = "_this setVariable ['executionnotes', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Sections";
+            };
+            
+            class PhaseDescriptions {
+                displayName = "Phase Outline";
+                tooltip = "Operational phases for the AI to structure the Execution paragraph around.\nExample:\nPhase I: Infiltration via helicopter\nPhase II: Reconnaissance of OBJ areas\nPhase III: Simultaneous raids\nPhase IV: Exfiltration via STABO";
+                property = "Recondo_OPORD_PhaseDesc";
+                control = "EditCodeMulti5";
+                expression = "_this setVariable ['phasedescriptions', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Sections";
+            };
+            
+            class SupportAssets {
+                displayName = "Support Assets";
+                tooltip = "Available and restricted support assets.\nExample:\n160th SOAR: Insertion, extraction, CASEVAC\nCAS: NOT authorized within civilian areas\nArtillery: On-call fire support available";
+                property = "Recondo_OPORD_SupportAssets";
+                control = "EditCodeMulti5";
+                expression = "_this setVariable ['supportassets', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Sections";
+            };
+            
+            class ServiceSupport {
+                displayName = "Service & Support Notes";
+                tooltip = "Logistics, medical, and sustainment information for the Sustainment paragraph.\nExample: Resupply via rotary-wing or pre-positioned caches. CASEVAC coordinated through 160th SOAR.";
+                property = "Recondo_OPORD_ServiceSupport";
+                control = "EditMulti3";
+                expression = "_this setVariable ['servicesupport', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Sections";
+            };
+            
+            class CommandSignal {
+                displayName = "Command & Signal Notes";
+                tooltip = "Command structure and communications plan.\nExample: Element leaders maintain tactical flexibility within commander's intent. Primary comms via secure long-range radio.";
+                property = "Recondo_OPORD_CommandSignal";
+                control = "EditMulti3";
+                expression = "_this setVariable ['commandsignal', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Sections";
+            };
+            
+            class SpecialInstructions {
+                displayName = "Special Instructions";
+                tooltip = "Any additional instructions or context for the AI.\nExample: Radio silence until first contact. Priority is hostage recovery over HVT capture.";
+                property = "Recondo_OPORD_SpecialInstr";
+                control = "EditMulti3";
+                expression = "_this setVariable ['specialinstructions', _value, true];";
+                defaultValue = "''";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Sections";
+            };
+            
+            // ========================================
+            // AUTO-COLLECTION TOGGLES
+            // ========================================
+            
+            class IncludeObjectives {
+                displayName = "Include Objectives";
+                tooltip = "Automatically collect and include all placed objectives (HVT, Hostages, Destroy, Photographs, etc.) in the prompt.";
+                property = "Recondo_OPORD_IncludeObj";
+                control = "Checkbox";
+                expression = "_this setVariable ['includeobjectives', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_OPORD_AutoCollect";
+            };
+            
+            class IncludeGrids {
+                displayName = "Include Grid References";
+                tooltip = "Include specific grid coordinates for objectives in the prompt.\nDisable if you want the OPORD to use general area references instead (recommended for discovery-based missions).";
+                property = "Recondo_OPORD_IncludeGrids";
+                control = "Checkbox";
+                expression = "_this setVariable ['includegrids', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_OPORD_AutoCollect";
+            };
+            
+            class IncludeWeather {
+                displayName = "Include Weather Data";
+                tooltip = "Include current weather conditions if a Weather module is placed.";
+                property = "Recondo_OPORD_IncludeWeather";
+                control = "Checkbox";
+                expression = "_this setVariable ['includeweather', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_OPORD_AutoCollect";
+            };
+            
+            class IncludeEnemyDisposition {
+                displayName = "Include Enemy Disposition";
+                tooltip = "Include detected enemy capabilities (Reinforcement Waves, QRF, Foot Patrols, etc.) in the prompt.";
+                property = "Recondo_OPORD_IncludeEnemy";
+                control = "Checkbox";
+                expression = "_this setVariable ['includeenemydisposition', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_OPORD_AutoCollect";
+            };
+            
+            class IncludeCivActivity {
+                displayName = "Include Civilian Activity";
+                tooltip = "Include civilian activity data (working civilians, traffic, Village Uprising threat) in the prompt.";
+                property = "Recondo_OPORD_IncludeCiv";
+                control = "Checkbox";
+                expression = "_this setVariable ['includecivactivity', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_OPORD_AutoCollect";
+            };
+            
+            class IncludeEquipment {
+                displayName = "Include Equipment & Capabilities";
+                tooltip = "Include available special equipment (wiretap, sensors, soil sampling) in the prompt.";
+                property = "Recondo_OPORD_IncludeEquip";
+                control = "Checkbox";
+                expression = "_this setVariable ['includeequipment', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_OPORD_AutoCollect";
+            };
+            
+            class IncludeExtraction {
+                displayName = "Include Extraction Options";
+                tooltip = "Include extraction capabilities (STABO, rally points, outposts) in the prompt.";
+                property = "Recondo_OPORD_IncludeExtract";
+                control = "Checkbox";
+                expression = "_this setVariable ['includeextraction', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_OPORD_AutoCollect";
+            };
+            
+            // ========================================
+            // PROMPT SETTINGS
+            // ========================================
+            
+            class Tone {
+                displayName = "OPORD Format";
+                tooltip = "The format/tone for the generated OPORD.";
+                property = "Recondo_OPORD_Tone";
+                control = "Combo";
+                expression = "_this setVariable ['tone', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                category = "Recondo_OPORD_Prompt";
+                class values {
+                    class val0 { name = "Formal 5-Paragraph OPORD"; value = 0; default = 1; };
+                    class val1 { name = "Abbreviated OPORD"; value = 1; };
+                    class val2 { name = "Patrol Order"; value = 2; };
+                };
+            };
+            
+            class DetailLevel {
+                displayName = "Detail Level";
+                tooltip = "How much detail the AI should include in the OPORD.";
+                property = "Recondo_OPORD_DetailLevel";
+                control = "Combo";
+                expression = "_this setVariable ['detaillevel', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                category = "Recondo_OPORD_Prompt";
+                class values {
+                    class val0 { name = "High"; value = 0; default = 1; };
+                    class val1 { name = "Medium"; value = 1; };
+                    class val2 { name = "Brief"; value = 2; };
+                };
+            };
+            
+            // ========================================
+            // OPORD DISPLAY
+            // ========================================
+            
+            class EnableOPORDDisplay {
+                displayName = "Enable OPORD Display";
+                tooltip = "If enabled, the module will attempt to load an OPORD text file from the mission folder for in-game display.";
+                property = "Recondo_OPORD_EnableDisplay";
+                control = "Checkbox";
+                expression = "_this setVariable ['enableoporddisplay', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_OPORD_Display";
+            };
+            
+            class OPORDFilename {
+                displayName = "OPORD Filename";
+                tooltip = "Filename of the OPORD SQF file in the mission folder.\nThe file should return a string or hashmap.\nDefault: recondo_opord.sqf";
+                property = "Recondo_OPORD_Filename";
+                control = "Edit";
+                expression = "_this setVariable ['opordfilename', _value, true];";
+                defaultValue = "'recondo_opord.sqf'";
+                typeName = "STRING";
+                category = "Recondo_OPORD_Display";
+            };
+            
+            // ========================================
+            // DEBUG
+            // ========================================
+            
+            class DebugLogging {
+                displayName = "Enable Debug Logging";
+                tooltip = "Enable detailed logging to RPT for troubleshooting.";
+                property = "Recondo_OPORD_Debug";
+                control = "Checkbox";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_OPORD_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
     class Recondo_Module_InventoryPersistence: Module_F {
         scope = 2;
         displayName = "Inventory Persistence";
@@ -15437,6 +15996,106 @@ class CfgVehicles {
                 typeName = "BOOL";
                 defaultValue = "false";
                 category = "Recondo_InvPersist_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    // ========================================
+    // SOG PF TRACKER GROUP MODULE
+    // ========================================
+    class Recondo_Module_SOGTracker: Module_F {
+        scope = 2;
+        displayName = "SOG PF Tracker Group";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\scout_ca.paa";
+        function = "Recondo_fnc_moduleSOGTracker";
+        functionPriority = 5;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        canSetArea = 0;
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Defines marker areas where OPFOR tracker-stalker teams spawn and pursue BLUFOR groups using SOG Prairie Fire's tracking system. Requires S.O.G. Prairie Fire DLC.";
+            sync[] = {};
+        };
+        
+        class Attributes: AttributesBase {
+            // ========================================
+            // GENERAL SETTINGS
+            // ========================================
+            class MarkerPrefix {
+                displayName = "Marker Prefix";
+                tooltip = "Prefix for invisible markers that define tracker zones. Markers should be named PREFIX1, PREFIX2, etc. (e.g., TRACKER_1, TRACKER_2). Include the trailing underscore.";
+                control = "Edit";
+                property = "Recondo_SOGTracker_MarkerPrefix";
+                expression = "_this setVariable ['markerprefix', _value, true];";
+                typeName = "STRING";
+                defaultValue = """TRACKER_""";
+                category = "Recondo_SOGTracker_General";
+            };
+            
+            class TrackerSide {
+                displayName = "Tracker Side";
+                tooltip = "Side for spawned tracker-stalker units. EAST = OPFOR, GUER = Independent.";
+                control = "Combo";
+                property = "Recondo_SOGTracker_TrackerSide";
+                expression = "_this setVariable ['trackerside', _value, true];";
+                typeName = "STRING";
+                defaultValue = """EAST""";
+                class Values {
+                    class EAST {
+                        name = "OPFOR (East)";
+                        value = "EAST";
+                    };
+                    class GUER {
+                        name = "Independent (Guerilla)";
+                        value = "GUER";
+                    };
+                };
+                category = "Recondo_SOGTracker_General";
+            };
+            
+            class TriggerRadius {
+                displayName = "Trigger Radius (meters)";
+                tooltip = "Distance in meters from marker center at which BLUFOR groups trigger the tracker spawn.";
+                control = "Edit";
+                property = "Recondo_SOGTracker_TriggerRadius";
+                expression = "_this setVariable ['triggerradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """100""";
+                category = "Recondo_SOGTracker_General";
+            };
+            
+            class TrackerClassnames {
+                displayName = "Tracker Unit Classnames";
+                tooltip = "Classnames for stalker units (one per line or comma-separated). 2 units are randomly selected from this pool per trigger.";
+                control = "EditMulti3";
+                property = "Recondo_SOGTracker_TrackerClassnames";
+                expression = "_this setVariable ['trackerclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_SOGTracker_General";
+            };
+            
+            // ========================================
+            // DEBUG SETTINGS
+            // ========================================
+            class DebugLogging {
+                displayName = "DEBUG - Enable Debug Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_SOGTracker_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SOGTracker_Debug";
             };
             
             class ModuleDescription: ModuleDescription {};

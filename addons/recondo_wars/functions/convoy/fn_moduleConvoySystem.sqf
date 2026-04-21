@@ -85,6 +85,10 @@ _settings set ["linkStiffness", _logic getVariable ["linkstiffness", 0.1]];
 _settings set ["pathFreq", _logic getVariable ["pathfreq", 0.05]];
 _settings set ["speedFreq", _logic getVariable ["speedfreq", 0.2]];
 
+// Cleanup Settings
+_settings set ["enableCleanup", _logic getVariable ["enablecleanup", true]];
+_settings set ["cleanupInterval", _logic getVariable ["cleanupinterval", 10]];
+
 // Debug Settings
 _settings set ["debugLogging", _logic getVariable ["debuglogging", false]];
 if (RECONDO_MASTER_DEBUG) then { _settings set ["debugLogging", true]; };
@@ -229,7 +233,13 @@ if (_debugLogging) then {
 // Start the convoy spawn loop
 RECONDO_CONVOY_SPAWN_LOOP_HANDLE = [_settings] spawn Recondo_fnc_convoySpawnLoop;
 
-// Start the cleanup loop
-RECONDO_CONVOY_CLEANUP_HANDLE = [_settings] spawn Recondo_fnc_convoyCleanup;
+// Start the cleanup loop (if enabled)
+if (_settings get "enableCleanup") then {
+    RECONDO_CONVOY_CLEANUP_HANDLE = [_settings] spawn Recondo_fnc_convoyCleanup;
+} else {
+    if (_debugLogging) then {
+        diag_log "[RECONDO_CONVOY] Cleanup loop DISABLED by module settings.";
+    };
+};
 
 diag_log "[RECONDO_CONVOY] Module initialized successfully";

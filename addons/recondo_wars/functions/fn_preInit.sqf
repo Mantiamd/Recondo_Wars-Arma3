@@ -311,4 +311,12 @@ RECONDO_SOIL_SETTINGS = nil;
 RECONDO_SOIL_INSTANCES = [];
 RECONDO_SOIL_TURNED_IN = createHashMap;
 
+// Roleplayer Source global variables
+RECONDO_RP_SOURCE_SETTINGS = nil;
+RECONDO_RP_SOURCE_UNITS = nil;
+
+// OPORD Generator global variables
+RECONDO_OPORD_SETTINGS = nil;
+RECONDO_OPORD_OPEN = false;
+
 diag_log format ["[RECONDO_WARS] PreInit complete. Version: %1", RECONDO_WARS_VERSION];

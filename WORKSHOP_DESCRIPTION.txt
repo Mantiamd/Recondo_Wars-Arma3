@@ -49,6 +49,7 @@ Recondo Wars is a comprehensive Arma 3 mod designed for SOG Prairie Fire operati
 [*] [b]Trackers[/b] — Enemy tracker teams with dogs that follow player footprints.
 [*] [b]Reinforcement Waves[/b] — Dynamic enemy reinforcement spawning triggered by combat or alerts.
 [*] [b]QRF Mounted[/b] — Vehicle-mounted quick reaction force. When the QRF side detects the target side, vehicles spawn at the nearest road, move towards the threat, and cargo passengers dismount at a configurable distance while drivers and gunners stay mounted.
+[*] [b]SOG PF Tracker Group[/b] — Defines marker areas where OPFOR tracker-stalker teams spawn and pursue BLUFOR groups using SOG Prairie Fire's tracking system. When BLUFOR enters a zone, their tracks become visible and a 2-man stalker team spawns to hunt them. Requires S.O.G. Prairie Fire DLC.
 [/list]
 
 [b]Extraction & Movement[/b]
@@ -87,6 +88,8 @@ Recondo Wars is a comprehensive Arma 3 mod designed for SOG Prairie Fire operati
 [*] [b]ACE Spectator Object[/b] — Enter spectator mode from objects.
 [*] [b]Convoy System[/b] — Automated convoy spawning and routing.
 [*] [b]Performance Monitor[/b] — Mission performance monitoring tools.
+[*] [b]Roleplay SOF Source[/b] — Grants synced playable units ACE self-actions for viewing objective status, player statistics, and mission-maker-defined roleplayer instructions. Supports "Allow All Players" mode with object interaction and a "Populate Nearby with Civilian Presence" self-action for roleplayers. Define roleplayers by syncing units or by unit classname.
+[*] [b]OPORD Generator[/b] — Generates an AI-ready prompt for OPORD creation by collecting data from all placed modules. Exports a structured prompt for copy-paste into an AI assistant. Configure operation context, ROE, phases, support assets, and more. Optionally import an AI-generated OPORD back into the mission for in-game display.
 [/list]
 
 [hr][/hr]

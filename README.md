@@ -38,6 +38,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **Trackers** - Enemy tracker teams with dogs that follow player footprints
 - **Reinforcement Waves** - Dynamic enemy reinforcement spawning
 - **QRF Mounted** - Vehicle-mounted quick reaction force that spawns at the nearest road when the QRF side detects the target side. Randomly selects vehicles from a pool (configurable min/max count), fills crew and cargo, moves to the detected target, and dismounts cargo passengers at a configurable distance while drivers and gunners remain mounted
+- **SOG PF Tracker Group** - Defines marker areas where OPFOR tracker-stalker teams spawn and pursue BLUFOR groups using SOG Prairie Fire's tracking system. When a BLUFOR group enters a trigger zone, their tracks become visible and a 2-man stalker team spawns to hunt them. Configurable trigger radius, tracker side, and unit classnames. Requires S.O.G. Prairie Fire DLC
 
 ### Extraction & Movement
 - **STABO Extraction** - Helicopter extraction via STABO rig with body/casualty attachment
@@ -59,7 +60,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 
 ### Utility Modules
 - **Persistence** - Save/load mission state across sessions with campaign ID support
-- **Player Persistence** - Save and restore player positions, directions, and full loadouts across sessions. Tracks specified playable units by Eden variable name with configurable restore delay. Saves immediately on disconnect
+- **Player Persistence** - Save and restore player positions, directions, and full loadouts across sessions. Tracks specified playable units by Eden variable name with configurable restore delay. Saves immediately on disconnect. Resets saved position on respawn so players return to their default spawn
 - **Vehicle Persistence** - Save and restore synchronized vehicle positions across sessions. Destroyed vehicles are removed on load
 - **Inventory Persistence** - Save and restore full cargo contents (weapons, magazines, items, backpacks) of synchronized containers and vehicles across sessions
 - **Intro Screen** - Mission introduction screens
@@ -70,6 +71,8 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **ACE Spectator Object** - Enter spectator mode from objects
 - **Convoy System** - Automated convoy spawning and routing
 - **Performance Monitor** - Mission performance monitoring
+- **Roleplay SOF Source** - Grants synced playable units ACE self-actions for viewing objective status, player statistics, and mission-maker-defined roleplayer instructions. Supports an "Allow All Players" mode that places interactions on a synced world object. Includes a "Populate Nearby with Civilian Presence" self-action for roleplayers to spawn wandering civilians with configurable classnames, count, radius, cooldown, and auto-despawn. Roleplayers can be defined by syncing units or by unit classname
+- **OPORD Generator** - Generates an AI-ready prompt for OPORD creation by automatically collecting data from all placed objective and mission modules. Exports a structured prompt for copy-paste into an AI assistant (e.g., ChatGPT). Configurable operation context, ROE, phases, support assets, and more. Optionally loads an imported OPORD from a mission-folder SQF file for in-game display to players
 
 ## Requirements
 
@@ -137,6 +140,7 @@ There are two ways:
 | AI Tweaks | [LAMBS Danger](https://steamcommunity.com/sharedfiles/filedetails/?id=1858075458) | Soft dependency — LAMBS features only apply if loaded |
 | POO Site Hunt | [SOG Prairie Fire](https://store.steampowered.com/app/1227700/Arma_3_Creator_DLC_SOG_Prairie_Fire/) | Default classnames are SOG assets; replace in module attributes if not using SOG |
 | Objective HVT / Hostages | [SOG Prairie Fire](https://store.steampowered.com/app/1227700/Arma_3_Creator_DLC_SOG_Prairie_Fire/) | Default compositions use SOG assets; fully configurable via module attributes |
+| SOG PF Tracker Group | [SOG Prairie Fire](https://store.steampowered.com/app/1227700/Arma_3_Creator_DLC_SOG_Prairie_Fire/) | Hard dependency — uses SOG PF tracking functions |
 
 All other modules work with only CBA and ACE.
 
@@ -155,7 +159,7 @@ Many modules support multiple instances:
 - AI Tweaks (one per side), Foot Patrols, Path Patrols
 - Objective Destroy, HVT, Hostages, Jammer, Photographs, Hub & Subs
 - Camps Random, Custom Site Spawn, Bad Civi, POO Site Hunt
-- Reinforcement Waves, QRF Mounted
+- Reinforcement Waves, QRF Mounted, SOG PF Tracker Group
 - Ambient Sound, Civilians Working, Village Uprising, Hanoi Hannah
 - Soil Sample, Destroy Powergrid
 
@@ -163,7 +167,7 @@ Single-instance modules (place only one):
 - Terminal, Persistence, Player Persistence, Vehicle Persistence, Inventory Persistence
 - Intel Board, Intel System, Intel Items, Recon Points
 - Weather Control, Intro Screen, Chat Control, Performance Monitor
-- Convoy System, RW Radio, Trackers, STABO, Sensors
+- Convoy System, RW Radio, Trackers, STABO, Sensors, OPORD Generator, Roleplay SOF Source
 
 ## Author
 

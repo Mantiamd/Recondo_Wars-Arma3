@@ -117,6 +117,32 @@ addMissionEventHandler ["HandleDisconnect", {
 }];
 
 // ========================================
+// HANDLE RESPAWN - CLEAR SAVED POSITION
+// ========================================
+// When a tracked player dies and respawns, remove their saved
+// position so they spawn at the default location instead of
+// being teleported back to where they were before death.
+
+addMissionEventHandler ["EntityRespawned", {
+    params ["_newUnit", "_oldUnit"];
+
+    if !(_newUnit getVariable ["RECONDO_IsPlayerTracked", false]) exitWith {};
+    if (!RECONDO_PLAYER_PERSISTENCE_ENABLED) exitWith {};
+
+    private _uid = getPlayerUID _newUnit;
+    if (_uid == "") exitWith {};
+
+    private _savedData = ["PLAYER_PERSIST_DATA", []] call Recondo_fnc_getSaveData;
+    private _newData = _savedData select { (_x get "uid") != _uid };
+    ["PLAYER_PERSIST_DATA", _newData] call Recondo_fnc_setSaveData;
+    saveMissionProfileNamespace;
+
+    if (RECONDO_PLAYER_PERSISTENCE_DEBUG) then {
+        diag_log format ["[RECONDO_PLAYERPERSIST] Cleared saved position on respawn: %1 (UID: %2)", name _newUnit, _uid];
+    };
+}];
+
+// ========================================
 // HANDLE CONNECT - RESTORE WITH DELAY
 // ========================================
 

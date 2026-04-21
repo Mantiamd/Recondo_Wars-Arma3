@@ -692,5 +692,36 @@ class CfgFunctions {
             class getSoilObjectiveCount {};
         };
         
+        // OPORD Generator Module Functions
+        class OPORD {
+            file = "\recondo_wars\functions\opord";
+            class moduleOPORD {};
+            class generateOPORDPrompt {};
+            class exportOPORDPrompt {};
+            class loadOPORDDisplay {};
+            class showOPORD {};
+            class addOPORDActions {};
+        };
+        
+        // Roleplayer Source Module Functions
+        class RoleplayerSource {
+            file = "\recondo_wars\functions\roleplayersource";
+            class moduleRoleplayerSource {};
+            class initRoleplayerSourceClient {};
+            class rpShowInstructions {};
+            class rpShowObjectiveStatus {};
+            class rpShowPlayerStats {};
+            class rpSpawnCivilians {};
+            class rpRequestCivilians {};
+        };
+        
+        // SOG PF Tracker Group Module Functions
+        class SOGTracker {
+            file = "\recondo_wars\functions\sogtracker";
+            class moduleSOGTracker {};
+            class sogTrackerLoop {};
+            class sogTrackerSpawn {};
+        };
+        
     };
 };
