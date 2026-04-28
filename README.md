@@ -50,7 +50,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **Weather Control** - Dynamic weather and time control
 - **Ambient Sound** - Configurable ambient sound zones
 - **Civilians Working** - Working civilians in fields and villages
-- **Civilian Traffic** - Ambient civilian vehicle traffic
+- **Civilian Traffic** - Ambient civilian vehicle traffic on roads with optional vehicle invincibility
 - **Civilian POL** - Persistent civilian pattern-of-life system
 - **Custom Site Spawn** - Spawn custom compositions at markers with garrison AI, patrols, and night lighting
 - **Camps Random** - Randomized camp placement with composition support

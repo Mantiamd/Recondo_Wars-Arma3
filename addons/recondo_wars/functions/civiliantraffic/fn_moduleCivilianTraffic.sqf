@@ -47,6 +47,7 @@ private _arrivalDistance = _logic getVariable ["arrivaldistance", 30];
 private _earlyStopDistance = _logic getVariable ["earlystopdistance", 100];
 private _fleeOnPlayerEnter = _logic getVariable ["fleeonplayerenter", true];
 private _cowerUnderFire = _logic getVariable ["cowerunderfire", true];
+private _vehiclesInvincible = _logic getVariable ["vehiclesinvincible", false];
 
 // Performance Settings
 private _spawnDelay = _logic getVariable ["spawndelay", 5];
@@ -91,6 +92,7 @@ RECONDO_CIVTRAFFIC_SETTINGS = createHashMapFromArray [
     ["earlyStopDistance", _earlyStopDistance],
     ["fleeOnPlayerEnter", _fleeOnPlayerEnter],
     ["cowerUnderFire", _cowerUnderFire],
+    ["vehiclesInvincible", _vehiclesInvincible],
     ["spawnDelay", _spawnDelay],
     ["despawnDelay", _despawnDelay],
     ["debugLogging", _debugLogging],

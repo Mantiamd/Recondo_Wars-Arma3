@@ -33,6 +33,7 @@ private _civilianClassnames = _settings get "civilianClassnames";
 private _vehicleClassnames = _settings get "vehicleClassnames";
 private _fleeOnPlayerEnter = _settings get "fleeOnPlayerEnter";
 private _cowerUnderFire = _settings get "cowerUnderFire";
+private _vehiclesInvincible = _settings getOrDefault ["vehiclesInvincible", false];
 private _debugLogging = _settings get "debugLogging";
 
 // Find random road position
@@ -62,6 +63,12 @@ private _civilian = _group createUnit [_civilianClass, _roadPos, [], 0, "NONE"];
 
 // Move civilian into vehicle as driver
 _civilian moveInDriver _vehicle;
+
+// Apply invincibility if enabled
+if (_vehiclesInvincible) then {
+    _vehicle allowDamage false;
+    _civilian allowDamage false;
+};
 
 // Set vehicle variables
 _vehicle setVariable ["RECONDO_CIVTRAFFIC_ZoneIndex", _zoneIndex, false];

@@ -10951,7 +10951,17 @@ class CfgVehicles {
                 defaultValue = "true";
                 category = "Recondo_CivTraffic_Behavior";
             };
-            
+            class VehiclesInvincible {
+                displayName = "Vehicles Invincible";
+                tooltip = "Make traffic vehicles and their drivers invincible (cannot be damaged or destroyed).";
+                control = "Checkbox";
+                property = "Recondo_CivTraffic_VehiclesInvincible";
+                expression = "_this setVariable ['vehiclesinvincible', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_CivTraffic_Behavior";
+            };
+
             // ========================================
             // DEBUG SETTINGS
             // ========================================

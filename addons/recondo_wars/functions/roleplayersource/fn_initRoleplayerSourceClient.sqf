@@ -38,6 +38,12 @@ if (isNil "RECONDO_RP_SOURCE_CIVACTION_ADDED" || {!RECONDO_RP_SOURCE_CIVACTION_A
         {
             private _settings = missionNamespace getVariable ["RECONDO_RP_SOURCE_SETTINGS", nil];
             if (isNil "_settings") exitWith { false };
+            private _isRP = player getVariable ["RECONDO_RP_SOURCE_ALLOWED", false];
+            if (!_isRP) then {
+                private _rpClassnames = _settings getOrDefault ["rpClassnames", []];
+                _isRP = (typeOf player) in _rpClassnames;
+            };
+            if (!_isRP) exitWith { false };
             private _civClassnames = _settings getOrDefault ["civClassnames", []];
             if (count _civClassnames == 0) exitWith { false };
             private _cooldown = _settings getOrDefault ["civCooldown", 300];
