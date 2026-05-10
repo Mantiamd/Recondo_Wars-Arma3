@@ -722,6 +722,15 @@ class CfgFunctions {
             class sogTrackerLoop {};
             class sogTrackerSpawn {};
         };
-        
+
+        // Outpost System Module Functions
+        class OutpostSystem {
+            file = "\recondo_wars\functions\outpostsystem";
+            class moduleOutpostSystem {};
+            class outpostSupplyLoop {};
+            class outpostQRFLoad {};
+            class outpostQRFDismount {};
+        };
+
     };
 };

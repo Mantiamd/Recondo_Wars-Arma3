@@ -33,9 +33,11 @@ private _targetMarkerPrefix = _logic getVariable ["targetmarkerprefix", "ARTY_TG
 private _numActiveSites    = parseNumber str (_logic getVariable ["numactivesites", 1]);
 if (_numActiveSites < 1) then { _numActiveSites = 1 };
 private _enablePersistence = _logic getVariable ["enablepersistence", false];
+private _intelBoardCategoryName = _logic getVariable ["intelboardcategoryname", ""];
 
 private _triggerSideStr    = _logic getVariable ["triggerside", "WEST"];
 private _triggerRadius     = parseNumber str (_logic getVariable ["triggerradius", 800]);
+private _triggerHeight     = parseNumber str (_logic getVariable ["triggerheight", -1]);
 private _terrainClearRadius = parseNumber str (_logic getVariable ["terrainclearradius", 15]);
 
 private _weaponClassname   = _logic getVariable ["weaponclassname", "vn_o_nva_static_d44_01"];
@@ -86,6 +88,7 @@ private _settings = createHashMapFromArray [
     ["enablePersistence", _enablePersistence],
     ["triggerSide", _triggerSide],
     ["triggerRadius", _triggerRadius],
+    ["triggerHeight", _triggerHeight],
     ["terrainClearRadius", _terrainClearRadius],
     ["weaponClassname", _weaponClassname],
     ["crewClassname", _crewClassname],
@@ -93,7 +96,8 @@ private _settings = createHashMapFromArray [
     ["firingInterval", _firingInterval],
     ["invulnTime", _invulnTime],
     ["debugLogging", _debugLogging],
-    ["debugMarkers", _debugMarkers]
+    ["debugMarkers", _debugMarkers],
+    ["intelBoardCategoryName", _intelBoardCategoryName]
 ];
 
 RECONDO_POO_INSTANCES pushBack _settings;

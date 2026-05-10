@@ -24,13 +24,18 @@ params [
 if (isNil "_settings" || _markerId == "") exitWith { objNull };
 
 private _triggerRadius = _settings get "triggerRadius";
+private _triggerHeight = _settings getOrDefault ["triggerHeight", -1];
 private _triggerSide   = _settings get "triggerSide";
 private _debugLogging  = _settings get "debugLogging";
 
 private _markerPos = getMarkerPos _markerId;
 
 private _trigger = createTrigger ["EmptyDetector", _markerPos, true];
-_trigger setTriggerArea [_triggerRadius, _triggerRadius, 0, false, 100];
+if (_triggerHeight == -1) then {
+    _trigger setTriggerArea [_triggerRadius, _triggerRadius, 0, false];
+} else {
+    _trigger setTriggerArea [_triggerRadius, _triggerRadius, 0, false, _triggerHeight];
+};
 _trigger setTriggerActivation [_triggerSide, "PRESENT", false];
 
 _trigger setVariable ["RECONDO_POO_settings", _settings, false];

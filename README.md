@@ -58,6 +58,9 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **Hanoi Hannah Loudspeakers** - Spawn propaganda loudspeakers at marker positions with configurable volume, distance, cooldown, and an ACE "Rip Out Wires" interaction that awards Recon Points. Extends the [Hanoi Hannah Loudspeakers Mod](https://steamcommunity.com/sharedfiles/filedetails/?id=3696734884) (required dependency for this module)
 - **Village Uprising** - Civilians at village markers wander peacefully until a configured side enters the detection radius, then rally to a point, arm up, switch sides, and attack. Each village triggers independently. Supports multiple areas via paired village/rally markers
 
+### Base & Outpost Management
+- **Outpost System** - Defines an outpost location with multi-class supply tracking, AI garrison management, and dynamic map marker display. Class 1 (supply) drains over time and is replenished by delivering configurable objects. Class 3 (fuel) operates independently — when fuel hits 0%, a "Comms lost" state disables all outpost systems and changes the marker to red. Garrison AI are automatically detected, tracked, and tasked via LAMBS `taskGarrison`. Ammo resupply (Class 5) distributes compatible magazines from crates to garrison units. Garrison morale is tied to Class 1: when supply is above 0, garrison AI operate at "Normal" skill levels; when supply drops to 0, skills degrade to configurable "Low Morale" values. Supports QRF helicopter loading/dismounting with unit invincibility during transit. Map marker visibility is side-restricted via dropdown. All supply classes, garrison count, and fuel are persistent across mission restarts. Requires [LAMBS Danger](https://steamcommunity.com/sharedfiles/filedetails/?id=1858075458) for garrison behavior
+
 ### Utility Modules
 - **Persistence** - Save/load mission state across sessions with campaign ID support
 - **Player Persistence** - Save and restore player positions, directions, and full loadouts across sessions. Tracks specified playable units by Eden variable name with configurable restore delay. Saves immediately on disconnect. Resets saved position on respawn so players return to their default spawn
@@ -80,6 +83,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - [CBA_A3](https://steamcommunity.com/sharedfiles/filedetails/?id=450814997)
 - [ACE3](https://steamcommunity.com/sharedfiles/filedetails/?id=463939057)
 - [SOG Prairie Fire](https://store.steampowered.com/app/1227700/Arma_3_Creator_DLC_SOG_Prairie_Fire/) (recommended)
+- [LAMBS Danger](https://steamcommunity.com/sharedfiles/filedetails/?id=1858075458) (required for Outpost System module)
 - [Hanoi Hannah Loudspeakers Mod](https://steamcommunity.com/sharedfiles/filedetails/?id=3696734884) (required for Hanoi Hannah module only)
 
 ## Installation
@@ -138,6 +142,7 @@ There are two ways:
 | Hanoi Hannah Loudspeakers | [Hanoi Hannah Loudspeakers Mod](https://steamcommunity.com/sharedfiles/filedetails/?id=3696734884) | Hard dependency — module will not function without it |
 | RW Radio | [ACRE2](https://steamcommunity.com/sharedfiles/filedetails/?id=751965892) | Hard dependency — radio system built on ACRE2 |
 | AI Tweaks | [LAMBS Danger](https://steamcommunity.com/sharedfiles/filedetails/?id=1858075458) | Soft dependency — LAMBS features only apply if loaded |
+| Outpost System | [LAMBS Danger](https://steamcommunity.com/sharedfiles/filedetails/?id=1858075458) | Hard dependency — garrison AI uses `lambs_wp_fnc_taskGarrison` |
 | POO Site Hunt | [SOG Prairie Fire](https://store.steampowered.com/app/1227700/Arma_3_Creator_DLC_SOG_Prairie_Fire/) | Default classnames are SOG assets; replace in module attributes if not using SOG |
 | Objective HVT / Hostages | [SOG Prairie Fire](https://store.steampowered.com/app/1227700/Arma_3_Creator_DLC_SOG_Prairie_Fire/) | Default compositions use SOG assets; fully configurable via module attributes |
 | SOG PF Tracker Group | [SOG Prairie Fire](https://store.steampowered.com/app/1227700/Arma_3_Creator_DLC_SOG_Prairie_Fire/) | Hard dependency — uses SOG PF tracking functions |
@@ -161,7 +166,7 @@ Many modules support multiple instances:
 - Camps Random, Custom Site Spawn, Bad Civi, POO Site Hunt
 - Reinforcement Waves, QRF Mounted, SOG PF Tracker Group
 - Ambient Sound, Civilians Working, Village Uprising, Hanoi Hannah
-- Soil Sample, Destroy Powergrid
+- Soil Sample, Destroy Powergrid, Outpost System
 
 Single-instance modules (place only one):
 - Terminal, Persistence, Player Persistence, Vehicle Persistence, Inventory Persistence

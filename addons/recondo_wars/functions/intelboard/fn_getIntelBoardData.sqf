@@ -3,7 +3,7 @@
     Gathers all objective data for the Intel Board display
     
     Description:
-        Collects data from all objective modules (HVT, Hostages, Destroy, Hub & Subs, Jammer)
+        Collects data from all objective modules (HVT, Hostages, Destroy, Hub & Subs, Jammer, POO Sites)
         and formats it for the Intel Board dialog. Returns a hashmap containing
         categorized target data. Categories are grouped by the custom Intel Board Category Name
         set in each objective module, allowing different modules to share categories.
@@ -32,6 +32,7 @@ private _enableDestroy = _settings getOrDefault ["enableDestroy", true];
 private _enableHubSubs = _settings getOrDefault ["enableHubSubs", true];
 private _enableJammer = _settings getOrDefault ["enableJammer", true];
 private _enablePhotos = _settings getOrDefault ["enablePhotos", true];
+private _enablePOO = _settings getOrDefault ["enablePOO", true];
 private _showRevealedLocations = _settings getOrDefault ["showRevealedLocations", true];
 private _debugLogging = _settings getOrDefault ["debugLogging", false];
 
@@ -463,6 +464,50 @@ if (_enableSoilSample && !isNil "RECONDO_SOIL_INSTANCES" && {count RECONDO_SOIL_
 };
 
 // ========================================
+// POO SITE HUNT OBJECTIVES
+// ========================================
+
+if (_enablePOO && !isNil "RECONDO_POO_INSTANCES" && {count RECONDO_POO_INSTANCES > 0}) then {
+    {
+        private _pooSettings = _x;
+        private _objectiveName = _pooSettings get "objectiveName";
+        private _instanceId = _pooSettings get "instanceId";
+        private _categoryName = _pooSettings getOrDefault ["intelBoardCategoryName", ""];
+
+        if (_categoryName == "") then {
+            _categoryName = "POO SITES";
+        };
+
+        private _activeEntries = if (isNil "RECONDO_POO_ACTIVE") then { [] } else { RECONDO_POO_ACTIVE };
+        private _instanceEntries = _activeEntries select { (_x select 0) == _instanceId };
+
+        private _total = count _instanceEntries;
+        private _destroyedCount = { (_x select 3) == "destroyed" } count _instanceEntries;
+        private _remaining = _total - _destroyedCount;
+        private _isComplete = _remaining == 0 && _total > 0;
+
+        private _targetData = createHashMapFromArray [
+            ["id", format ["poo_%1", _forEachIndex]],
+            ["type", "poo"],
+            ["name", _objectiveName],
+            ["displayName", _objectiveName],
+            ["photo", ""],
+            ["background", ""],
+            ["status", if (_isComplete) then { format ["DESTROYED (%1/%1)", _total] } else { format ["%1/%2 REMAINING", _remaining, _total] }],
+            ["statusColor", if (_isComplete) then { [0.5, 0.8, 0.5, 1] } else { [1, 0.5, 0.5, 1] }],
+            ["location", ""],
+            ["complete", _isComplete],
+            ["objectiveName", _objectiveName]
+        ];
+
+        [_categoryName, "poo", _targetData] call _fnc_addToCategory;
+        _totalTargets = _totalTargets + 1;
+        if (!_isComplete) then { _remainingTargets = _remainingTargets + 1 };
+
+    } forEach RECONDO_POO_INSTANCES;
+};
+
+// ========================================
 // CONVERT CATEGORIES MAP TO ARRAY
 // ========================================
 
@@ -477,7 +522,8 @@ private _typePriority = createHashMapFromArray [
     ["hvt", 1],
     ["hostage", 2],
     ["photograph", 3],
-    ["soilsample", 4]
+    ["soilsample", 4],
+    ["poo", 5]
 ];
 
 _categories = [_categories, [], {

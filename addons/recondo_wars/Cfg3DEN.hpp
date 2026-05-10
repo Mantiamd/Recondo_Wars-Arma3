@@ -2528,4 +2528,49 @@ class Cfg3DEN {
         };
     };
     
+    class Recondo_Module_OutpostSystem {
+        class Object {
+            class Recondo_Outpost_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_Outpost_Supply {
+                displayName = "Class 1 (Supply) Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_Outpost_Fuel {
+                displayName = "Class 3 (Fuel) Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_Outpost_Garrison {
+                displayName = "Garrison Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_Outpost_Skills_Normal {
+                displayName = "Garrison Skills - Normal";
+                collapsed = 1;
+                class Attributes {};
+            };
+            class Recondo_Outpost_Skills_LowMorale {
+                displayName = "Garrison Skills - Low Morale";
+                collapsed = 1;
+                class Attributes {};
+            };
+            class Recondo_Outpost_Persistence {
+                displayName = "Persistence";
+                collapsed = 1;
+                class Attributes {};
+            };
+            class Recondo_Outpost_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+        };
+    };
+    
 };

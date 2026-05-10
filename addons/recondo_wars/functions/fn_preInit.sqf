@@ -319,4 +319,7 @@ RECONDO_RP_SOURCE_UNITS = nil;
 RECONDO_OPORD_SETTINGS = nil;
 RECONDO_OPORD_OPEN = false;
 
+// Outpost System global variables
+RECONDO_OUTPOST_INSTANCES = [];
+
 diag_log format ["[RECONDO_WARS] PreInit complete. Version: %1", RECONDO_WARS_VERSION];

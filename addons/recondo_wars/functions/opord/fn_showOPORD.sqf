@@ -92,10 +92,18 @@ _sep ctrlSetPosition [_panelX + 0.015, _panelY + 0.05, _panelW - 0.03, 0.001];
 _sep ctrlSetBackgroundColor [0.3, 0.3, 0.3, 0.5];
 _sep ctrlCommit 0;
 
-// OPORD text (scrollable)
+// OPORD text inside scrollable container
 private _textAreaH = _panelH - 0.11;
-private _textCtrl = _display ctrlCreate ["RscStructuredText", 9411];
-_textCtrl ctrlSetPosition [_panelX + 0.02, _panelY + 0.06, _panelW - 0.04, _textAreaH];
+private _scrollW = _panelW - 0.04;
+private _scrollbarW = 0.025;
+private _textW = _scrollW - _scrollbarW;
+
+private _scrollGroup = _display ctrlCreate ["RscControlsGroup", 9410];
+_scrollGroup ctrlSetPosition [_panelX + 0.02, _panelY + 0.06, _scrollW, _textAreaH];
+_scrollGroup ctrlCommit 0;
+
+private _textCtrl = _display ctrlCreate ["RscStructuredText", 9411, _scrollGroup];
+_textCtrl ctrlSetPosition [0, 0, _textW, _textAreaH];
 
 private _displayText = _fullText;
 _displayText = _displayText regexReplace ["<", "&lt;"];
@@ -105,6 +113,12 @@ _displayText = format ["<t color='#DDDDDD' size='0.9' font='PuristaLight'>%1</t>
 
 _textCtrl ctrlSetStructuredText parseText _displayText;
 _textCtrl ctrlCommit 0;
+
+private _contentH = ctrlTextHeight _textCtrl;
+if (_contentH > _textAreaH) then {
+    _textCtrl ctrlSetPosition [0, 0, _textW, _contentH];
+    _textCtrl ctrlCommit 0;
+};
 
 // Close button
 private _btnY = _panelY + _panelH - 0.045;

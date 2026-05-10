@@ -71,10 +71,18 @@ _sep ctrlSetPosition [_panelX + 0.015, _panelY + 0.075, _panelW - 0.03, 0.001];
 _sep ctrlSetBackgroundColor [0.3, 0.3, 0.3, 0.5];
 _sep ctrlCommit 0;
 
-// Prompt text area (scrollable structured text)
+// Prompt text area inside scrollable container
 private _textAreaH = _panelH - 0.14;
-private _textCtrl = _display ctrlCreate ["RscStructuredText", 9401];
-_textCtrl ctrlSetPosition [_panelX + 0.02, _panelY + 0.085, _panelW - 0.04, _textAreaH];
+private _scrollW = _panelW - 0.04;
+private _scrollbarW = 0.025;
+private _textW = _scrollW - _scrollbarW;
+
+private _scrollGroup = _display ctrlCreate ["RscControlsGroup", 9400];
+_scrollGroup ctrlSetPosition [_panelX + 0.02, _panelY + 0.085, _scrollW, _textAreaH];
+_scrollGroup ctrlCommit 0;
+
+private _textCtrl = _display ctrlCreate ["RscStructuredText", 9401, _scrollGroup];
+_textCtrl ctrlSetPosition [0, 0, _textW, _textAreaH];
 
 // Format prompt for display: escape < > and convert newlines to <br/>
 private _displayText = _prompt;
@@ -85,6 +93,12 @@ _displayText = format ["<t color='#CCCCCC' size='0.85' font='EtelkaMonospacePro'
 
 _textCtrl ctrlSetStructuredText parseText _displayText;
 _textCtrl ctrlCommit 0;
+
+private _contentH = ctrlTextHeight _textCtrl;
+if (_contentH > _textAreaH) then {
+    _textCtrl ctrlSetPosition [0, 0, _textW, _contentH];
+    _textCtrl ctrlCommit 0;
+};
 
 // ========================================
 // BUTTONS

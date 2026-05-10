@@ -4320,6 +4320,16 @@ class CfgVehicles {
                 defaultValue = "true";
                 category = "Recondo_IntelBoard_Display";
             };
+            class EnablePOO {
+                displayName = "Show POO Site Objectives";
+                tooltip = "Show POO Site Hunt objectives on the Intel Board.";
+                control = "Checkbox";
+                property = "Recondo_IntelBoard_EnablePOO";
+                expression = "_this setVariable ['enablepoo', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_IntelBoard_Display";
+            };
             class ShowRevealedLocations {
                 displayName = "Show Revealed Locations";
                 tooltip = "Show grid references for targets that have been revealed through intel.";
@@ -13849,6 +13859,16 @@ class CfgVehicles {
                 defaultValue = "false";
                 category = "Recondo_POO_General";
             };
+            class IntelBoardCategoryName {
+                displayName = "Intel Board Category Name";
+                tooltip = "Custom category name displayed on the Intel Board. Leave blank for default ('POO SITES').";
+                control = "Edit";
+                property = "Recondo_POO_IntelBoardCategoryName";
+                expression = "_this setVariable ['intelboardcategoryname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_POO_General";
+            };
             
             // ========================================
             // SPAWNING SETTINGS
@@ -13889,6 +13909,16 @@ class CfgVehicles {
                 expression = "_this setVariable ['triggerradius', _value, true];";
                 typeName = "NUMBER";
                 defaultValue = "800";
+                category = "Recondo_POO_Spawning";
+            };
+            class TriggerHeight {
+                displayName = "Trigger Height (meters)";
+                tooltip = "Vertical detection range of the trigger. Set to -1 for infinite height (recommended for mountainous terrain). A value of 100 means the trigger detects units within 100m above or below it.";
+                control = "Edit";
+                property = "Recondo_POO_TriggerHeight";
+                expression = "_this setVariable ['triggerheight', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """-1""";
                 category = "Recondo_POO_Spawning";
             };
             class TerrainClearRadius {
@@ -16106,6 +16136,492 @@ class CfgVehicles {
                 typeName = "BOOL";
                 defaultValue = "false";
                 category = "Recondo_SOGTracker_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+
+    // ========================================
+    // OUTPOST SYSTEM MODULE
+    // ========================================
+    class Recondo_Module_OutpostSystem: Module_F {
+        scope = 2;
+        displayName = "Outpost System";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\defend_ca.paa";
+        function = "Recondo_fnc_moduleOutpostSystem";
+        functionPriority = 5;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        canSetArea = 0;
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Defines an outpost location with supply tracking. Class 1 supplies drain over time and can be replenished by delivering supply objects into the outpost area. Supply level is displayed on the map marker.";
+            sync[] = {};
+        };
+        
+        class Attributes: AttributesBase {
+            
+            // ========================================
+            // GENERAL SETTINGS
+            // ========================================
+            class OutpostName {
+                displayName = "Outpost Name";
+                tooltip = "Display name for this outpost. Shown on the map marker and used for logging.";
+                control = "Edit";
+                property = "Recondo_Outpost_OutpostName";
+                expression = "_this setVariable ['outpostname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Outpost Alpha""";
+                category = "Recondo_Outpost_General";
+            };
+            class MarkerName {
+                displayName = "Marker Name";
+                tooltip = "Exact name of the invisible map marker that defines the outpost center (e.g., OUTPOST_1).";
+                control = "Edit";
+                property = "Recondo_Outpost_MarkerName";
+                expression = "_this setVariable ['markername', _value, true];";
+                typeName = "STRING";
+                defaultValue = """OUTPOST_1""";
+                category = "Recondo_Outpost_General";
+            };
+            class OutpostRadius {
+                displayName = "Outpost Radius (meters)";
+                tooltip = "Radius around the marker center that defines the outpost area. Used for resupply object detection.";
+                control = "Edit";
+                property = "Recondo_Outpost_OutpostRadius";
+                expression = "_this setVariable ['outpostradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """25""";
+                category = "Recondo_Outpost_General";
+            };
+            
+            // ========================================
+            // SUPPLY SETTINGS
+            // ========================================
+            class Class1Classname {
+                displayName = "Class 1 Object Classname";
+                tooltip = "Classname of the object that replenishes Class 1 supply when detected inside the outpost radius. The object is consumed (deleted) on detection.";
+                control = "Edit";
+                property = "Recondo_Outpost_Class1Classname";
+                expression = "_this setVariable ['class1classname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Outpost_Supply";
+            };
+            class Class1ResupplyAmount {
+                displayName = "Class 1 Resupply Amount";
+                tooltip = "How much Class 1 supply each consumed object restores.";
+                control = "Edit";
+                property = "Recondo_Outpost_Class1ResupplyAmount";
+                expression = "_this setVariable ['class1resupplyamount', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """25""";
+                category = "Recondo_Outpost_Supply";
+            };
+            class MaxClass1Supply {
+                displayName = "Max Class 1 Supply";
+                tooltip = "Maximum Class 1 supply level for this outpost.";
+                control = "Edit";
+                property = "Recondo_Outpost_MaxClass1Supply";
+                expression = "_this setVariable ['maxclass1supply', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """100""";
+                category = "Recondo_Outpost_Supply";
+            };
+            class DrainAmount {
+                displayName = "Drain Amount";
+                tooltip = "How much Class 1 supply is consumed per drain interval.";
+                control = "Edit";
+                property = "Recondo_Outpost_DrainAmount";
+                expression = "_this setVariable ['drainamount', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """1""";
+                category = "Recondo_Outpost_Supply";
+            };
+            class DrainInterval {
+                displayName = "Drain Interval (seconds)";
+                tooltip = "Time in seconds between each supply drain tick.";
+                control = "Edit";
+                property = "Recondo_Outpost_DrainInterval";
+                expression = "_this setVariable ['draininterval', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """300""";
+                category = "Recondo_Outpost_Supply";
+            };
+            class DetectionInterval {
+                displayName = "Detection Interval (seconds)";
+                tooltip = "How often (in seconds) the system scans for resupply objects inside the outpost radius.";
+                control = "Edit";
+                property = "Recondo_Outpost_DetectionInterval";
+                expression = "_this setVariable ['detectioninterval', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """30""";
+                category = "Recondo_Outpost_Supply";
+            };
+            
+            // ========================================
+            // CLASS 3 (FUEL) SETTINGS
+            // ========================================
+            class Class3Classname {
+                displayName = "Class 3 Fuel Object Classname";
+                tooltip = "Classname of the object that replenishes Class 3 (fuel) supply when detected inside the outpost radius. The object is consumed on detection.";
+                control = "Edit";
+                property = "Recondo_Outpost_Class3Classname";
+                expression = "_this setVariable ['class3classname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Outpost_Fuel";
+            };
+            class Class3ResupplyAmount {
+                displayName = "Class 3 Resupply Amount";
+                tooltip = "How much Class 3 (fuel) supply each consumed object restores.";
+                control = "Edit";
+                property = "Recondo_Outpost_Class3ResupplyAmount";
+                expression = "_this setVariable ['class3resupplyamount', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """25""";
+                category = "Recondo_Outpost_Fuel";
+            };
+            class MaxClass3Supply {
+                displayName = "Max Class 3 Supply";
+                tooltip = "Maximum Class 3 (fuel) supply level for this outpost.";
+                control = "Edit";
+                property = "Recondo_Outpost_MaxClass3Supply";
+                expression = "_this setVariable ['maxclass3supply', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """100""";
+                category = "Recondo_Outpost_Fuel";
+            };
+            class Class3DrainAmount {
+                displayName = "Class 3 Drain Amount";
+                tooltip = "How much Class 3 (fuel) supply is consumed per drain interval.";
+                control = "Edit";
+                property = "Recondo_Outpost_Class3DrainAmount";
+                expression = "_this setVariable ['class3drainamount', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """1""";
+                category = "Recondo_Outpost_Fuel";
+            };
+            class Class3DrainInterval {
+                displayName = "Class 3 Drain Interval (seconds)";
+                tooltip = "Time in seconds between each Class 3 (fuel) drain tick.";
+                control = "Edit";
+                property = "Recondo_Outpost_Class3DrainInterval";
+                expression = "_this setVariable ['class3draininterval', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """300""";
+                category = "Recondo_Outpost_Fuel";
+            };
+            class MarkerVisibleSide {
+                displayName = "Marker Visible To Side";
+                tooltip = "Which side can see the outpost status marker on the map. Players on other sides will not see it.";
+                control = "Combo";
+                property = "Recondo_Outpost_MarkerVisibleSide";
+                expression = "_this setVariable ['markervisibleside', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                category = "Recondo_Outpost_General";
+                class Values {
+                    class West { name = "BLUFOR (West)"; value = 0; default = 1; };
+                    class East { name = "OPFOR (East)"; value = 1; };
+                    class Guer { name = "Independent"; value = 2; };
+                    class All { name = "All Sides"; value = 3; };
+                };
+            };
+            
+            // ========================================
+            // GARRISON SETTINGS
+            // ========================================
+            class GarrisonClassnames {
+                displayName = "Garrison Unit Classnames";
+                tooltip = "Comma-separated list of AI unit classnames eligible for garrison duty. Non-player AI matching these classnames found inside the outpost radius will be garrisoned.";
+                control = "EditMulti3";
+                property = "Recondo_Outpost_GarrisonClassnames";
+                expression = "_this setVariable ['garrisonclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Outpost_Garrison";
+            };
+            class MaxGarrison {
+                displayName = "Max Garrison";
+                tooltip = "Maximum number of AI units that can be garrisoned at this outpost.";
+                control = "Edit";
+                property = "Recondo_Outpost_MaxGarrison";
+                expression = "_this setVariable ['maxgarrison', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """20""";
+                category = "Recondo_Outpost_Garrison";
+            };
+            class AmmoResupplyClassname {
+                displayName = "Ammo Resupply Object Classname";
+                tooltip = "Classname of an ammo crate/container placed in the outpost area. The system will pull compatible magazines from it and distribute them to garrisoned AI. The crate is deleted when empty.";
+                control = "Edit";
+                property = "Recondo_Outpost_AmmoResupplyClassname";
+                expression = "_this setVariable ['ammoresupplyclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_Outpost_Garrison";
+            };
+            class AmmoResupplyInterval {
+                displayName = "Ammo Resupply Interval (seconds)";
+                tooltip = "How often (in seconds) the system checks for ammo crates and distributes magazines to garrisoned AI.";
+                control = "Edit";
+                property = "Recondo_Outpost_AmmoResupplyInterval";
+                expression = "_this setVariable ['ammoresupplyinterval', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """300""";
+                category = "Recondo_Outpost_Garrison";
+            };
+            class QRFTeamSize {
+                displayName = "QRF Team Size";
+                tooltip = "Number of garrison-type AI units loaded into a synced helicopter when 'Load QRF Team' is used. Sync a helicopter to this module in Eden to enable QRF actions.";
+                control = "Edit";
+                property = "Recondo_Outpost_QRFTeamSize";
+                expression = "_this setVariable ['qrfteamsize', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """4""";
+                category = "Recondo_Outpost_Garrison";
+            };
+            
+            // ========================================
+            // GARRISON SKILLS - NORMAL (Class 1 above 0)
+            // ========================================
+            class NormalAimingAccuracy {
+                displayName = "Normal - Aiming Accuracy";
+                tooltip = "Garrison AI aiming accuracy when Class 1 supply is above 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_NormalAimingAccuracy";
+                expression = "_this setVariable ['normal_aimingaccuracy', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.3";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_Normal";
+            };
+            class NormalAimingShake {
+                displayName = "Normal - Aiming Shake";
+                tooltip = "Garrison AI aiming shake when Class 1 supply is above 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_NormalAimingShake";
+                expression = "_this setVariable ['normal_aimingshake', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.3";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_Normal";
+            };
+            class NormalAimingSpeed {
+                displayName = "Normal - Aiming Speed";
+                tooltip = "Garrison AI aiming speed when Class 1 supply is above 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_NormalAimingSpeed";
+                expression = "_this setVariable ['normal_aimingspeed', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.3";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_Normal";
+            };
+            class NormalSpotDistance {
+                displayName = "Normal - Spot Distance";
+                tooltip = "Garrison AI spotting distance when Class 1 supply is above 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_NormalSpotDistance";
+                expression = "_this setVariable ['normal_spotdistance', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.5";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_Normal";
+            };
+            class NormalSpotTime {
+                displayName = "Normal - Spot Time";
+                tooltip = "Garrison AI spotting time when Class 1 supply is above 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_NormalSpotTime";
+                expression = "_this setVariable ['normal_spottime', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.5";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_Normal";
+            };
+            class NormalCourage {
+                displayName = "Normal - Courage";
+                tooltip = "Garrison AI courage when Class 1 supply is above 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_NormalCourage";
+                expression = "_this setVariable ['normal_courage', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "1.0";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_Normal";
+            };
+            class NormalCommanding {
+                displayName = "Normal - Commanding";
+                tooltip = "Garrison AI commanding skill when Class 1 supply is above 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_NormalCommanding";
+                expression = "_this setVariable ['normal_commanding', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.5";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_Normal";
+            };
+            class NormalGeneral {
+                displayName = "Normal - General";
+                tooltip = "Garrison AI general skill when Class 1 supply is above 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_NormalGeneral";
+                expression = "_this setVariable ['normal_general', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.3";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_Normal";
+            };
+            class NormalReloadSpeed {
+                displayName = "Normal - Reload Speed";
+                tooltip = "Garrison AI reload speed when Class 1 supply is above 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_NormalReloadSpeed";
+                expression = "_this setVariable ['normal_reloadspeed', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.5";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_Normal";
+            };
+            
+            // ========================================
+            // GARRISON SKILLS - LOW MORALE (Class 1 at 0)
+            // ========================================
+            class LowMoraleAimingAccuracy {
+                displayName = "Low Morale - Aiming Accuracy";
+                tooltip = "Garrison AI aiming accuracy when Class 1 supply is at 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_LowMoraleAimingAccuracy";
+                expression = "_this setVariable ['lowmorale_aimingaccuracy', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.1";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_LowMorale";
+            };
+            class LowMoraleAimingShake {
+                displayName = "Low Morale - Aiming Shake";
+                tooltip = "Garrison AI aiming shake when Class 1 supply is at 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_LowMoraleAimingShake";
+                expression = "_this setVariable ['lowmorale_aimingshake', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.6";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_LowMorale";
+            };
+            class LowMoraleAimingSpeed {
+                displayName = "Low Morale - Aiming Speed";
+                tooltip = "Garrison AI aiming speed when Class 1 supply is at 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_LowMoraleAimingSpeed";
+                expression = "_this setVariable ['lowmorale_aimingspeed', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.1";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_LowMorale";
+            };
+            class LowMoraleSpotDistance {
+                displayName = "Low Morale - Spot Distance";
+                tooltip = "Garrison AI spotting distance when Class 1 supply is at 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_LowMoraleSpotDistance";
+                expression = "_this setVariable ['lowmorale_spotdistance', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.2";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_LowMorale";
+            };
+            class LowMoraleSpotTime {
+                displayName = "Low Morale - Spot Time";
+                tooltip = "Garrison AI spotting time when Class 1 supply is at 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_LowMoraleSpotTime";
+                expression = "_this setVariable ['lowmorale_spottime', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.2";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_LowMorale";
+            };
+            class LowMoraleCourage {
+                displayName = "Low Morale - Courage";
+                tooltip = "Garrison AI courage when Class 1 supply is at 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_LowMoraleCourage";
+                expression = "_this setVariable ['lowmorale_courage', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.3";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_LowMorale";
+            };
+            class LowMoraleCommanding {
+                displayName = "Low Morale - Commanding";
+                tooltip = "Garrison AI commanding skill when Class 1 supply is at 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_LowMoraleCommanding";
+                expression = "_this setVariable ['lowmorale_commanding', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.2";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_LowMorale";
+            };
+            class LowMoraleGeneral {
+                displayName = "Low Morale - General";
+                tooltip = "Garrison AI general skill when Class 1 supply is at 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_LowMoraleGeneral";
+                expression = "_this setVariable ['lowmorale_general', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.1";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_LowMorale";
+            };
+            class LowMoraleReloadSpeed {
+                displayName = "Low Morale - Reload Speed";
+                tooltip = "Garrison AI reload speed when Class 1 supply is at 0.";
+                control = "Slider";
+                property = "Recondo_Outpost_LowMoraleReloadSpeed";
+                expression = "_this setVariable ['lowmorale_reloadspeed', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.2";
+                class Slider { range[] = {0, 1}; };
+                category = "Recondo_Outpost_Skills_LowMorale";
+            };
+            
+            // ========================================
+            // PERSISTENCE SETTINGS
+            // ========================================
+            class EnablePersistence {
+                displayName = "Enable Persistence";
+                tooltip = "Save and load the outpost supply level across mission restarts. Requires the Persistence module.";
+                control = "Checkbox";
+                property = "Recondo_Outpost_EnablePersistence";
+                expression = "_this setVariable ['enablepersistence', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Outpost_Persistence";
+            };
+            
+            // ========================================
+            // DEBUG SETTINGS
+            // ========================================
+            class DebugLogging {
+                displayName = "Debug Logging";
+                tooltip = "Enable detailed RPT logging for this module.";
+                control = "Checkbox";
+                property = "Recondo_Outpost_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Outpost_Debug";
             };
             
             class ModuleDescription: ModuleDescription {};
