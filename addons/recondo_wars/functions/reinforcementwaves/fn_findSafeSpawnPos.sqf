@@ -26,27 +26,26 @@ private _reverseDir = (_detectorDir + 180) mod 360;
 private _initialPos = _detectorPos getPos [_spawnDistance, _reverseDir];
 _initialPos set [2, 0]; // Ensure on ground
 
-// Function to check if position is safe
+// Cache target-side units once instead of iterating allUnits per direction
+private _targetUnits = allUnits select {
+    alive _x && side _x == _targetSide && {(getPosATL _x select 2) <= _heightLimit}
+};
+
 private _fnc_isSafe = {
-    params ["_pos", "_safetyDist", "_targetSide", "_heightLimit"];
+    params ["_pos", "_safetyDist", "_targetUnits"];
     
     private _safe = true;
     {
-        if (alive _x && side _x == _targetSide) then {
-            private _targetHeight = (getPosATL _x) select 2;
-            if (_targetHeight <= _heightLimit) then {
-                if (_x distance _pos < _safetyDist) exitWith {
-                    _safe = false;
-                };
-            };
+        if (_x distance _pos < _safetyDist) exitWith {
+            _safe = false;
         };
-    } forEach allUnits;
+    } forEach _targetUnits;
     
     _safe
 };
 
 // Check if initial position is safe
-if ([_initialPos, _safetyDistance, _targetSide, _heightLimit] call _fnc_isSafe) exitWith {
+if ([_initialPos, _safetyDistance, _targetUnits] call _fnc_isSafe) exitWith {
     [_initialPos, true]
 };
 
@@ -61,7 +60,7 @@ private _foundSafe = false;
     private _testPos = _detectorPos getPos [_spawnDistance, _testDir];
     _testPos set [2, 0];
     
-    if ([_testPos, _safetyDistance, _targetSide, _heightLimit] call _fnc_isSafe) exitWith {
+    if ([_testPos, _safetyDistance, _targetUnits] call _fnc_isSafe) exitWith {
         _bestPos = _testPos;
         _foundSafe = true;
     };
@@ -69,16 +68,11 @@ private _foundSafe = false;
     // Track the position with the greatest distance from any target
     private _minDist = 999999;
     {
-        if (alive _x && side _x == _targetSide) then {
-            private _targetHeight = (getPosATL _x) select 2;
-            if (_targetHeight <= _heightLimit) then {
-                private _dist = _x distance _testPos;
-                if (_dist < _minDist) then {
-                    _minDist = _dist;
-                };
-            };
+        private _dist = _x distance _testPos;
+        if (_dist < _minDist) then {
+            _minDist = _dist;
         };
-    } forEach allUnits;
+    } forEach _targetUnits;
     
     if (_minDist > _bestDistance) then {
         _bestDistance = _minDist;

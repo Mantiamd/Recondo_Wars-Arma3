@@ -133,13 +133,14 @@ if (_debug) then {
     diag_log format ["[RECONDO_RWR] Exempt Groups: %1", _exemptGroups];
 };
 
-// JIP handler - sync state to joining players
+// JIP handler - re-broadcast current state so joining players receive it
 addMissionEventHandler ["PlayerConnected", {
     params ["_id", "_uid", "_name", "_jip", "_owner"];
     if (_jip) then {
-        // Sync current state to JIP player
-        RECONDO_RWR_SETTINGS remoteExec ["", _owner];
-        RECONDO_RWR_BATTERY_LEVELS remoteExec ["", _owner];
+        publicVariable "RECONDO_RWR_SETTINGS";
+        publicVariable "RECONDO_RWR_BATTERY_LEVELS";
+        publicVariable "RECONDO_RWR_GROUP_TIMES";
+        publicVariable "RECONDO_RWR_CALL_COUNT";
     };
 }];
 
@@ -158,7 +159,7 @@ if (_enablePersistence && {!isNil "RECONDO_PERSISTENCE_SETTINGS"}) then {
         ["RWR_Batteries", RECONDO_RWR_BATTERY_LEVELS] call Recondo_fnc_setSaveData;
         ["RWR_GroupTimes", RECONDO_RWR_GROUP_TIMES] call Recondo_fnc_setSaveData;
         ["RWR_CallCount", RECONDO_RWR_CALL_COUNT] call Recondo_fnc_setSaveData;
-        saveMissionProfileNamespace;
+        call Recondo_fnc_queueSave;
         
         if (RECONDO_RWR_SETTINGS get "enableDebug") then {
             diag_log "[RECONDO_RWR] Auto-saved battery and triangulation data";

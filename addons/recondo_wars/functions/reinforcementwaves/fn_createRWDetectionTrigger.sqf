@@ -69,30 +69,26 @@ if (_debugLogging) then {
             _triggered = true;
         };
         
+        private _cachedUnits = allUnits;
+
         // Find all reinforcement side units within trigger radius
-        private _detectorUnits = allUnits select {
+        private _detectorUnits = _cachedUnits select {
             alive _x &&
             side _x == _reinforcementSide &&
             _x distance _modulePos <= _triggerRadius &&
             (getPosATL _x select 2) <= _heightLimit
         };
         
+        private _targetCandidates = _cachedUnits select {
+            alive _x && side _x == _targetSide && {(getPosATL _x select 2) <= _heightLimit}
+        };
+        
         // Check if any detector unit has detected a target side unit
         {
             private _detector = _x;
             
-            // Check what this unit knows about
             {
                 private _target = _x;
-                
-                // Skip if not target side or not alive
-                if (!alive _target || side _target != _targetSide) then { continue };
-                
-                // Check height filter
-                private _targetHeight = (getPosATL _target) select 2;
-                if (_targetHeight > _heightLimit) then { continue };
-                
-                // Check knowsAbout threshold
                 private _knowsAbout = _detector knowsAbout _target;
                 
                 if (_knowsAbout >= _detectionThreshold) then {
@@ -126,7 +122,7 @@ if (_debugLogging) then {
                 };
                 
                 if (_triggered) exitWith {};
-            } forEach allUnits;
+            } forEach _targetCandidates;
             
             if (_triggered) exitWith {};
         } forEach _detectorUnits;

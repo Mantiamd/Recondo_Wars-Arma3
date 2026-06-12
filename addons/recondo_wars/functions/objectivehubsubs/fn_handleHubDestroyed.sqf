@@ -65,7 +65,7 @@ if (!isNil "_settings") then {
     if !(_hubMarker in _savedDestroyed) then {
         _savedDestroyed pushBack _hubMarker;
         [_persistenceKey + "_DESTROYED", _savedDestroyed] call Recondo_fnc_setSaveData;
-        saveMissionProfileNamespace;
+        call Recondo_fnc_queueSave;
     };
     
     // Optionally spawn destroyed composition

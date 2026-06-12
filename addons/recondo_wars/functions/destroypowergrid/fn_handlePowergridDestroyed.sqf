@@ -42,7 +42,7 @@ diag_log format ["[RECONDO_POWERGRID] Power grid destroyed: %1", _instanceId];
 if (_enablePersistence) then {
     private _persistenceKey = format ["POWERGRID_%1_DESTROYED", _instanceId];
     [_persistenceKey, true] call Recondo_fnc_setSaveData;
-    saveMissionProfileNamespace;
+    call Recondo_fnc_queueSave;
 
     if (_debugLogging) then {
         diag_log format ["[RECONDO_POWERGRID] Saved destroyed state for '%1'", _instanceId];

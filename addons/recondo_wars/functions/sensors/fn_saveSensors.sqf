@@ -102,7 +102,7 @@ private _vehicleCounts = [];
 } forEach (keys _vehicleCountMap);
 ["SENSORS_VEHICLE_COUNT", _vehicleCounts] call Recondo_fnc_setSaveData;
 
-saveMissionProfileNamespace;
+call Recondo_fnc_queueSave;
 
 if (_debugLogging) then {
     diag_log format ["[RECONDO_SENSORS] Saved %1 sensors to persistence (written to disk)", count _saveData];

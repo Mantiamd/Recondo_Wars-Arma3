@@ -184,7 +184,7 @@ if (count _savedActive > 0 && _enablePersistence) then {
         [_persistenceKey + "_ACTIVE", _selectedMarkers] call Recondo_fnc_setSaveData;
         [_persistenceKey + "_TARGETS", _targetAssignments] call Recondo_fnc_setSaveData;
         [_persistenceKey + "_DESTROYED", []] call Recondo_fnc_setSaveData;
-        saveMissionProfileNamespace;
+        call Recondo_fnc_queueSave;
     };
 
     if (_debugLogging) then {

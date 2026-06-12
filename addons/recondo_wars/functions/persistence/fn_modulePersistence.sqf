@@ -138,7 +138,7 @@ private _resetPending = missionProfileNamespace getVariable [_resetPendingTag, f
 if (_resetPending) then {
     // Clear the flag
     missionProfileNamespace setVariable [_resetPendingTag, nil];
-    saveMissionProfileNamespace;
+    call Recondo_fnc_queueSave;
     
     diag_log "[RECONDO_PERSISTENCE] Reset detected - showing reroll notification to players";
     

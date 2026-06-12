@@ -39,6 +39,7 @@ private _trackerSide = _logic getVariable ["trackerside", "EAST"];
 private _markerPrefix = _logic getVariable ["markerprefix", "TRACKER_"];
 
 private _triggerRadius = _logic getVariable ["triggerradius", 100];
+private _heightLimit = _logic getVariable ["heightlimit", 100];
 
 private _trackerClassnamesRaw = _logic getVariable ["trackerclassnames", ""];
 private _trackerClassnames = [];
@@ -59,6 +60,7 @@ private _settings = createHashMapFromArray [
     ["trackerSide", _trackerSide],
     ["markerPrefix", _markerPrefix],
     ["triggerRadius", _triggerRadius],
+    ["heightLimit", _heightLimit],
     ["trackerClassnames", _trackerClassnames]
 ];
 
@@ -88,6 +90,7 @@ if (_debugLogging) then {
     diag_log format ["[RECONDO_SOGTRACKER] Tracker Side: %1", _trackerSide];
     diag_log format ["[RECONDO_SOGTRACKER] Marker Prefix: %1", _markerPrefix];
     diag_log format ["[RECONDO_SOGTRACKER] Trigger Radius: %1m", _triggerRadius];
+    diag_log format ["[RECONDO_SOGTRACKER] Height Limit: %1m", _heightLimit];
     diag_log format ["[RECONDO_SOGTRACKER] Markers Found: %1", count _markers];
     diag_log format ["[RECONDO_SOGTRACKER] Tracker Classnames: %1", _trackerClassnames];
     {

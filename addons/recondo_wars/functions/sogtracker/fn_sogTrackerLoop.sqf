@@ -22,6 +22,7 @@ if (isNil "_settings") exitWith {
 
 private _debugLogging = _settings get "debugLogging";
 private _triggerRadius = _settings get "triggerRadius";
+private _heightLimit = _settings get "heightLimit";
 private _activeMarkers = +_markers;
 
 if (_debugLogging) then {
@@ -39,7 +40,7 @@ while {count _activeMarkers > 0} do {
         private _triggerGroup = grpNull;
 
         {
-            if (alive _x && {side group _x == west} && {(_x distance2D _markerPos) < _triggerRadius}) exitWith {
+            if (alive _x && {side group _x == west} && {(_x distance2D _markerPos) < _triggerRadius} && {(getPosATL _x select 2) <= _heightLimit}) exitWith {
                 _triggerGroup = group _x;
             };
         } forEach allUnits;

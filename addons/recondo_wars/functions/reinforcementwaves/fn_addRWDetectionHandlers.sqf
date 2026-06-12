@@ -64,25 +64,19 @@ if (_debugLogging) then {
             _triggered = true;
         };
         
-        // Check all units in this group for detection
+        private _targetCandidates = allUnits select {
+            alive _x && side _x == _targetSide && {(getPosATL _x select 2) <= _heightLimit}
+        };
+
         {
             private _detector = _x;
             if (!alive _detector) then { continue };
             
-            // Check against all target side units
             {
                 private _target = _x;
-                if (!alive _target || side _target != _targetSide) then { continue };
-                
-                // Height filter
-                private _targetHeight = (getPosATL _target) select 2;
-                if (_targetHeight > _heightLimit) then { continue };
-                
-                // Check knowsAbout
                 private _knowsAbout = _detector knowsAbout _target;
                 
                 if (_knowsAbout >= _detectionThreshold) then {
-                    // Detection! Mark wave as spawned
                     _spawnedWaves pushBack _waveTrackId;
                     _triggered = true;
                     
@@ -91,12 +85,11 @@ if (_debugLogging) then {
                             _moduleId, _group, _nextWaveNumber];
                     };
                     
-                    // Spawn next wave
                     [_moduleSettings, _group, _targetGroup, _nextWaveNumber, _partyId] call Recondo_fnc_spawnPursuitGroup;
                 };
                 
                 if (_triggered) exitWith {};
-            } forEach allUnits;
+            } forEach _targetCandidates;
             
             if (_triggered) exitWith {};
         } forEach (units _group);

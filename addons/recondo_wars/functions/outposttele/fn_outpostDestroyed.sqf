@@ -71,7 +71,7 @@ if (_enablePersistence) then {
     if !(_markerId in _destroyedMarkers) then {
         _destroyedMarkers pushBack _markerId;
         [_persistenceKey + "_DESTROYED", _destroyedMarkers] call Recondo_fnc_setSaveData;
-        saveMissionProfileNamespace;
+        call Recondo_fnc_queueSave;
         
         if (_debugLogging) then {
             diag_log format ["[RECONDO_OUTPOSTTELE] Saved destroyed state for marker '%1'. Total destroyed: %2", _markerId, count _destroyedMarkers];
@@ -93,10 +93,12 @@ private _allowedSide = switch (_allowedSideNum) do {
 
 private _markerPos = getMarkerPos _markerId;
 private _gridRef = mapGridPosition _markerPos;
-private _gridLen = count _gridRef;
-private _halfLen = _gridLen / 2;
-private _eastingGrid = _gridRef select [0, 3];
-private _northingGrid = _gridRef select [_halfLen, 3];
+private _gridDigits = (_gridRef splitString " ") joinString "";
+private _gridLen = count _gridDigits;
+private _halfLen = floor (_gridLen / 2);
+private _digitsPerHalf = (4 min _halfLen) max 1;
+private _eastingGrid = _gridDigits select [0, _digitsPerHalf];
+private _northingGrid = _gridDigits select [_halfLen, _digitsPerHalf];
 
 private _notificationBody = format ["%1 has been destroyed at grid %2 %3. It will be unavailable on next restart.", _displayName, _eastingGrid, _northingGrid];
 

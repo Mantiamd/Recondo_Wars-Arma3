@@ -142,3 +142,15 @@ class Recondo_OPORD_Base {
     class ControlsBackground {};
     class Controls {};
 };
+
+class Recondo_Notebook_Base {
+    idd = 9650;
+    movingEnable = 0;
+    enableSimulation = 1;
+
+    onLoad = "uiNamespace setVariable ['Recondo_Notebook_Display', _this select 0];";
+    onUnload = "uiNamespace setVariable ['Recondo_Notebook_Display', displayNull]; RECONDO_NOTEBOOK_OPEN = false; if (!isNil 'RECONDO_NOTEBOOK_PAGES') then { call Recondo_fnc_notebookSaveData; };";
+
+    class ControlsBackground {};
+    class Controls {};
+};

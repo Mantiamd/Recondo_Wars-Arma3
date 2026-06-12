@@ -73,7 +73,7 @@ if (!isNil "_settings") then {
     private _markerPrefix = _settings getOrDefault ["markerPrefix", "HVT_"];
     private _persistenceKey = format ["HVT_%1_%2", _markerPrefix, _objectiveName];
     [_persistenceKey + "_CAPTURED", true] call Recondo_fnc_setSaveData;
-    saveMissionProfileNamespace;
+    call Recondo_fnc_queueSave;
     
     private _debugLogging = _settings getOrDefault ["debugLogging", false];
     if (_debugLogging) then {

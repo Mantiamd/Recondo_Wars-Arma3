@@ -332,7 +332,7 @@ diag_log "[RECONDO_TERMINAL] Cleared: inventory persistence data";
 
 missionProfileNamespace setVariable [["RESET_PENDING"] call _fnc_getTag, true];
 
-saveMissionProfileNamespace;
+call Recondo_fnc_queueSave;
 
 diag_log "[RECONDO_TERMINAL] All persistence data cleared. Changes will take effect on next mission restart.";
 

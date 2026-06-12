@@ -55,43 +55,26 @@ if (_debugLogging) then {
     diag_log format ["[RECONDO_INTELITEMS] Processing POW turn-in: %1 (%2) by player %3", _powName, _powType, name _player];
 };
 
-// Trigger intel reveal using the POW intel value as weight
-// The Intel system's reveal function handles weighted random selection
-private _playerGroup = group _player;
-private _groupId = str _playerGroup;
-
-// Check if Intel system is available
-if (isNil "RECONDO_INTEL_TARGETS" || {count RECONDO_INTEL_TARGETS == 0}) then {
-    // No intel targets registered, just notify
+// Route the reveal through the standard intel turn-in flow with the "pow" source.
+// processTurnIn handles weighted selection, the interrogation intel card, and the intel log.
+// Guard against the Intel module being absent so we never call into a nil target list.
+if (isNil "RECONDO_INTEL_TARGETS") then {
     private _msg = format ["Prisoner %1 turned in. No actionable intelligence obtained.", _powName];
     [_msg] remoteExec ["hint", _player];
     
     if (_debugLogging) then {
-        diag_log "[RECONDO_INTELITEMS] No intel targets available for POW turn-in";
+        diag_log "[RECONDO_INTELITEMS] No intel system available for POW turn-in";
     };
 } else {
-    // Attempt to reveal intel using weighted random
-    // Use the POW intel value to modify the chance
-    private _revealed = false;
-    
-    // Roll against the intel value (lower value = less likely to reveal)
+    // Configured POW intel value gates the chance of yielding actionable intel
     if (random 1 <= _intelValue) then {
-        // Try to reveal a random target
-        _revealed = [_playerGroup] call Recondo_fnc_revealRandomTarget;
-    };
-    
-    if (_revealed) then {
-        // Success message handled by revealRandomTarget
-        if (_debugLogging) then {
-            diag_log format ["[RECONDO_INTELITEMS] POW turn-in revealed intel for group %1", _groupId];
-        };
+        [_player, "pow"] call Recondo_fnc_processTurnIn;
     } else {
-        // No reveal this time
         private _msg = format ["Prisoner %1 turned in. No actionable intelligence obtained.", _powName];
         [_msg] remoteExec ["hint", _player];
         
         if (_debugLogging) then {
-            diag_log "[RECONDO_INTELITEMS] POW turn-in did not reveal intel (random roll or no targets)";
+            diag_log "[RECONDO_INTELITEMS] POW turn-in did not yield intel (random roll)";
         };
     };
 };

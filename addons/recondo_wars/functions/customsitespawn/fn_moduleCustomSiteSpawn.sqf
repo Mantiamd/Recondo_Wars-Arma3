@@ -187,7 +187,7 @@ if (count _selectedMarkers == 0) then {
     if (_enablePersistence) then {
         [_persistenceKey + "_MARKERS", _selectedMarkers] call Recondo_fnc_setSaveData;
         [_persistenceKey + "_COMPMAP", _compositionMap] call Recondo_fnc_setSaveData;
-        saveMissionProfileNamespace;
+        call Recondo_fnc_queueSave;
     };
     
     if (_debugLogging) then {

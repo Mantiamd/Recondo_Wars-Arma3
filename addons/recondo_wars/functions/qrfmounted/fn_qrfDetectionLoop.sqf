@@ -65,11 +65,17 @@ if (_debugLogging) then {
             _triggered = true;
         };
 
-        private _detectorUnits = allUnits select {
+        private _cachedUnits = allUnits;
+
+        private _detectorUnits = _cachedUnits select {
             alive _x &&
             side _x == _qrfSide &&
             _x distance _modulePos <= _triggerRadius &&
             (getPosATL _x select 2) <= _heightLimit
+        };
+
+        private _targetCandidates = _cachedUnits select {
+            alive _x && side _x == _targetSide && {(getPosATL _x select 2) <= _heightLimit}
         };
 
         {
@@ -77,12 +83,6 @@ if (_debugLogging) then {
 
             {
                 private _target = _x;
-
-                if (!alive _target || side _target != _targetSide) then { continue };
-
-                private _targetHeight = (getPosATL _target) select 2;
-                if (_targetHeight > _heightLimit) then { continue };
-
                 private _knowsAbout = _detector knowsAbout _target;
 
                 if (_knowsAbout >= _detectionThreshold) then {
@@ -100,7 +100,7 @@ if (_debugLogging) then {
                 };
 
                 if (_triggered) exitWith {};
-            } forEach allUnits;
+            } forEach _targetCandidates;
 
             if (_triggered) exitWith {};
         } forEach _detectorUnits;

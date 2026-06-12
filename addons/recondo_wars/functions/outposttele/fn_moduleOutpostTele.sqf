@@ -189,7 +189,7 @@ if (count _savedMarkers > 0 && _enablePersistence) then {
     if (_enablePersistence) then {
         [_persistenceKey + "_MARKERS", _selectedMarkers] call Recondo_fnc_setSaveData;
         [_persistenceKey + "_COMPOSITIONS", _compositionMap] call Recondo_fnc_setSaveData;
-        saveMissionProfileNamespace;
+        call Recondo_fnc_queueSave;
         
         if (_debugLogging) then {
             diag_log format ["[RECONDO_OUTPOSTTELE] Saved %1 outpost markers to persistence", count _selectedMarkers];

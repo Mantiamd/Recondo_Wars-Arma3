@@ -130,7 +130,7 @@ while {true} do {
         
         // Save to persistence
         [_persistenceKey + "_CHANCE", _newChance] call Recondo_fnc_setSaveData;
-        saveMissionProfileNamespace;
+        call Recondo_fnc_queueSave;
         
         diag_log format ["[RECONDO_ELDESTSON] Sabotage increased: %1%% -> %2%% (+%3%% from %4 item(s))", 
             _currentChance, _newChance, _addedChance, _itemsFound];

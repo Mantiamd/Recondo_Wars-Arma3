@@ -76,7 +76,7 @@ if (_reconPointsAward > 0 && {!isNull _player} && {isPlayer _player}) then {
 if (_enablePersistence && {!isNil "RECONDO_PERSISTENCE_SETTINGS"}) then {
     private _persistenceKey = format ["HANNAH_%1", _markerPrefix];
     [_persistenceKey + "_DISABLED", RECONDO_HANNAH_DISABLED] call Recondo_fnc_setSaveData;
-    saveMissionProfileNamespace;
+    call Recondo_fnc_queueSave;
 
     if (_debugLogging) then {
         diag_log format ["[RECONDO_HANNAH] Saved disabled state for %1", _markerId];

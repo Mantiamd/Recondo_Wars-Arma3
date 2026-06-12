@@ -143,18 +143,16 @@ _dog addEventHandler ["Killed", {
         private _nearestTarget = objNull;
         private _nearestDist = _detectionRange;
         
+        private _targetUnits = allUnits select {
+            alive _x && side _x == _targetSide && {(getPosATL _x select 2) < 20}
+        };
         {
-            if (alive _x && side _x == _targetSide) then {
-                private _dist = _x distance _dog;
-                if (_dist < _nearestDist) then {
-                    // Height check (ignore aircraft)
-                    if ((getPosATL _x select 2) < 20) then {
-                        _nearestDist = _dist;
-                        _nearestTarget = _x;
-                    };
-                };
+            private _dist = _x distance _dog;
+            if (_dist < _nearestDist) then {
+                _nearestDist = _dist;
+                _nearestTarget = _x;
             };
-        } forEach allUnits;
+        } forEach _targetUnits;
         
         if (!isNull _nearestTarget) then {
             // Target detected - alert and chase

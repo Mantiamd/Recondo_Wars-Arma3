@@ -34,6 +34,8 @@ class CfgFunctions {
         class PlayerOptions {
             file = "\recondo_wars\functions\playeroptions";
             class modulePlayerOptions {};
+            class requestPlayerOptionsSettings {};
+            class receivePlayerOptionsSettings {};
             class restrictGraphics {};
             class adjustTraits {};
             class enforceFaces {};
@@ -41,8 +43,13 @@ class CfgFunctions {
             class restrictPilots {};
             class limitPainSounds {};
             class enableCarryBodybags {};
+            class initNotebook {};
+            class openNotebook {};
+            class clearNotebook {};
+            class notebookLoadData {};
+            class notebookSaveData {};
         };
-        
+
         // ACE Arsenal Area Module Functions
         class ArsenalArea {
             file = "\recondo_wars\functions\arsenalarea";
@@ -87,6 +94,7 @@ class CfgFunctions {
             class loadPlayerStats {};
             class trackPlayerStats {};
             class deleteSave {};
+            class queueSave {};
         };
         
         // Static Defense Randomized Module Functions
@@ -465,8 +473,6 @@ class CfgFunctions {
             class handleTrafficFiredNear {};
             class cleanupTrafficVehicle {};
         };
-        
-        // Blindfold Module Functions
         
         // Player Limitations Module Functions
         class PlayerLimitations {

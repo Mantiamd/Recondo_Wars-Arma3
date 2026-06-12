@@ -294,7 +294,7 @@ if (count _savedActiveMarkers > 0) then {
     [_persistenceKey + "_ACTIVE", _selectedMarkers] call Recondo_fnc_setSaveData;
     [_persistenceKey + "_COMPMAP", _compositionMap] call Recondo_fnc_setSaveData;
     [_persistenceKey + "_DESTROYED", []] call Recondo_fnc_setSaveData;
-    saveMissionProfileNamespace;
+    call Recondo_fnc_queueSave;
     
     if (_debugLogging) then {
         diag_log format ["[RECONDO_JAMMER] Generated %1 new markers for '%2'", count _selectedMarkers, _objectiveName];

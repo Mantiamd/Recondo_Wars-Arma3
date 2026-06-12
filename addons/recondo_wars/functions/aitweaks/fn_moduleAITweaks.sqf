@@ -249,26 +249,6 @@ if (isNil "RECONDO_AITWEAKS_FLASHLIGHT_LOOP_STARTED") then {
             };
         };
     };
-} else {
-    // Loop already running; check if this new instance enables flashlights
-    private _thisFlashlights = (_settings get "baseEnableFlashlights") || 
-                               (_settings get "eliteEnableFlashlights") || 
-                               (_settings get "aaEnableFlashlights");
-    if (_thisFlashlights && isNil "RECONDO_AITWEAKS_FLASHLIGHT_LOOP_STARTED") then {
-        RECONDO_AITWEAKS_FLASHLIGHT_LOOP_STARTED = true;
-        [] spawn {
-            private _lastState = sunOrMoon < 0.5;
-            while {true} do {
-                sleep 30;
-                private _isDark = sunOrMoon < 0.5;
-                if (_isDark != _lastState) then {
-                    private _mode = if (_isDark) then {"forceOn"} else {"forceOff"};
-                    { if (_x getVariable ["RECONDO_AITWEAKS_hasFlashlight", false]) then { _x enableGunLights _mode; }; } forEach allUnits;
-                    _lastState = _isDark;
-                };
-            };
-        };
-    };
 };
 
 // Final log

@@ -196,7 +196,7 @@ if (_enablePersistence && {!isNil "RECONDO_PERSISTENCE_SETTINGS"}) then {
 if (_enablePersistence && {!isNil "RECONDO_PERSISTENCE_SETTINGS"}) then {
     [_persistenceKey + "_SELECTED", _selectedMarkers] call Recondo_fnc_setSaveData;
     [_persistenceKey + "_DISABLED", RECONDO_HANNAH_DISABLED] call Recondo_fnc_setSaveData;
-    saveMissionProfileNamespace;
+    call Recondo_fnc_queueSave;
 };
 
 // ========================================

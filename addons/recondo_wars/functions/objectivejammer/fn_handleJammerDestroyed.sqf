@@ -78,7 +78,7 @@ if (isNil "_savedDestroyed") then { _savedDestroyed = [] };
 if (!(_markerId in _savedDestroyed)) then {
     _savedDestroyed pushBack _markerId;
     [_persistenceKey + "_DESTROYED", _savedDestroyed] call Recondo_fnc_setSaveData;
-    saveMissionProfileNamespace;
+    call Recondo_fnc_queueSave;
 };
 
 // ========================================

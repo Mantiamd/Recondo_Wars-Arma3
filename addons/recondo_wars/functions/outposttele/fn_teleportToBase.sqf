@@ -8,7 +8,7 @@
         2. Play sound
         3. Move player to base teleporter position
         4. Fade from black (2 seconds)
-        5. Show destination name and 6-digit grid
+        5. Show destination name and 8-digit grid
     
     Parameters:
         _player - OBJECT - The player to teleport
@@ -75,14 +75,16 @@ playSoundUI ["Transition1", 1];
             
             // Get proper grid reference using Arma's built-in function
             private _gridRef = mapGridPosition _destPos;
+            private _gridDigits = (_gridRef splitString " ") joinString "";
             
-            // Split into easting and northing (grid string is half easting, half northing)
-            private _gridLen = count _gridRef;
-            private _halfLen = _gridLen / 2;
+            // Split normalized grid digits into easting/northing halves
+            private _gridLen = count _gridDigits;
+            private _halfLen = floor (_gridLen / 2);
+            private _digitsPerHalf = (4 min _halfLen) max 1;
             
-            // Take first 3 digits of each half for 6-digit grid reference
-            private _eastingGrid = _gridRef select [0, 3];
-            private _northingGrid = _gridRef select [_halfLen, 3];
+            // Use up to 4 digits per half (8-digit when available)
+            private _eastingGrid = _gridDigits select [0, _digitsPerHalf];
+            private _northingGrid = _gridDigits select [_halfLen, _digitsPerHalf];
             
             // Show arrival message after fade in completes
             [{

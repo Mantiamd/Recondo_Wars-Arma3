@@ -165,6 +165,13 @@ class Cfg3DEN {
                 collapsed = 1;
                 class Attributes {};
             };
+
+            // Notebook
+            class Recondo_PlayerOptions_Notebook {
+                displayName = "Notebook";
+                collapsed = 1;
+                class Attributes {};
+            };
             
             // Debug
             class Recondo_PlayerOptions_Debug {
@@ -2075,172 +2082,137 @@ class Cfg3DEN {
     };
     
     // ==========================================
-    // BLINDFOLD MODULE CATEGORIES
+    // CUSTOM SITE SPAWN MODULE CATEGORIES
     // ==========================================
-    class Recondo_Module_Blindfold {
+    class Recondo_Module_CustomSiteSpawn {
         class AttributeCategories {
-            // General Settings
-            class Recondo_Blindfold_General {
-                displayName = "General";
-                collapsed = 0;
-                class Attributes {};
-            };
-            
-            // Timing Settings
-            class Recondo_Blindfold_Timing {
-                displayName = "Timing";
-                collapsed = 0;
-                class Attributes {};
-            };
-            
-            // UI Text Settings
-            class Recondo_Blindfold_Text {
-                displayName = "UI Text";
-                collapsed = 1;
-                class Attributes {};
-            };
-            
-            // Debug Settings
-            class Recondo_Blindfold_Debug {
-                displayName = "Debug";
-                collapsed = 1;
-                class Attributes {};
-            };
-            
-            //==========================================
-            // CUSTOM SITE SPAWN MODULE CATEGORIES
-            //==========================================
-            
             class Recondo_CSS_General {
                 displayName = "General Settings";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_CSS_Compositions {
                 displayName = "Compositions";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_CSS_Spawning {
                 displayName = "Spawning";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_CSS_Garrison {
                 displayName = "Garrison AI";
                 collapsed = 1;
                 class Attributes {};
             };
-            
             class Recondo_CSS_Patrols {
                 displayName = "Patrol AI";
                 collapsed = 1;
                 class Attributes {};
             };
-            
             class Recondo_CSS_NightLights {
                 displayName = "Night Lights";
                 collapsed = 1;
                 class Attributes {};
             };
-            
             class Recondo_CSS_Debug {
                 displayName = "Debug";
                 collapsed = 1;
                 class Attributes {};
             };
-            
-            //==========================================
-            // BAD CIVI MODULE CATEGORIES
-            //==========================================
-            
+        };
+    };
+    
+    // ==========================================
+    // BAD CIVI MODULE CATEGORIES
+    // ==========================================
+    class Recondo_Module_BadCivi {
+        class AttributeCategories {
             class Recondo_BC_General {
                 displayName = "General Settings";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_BC_Weapon {
                 displayName = "Weapon";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_BC_Behavior {
                 displayName = "Behavior";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_BC_Debug {
                 displayName = "Debug";
                 collapsed = 1;
                 class Attributes {};
             };
-            
-            //==========================================
-            // POO SITE HUNT MODULE CATEGORIES
-            //==========================================
-            
+        };
+    };
+    
+    // ==========================================
+    // POO SITE HUNT MODULE CATEGORIES
+    // ==========================================
+    class Recondo_Module_POOSiteHunt {
+        class AttributeCategories {
             class Recondo_POO_General {
                 displayName = "General Settings";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_POO_Spawning {
                 displayName = "Spawning";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_POO_Artillery {
                 displayName = "Artillery";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_POO_Debug {
                 displayName = "Debug";
                 collapsed = 1;
                 class Attributes {};
             };
-            
-            //==========================================
-            // DESTROY POWERGRID MODULE CATEGORIES
-            //==========================================
-            
+        };
+    };
+    
+    // ==========================================
+    // DESTROY POWERGRID MODULE CATEGORIES
+    // ==========================================
+    class Recondo_Module_DestroyPowergrid {
+        class AttributeCategories {
             class Recondo_PG_General {
                 displayName = "General Settings";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_PG_TurnOff {
                 displayName = "Turn Off Mode";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_PG_Destroy {
                 displayName = "Destroy Mode";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_PG_Debug {
                 displayName = "Debug";
                 collapsed = 1;
                 class Attributes {};
             };
-            
-            //==========================================
-            // OBJECTIVE - PHOTOGRAPHS CATEGORIES
-            //==========================================
-            
+        };
+    };
+    
+    // ==========================================
+    // OBJECTIVE - PHOTOGRAPHS CATEGORIES
+    // ==========================================
+    class Recondo_Module_ObjectivePhotographs {
+        class AttributeCategories {
             class Recondo_Photo_General {
                 displayName = "General";
                 collapsed = 0;
@@ -2291,50 +2263,52 @@ class Cfg3DEN {
                 collapsed = 1;
                 class Attributes {};
             };
-            
-            //==========================================
-            // HANOI HANNAH LOUDSPEAKERS MODULE CATEGORIES
-            //==========================================
-            
+        };
+    };
+    
+    // ==========================================
+    // HANOI HANNAH LOUDSPEAKERS MODULE CATEGORIES
+    // ==========================================
+    class Recondo_Module_HanoiHannah {
+        class AttributeCategories {
             class Recondo_Hannah_General {
                 displayName = "General Settings";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_Hannah_Sound {
                 displayName = "Sound Settings";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_Hannah_Original {
                 displayName = "Original Mod";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_Hannah_Rewards {
                 displayName = "Rewards";
                 collapsed = 0;
                 class Attributes {};
             };
-            
             class Recondo_Hannah_Persistence {
                 displayName = "Persistence";
                 collapsed = 1;
                 class Attributes {};
             };
-            
             class Recondo_Hannah_Debug {
                 displayName = "Debug";
                 collapsed = 1;
                 class Attributes {};
             };
-            
-            //==========================================
-            // QRF MOUNTED MODULE CATEGORIES
-            //==========================================
+        };
+    };
+    
+    // ==========================================
+    // QRF MOUNTED MODULE CATEGORIES
+    // ==========================================
+    class Recondo_Module_QRFMounted {
+        class AttributeCategories {
             class Recondo_QRF_General {
                 displayName = "General Settings";
                 collapsed = 0;
@@ -2365,10 +2339,14 @@ class Cfg3DEN {
                 collapsed = 1;
                 class Attributes {};
             };
-            
-            //==========================================
-            // VILLAGE UPRISING MODULE CATEGORIES
-            //==========================================
+        };
+    };
+    
+    // ==========================================
+    // VILLAGE UPRISING MODULE CATEGORIES
+    // ==========================================
+    class Recondo_Module_VillageUprising {
+        class AttributeCategories {
             class Recondo_Uprising_Area {
                 displayName = "Area Settings";
                 collapsed = 0;
@@ -2394,10 +2372,14 @@ class Cfg3DEN {
                 collapsed = 1;
                 class Attributes {};
             };
-            
-            //==========================================
-            // PLAYER PERSISTENCE MODULE CATEGORIES
-            //==========================================
+        };
+    };
+    
+    // ==========================================
+    // PLAYER PERSISTENCE MODULE CATEGORIES
+    // ==========================================
+    class Recondo_Module_PlayerPersistence {
+        class AttributeCategories {
             class Recondo_PlayerPersist_General {
                 displayName = "General Settings";
                 collapsed = 0;
@@ -2408,28 +2390,40 @@ class Cfg3DEN {
                 collapsed = 1;
                 class Attributes {};
             };
-            
-            //==========================================
-            // VEHICLE PERSISTENCE MODULE CATEGORIES
-            //==========================================
+        };
+    };
+    
+    // ==========================================
+    // VEHICLE PERSISTENCE MODULE CATEGORIES
+    // ==========================================
+    class Recondo_Module_VehiclePersistence {
+        class AttributeCategories {
             class Recondo_VehPersist_Debug {
                 displayName = "Debug";
                 collapsed = 1;
                 class Attributes {};
             };
-            
-            //==========================================
-            // INVENTORY PERSISTENCE MODULE CATEGORIES
-            //==========================================
+        };
+    };
+    
+    // ==========================================
+    // INVENTORY PERSISTENCE MODULE CATEGORIES
+    // ==========================================
+    class Recondo_Module_InventoryPersistence {
+        class AttributeCategories {
             class Recondo_InvPersist_Debug {
                 displayName = "Debug";
                 collapsed = 1;
                 class Attributes {};
             };
-            
-            //==========================================
-            // SOIL SAMPLE MODULE CATEGORIES
-            //==========================================
+        };
+    };
+    
+    // ==========================================
+    // SOIL SAMPLE MODULE CATEGORIES
+    // ==========================================
+    class Recondo_Module_SoilSample {
+        class AttributeCategories {
             class Recondo_Soil_General {
                 displayName = "General";
                 collapsed = 0;
@@ -2455,9 +2449,14 @@ class Cfg3DEN {
                 collapsed = 1;
                 class Attributes {};
             };
-            //==========================================
-            // ROLEPLAYER SOURCE MODULE CATEGORIES
-            //==========================================
+        };
+    };
+    
+    // ==========================================
+    // ROLEPLAYER SOURCE MODULE CATEGORIES
+    // ==========================================
+    class Recondo_Module_RoleplayerSource {
+        class AttributeCategories {
             class Recondo_RPSource_General {
                 displayName = "General";
                 collapsed = 0;
@@ -2473,10 +2472,14 @@ class Cfg3DEN {
                 collapsed = 1;
                 class Attributes {};
             };
-
-            //==========================================
-            // OPORD MODULE CATEGORIES
-            //==========================================
+        };
+    };
+    
+    // ==========================================
+    // OPORD MODULE CATEGORIES
+    // ==========================================
+    class Recondo_Module_OPORD {
+        class AttributeCategories {
             class Recondo_OPORD_Context {
                 displayName = "Operation Context";
                 collapsed = 0;

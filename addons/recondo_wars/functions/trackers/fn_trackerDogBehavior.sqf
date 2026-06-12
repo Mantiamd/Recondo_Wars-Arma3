@@ -44,6 +44,13 @@ if (isNull _trackerGroup) exitWith {
 // Animation tracking
 private _last_anim = "";
 
+// Ambient hunting bark state - dogs bark while a target is within audible range,
+// independent of close-range detection so players hear the hunt closing in.
+private _ambientBarkSounds = ["bark_hound", "bark1", "bark2"];
+private _ambientBarkRange = 300;
+private _ambientBarkInterval = 20;
+private _lastAmbientBark = 0;
+
 // Function to get current detection range based on time of day
 private _fnc_getDetectionRange = {
     private _sunMoon = sunOrMoon;
@@ -153,6 +160,22 @@ while {alive _dog} do {
             };
         };
     } else {
+        // Ambient bark when a target-side player is within range (audio only - no combat/reveal)
+        if (time - _lastAmbientBark >= _ambientBarkInterval) then {
+            private _dogPos = getPos _dog;
+            private _targetNear = allPlayers findIf {
+                side _x == _targetSide && {alive _x} && {_x distance _dogPos <= _ambientBarkRange}
+            };
+            if (_targetNear != -1) then {
+                private _nearbyPlayers = allPlayers select { _x distance _dog < 350 };
+                if (count _nearbyPlayers > 0) then {
+                    [_dog, _ambientBarkSounds] remoteExec ["RECONDO_TRACKERS_fnc_playSound", _nearbyPlayers];
+                };
+                // Small jitter so multiple dogs don't bark in unison
+                _lastAmbientBark = time + (random 10) - 5;
+            };
+        };
+
         // No enemy - heel/follow behavior
         _dog enableAI "PATH";
         _dog doFollow _handler;

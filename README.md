@@ -35,7 +35,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 
 ### Radio & Communications
 - **RW Radio** - Radio transmission system with battery management and triangulation
-- **Trackers** - Enemy tracker teams with dogs that follow player footprints
+- **Trackers** - Enemy tracker teams with dogs that follow player footprints. Dogs bark ambiently when a target player is within ~300m (audio only) and bark/harass on close-range detection
 - **Reinforcement Waves** - Dynamic enemy reinforcement spawning
 - **QRF Mounted** - Vehicle-mounted quick reaction force that spawns at the nearest road when the QRF side detects the target side. Randomly selects vehicles from a pool (configurable min/max count), fills crew and cargo, moves to the detected target, and dismounts cargo passengers at a configurable distance while drivers and gunners remain mounted
 - **SOG PF Tracker Group** - Defines marker areas where OPFOR tracker-stalker teams spawn and pursue BLUFOR groups using SOG Prairie Fire's tracking system. When a BLUFOR group enters a trigger zone, their tracks become visible and a 2-man stalker team spawns to hunt them. Configurable trigger radius, tracker side, and unit classnames. Requires S.O.G. Prairie Fire DLC
@@ -76,7 +76,6 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **Performance Monitor** - Mission performance monitoring
 - **Roleplay SOF Source** - Grants synced playable units ACE self-actions for viewing objective status, player statistics, and mission-maker-defined roleplayer instructions. Supports an "Allow All Players" mode that places interactions on a synced world object. Includes a "Populate Nearby with Civilian Presence" self-action for roleplayers to spawn wandering civilians with configurable classnames, count, radius, cooldown, and auto-despawn. Roleplayers can be defined by syncing units or by unit classname
 - **OPORD Generator** - Generates an AI-ready prompt for OPORD creation by automatically collecting data from all placed objective and mission modules. Exports a structured prompt for copy-paste into an AI assistant (e.g., ChatGPT). Configurable operation context, ROE, phases, support assets, and more. Optionally loads an imported OPORD from a mission-folder SQF file for in-game display to players
-
 ## Requirements
 
 - Arma 3 (v2.10+)

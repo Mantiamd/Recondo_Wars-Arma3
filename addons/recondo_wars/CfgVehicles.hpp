@@ -872,7 +872,7 @@ class CfgVehicles {
         icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\use_ca.paa";
         
         class ModuleDescription: ModuleDescription {
-            description = "Configures player graphics restrictions, traits, forced faces, and ACE rations settings.";
+            description = "Configures player graphics restrictions, traits, forced faces, ACE rations settings, and notebook access.";
             sync[] = {};
         };
         
@@ -1112,6 +1112,28 @@ class CfgVehicles {
                 typeName = "BOOL";
                 defaultValue = "true";
                 category = "Recondo_PlayerOptions_Bodybags";
+            };
+
+            // NOTEBOOK
+            class NotebookGiveAll {
+                displayName = "NOTEBOOK - Give To All Players";
+                tooltip = "When enabled, all players can open the notebook via ACE action and hotkey, and the item requirement is bypassed.";
+                control = "Checkbox";
+                property = "Recondo_PO_NotebookGiveAll";
+                expression = "_this setVariable ['notebookgiveall', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_PlayerOptions_Notebook";
+            };
+            class NotebookItemClassname {
+                displayName = "Notebook Item Classname";
+                tooltip = "Inventory item required to open notebook when 'Give To All Players' is disabled. Default: ACE_Notepad";
+                control = "Edit";
+                property = "Recondo_PO_NotebookItemClassname";
+                expression = "_this setVariable ['notebookitemclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """ACE_Notepad""";
+                category = "Recondo_PlayerOptions_Notebook";
             };
             
             // DEBUG
@@ -5571,6 +5593,16 @@ class CfgVehicles {
                 control = "Checkbox";
                 property = "Recondo_HubSubs_Comp_MapTents";
                 expression = "_this setVariable ['comp_map_tents', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HubSubs_CompPool";
+            };
+            class Comp_AACache1 {
+                displayName = "AA Cache";
+                tooltip = "Enable this composition (AAcache1.sqe / AAcache1_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_HubSubs_Comp_AACache1";
+                expression = "_this setVariable ['comp_aacache1', _value, true];";
                 typeName = "BOOL";
                 defaultValue = "false";
                 category = "Recondo_HubSubs_CompPool";
@@ -16108,6 +16140,17 @@ class CfgVehicles {
                 control = "Edit";
                 property = "Recondo_SOGTracker_TriggerRadius";
                 expression = "_this setVariable ['triggerradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """100""";
+                category = "Recondo_SOGTracker_General";
+            };
+            
+            class HeightLimit {
+                displayName = "Height Limit (meters)";
+                tooltip = "Maximum altitude (ATL) for trigger detection. Units above this height will not activate the tracker zone. Prevents helicopters flying over from triggering ground trackers.";
+                control = "Edit";
+                property = "Recondo_SOGTracker_HeightLimit";
+                expression = "_this setVariable ['heightlimit', parseNumber _value, true];";
                 typeName = "STRING";
                 defaultValue = """100""";
                 category = "Recondo_SOGTracker_General";

@@ -20,6 +20,9 @@ if (hasInterface && {!isNil "RECONDO_AITWEAKS_MINE_KNOWLEDGE_ENABLED"} && {RECON
 
 // Player Options: Wait for settings to be available and apply client-side effects
 if (hasInterface) then {
+    // JIP-safe fallback: explicitly request settings from server.
+    [clientOwner] remoteExecCall ["Recondo_fnc_requestPlayerOptionsSettings", 2];
+
     [{
         !isNil "RECONDO_PLAYEROPTIONS_SETTINGS"
     }, {
@@ -63,6 +66,13 @@ if (hasInterface) then {
         // Enable body bag carry/drag
         if (_settings get "enableCarryBodybags") then {
             [] call Recondo_fnc_enableCarryBodybags;
+        };
+
+        // Initialize player notebook system
+        private _notebookGiveAll = _settings getOrDefault ["notebookGiveAll", false];
+        private _notebookItemClassname = _settings getOrDefault ["notebookItemClassname", "ACE_Notepad"];
+        if (_notebookGiveAll || {_notebookItemClassname != ""}) then {
+            [] call Recondo_fnc_initNotebook;
         };
         
         if (_settings get "enableDebug") then {

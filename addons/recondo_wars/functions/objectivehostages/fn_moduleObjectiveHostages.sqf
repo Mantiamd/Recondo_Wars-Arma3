@@ -328,22 +328,18 @@ private _aiSideEnum = switch (toUpper _aiSide) do {
 
 if (isNil "RECONDO_HOSTAGE_INSTANCES") then {
     RECONDO_HOSTAGE_INSTANCES = [];
-    publicVariable "RECONDO_HOSTAGE_INSTANCES";
 };
 
 if (isNil "RECONDO_HOSTAGE_LOCATIONS") then {
     RECONDO_HOSTAGE_LOCATIONS = createHashMap;
-    publicVariable "RECONDO_HOSTAGE_LOCATIONS";
 };
 
 if (isNil "RECONDO_HOSTAGE_UNITS") then {
     RECONDO_HOSTAGE_UNITS = createHashMap;
-    publicVariable "RECONDO_HOSTAGE_UNITS";
 };
 
 if (isNil "RECONDO_HOSTAGE_RESCUED") then {
     RECONDO_HOSTAGE_RESCUED = [];
-    publicVariable "RECONDO_HOSTAGE_RESCUED";
 };
 
 if (isNil "RECONDO_HOSTAGE_TRIGGERS") then {

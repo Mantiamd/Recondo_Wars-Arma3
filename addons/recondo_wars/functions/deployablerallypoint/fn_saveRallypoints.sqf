@@ -62,7 +62,7 @@ if (isNil "RECONDO_PERSISTENCE_SETTINGS") then {
     // Persistence module not placed - save directly
     private _saveTag = "RECONDO_DRP_RALLIES";
     missionProfileNamespace setVariable [_saveTag, _saveData];
-    saveMissionProfileNamespace;
+    call Recondo_fnc_queueSave;
     
     if (_enableDebug) then {
         diag_log format ["[RECONDO_DRP] Saved %1 rally points directly (no Persistence module)", count _saveData];

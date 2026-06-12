@@ -63,7 +63,7 @@ _speaker addEventHandler ["Killed", {
     if (_persist && {!isNil "RECONDO_PERSISTENCE_SETTINGS"}) then {
         private _key = format ["HANNAH_%1", _prefix];
         [_key + "_DISABLED", RECONDO_HANNAH_DISABLED] call Recondo_fnc_setSaveData;
-        saveMissionProfileNamespace;
+        call Recondo_fnc_queueSave;
     };
 
     if (_cfg get "debugLogging") then {

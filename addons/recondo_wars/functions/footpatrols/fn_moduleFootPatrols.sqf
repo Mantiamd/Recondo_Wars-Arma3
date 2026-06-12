@@ -149,7 +149,7 @@ if (count _selectedMarkers == 0) then {
     // Save to persistence if enabled
     if (_enablePersistence && {!isNil "RECONDO_PERSISTENCE_SETTINGS"}) then {
         [_persistenceTag, _selectedMarkers] call Recondo_fnc_setSaveData;
-        saveMissionProfileNamespace; // Commit to disk immediately
+        call Recondo_fnc_queueSave; // Commit to disk immediately
         
         if (_debug) then {
             diag_log format ["[RECONDO_FP] Saved %1 markers to persistence and committed to disk", count _selectedMarkers];

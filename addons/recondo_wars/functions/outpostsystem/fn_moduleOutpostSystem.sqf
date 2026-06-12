@@ -283,12 +283,24 @@ _markerName setMarkerAlpha 0;
 // ========================================
 
 if (_markerVisibleSide != "ALL") then {
-    private _sideCode = format [
-        "if !(side player isEqualTo %1) then { '%2' setMarkerAlphaLocal 0; };",
+    private _sideEnum = switch (_markerVisibleSide) do {
+        case "WEST": { west };
+        case "EAST": { east };
+        case "GUER": { independent };
+        default { west };
+    };
+    _settings set ["markerVisibleSideEnum", _sideEnum];
+    _settings set ["markerVisibleSideRestricted", true];
+
+    private _markerNameForVis = _displayMarker;
+    private _visCode = compile format [
+        "if (hasInterface) then { if (side player isEqualTo %1) then { '%2' setMarkerAlphaLocal 1; } else { '%2' setMarkerAlphaLocal 0; }; };",
         _markerVisibleSide,
-        _displayMarker
+        _markerNameForVis
     ];
-    [compile _sideCode, "BIS_fnc_call", true, true] call BIS_fnc_MP;
+    _visCode remoteExec ["call", 0, true];
+} else {
+    _settings set ["markerVisibleSideRestricted", false];
 };
 
 // ========================================
@@ -312,7 +324,7 @@ private _qrfHelicopters = _syncedObjects select { _x isKindOf "Helicopter" };
 
     _helo setVariable ["RECONDO_OUTPOST_QRF_LOADED", false, true];
 
-    private _loadActionId = _helo addAction [
+    [_helo, [
         "<t color='#00FF00'>Load QRF Team</t>",
         {
             params ["_target", "_caller", "_actionId", "_args"];
@@ -324,9 +336,9 @@ private _qrfHelicopters = _syncedObjects select { _x isKindOf "Helicopter" };
         true,
         "",
         "alive _target && {_this in [driver _target, _target turretUnit [0]]} && {!(_target getVariable ['RECONDO_OUTPOST_QRF_LOADED', false])}"
-    ];
+    ]] remoteExec ["addAction", 0, true];
 
-    private _dismountActionId = _helo addAction [
+    [_helo, [
         "<t color='#FF8C00'>Dismount QRF Team</t>",
         {
             params ["_target", "_caller", "_actionId", "_args"];
@@ -338,7 +350,7 @@ private _qrfHelicopters = _syncedObjects select { _x isKindOf "Helicopter" };
         true,
         "",
         "alive _target && {_this in [driver _target, _target turretUnit [0]]} && {_target getVariable ['RECONDO_OUTPOST_QRF_LOADED', false]}"
-    ];
+    ]] remoteExec ["addAction", 0, true];
 
     if (_debugLogging) then {
         diag_log format ["[RECONDO_OUTPOST] '%1' QRF helicopter '%2' (%3) configured. Team size: %4",

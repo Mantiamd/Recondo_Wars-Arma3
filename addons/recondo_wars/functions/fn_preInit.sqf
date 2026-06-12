@@ -21,6 +21,14 @@ RECONDO_PLAYEROPTIONS_INITIALIZED = nil;
 RECONDO_PO_TERRAIN_BLACKOUT = false;
 RECONDO_PO_IN_VEHICLE = false;
 RECONDO_PO_VEHICLE_GRACE = false;
+RECONDO_NOTEBOOK_PAGES = [];
+RECONDO_NOTEBOOK_HEADERS = [];
+RECONDO_NOTEBOOK_SPREAD = 0;
+RECONDO_NOTEBOOK_KEY = "";
+RECONDO_NOTEBOOK_OPEN = false;
+RECONDO_NOTEBOOK_CLIENT_INIT = false;
+RECONDO_NOTEBOOK_ACTIONS_ADDED = false;
+RECONDO_NOTEBOOK_KEYBIND_ADDED = false;
 
 // ACE Arsenal Area globals
 RECONDO_ARSENALAREAS = [];
@@ -44,14 +52,11 @@ RECONDO_PERSISTENCE_TRACKING_ACTIVE = nil;
 
 // Static Defense Randomized globals
 RECONDO_SDR_SETTINGS = nil;
-RECONDO_SDR_SELECTED_MARKERS = [];
 RECONDO_SDR_SPAWNED_STATICS = [];
 RECONDO_SDR_SPAWNED_UNITS = [];
 
 // Foot Patrols globals
 RECONDO_FP_SETTINGS = nil;
-RECONDO_FP_SELECTED_MARKERS = [];
-RECONDO_FP_ACTIVE_TRIGGERS = [];
 RECONDO_FP_SPAWNED_GROUPS = [];
 
 // Add AI Crew globals
@@ -66,7 +71,6 @@ RECONDO_STABO_HELICOPTERS = [];
 RECONDO_PP_SETTINGS = nil;
 RECONDO_PP_PATH_MARKERS = [];
 RECONDO_PP_SPAWNED_GROUPS = [];
-RECONDO_PP_ACTIVE_TRIGGER = nil;
 
 // RW Radio globals
 RECONDO_RWR_SETTINGS = nil;
@@ -247,8 +251,6 @@ RECONDO_RP_ITEMS = nil;                       // Unlockable items hashmap (categ
 RECONDO_RP_PLAYER_DATA = nil;                 // Player data hashmap (uid -> {points, totalEarned, unlocks[], lastSeen})
 RECONDO_RP_TERMINAL_OBJECTS = [];             // Objects with unlock terminal ACE actions
 RECONDO_RP_INITIALIZED = nil;                 // Prevent duplicate init
-RECONDO_RP_KILL_HANDLER = nil;                // EntityKilled handler ID
-RECONDO_RP_DEATH_HANDLER = nil;               // Player death handler ID
 
 // Custom Site Spawn globals
 RECONDO_CSS_INSTANCES = [];
@@ -261,7 +263,7 @@ RECONDO_CSS_NIGHT_LIGHT_LOOP_STARTED = false;
 
 // Bad Civi global variables
 RECONDO_BADCIVI_INSTANCES = [];                // Array of module instances with settings
-RECONDO_BADCIVI_TRIGGERS = [];                 // Created triggers (for cleanup reference)
+RECONDO_BADCIVI_TRIGGERS = [];                 // Created triggers (used by fn_setupBadCivi)
 
 // POO Site Hunt global variables
 RECONDO_POO_INSTANCES = [];                   // Array of module instances with settings

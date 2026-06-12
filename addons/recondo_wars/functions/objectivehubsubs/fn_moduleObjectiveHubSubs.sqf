@@ -42,6 +42,7 @@ private _compGatesTents = _logic getVariable ["comp_gates_tents", false];
 private _compTwoHuts = _logic getVariable ["comp_two_huts", false];
 private _compTower = _logic getVariable ["comp_tower", false];
 private _compMapTents = _logic getVariable ["comp_map_tents", false];
+private _compAACache1 = _logic getVariable ["comp_aacache1", false];
 private _compHVTBASE1 = _logic getVariable ["comp_hvtbase_1", false];
 private _compHVTBASE2 = _logic getVariable ["comp_hvtbase_2", false];
 private _compHVTBASE3 = _logic getVariable ["comp_hvtbase_3", false];
@@ -129,6 +130,7 @@ if (_compGatesTents) then { _compositionPool pushBack ["comp_gates_tents.sqe", "
 if (_compTwoHuts) then { _compositionPool pushBack ["comp_two_huts.sqe", "comp_two_huts_destroyed.sqe", true]; };
 if (_compTower) then { _compositionPool pushBack ["comp_tower.sqe", "comp_tower_destroyed.sqe", true]; };
 if (_compMapTents) then { _compositionPool pushBack ["comp_map_tents.sqe", "comp_map_tents_destroyed.sqe", true]; };
+if (_compAACache1) then { _compositionPool pushBack ["AAcache1.sqe", "AAcache1_destroyed.sqe", true]; };
 if (_compHVTBASE1) then { _compositionPool pushBack ["HVTBASE_comp_1.sqe", "", true]; };
 if (_compHVTBASE2) then { _compositionPool pushBack ["HVTBASE_comp_2.sqe", "", true]; };
 if (_compHVTBASE3) then { _compositionPool pushBack ["HVTBASE_comp_3.sqe", "", true]; };
@@ -408,13 +410,6 @@ publicVariable "RECONDO_HUBSUBS_ACTIVE";
     if (_hubSpawnMode == "immediate") then {
         // Spawn hub immediately
         [_settings, _hubMarker, _activeComp, false, _isModPath] call Recondo_fnc_spawnHub;
-        
-        // Spawn sub-sites immediately
-        {
-            private _subSiteMarker = _x;
-            private _subSiteClass = selectRandom _subSiteClassnames;
-            [_settings, _hubMarker, _subSiteMarker, _subSiteClass] call Recondo_fnc_spawnSubSite;
-        } forEach _subSiteMarkers;
     } else {
         // Create proximity trigger for hub
         [_settings, _hubMarker, _compData, _subSiteMarkers] call Recondo_fnc_createHubTrigger;
@@ -422,8 +417,16 @@ publicVariable "RECONDO_HUBSUBS_ACTIVE";
         if (_debugLogging) then {
             diag_log format ["[RECONDO_HUBSUBS] Created trigger for hub %1 at %2, radius: %3m", _hubMarker, _markerPos, _hubTriggerRadius];
         };
-        
-        // Create separate triggers for sub-sites
+    };
+
+    // Handle sub-site spawning independently from hub spawn mode.
+    if (_subSiteSpawnMode == "immediate") then {
+        {
+            private _subSiteMarker = _x;
+            private _subSiteClass = selectRandom _subSiteClassnames;
+            [_settings, _hubMarker, _subSiteMarker, _subSiteClass] call Recondo_fnc_spawnSubSite;
+        } forEach _subSiteMarkers;
+    } else {
         {
             private _subSiteMarker = _x;
             private _subSiteClass = selectRandom _subSiteClassnames;

@@ -24,6 +24,11 @@ if (!_activated) exitWith {
     diag_log "[RECONDO_PLAYERPERSIST] Module not activated.";
 };
 
+if (!isNil "RECONDO_PLAYER_PERSISTENCE_INITIALIZED") exitWith {
+    diag_log "[RECONDO_PLAYERPERSIST] WARNING: Module already initialized. Skipping duplicate.";
+};
+RECONDO_PLAYER_PERSISTENCE_INITIALIZED = true;
+
 // ========================================
 // READ MODULE ATTRIBUTES
 // ========================================
@@ -107,7 +112,7 @@ addMissionEventHandler ["HandleDisconnect", {
     };
 
     ["PLAYER_PERSIST_DATA", _savedData] call Recondo_fnc_setSaveData;
-    saveMissionProfileNamespace;
+    call Recondo_fnc_queueSave;
 
     if (RECONDO_PLAYER_PERSISTENCE_DEBUG) then {
         diag_log format ["[RECONDO_PLAYERPERSIST] Saved on disconnect: %1 (UID: %2)", _name, _uid];
@@ -135,7 +140,7 @@ addMissionEventHandler ["EntityRespawned", {
     private _savedData = ["PLAYER_PERSIST_DATA", []] call Recondo_fnc_getSaveData;
     private _newData = _savedData select { (_x get "uid") != _uid };
     ["PLAYER_PERSIST_DATA", _newData] call Recondo_fnc_setSaveData;
-    saveMissionProfileNamespace;
+    call Recondo_fnc_queueSave;
 
     if (RECONDO_PLAYER_PERSISTENCE_DEBUG) then {
         diag_log format ["[RECONDO_PLAYERPERSIST] Cleared saved position on respawn: %1 (UID: %2)", name _newUnit, _uid];

@@ -55,6 +55,9 @@ private _normalSkills          = _settings get "normalSkills";
 private _lowMoraleSkills       = _settings get "lowMoraleSkills";
 private _currentMoraleState    = _settings get "currentMoraleState";
 
+private _markerSideRestricted = _settings getOrDefault ["markerVisibleSideRestricted", false];
+private _markerVisibleSide = _settings getOrDefault ["markerVisibleSide", "ALL"];
+
 private _garrisonEnabled = count _garrisonClassnames > 0;
 private _ammoResupplyEnabled = _garrisonEnabled && {_ammoResupplyClassname != ""};
 
@@ -99,6 +102,18 @@ private _fnc_updateMarker = {
     _marker setMarkerColor "ColorBLUFOR";
 };
 
+private _fnc_enforceMarkerVisibility = {
+    params ["_marker", "_restricted", "_sideStr"];
+    if (_restricted) then {
+        private _code = compile format [
+            "if (hasInterface) then { if (side player isEqualTo %1) then { '%2' setMarkerAlphaLocal 1; } else { '%2' setMarkerAlphaLocal 0; }; };",
+            _sideStr,
+            _marker
+        ];
+        _code remoteExec ["call", 0];
+    };
+};
+
 private _fnc_persist = {
     params ["_name", "_supply", "_garrisonCount", "_fuel", "_class3Enabled"];
     private _supplyKey = format ["OUTPOST_%1_CLASS1", _name];
@@ -109,7 +124,7 @@ private _fnc_persist = {
         private _fuelKey = format ["OUTPOST_%1_CLASS3", _name];
         [_fuelKey, _fuel] call Recondo_fnc_setSaveData;
     };
-    saveMissionProfileNamespace;
+    call Recondo_fnc_queueSave;
 };
 
 private _fnc_getUnitNeededMags = {
@@ -127,7 +142,7 @@ private _fnc_getUnitNeededMags = {
 };
 
 private _fnc_evaluateAmmoStatus = {
-    params ["_garrisonUnits", "_ammoResupplyClassname", "_markerPos", "_outpostRadius", "_fnc_getUnitNeededMags"];
+    params ["_garrisonUnits", "_ammoCrates", "_fnc_getUnitNeededMags"];
     private _aliveUnits = _garrisonUnits select {alive _x};
     if (count _aliveUnits == 0) exitWith { "GREEN" };
 
@@ -149,18 +164,15 @@ private _fnc_evaluateAmmoStatus = {
 
     if (_anyEmpty) exitWith { "RED" };
 
-    if (_ammoResupplyClassname != "") then {
-        private _crates = nearestObjects [_markerPos, [_ammoResupplyClassname], _outpostRadius, true];
-        if (count _crates == 0) exitWith { "AMBER" };
+    if (count _ammoCrates == 0) exitWith { "AMBER" };
 
-        private _hasAnyAmmo = false;
-        {
-            private _cargoData = getMagazineCargo _x;
-            if (count (_cargoData select 0) > 0) exitWith { _hasAnyAmmo = true; };
-        } forEach _crates;
+    private _hasAnyAmmo = false;
+    {
+        private _cargoData = getMagazineCargo _x;
+        if (count (_cargoData select 0) > 0) exitWith { _hasAnyAmmo = true; };
+    } forEach _ammoCrates;
 
-        if (!_hasAnyAmmo) exitWith { "AMBER" };
-    };
+    if (!_hasAnyAmmo) exitWith { "AMBER" };
 
     "GREEN"
 };
@@ -221,11 +233,28 @@ while {true} do {
     };
 
     // ========================================
+    // CACHED OBJECT SCAN (reused by fuel, supply, and ammo checks)
+    // ========================================
+
+    private _detectionTick = time - _lastDetectTime >= _detectionInterval;
+    private _cachedAmmoCrates = [];
+
+    if (_detectionTick || _commsLost) then {
+        if (_ammoResupplyEnabled && _ammoResupplyClassname != "") then {
+            _cachedAmmoCrates = (nearestObjects [_markerPos, [_ammoResupplyClassname], _outpostRadius, true]) select {
+                (getPosATL _x select 2) < 2 && {isNull (ropeAttachedTo _x)}
+            };
+        };
+    };
+
+    // ========================================
     // CLASS 3 (FUEL) RESUPPLY (always active even during comms lost)
     // ========================================
 
-    if (_class3Enabled && {time - _lastDetectTime >= _detectionInterval || _commsLost}) then {
-        private _fuelObjects = nearestObjects [_markerPos, [_class3Classname], _outpostRadius, true];
+    if (_class3Enabled && {_detectionTick || _commsLost}) then {
+        private _fuelObjects = (nearestObjects [_markerPos, [_class3Classname], _outpostRadius, true]) select {
+            (getPosATL _x select 2) < 2 && {isNull (ropeAttachedTo _x)}
+        };
         if (count _fuelObjects > 0) then {
             {
                 if (_fuel >= _maxClass3Supply) exitWith {};
@@ -255,6 +284,7 @@ while {true} do {
         // Still update marker and persist fuel changes
         if (_fuelChanged) then {
             [_displayMarker, _outpostName, _supply, _maxClass1Supply, _garrisonEnabled, _settings get "garrisonCount", _maxGarrison, _currentAmmoStatus, _class3Enabled, _fuel, _maxClass3Supply] call _fnc_updateMarker;
+            [_displayMarker, _markerSideRestricted, _markerVisibleSide] call _fnc_enforceMarkerVisibility;
 
             {
                 if ((_x get "instanceId") == _instanceId) exitWith {
@@ -292,11 +322,13 @@ while {true} do {
     // DETECTION: scan for Class 1 resupply objects
     // ========================================
 
-    if (time - _lastDetectTime >= _detectionInterval) then {
+    if (_detectionTick) then {
         _lastDetectTime = time;
 
         if (_class1Classname != "") then {
-            private _nearObjects = nearestObjects [_markerPos, [_class1Classname], _outpostRadius, true];
+            private _nearObjects = (nearestObjects [_markerPos, [_class1Classname], _outpostRadius, true]) select {
+                (getPosATL _x select 2) < 2 && {isNull (ropeAttachedTo _x)}
+            };
 
             if (count _nearObjects > 0) then {
                 {
@@ -420,7 +452,7 @@ while {true} do {
             };
 
             if (_ammoResupplyEnabled) then {
-                private _newAmmoStatus = [_garrisonUnits, _ammoResupplyClassname, _markerPos, _outpostRadius, _fnc_getUnitNeededMags] call _fnc_evaluateAmmoStatus;
+                private _newAmmoStatus = [_garrisonUnits, _cachedAmmoCrates, _fnc_getUnitNeededMags] call _fnc_evaluateAmmoStatus;
                 if (_newAmmoStatus != _currentAmmoStatus) then {
                     _currentAmmoStatus = _newAmmoStatus;
                     _garrisonChanged = true;
@@ -443,7 +475,13 @@ while {true} do {
         private _aliveGarrison = _garrisonUnits select {alive _x};
 
         if (count _aliveGarrison > 0) then {
-            private _crates = nearestObjects [_markerPos, [_ammoResupplyClassname], _outpostRadius, true];
+            private _crates = if (_detectionTick && {count _cachedAmmoCrates > 0}) then {
+                _cachedAmmoCrates
+            } else {
+                (nearestObjects [_markerPos, [_ammoResupplyClassname], _outpostRadius, true]) select {
+                    (getPosATL _x select 2) < 2 && {isNull (ropeAttachedTo _x)}
+                }
+            };
 
             if (count _crates > 0) then {
                 if (_debugLogging) then {
@@ -536,6 +574,7 @@ while {true} do {
 
         private _garrisonCount = _settings get "garrisonCount";
         [_displayMarker, _outpostName, _supply, _maxClass1Supply, _garrisonEnabled, _garrisonCount, _maxGarrison, _currentAmmoStatus, _class3Enabled, _fuel, _maxClass3Supply] call _fnc_updateMarker;
+        [_displayMarker, _markerSideRestricted, _markerVisibleSide] call _fnc_enforceMarkerVisibility;
 
         {
             if ((_x get "instanceId") == _instanceId) exitWith {

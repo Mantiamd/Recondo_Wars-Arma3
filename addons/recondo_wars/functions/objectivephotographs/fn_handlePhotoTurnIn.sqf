@@ -70,7 +70,7 @@ private _savedCompleted = [_persistenceKey + "_COMPLETED"] call Recondo_fnc_getS
 if (isNil "_savedCompleted") then { _savedCompleted = [] };
 _savedCompleted pushBack _markerToComplete;
 [_persistenceKey + "_COMPLETED", _savedCompleted] call Recondo_fnc_setSaveData;
-saveMissionProfileNamespace;
+call Recondo_fnc_queueSave;
 
 // Notify all players
 private _grid = mapGridPosition (getMarkerPos _markerToComplete);

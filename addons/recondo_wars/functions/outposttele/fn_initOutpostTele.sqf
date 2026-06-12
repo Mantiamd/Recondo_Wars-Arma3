@@ -164,6 +164,47 @@ if (!hasInterface) exitWith {};
             ] call ace_interact_menu_fnc_createAction;
             
             [_baseObject, 0, ["ACE_MainActions"], _parentAction, true] call ace_interact_menu_fnc_addActionToObject;
+
+            // Create standalone action to show base grid reference
+            private _showGridAction = [
+                format ["Recondo_OutpostTele_BaseGrid_%1", _instanceId],
+                "Show Base Grid",
+                "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\map_ca.paa",
+                {
+                    params ["_target", "_player", "_params"];
+                    _params params ["_sideNum"];
+
+                    private _gridRef = mapGridPosition (getPosATL _target);
+                    private _gridDigits = (_gridRef splitString " ") joinString "";
+                    private _gridLen = count _gridDigits;
+                    private _halfLen = floor (_gridLen / 2);
+                    private _digitsPerHalf = (4 min _halfLen) max 1;
+                    private _eastingGrid = _gridDigits select [0, _digitsPerHalf];
+                    private _northingGrid = _gridDigits select [_halfLen, _digitsPerHalf];
+
+                    hint format ["Base Grid: %1 %2", _eastingGrid, _northingGrid];
+                },
+                {
+                    // Condition: Check side (convert number to side inside condition)
+                    params ["_target", "_player", "_params"];
+                    _params params ["_sideNum"];
+
+                    if (_sideNum < 0) then { true } else {
+                        private _allowedSide = switch (_sideNum) do {
+                            case 0: { east };
+                            case 1: { west };
+                            case 2: { independent };
+                            case 3: { civilian };
+                            default { nil };
+                        };
+                        if (isNil "_allowedSide") then { true } else { side _player == _allowedSide }
+                    }
+                },
+                {},
+                [_allowedSideNum]
+            ] call ace_interact_menu_fnc_createAction;
+
+            [_baseObject, 0, ["ACE_MainActions"], _showGridAction, true] call ace_interact_menu_fnc_addActionToObject;
             
             // Create child actions for each outpost destination - TELEPORTS DIRECTLY
             {

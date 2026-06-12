@@ -95,6 +95,12 @@ _settings set ["enableLimitPainSounds", _logic getVariable ["enablelimitpainsoun
 // Body Bags
 _settings set ["enableCarryBodybags", _logic getVariable ["enablecarrybodybags", true]];
 
+// Notebook
+_settings set ["notebookGiveAll", _logic getVariable ["notebookgiveall", false]];
+private _notebookItemClassname = _logic getVariable ["notebookitemclassname", "ACE_Notepad"];
+_notebookItemClassname = _notebookItemClassname trim [" ", 0];
+_settings set ["notebookItemClassname", _notebookItemClassname];
+
 // Store settings globally and broadcast to clients
 RECONDO_PLAYEROPTIONS_SETTINGS = _settings;
 publicVariable "RECONDO_PLAYEROPTIONS_SETTINGS";
@@ -111,6 +117,7 @@ if (_debug) then {
     diag_log format ["[RECONDO_PLAYEROPTIONS] Pilot Restrictions: %1 (aircraft: %2, pilots: %3)", _settings get "enablePilotRestrictions", _restrictedAircraftArray, _allowedPilotsArray];
     diag_log format ["[RECONDO_PLAYEROPTIONS] Limit Pain Sounds: %1", _settings get "enableLimitPainSounds"];
     diag_log format ["[RECONDO_PLAYEROPTIONS] Carry Bodybags: %1", _settings get "enableCarryBodybags"];
+    diag_log format ["[RECONDO_PLAYEROPTIONS] Notebook: giveAll=%1, item='%2'", _settings get "notebookGiveAll", _settings get "notebookItemClassname"];
 };
 
 diag_log "[RECONDO_PLAYEROPTIONS] Module initialized. Settings broadcast to clients.";
