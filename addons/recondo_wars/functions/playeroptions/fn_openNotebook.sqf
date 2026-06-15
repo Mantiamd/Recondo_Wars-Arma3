@@ -7,7 +7,7 @@ if (!hasInterface) exitWith {};
 if (isNil "RECONDO_NOTEBOOK_PAGES") exitWith {};
 if (isNil "RECONDO_NOTEBOOK_HEADERS") then {
     RECONDO_NOTEBOOK_HEADERS = [];
-    for "_i" from 0 to 19 do {
+    for "_i" from 0 to 11 do {
         RECONDO_NOTEBOOK_HEADERS pushBack "";
     };
 };
@@ -24,6 +24,51 @@ private _display = uiNamespace getVariable ["Recondo_Notebook_Display", displayN
 if (isNull _display) exitWith {};
 
 RECONDO_NOTEBOOK_OPEN = true;
+
+// Build read-only image spreads from mission-folder images.
+// Side-specific pages (notebook\<side>\imageN.jpg) come first, then shared global
+// pages (notebook\global\imageN.jpg). The scan probes a fixed range and skips gaps,
+// so any image can be added/removed without breaking the sequence. Runs locally, so
+// each client only loads its own side's images.
+RECONDO_NOTEBOOK_WRITABLE_SPREADS = 6;
+RECONDO_NOTEBOOK_IMAGES = [];
+
+private _fnc_scanFolder = {
+    params ["_folder"];
+    private _result = [];
+    for "_i" from 1 to 50 do {
+        // Prefer .paa (native), fall back to .jpg so either format works per image.
+        private _paa = format ["notebook\%1\image%2.paa", _folder, _i];
+        private _jpg = format ["notebook\%1\image%2.jpg", _folder, _i];
+        if (fileExists _paa) then {
+            _result pushBack _paa;
+        } else {
+            if (fileExists _jpg) then {
+                _result pushBack _jpg;
+            };
+        };
+    };
+    _result
+};
+
+private _sideFolder = switch (playerSide) do {
+    case west:        { "blufor" };
+    case east:        { "opfor" };
+    case independent: { "ind" };
+    case civilian:    { "civ" };
+    default           { "" };
+};
+
+if (_sideFolder != "") then {
+    RECONDO_NOTEBOOK_IMAGES append ([_sideFolder] call _fnc_scanFolder);
+};
+RECONDO_NOTEBOOK_IMAGES append (["global"] call _fnc_scanFolder);
+
+RECONDO_NOTEBOOK_TOTAL_SPREADS = RECONDO_NOTEBOOK_WRITABLE_SPREADS + (count RECONDO_NOTEBOOK_IMAGES);
+if !(RECONDO_NOTEBOOK_SPREAD isEqualType 0) then {
+    RECONDO_NOTEBOOK_SPREAD = 0;
+};
+RECONDO_NOTEBOOK_SPREAD = (RECONDO_NOTEBOOK_SPREAD max 0) min (RECONDO_NOTEBOOK_TOTAL_SPREADS - 1);
 
 private _screenW = safezoneW;
 private _screenH = safezoneH;
@@ -118,10 +163,22 @@ _body2 ctrlSetFont "EtelkaMonospacePro";
 _body2 ctrlSetFontHeight _bodyFontH;
 _body2 ctrlCommit 0;
 
+// Full two-page image control for read-only image spreads (hidden until shown).
+private _imageCtrl = _display ctrlCreate ["RscPicture", 9655];
+_imageCtrl ctrlSetPosition [
+    _texX + (_texW * 0.066),
+    _texY + (_texH * 0.062),
+    _texW * (0.919 - 0.066),
+    _texH * (0.855 - 0.062)
+];
+_imageCtrl ctrlShow false;
+_imageCtrl ctrlCommit 0;
+
 _display setVariable ["RECONDO_NOTEBOOK_HEADER1_CTRL", _header1];
 _display setVariable ["RECONDO_NOTEBOOK_HEADER2_CTRL", _header2];
 _display setVariable ["RECONDO_NOTEBOOK_BODY1_CTRL", _body1];
 _display setVariable ["RECONDO_NOTEBOOK_BODY2_CTRL", _body2];
+_display setVariable ["RECONDO_NOTEBOOK_IMAGE_CTRL", _imageCtrl];
 _display setVariable ["RECONDO_NOTEBOOK_LABEL_CTRL", _spreadLabel];
 
 private _prevTLN = [0.060, 0.857];
@@ -219,26 +276,41 @@ private _fnc_renderSpread = {
     private _header2Ctrl = _display getVariable ["RECONDO_NOTEBOOK_HEADER2_CTRL", controlNull];
     private _body1Ctrl = _display getVariable ["RECONDO_NOTEBOOK_BODY1_CTRL", controlNull];
     private _body2Ctrl = _display getVariable ["RECONDO_NOTEBOOK_BODY2_CTRL", controlNull];
+    private _imageCtrl = _display getVariable ["RECONDO_NOTEBOOK_IMAGE_CTRL", controlNull];
     private _labelCtrl = _display getVariable ["RECONDO_NOTEBOOK_LABEL_CTRL", controlNull];
 
     if (isNull _header1Ctrl || isNull _header2Ctrl || isNull _body1Ctrl || isNull _body2Ctrl || isNull _labelCtrl) exitWith {};
 
     private _spread = RECONDO_NOTEBOOK_SPREAD;
-    private _leftPageIndex = _spread * 2;
-    private _rightPageIndex = _leftPageIndex + 1;
+    private _writable = RECONDO_NOTEBOOK_WRITABLE_SPREADS;
+    private _total = RECONDO_NOTEBOOK_TOTAL_SPREADS;
 
-    private _headers = RECONDO_NOTEBOOK_HEADERS;
-    private _bodies = RECONDO_NOTEBOOK_PAGES;
-    private _header1Text = _headers param [_leftPageIndex, ""];
-    private _header2Text = _headers param [_rightPageIndex, ""];
-    private _body1Text = _bodies param [_leftPageIndex, ""];
-    private _body2Text = _bodies param [_rightPageIndex, ""];
+    if (_spread >= _writable) then {
+        // Read-only image spread: hide the writable controls and show the image.
+        { _x ctrlShow false } forEach [_header1Ctrl, _header2Ctrl, _body1Ctrl, _body2Ctrl];
+        if (!isNull _imageCtrl) then {
+            private _imgPath = RECONDO_NOTEBOOK_IMAGES param [_spread - _writable, ""];
+            _imageCtrl ctrlSetText _imgPath;
+            _imageCtrl ctrlShow true;
+        };
+    } else {
+        // Writable text spread.
+        if (!isNull _imageCtrl) then { _imageCtrl ctrlShow false; };
+        { _x ctrlShow true } forEach [_header1Ctrl, _header2Ctrl, _body1Ctrl, _body2Ctrl];
 
-    _header1Ctrl ctrlSetText _header1Text;
-    _header2Ctrl ctrlSetText _header2Text;
-    _body1Ctrl ctrlSetText _body1Text;
-    _body2Ctrl ctrlSetText _body2Text;
-    _labelCtrl ctrlSetStructuredText parseText format ["<t align='center' color='#000000' size='0.75' font='PuristaSemibold'>PAGE %1 / 10</t>", _spread + 1];
+        private _leftPageIndex = _spread * 2;
+        private _rightPageIndex = _leftPageIndex + 1;
+
+        private _headers = RECONDO_NOTEBOOK_HEADERS;
+        private _bodies = RECONDO_NOTEBOOK_PAGES;
+
+        _header1Ctrl ctrlSetText (_headers param [_leftPageIndex, ""]);
+        _header2Ctrl ctrlSetText (_headers param [_rightPageIndex, ""]);
+        _body1Ctrl ctrlSetText (_bodies param [_leftPageIndex, ""]);
+        _body2Ctrl ctrlSetText (_bodies param [_rightPageIndex, ""]);
+    };
+
+    _labelCtrl ctrlSetStructuredText parseText format ["<t align='center' color='#000000' size='0.75' font='PuristaSemibold'>PAGE %1 / %2</t>", _spread + 1, _total];
 };
 
 private _fnc_captureCurrentSpread = {
@@ -251,6 +323,9 @@ private _fnc_captureCurrentSpread = {
     if (isNull _header1Ctrl || isNull _header2Ctrl || isNull _body1Ctrl || isNull _body2Ctrl) exitWith {};
 
     private _spread = RECONDO_NOTEBOOK_SPREAD;
+    // Image spreads are read-only; nothing to capture.
+    if (_spread >= RECONDO_NOTEBOOK_WRITABLE_SPREADS) exitWith {};
+
     private _leftPageIndex = _spread * 2;
     private _rightPageIndex = _leftPageIndex + 1;
 
@@ -283,7 +358,7 @@ _nextBtn ctrlAddEventHandler ["ButtonClick", {
     private _capture = _display getVariable ["RECONDO_NOTEBOOK_CAPTURE", {}];
     [_display] call _capture;
 
-    RECONDO_NOTEBOOK_SPREAD = (RECONDO_NOTEBOOK_SPREAD + 1) min 9;
+    RECONDO_NOTEBOOK_SPREAD = (RECONDO_NOTEBOOK_SPREAD + 1) min (RECONDO_NOTEBOOK_TOTAL_SPREADS - 1);
 
     private _render = _display getVariable ["RECONDO_NOTEBOOK_RENDER", {}];
     [_display] call _render;

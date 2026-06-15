@@ -19,7 +19,7 @@ if (isNil "RECONDO_NOTEBOOK_PAGES") exitWith {};
 
     RECONDO_NOTEBOOK_PAGES = [];
     RECONDO_NOTEBOOK_HEADERS = [];
-    for "_i" from 0 to 19 do {
+    for "_i" from 0 to 11 do {
         RECONDO_NOTEBOOK_HEADERS pushBack "";
         RECONDO_NOTEBOOK_PAGES pushBack "";
     };

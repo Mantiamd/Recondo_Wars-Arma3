@@ -95,6 +95,11 @@ if (isNil "RECONDO_NOTEBOOK_KEYBIND_ADDED" || {!RECONDO_NOTEBOOK_KEYBIND_ADDED})
             "Recondo_OpenNotebook",
             ["Open Notebook", "Open the personal notebook."],
             {
+                if (!isNil "RECONDO_NOTEBOOK_OPEN" && {RECONDO_NOTEBOOK_OPEN}) exitWith {
+                    closeDialog 0;
+                    true
+                };
+
                 if !([] call RECONDO_fnc_playerCanUseNotebook) exitWith { false };
                 [] call Recondo_fnc_openNotebook;
                 true
