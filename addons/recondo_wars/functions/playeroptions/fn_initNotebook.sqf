@@ -107,6 +107,53 @@ if (isNil "RECONDO_NOTEBOOK_KEYBIND_ADDED" || {!RECONDO_NOTEBOOK_KEYBIND_ADDED})
             {},
             [49, [false, true, false]]
         ] call CBA_fnc_addKeybind;
+
+        [
+            "Recondo Wars",
+            "Recondo_NotebookPrev",
+            ["Notebook Previous Page", "Go to the previous notebook spread while notebook is open."],
+            {
+                if (isNil "RECONDO_NOTEBOOK_OPEN" || {!RECONDO_NOTEBOOK_OPEN}) exitWith { false };
+
+                private _display = uiNamespace getVariable ["Recondo_Notebook_Display", displayNull];
+                if (isNull _display) exitWith { false };
+
+                private _capture = _display getVariable ["RECONDO_NOTEBOOK_CAPTURE", {}];
+                [_display] call _capture;
+
+                RECONDO_NOTEBOOK_SPREAD = (RECONDO_NOTEBOOK_SPREAD - 1) max 0;
+
+                private _render = _display getVariable ["RECONDO_NOTEBOOK_RENDER", {}];
+                [_display] call _render;
+                true
+            },
+            {},
+            [203, [false, false, false]]
+        ] call CBA_fnc_addKeybind;
+
+        [
+            "Recondo Wars",
+            "Recondo_NotebookNext",
+            ["Notebook Next Page", "Go to the next notebook spread while notebook is open."],
+            {
+                if (isNil "RECONDO_NOTEBOOK_OPEN" || {!RECONDO_NOTEBOOK_OPEN}) exitWith { false };
+
+                private _display = uiNamespace getVariable ["Recondo_Notebook_Display", displayNull];
+                if (isNull _display) exitWith { false };
+
+                private _capture = _display getVariable ["RECONDO_NOTEBOOK_CAPTURE", {}];
+                [_display] call _capture;
+
+                RECONDO_NOTEBOOK_SPREAD = (RECONDO_NOTEBOOK_SPREAD + 1) min (RECONDO_NOTEBOOK_TOTAL_SPREADS - 1);
+
+                private _render = _display getVariable ["RECONDO_NOTEBOOK_RENDER", {}];
+                [_display] call _render;
+                true
+            },
+            {},
+            [205, [false, false, false]]
+        ] call CBA_fnc_addKeybind;
+
         RECONDO_NOTEBOOK_KEYBIND_ADDED = true;
     };
 };
