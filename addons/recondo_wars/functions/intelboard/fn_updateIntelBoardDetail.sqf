@@ -88,8 +88,18 @@ if (_type == "log") exitWith {
     // Set header
     _nameCtrl ctrlSetStructuredText parseText "<t color='#5599DD' size='1.4' font='PuristaBold'>INTEL LOG ENTRY</t>";
     
-    // Set timestamp as status
-    _statusCtrl ctrlSetStructuredText parseText format ["<t color='#AAAAAA' size='1.0'>Received: %1 UTC</t>", _timestamp];
+    // Set timestamp as status; tolerate older numeric timestamps.
+    private _timestampText = "";
+    if (_timestamp isEqualType "") then {
+        _timestampText = _timestamp;
+    } else {
+        if (_timestamp isEqualType 0) then {
+            _timestampText = format ["T+%1s", floor _timestamp];
+        } else {
+            _timestampText = str _timestamp;
+        };
+    };
+    _statusCtrl ctrlSetStructuredText parseText format ["<t color='#AAAAAA' size='1.0'>Received: %1 UTC</t>", _timestampText];
     
     // Set location if available
     if (_grid != "") then {

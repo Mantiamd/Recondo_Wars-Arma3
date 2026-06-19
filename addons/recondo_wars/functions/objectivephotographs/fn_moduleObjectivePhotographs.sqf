@@ -38,8 +38,9 @@ private _compBulldozer1 = _logic getVariable ["comp_bulldozer1", false];
 private _compNVALogisticTrucks1 = _logic getVariable ["comp_nvalogistictrucks1", false];
 private _compDevice1 = _logic getVariable ["comp_device1", false];
 private _compNVASAM1 = _logic getVariable ["comp_nvasam1", false];
-private _customCompPath = _logic getVariable ["customcomppath", "compositions"];
-private _customActiveCompsRaw = _logic getVariable ["customactivecomps", ""];
+private _customCompPath = "compositions";
+private _customCompEnabled = _logic getVariable ["customcompenabled", false];
+private _customCompData = _logic getVariable ["customcompdata", ""];
 private _customTargetClassname = _logic getVariable ["customtargetclassname", ""];
 private _clearRadius = _logic getVariable ["clearradius", 25];
 private _disableSimulation = _logic getVariable ["disablesimulation", true];
@@ -114,12 +115,12 @@ if (_compNVALogisticTrucks1) then { _compositionPool pushBack ["Photo\NVALogisti
 if (_compDevice1) then { _compositionPool pushBack ["Photo\Device_1.sqe", "Land_Device_assembled_F", true]; };
 if (_compNVASAM1) then { _compositionPool pushBack ["Photo\NVASAM_1.sqe", "vn_sa2", true]; };
 
-// Parse custom compositions from mission folder
-private _customActiveComps = ((_customActiveCompsRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" && !(_x select [0, 2] == "//") };
-
-{
-    _compositionPool pushBack [_x, _customTargetClassname, false];
-} forEach _customActiveComps;
+// Register the pasted custom composition (if enabled) and add it to the pool.
+private _customTokens = [_customCompEnabled, _customCompData, "", format ["%1_%2", _markerPrefix, _objectiveName]] call Recondo_fnc_registerCustomComposition;
+private _customActiveToken = _customTokens select 0;
+if (_customActiveToken != "") then {
+    _compositionPool pushBack [_customActiveToken, _customTargetClassname, false];  // [comp, targetClassname, isModPath]
+};
 
 if (count _compositionPool == 0) exitWith {
     diag_log format ["[RECONDO_PHOTO] ERROR: No compositions configured for '%1'. Enable a checkbox or add custom compositions.", _objectiveName];

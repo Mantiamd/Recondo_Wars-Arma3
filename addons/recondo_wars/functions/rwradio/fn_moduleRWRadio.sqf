@@ -96,6 +96,7 @@ RECONDO_RWR_GROUP_TIMES = createHashMap;           // groupId -> cumulative tran
 RECONDO_RWR_GROUP_MARKERS = createHashMap;         // groupId -> [markerName, textMarkerName]
 RECONDO_RWR_CALL_COUNT = 0;                        // Global radio call counter for enemy spawn
 RECONDO_RWR_LAST_ENEMY_COUNT = 0;                  // Track enemy spawn threshold
+RECONDO_RWR_SAFEZONE_LEADER_STATE = createHashMap; // groupId -> whether leader currently in safe zone
 
 // Load from persistence if enabled
 private _enablePersistence = _settings get "enablePersistence";
@@ -148,6 +149,11 @@ addMissionEventHandler ["PlayerConnected", {
 [{
     [] remoteExec ["Recondo_fnc_initRadioClient", 0, true];
 }, [], 1] call CBA_fnc_waitAndExecute;
+
+// Monitor NO_RADIO safe-zone entry by player group leaders.
+if (isNil "RECONDO_RWR_SAFEZONE_MONITOR_EH") then {
+    RECONDO_RWR_SAFEZONE_MONITOR_EH = [Recondo_fnc_safeZoneLeaderMonitor, 1, []] call CBA_fnc_addPerFrameHandler;
+};
 
 // Auto-save if persistence enabled
 if (_enablePersistence && {!isNil "RECONDO_PERSISTENCE_SETTINGS"}) then {

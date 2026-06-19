@@ -123,6 +123,47 @@ if (!_success) then {
     if (_debugLogging) then {
         diag_log format ["[RECONDO_INTEL] processTurnIn - No targets available for player %1", name _player];
     };
+
+    // Add a turn-in event to intel log even when no targets remain, so the board
+    // always reflects that intel was submitted.
+    private _timeArray = systemTimeUTC;
+    private _timestamp = format ["%1-%2-%3 %4:%5",
+        _timeArray select 0,
+        ([_timeArray select 1] call {
+            params ["_n"];
+            if (_n < 10) then { format ["0%1", _n] } else { str _n }
+        }),
+        ([_timeArray select 2] call {
+            params ["_n"];
+            if (_n < 10) then { format ["0%1", _n] } else { str _n }
+        }),
+        ([_timeArray select 3] call {
+            params ["_n"];
+            if (_n < 10) then { format ["0%1", _n] } else { str _n }
+        }),
+        ([_timeArray select 4] call {
+            params ["_n"];
+            if (_n < 10) then { format ["0%1", _n] } else { str _n }
+        })
+    ];
+
+    private _logEntry = createHashMapFromArray [
+        ["message", format ["%1 turned in intel. No actionable targets remain.", name _player]],
+        ["timestamp", _timestamp],
+        ["targetType", "none"],
+        ["targetName", ""],
+        ["grid", ""],
+        ["source", _source]
+    ];
+
+    RECONDO_INTEL_LOG insert [0, [_logEntry]];
+    RECONDO_INTEL_LOG_LATEST = _logEntry;
+    publicVariable "RECONDO_INTEL_LOG_LATEST";
+
+    private _enablePersistence = if (isNil "RECONDO_INTEL_SETTINGS") then { false } else { RECONDO_INTEL_SETTINGS getOrDefault ["enablePersistence", true] };
+    if (_enablePersistence) then {
+        ["INTEL_LOG", RECONDO_INTEL_LOG] call Recondo_fnc_setSaveData;
+    };
     
     // Still award points for turning in intel even if no targets remain
     if (!isNil "RECONDO_RP_SETTINGS" && _source == "document") then {

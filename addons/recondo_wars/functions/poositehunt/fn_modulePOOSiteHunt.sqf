@@ -28,6 +28,7 @@ if (!_activated) exitWith {
 // ========================================
 
 private _objectiveName     = _logic getVariable ["objectivename", "POO Site"];
+private _objectiveDescription = _logic getVariable ["objectivedescription", ""];
 private _pooMarkerPrefix   = _logic getVariable ["poomarkerprefix", "POO_"];
 private _targetMarkerPrefix = _logic getVariable ["targetmarkerprefix", "ARTY_TGT_"];
 private _numActiveSites    = parseNumber str (_logic getVariable ["numactivesites", 1]);
@@ -82,6 +83,7 @@ private _instanceId = format ["poo_%1_%2", _objectiveName, count RECONDO_POO_INS
 private _settings = createHashMapFromArray [
     ["instanceId", _instanceId],
     ["objectiveName", _objectiveName],
+    ["objectiveDescription", _objectiveDescription],
     ["pooMarkerPrefix", _pooMarkerPrefix],
     ["targetMarkerPrefix", _targetMarkerPrefix],
     ["numActiveSites", _numActiveSites],

@@ -158,6 +158,12 @@ if (isNil "RECONDO_NOTEBOOK_KEYBIND_ADDED" || {!RECONDO_NOTEBOOK_KEYBIND_ADDED})
     };
 };
 
+// Global event so every machine plays the reading pose on its copy of the unit.
+if (isNil "RECONDO_NOTEBOOK_ANIM_EVENT_ADDED" || {!RECONDO_NOTEBOOK_ANIM_EVENT_ADDED}) then {
+    ["Recondo_notebookAnim", { _this call Recondo_fnc_notebookAnim }] call CBA_fnc_addEventHandler;
+    RECONDO_NOTEBOOK_ANIM_EVENT_ADDED = true;
+};
+
 RECONDO_NOTEBOOK_CLIENT_INIT = true;
 
 if (_debug) then {

@@ -36,8 +36,9 @@ private _spawnPercentage = _logic getVariable ["spawnpercentage", 0.5];
 // Composition Pool (individual checkboxes)
 private _compVCCamp1 = _logic getVariable ["comp_vc_camp1", false];
 private _compVCCamp2 = _logic getVariable ["comp_vc_camp2", false];
-private _customCompPath = _logic getVariable ["customcomppath", "compositions"];
-private _customCompositionsRaw = _logic getVariable ["customcompositions", ""];
+private _customCompPath = "compositions";
+private _customCompEnabled = _logic getVariable ["customcompenabled", false];
+private _customCompData = _logic getVariable ["customcompdata", ""];
 
 // Spawning Settings
 private _spawnMode = _logic getVariable ["spawnmode", 1];
@@ -111,14 +112,12 @@ private _compositionPool = [];
 if (_compVCCamp1) then { _compositionPool pushBack ["VC_camp1.sqe", true]; };
 if (_compVCCamp2) then { _compositionPool pushBack ["VC_camp2.sqe", true]; };
 
-// Parse and add custom compositions from mission folder
-private _customCompositions = if (_customCompositionsRaw != "") then {
-    ((_customCompositionsRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" && !(_x select [0, 2] == "//") }
-} else { [] };
-
-{
-    _compositionPool pushBack [_x, false]; // false = mission path
-} forEach _customCompositions;
+// Register the pasted custom composition (if enabled) and add it to the pool.
+private _customTokens = [_customCompEnabled, _customCompData, "", format ["%1_%2", _markerPrefix, _campName]] call Recondo_fnc_registerCustomComposition;
+private _customActiveToken = _customTokens select 0;
+if (_customActiveToken != "") then {
+    _compositionPool pushBack [_customActiveToken, false]; // [name, isModPath]
+};
 
 // Validate composition pool
 if (count _compositionPool == 0) exitWith {

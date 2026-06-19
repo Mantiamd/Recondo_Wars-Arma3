@@ -49,6 +49,8 @@ private _safetyDistance = _logic getVariable ["safetydistance", 200];
 private _wave1MinSize = _logic getVariable ["wave1minsize", 2];
 private _wave1MaxSize = _logic getVariable ["wave1maxsize", 4];
 private _soundInterval = _logic getVariable ["soundinterval", 30];
+private _enableBambooSticks = _logic getVariable ["enablebamboosticks", true];
+private _enableWhistling = _logic getVariable ["enablewhistling", false];
 
 // Flanker Settings
 private _enableFlankers = _logic getVariable ["enableflankers", true];
@@ -125,9 +127,14 @@ private _moduleId = format ["RW_%1_%2", getPos _logic, time];
 // STORE SETTINGS FOR THIS MODULE INSTANCE
 // ========================================
 
-// Sound arrays (same as Trackers module)
-private _soundsNoDog = ["bamboo1", "mallet3hits", "mallet6hits", "sticks1"];
-private _soundsWithDog = ["bamboo1", "mallet3hits", "mallet6hits", "sticks1", "bark_hound", "bark1", "bark2"];
+// Sound arrays (ambient pools can be toggled while dog sounds stay active when dogs exist)
+private _bambooStickSounds = ["bamboo1", "mallet3hits", "mallet6hits", "sticks1"];
+private _whistlingSounds = ["enemy_whistle_2", "enemy_whistle_3", "enemy_whistle_4", "enemy_whistling_2", "enemy_whistling_3", "enemy_whistling_4"];
+private _dogGroupSounds = ["bark_hound", "bark1", "bark2"];
+private _soundsNoDog = [];
+if (_enableBambooSticks) then { _soundsNoDog append _bambooStickSounds; };
+if (_enableWhistling) then { _soundsNoDog append _whistlingSounds; };
+private _soundsWithDog = _soundsNoDog + _dogGroupSounds;
 private _dogDetectionSounds = ["bark1", "bark2", "barkmean1", "barkmean2", "barkmean3", "dog_growl_vicious"];
 private _dogDeathSounds = ["boomerYelp", "boomerYelp2"];
 
@@ -156,6 +163,8 @@ private _moduleSettings = createHashMapFromArray [
     ["wave1MinSize", _wave1MinSize],
     ["wave1MaxSize", _wave1MaxSize],
     ["soundInterval", _soundInterval],
+    ["enableBambooSticks", _enableBambooSticks],
+    ["enableWhistling", _enableWhistling],
     
     // Flankers
     ["enableFlankers", _enableFlankers],
@@ -221,6 +230,13 @@ if (isNil "RECONDO_RW_fnc_playSound") then {
 // ========================================
 
 [_moduleSettings] call Recondo_fnc_createRWDetectionTrigger;
+
+// Start RW-owned footprint producer once. This keeps strict footprint pursuit
+// functional even when the Trackers module is not running.
+if (isNil "RECONDO_RW_FOOTPRINT_LOOP_RUNNING") then {
+    RECONDO_RW_FOOTPRINT_LOOP_RUNNING = true;
+    [] spawn Recondo_fnc_rwFootprintLoop;
+};
 
 // ========================================
 // LOG INITIALIZATION

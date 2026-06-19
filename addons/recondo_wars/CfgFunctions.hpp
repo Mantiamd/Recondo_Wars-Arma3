@@ -8,6 +8,7 @@ class CfgFunctions {
             class preInit {};
             class postInit {};
             class parseClassnames {};
+            class registerCustomComposition {};
             class validateModules {};
         };
         
@@ -45,6 +46,7 @@ class CfgFunctions {
             class enableCarryBodybags {};
             class initNotebook {};
             class openNotebook {};
+            class notebookAnim {};
             class clearNotebook {};
             class notebookLoadData {};
             class notebookSaveData {};
@@ -149,6 +151,8 @@ class CfgFunctions {
             file = "\recondo_wars\functions\rwradio";
             class moduleRWRadio {};
             class initRadioClient {};
+            class safeZoneLeaderMonitor {};
+            class resetTriangulationForGroup {};
             class startTransmission {};
             class stopTransmission {};
             class getBatteryLevel {};
@@ -190,6 +194,18 @@ class CfgFunctions {
             class findSafeSpawnPos {};
             class rwTrackerBehavior {};
             class createRWDog {};
+            class rwFootprintLoop {};
+        };
+        
+        // River Traffic Module Functions
+        class RiverTraffic {
+            file = "\recondo_wars\functions\rivertraffic";
+            class moduleRiverTraffic {};
+            class riverTrafficDefineRivers {};
+            class riverTrafficClearObstacles {};
+            class riverTrafficScanLoop {};
+            class spawnRiverBoat {};
+            class riverBoatMove {};
         };
         
         // Intel Module Functions

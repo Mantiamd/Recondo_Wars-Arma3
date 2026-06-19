@@ -54,6 +54,8 @@ private _footprintSpeedThreshold = 6; // Hardcoded: walking pace is ~6 km/h
 // Tracker Behavior Settings
 private _movementSpeed = _logic getVariable ["movementspeed", "LIMITED"];
 private _soundInterval = _logic getVariable ["soundinterval", 30];
+private _enableBambooSounds = _logic getVariable ["enablebamboosounds", true];
+private _enableWhistling = _logic getVariable ["enablewhistling", false];
 private _predictiveDistanceMin = _logic getVariable ["predictivedistancemin", 200];
 private _predictiveDistanceMax = _logic getVariable ["predictivedistancemax", 300];
 
@@ -112,9 +114,15 @@ _maxGroupSize = _maxGroupSize max _minGroupSize;
 // STORE SETTINGS GLOBALLY
 // ========================================
 
-// Define sound arrays based on whether dog is present
-private _soundsNoDog = ["bamboo1", "mallet3hits", "mallet6hits", "sticks1"];
-private _soundsWithDog = ["bamboo1", "mallet3hits", "mallet6hits", "sticks1", "bark_hound", "bark1", "bark2"];
+// Define sound arrays based on whether dog is present.
+// Ambient no-dog pools are opt-in via module checkboxes; dog sounds remain available.
+private _bambooSounds = ["bamboo1", "mallet3hits", "mallet6hits", "sticks1"];
+private _whistlingSounds = ["enemy_whistle_2", "enemy_whistle_3", "enemy_whistle_4", "enemy_whistling_2", "enemy_whistling_3", "enemy_whistling_4"];
+private _dogGroupSounds = ["bark_hound", "bark1", "bark2"];
+private _soundsNoDog = [];
+if (_enableBambooSounds) then { _soundsNoDog append _bambooSounds; };
+if (_enableWhistling) then { _soundsNoDog append _whistlingSounds; };
+private _soundsWithDog = _soundsNoDog + _dogGroupSounds;
 private _dogDetectionSounds = ["bark1", "bark2", "barkmean1", "barkmean2", "barkmean3", "dog_growl_vicious"];
 private _dogDeathSounds = ["boomerYelp", "boomerYelp2"];
 
@@ -144,6 +152,8 @@ RECONDO_TRACKERS_SETTINGS = createHashMapFromArray [
     // Behavior
     ["movementSpeed", _movementSpeed],
     ["soundInterval", _soundInterval],
+    ["enableBambooSounds", _enableBambooSounds],
+    ["enableWhistling", _enableWhistling],
     ["predictiveDistanceMin", _predictiveDistanceMin],
     ["predictiveDistanceMax", _predictiveDistanceMax],
     

@@ -42,9 +42,10 @@ private _clearRadius = _logic getVariable ["clearradius", 25];
 private _disableSimulation = _logic getVariable ["disablesimulation", true];
 
 // Custom Compositions (Mission folder)
-private _customCompPath = _logic getVariable ["customcomppath", "compositions"];
-private _customActiveCompsRaw = _logic getVariable ["customactivecomps", ""];
-private _customDestroyedCompsRaw = _logic getVariable ["customdestroyedcomps", ""];
+private _customCompPath = "compositions";
+private _customCompEnabled = _logic getVariable ["customcompenabled", false];
+private _customCompData = _logic getVariable ["customcompdata", ""];
+private _customDestroyedData = _logic getVariable ["customdestroyeddata", ""];
 
 // Jammer Settings
 private _jammerClassname = _logic getVariable ["jammerclassname", "Land_TTowerBig_1_F"];
@@ -126,26 +127,14 @@ if (_useCampComp) then {
     _compositionPool pushBack ["JAMMER_Camp1.sqe", "JAMMER_Camp1_destroyed.sqe", true];
 };
 
-// Parse and add custom compositions from mission folder
-private _customActiveComps = ((_customActiveCompsRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" && !(_x select [0, 2] == "//") };
-private _customDestroyedComps = ((_customDestroyedCompsRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" && !(_x select [0, 2] == "//") };
-
-// Add custom compositions to pool
-{
-    private _activeComp = _x;
-    private _destroyedComp = "";
-    
-    // Try to get matching destroyed composition from list
-    if (_forEachIndex < count _customDestroyedComps) then {
-        _destroyedComp = _customDestroyedComps select _forEachIndex;
-    } else {
-        // Auto-generate destroyed name by adding _destroyed before .sqe
-        private _baseName = _activeComp select [0, count _activeComp - 4]; // Remove .sqe
-        _destroyedComp = _baseName + "_destroyed.sqe";
-    };
-    
-    _compositionPool pushBack [_activeComp, _destroyedComp, false]; // false = mission path
-} forEach _customActiveComps;
+// Register the pasted custom composition (if enabled) and add it to the pool.
+private _customTokens = [_customCompEnabled, _customCompData, _customDestroyedData, format ["%1_%2", _markerPrefix, _objectiveName]] call Recondo_fnc_registerCustomComposition;
+_customTokens params ["_customActiveToken", "_customDestroyedToken"];
+if (_customActiveToken != "") then {
+    _compositionPool pushBack [_customActiveToken, _customDestroyedToken, false];
+};
+// Keep a count for the debug log below.
+private _customActiveComps = if (_customActiveToken != "") then { [_customActiveToken] } else { [] };
 
 // Convert sides
 private _triggerSide = switch (_triggerSideNum) do {

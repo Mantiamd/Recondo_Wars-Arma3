@@ -42,41 +42,56 @@ if (_compositionName == "") exitWith {
     [[], objNull]
 };
 
-// Strip .sqe extension if present (we'll add it back)
-private _compNameClean = _compositionName;
-if (_compNameClean select [count _compNameClean - 4, 4] == ".sqe") then {
-    _compNameClean = _compNameClean select [0, count _compNameClean - 4];
+// A "pasted" composition is passed in as a token (prefix RECONDO_CUSTOMCOMP::)
+// that maps to raw SQF array text registered by the module, rather than a file.
+private _rawCompText = "";
+private _isPasted = ((_compositionName select [0, 20]) == "RECONDO_CUSTOMCOMP::");
+if (_isPasted) then {
+    if (isNil "RECONDO_CUSTOM_COMP_TEXT") then { RECONDO_CUSTOM_COMP_TEXT = createHashMap; };
+    _rawCompText = RECONDO_CUSTOM_COMP_TEXT getOrDefault [_compositionName, ""];
 };
 
-// Build file path based on source
+// Custom token with no registered text means the module is misconfigured.
+if (_isPasted && {_rawCompText == ""}) exitWith {
+    diag_log format ["[RECONDO] ERROR: No pasted composition registered for token: %1", _compositionName];
+    [[], objNull]
+};
+
+private _compNameClean = if (_isPasted) then { "[pasted]" } else { _compositionName };
 private _filePath = "";
-if (_isModPath) then {
-    // Load from mod's compositions folder
-    _filePath = format ["\recondo_wars\compositions\%1.sqe", _compNameClean];
-} else {
-    // Load from mission folder
-    if (_compositionPath != "") then {
-        _filePath = format ["%1\%2.sqe", _compositionPath, _compNameClean];
+
+if (!_isPasted) then {
+    // Strip .sqe extension if present (we'll add it back)
+    if (_compNameClean select [count _compNameClean - 4, 4] == ".sqe") then {
+        _compNameClean = _compNameClean select [0, count _compNameClean - 4];
+    };
+
+    // Build file path based on source
+    if (_isModPath) then {
+        _filePath = format ["\recondo_wars\compositions\%1.sqe", _compNameClean];
     } else {
-        _filePath = format ["%1.sqe", _compNameClean];
+        if (_compositionPath != "") then {
+            _filePath = format ["%1\%2.sqe", _compositionPath, _compNameClean];
+        } else {
+            _filePath = format ["%1.sqe", _compNameClean];
+        };
     };
 };
 
 if (_debugLogging) then {
-    diag_log format ["[RECONDO] Loading composition from: %1 (isModPath: %2)", _filePath, _isModPath];
+    diag_log format ["[RECONDO] Loading composition: %1 (pasted: %2, isModPath: %3)", if (_isPasted) then { "[pasted]" } else { _filePath }, _isPasted, _isModPath];
 };
 
-// Check if file exists
-if (!fileExists _filePath) exitWith {
+// Only file-based compositions need to exist on disk.
+if (!_isPasted && {!fileExists _filePath}) exitWith {
     diag_log format ["[RECONDO] ERROR: Composition file not found: %1", _filePath];
     [[], objNull]
 };
 
-// Load file content
-private _fileContent = loadFile _filePath;
+private _fileContent = if (_isPasted) then { _rawCompText } else { loadFile _filePath };
 
 if (_fileContent == "") exitWith {
-    diag_log format ["[RECONDO] ERROR: Empty composition file: %1", _filePath];
+    diag_log format ["[RECONDO] ERROR: Empty composition: %1", if (_isPasted) then { _compositionName } else { _filePath }];
     [[], objNull]
 };
 

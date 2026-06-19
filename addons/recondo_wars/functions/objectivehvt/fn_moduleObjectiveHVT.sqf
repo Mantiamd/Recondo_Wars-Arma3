@@ -57,8 +57,9 @@ private _compShack5 = _logic getVariable ["comp_shack_5", false];
 private _compShack6 = _logic getVariable ["comp_shack_6", false];
 private _compShack7 = _logic getVariable ["comp_shack_7", false];
 private _compShack8 = _logic getVariable ["comp_shack_8", false];
-private _customCompPath = _logic getVariable ["customcomppath", "compositions"];
-private _customActiveCompsRaw = _logic getVariable ["customactivecomps", ""];
+private _customCompPath = "compositions";
+private _customCompEnabled = _logic getVariable ["customcompenabled", false];
+private _customCompData = _logic getVariable ["customcompdata", ""];
 private _clearRadius = _logic getVariable ["clearradius", 25];
 private _disableSimulation = _logic getVariable ["disablesimulation", true];
 
@@ -243,11 +244,12 @@ if (_compShack6) then { _compositionPool pushBack ["Shack_6.sqe", true]; };
 if (_compShack7) then { _compositionPool pushBack ["Shack_7.sqe", true]; };
 if (_compShack8) then { _compositionPool pushBack ["Shack_8.sqe", true]; };
 
-// Parse and add custom compositions from mission folder
-private _customCompositions = [_customActiveCompsRaw] call _fnc_parseClassnames;
-{
-    _compositionPool pushBack [_x, false];  // false = mission path
-} forEach _customCompositions;
+// Register the pasted custom composition (if enabled) and add it to the pool.
+private _customTokens = [_customCompEnabled, _customCompData, "", format ["%1_%2", _markerPrefix, _objectiveName]] call Recondo_fnc_registerCustomComposition;
+private _customActiveToken = _customTokens select 0;
+if (_customActiveToken != "") then {
+    _compositionPool pushBack [_customActiveToken, false];  // [name, isModPath]
+};
 
 if (_debugLogging) then {
     diag_log format ["[RECONDO_HVT] Composition pool built: %1 compositions", count _compositionPool];

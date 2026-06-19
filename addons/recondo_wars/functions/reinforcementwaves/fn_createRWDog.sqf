@@ -116,13 +116,12 @@ _dog addEventHandler ["Killed", {
     params ["_dog", "_group", "_moduleSettings"];
     
     private _moduleId = _moduleSettings get "moduleId";
-    private _targetSide = _moduleSettings get "targetSide";
     private _debugLogging = _moduleSettings get "debugLogging";
     
     private _detectionDay = _dog getVariable ["RECONDO_RW_detectionDay", 15];
     private _detectionNight = _dog getVariable ["RECONDO_RW_detectionNight", 10];
     private _leadDistance = _dog getVariable ["RECONDO_RW_leadDistance", 12];
-    private _harassmentRange = _dog getVariable ["RECONDO_RW_harassmentRange", 5];
+    private _targetGroupId = _group getVariable ["RECONDO_RW_targetGroupId", ""];
     private _detectionSounds = _dog getVariable ["RECONDO_RW_detectionSounds", []];
     
     private _lastDetectionSoundTime = 0;
@@ -138,44 +137,33 @@ _dog addEventHandler ["Killed", {
         private _sunAngle = sunOrMoon;
         private _detectionRange = if (_sunAngle > 0.5) then { _detectionDay } else { _detectionNight };
         
-        // Check for nearby targets
+        // Strict footprint mode: dog follows footprints only.
         private _dogPos = getPos _dog;
-        private _nearestTarget = objNull;
+        private _nearestFootprintPos = [];
         private _nearestDist = _detectionRange;
-        
-        private _targetUnits = allUnits select {
-            alive _x && side _x == _targetSide && {(getPosATL _x select 2) < 20}
-        };
+
         {
-            private _dist = _x distance _dog;
-            if (_dist < _nearestDist) then {
-                _nearestDist = _dist;
-                _nearestTarget = _x;
+            _x params ["_fPos", "_fTime", "_fGroupId", "_fTrackerGroups"];
+            if (_fGroupId == _targetGroupId) then {
+                private _dist = _dogPos distance _fPos;
+                if (_dist < _nearestDist) then {
+                    _nearestDist = _dist;
+                    _nearestFootprintPos = _fPos;
+                };
             };
-        } forEach _targetUnits;
-        
-        if (!isNull _nearestTarget) then {
-            // Target detected - alert and chase
+        } forEach RECONDO_TRACKERS_FOOTPRINTS;
+
+        if (count _nearestFootprintPos > 0) then {
+            // Footprint detected - bark and move to the track position.
             if (time - _lastDetectionSoundTime > 10) then {
                 if (count _detectionSounds > 0) then {
                     [_dog, _detectionSounds] remoteExec ["RECONDO_RW_fnc_playSound", 0];
                 };
                 _lastDetectionSoundTime = time;
             };
-            
-            // Chase behavior
-            if (_nearestDist < _harassmentRange) then {
-                // Close enough to harass
-                _dog doMove (getPos _nearestTarget);
-                _dog doWatch _nearestTarget;
-            } else {
-                // Move toward target
-                _dog doMove (getPos _nearestTarget);
-            };
-            
-            // Alert the group
-            _group reveal [_nearestTarget, 4];
-            
+
+            _dog doMove _nearestFootprintPos;
+            _dog doWatch objNull;
         } else {
             // No target - lead the group
             private _leaderPos = getPos _leader;

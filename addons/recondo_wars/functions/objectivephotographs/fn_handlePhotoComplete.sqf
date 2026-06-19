@@ -50,9 +50,30 @@ if (_debugLogging) then {
 
 // Log to intel system
 if (!isNil "RECONDO_INTEL_LOG") then {
+    private _timeArray = systemTimeUTC;
+    private _timestamp = format ["%1-%2-%3 %4:%5",
+        _timeArray select 0,
+        ([_timeArray select 1] call {
+            params ["_n"];
+            if (_n < 10) then { format ["0%1", _n] } else { str _n }
+        }),
+        ([_timeArray select 2] call {
+            params ["_n"];
+            if (_n < 10) then { format ["0%1", _n] } else { str _n }
+        }),
+        ([_timeArray select 3] call {
+            params ["_n"];
+            if (_n < 10) then { format ["0%1", _n] } else { str _n }
+        }),
+        ([_timeArray select 4] call {
+            params ["_n"];
+            if (_n < 10) then { format ["0%1", _n] } else { str _n }
+        })
+    ];
+
     private _logEntry = createHashMapFromArray [
         ["message", format ["%1 photographed %2 at grid %3", name _player, _objectiveName, mapGridPosition (getMarkerPos _markerId)]],
-        ["timestamp", serverTime],
+        ["timestamp", _timestamp],
         ["targetType", "photograph"],
         ["targetName", _objectiveName],
         ["grid", mapGridPosition (getMarkerPos _markerId)],

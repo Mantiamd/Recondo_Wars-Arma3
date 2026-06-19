@@ -50,9 +50,10 @@ private _compBivouac7 = _logic getVariable ["comp_bivouac_7", false];
 private _compBivouac8 = _logic getVariable ["comp_bivouac_8", false];
 private _compNVABivouac9 = _logic getVariable ["comp_nva_bivouac_9", false];
 private _compBivouac10 = _logic getVariable ["comp_bivouac_10", false];
-private _customCompPath = _logic getVariable ["customcomppath", "compositions"];
-private _customActiveCompsRaw = _logic getVariable ["customactivecomps", ""];
-private _customDestroyedCompsRaw = _logic getVariable ["customdestroyedcomps", ""];
+private _customCompPath = "compositions";
+private _customCompEnabled = _logic getVariable ["customcompenabled", false];
+private _customCompData = _logic getVariable ["customcompdata", ""];
+private _customDestroyedData = _logic getVariable ["customdestroyeddata", ""];
 private _clearRadius = _logic getVariable ["clearradius", 25];
 
 private _targetClassname = _logic getVariable ["targetclassname", ""];
@@ -129,20 +130,12 @@ if (_compBivouac8) then { _compositionPool pushBack ["Bivouac_8.sqe", "Bivouac_d
 if (_compNVABivouac9) then { _compositionPool pushBack ["NVA_Bivouac_9.sqe", "Bivouac_destroyed.sqe", true]; };
 if (_compBivouac10) then { _compositionPool pushBack ["Bivouac_10.sqe", "Bivouac_destroyed.sqe", true]; };
 
-// Parse custom compositions from mission folder
-private _customActiveComps = ((_customActiveCompsRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" && !(_x select [0, 2] == "//") };
-private _customDestroyedComps = ((_customDestroyedCompsRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" && !(_x select [0, 2] == "//") };
-
-// Add custom compositions to pool
-{
-    private _activeComp = _x;
-    private _destroyedComp = if (_forEachIndex < count _customDestroyedComps) then {
-        _customDestroyedComps select _forEachIndex
-    } else {
-        ""
-    };
-    _compositionPool pushBack [_activeComp, _destroyedComp, false]; // false = mission path
-} forEach _customActiveComps;
+// Register the pasted custom composition (if enabled) and add it to the pool.
+private _customTokens = [_customCompEnabled, _customCompData, _customDestroyedData, format ["%1_%2", _markerPrefix, _objectiveName]] call Recondo_fnc_registerCustomComposition;
+_customTokens params ["_customActiveToken", "_customDestroyedToken"];
+if (_customActiveToken != "") then {
+    _compositionPool pushBack [_customActiveToken, _customDestroyedToken, false];
+};
 
 // Validate composition pool
 if (count _compositionPool == 0) exitWith {

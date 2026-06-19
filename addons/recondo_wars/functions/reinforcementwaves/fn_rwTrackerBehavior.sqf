@@ -7,10 +7,10 @@
         player footprints. Similar to Trackers module behavior but
         with Wave 1 sounds and integrated settings.
         
-        Movement priority:
-        1. If target group has live units, move toward them
-        2. If footprints exist from target group, follow them
-        3. Otherwise, search from last known position
+        Movement priority (strict footprint mode):
+        1. If footprints exist from target group, follow them
+        2. Move toward initial detection position (one-time convergence)
+        3. Otherwise, search from last known footprint position
     
     Parameters:
         _group - The tracker group
@@ -93,32 +93,7 @@ while {!isNull _group && {count (units _group select {alive _x}) > 0}} do {
         private _moveTarget = [];
         private _moveReason = "";
         
-        // Priority 1: Check if target group has alive units we can see/track
-        private _targetUnits = if (!isNull _targetGroup) then {
-            units _targetGroup select { alive _x && (getPosATL _x select 2) < 20 }
-        } else { [] };
-        
-        if (count _targetUnits > 0) then {
-            // Get closest target unit position
-            private _closestTarget = objNull;
-            private _closestDist = 999999;
-            {
-                private _dist = _leaderPos distance _x;
-                if (_dist < _closestDist) then {
-                    _closestDist = _dist;
-                    _closestTarget = _x;
-                };
-            } forEach _targetUnits;
-            
-            if (!isNull _closestTarget) then {
-                _moveTarget = getPos _closestTarget;
-                _lastKnownPos = _moveTarget;
-                _moveReason = "tracking live target";
-                _reachedInitialTarget = true;
-            };
-        };
-        
-        // Priority 2: Check for footprints from the target group
+        // Priority 1: Follow footprints from the target group
         if (count _moveTarget == 0) then {
             private _nearestDist = 150; // Search radius for footprints
             private _footprintPos = [];
@@ -145,7 +120,7 @@ while {!isNull _group && {count (units _group select {alive _x}) > 0}} do {
             };
         };
         
-        // Priority 3: Move toward initial target position if not yet reached
+        // Priority 2: Move toward initial target position if not yet reached
         if (count _moveTarget == 0 && !_reachedInitialTarget && count _initialTargetPos > 0) then {
             private _distToInitial = _leaderPos distance _initialTargetPos;
             if (_distToInitial > 50) then {
@@ -156,7 +131,7 @@ while {!isNull _group && {count (units _group select {alive _x}) > 0}} do {
             };
         };
         
-        // Priority 4: Search from last known position
+        // Priority 3: Search from last known position
         if (count _moveTarget == 0) then {
             if (!_searching) then {
                 _searching = true;

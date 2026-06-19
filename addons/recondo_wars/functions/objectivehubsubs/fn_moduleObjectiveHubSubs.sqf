@@ -46,9 +46,10 @@ private _compAACache1 = _logic getVariable ["comp_aacache1", false];
 private _compHVTBASE1 = _logic getVariable ["comp_hvtbase_1", false];
 private _compHVTBASE2 = _logic getVariable ["comp_hvtbase_2", false];
 private _compHVTBASE3 = _logic getVariable ["comp_hvtbase_3", false];
-private _customCompPath = _logic getVariable ["customcomppath", "compositions"];
-private _customActiveCompsRaw = _logic getVariable ["customactivecomps", ""];
-private _customDestroyedCompsRaw = _logic getVariable ["customdestroyedcomps", ""];
+private _customCompPath = "compositions";
+private _customCompEnabled = _logic getVariable ["customcompenabled", false];
+private _customCompData = _logic getVariable ["customcompdata", ""];
+private _customDestroyedData = _logic getVariable ["customdestroyeddata", ""];
 private _clearRadius = _logic getVariable ["clearradius", 30];
 private _disableSimulation = _logic getVariable ["disablesimulation", true];
 
@@ -135,20 +136,12 @@ if (_compHVTBASE1) then { _compositionPool pushBack ["HVTBASE_comp_1.sqe", "", t
 if (_compHVTBASE2) then { _compositionPool pushBack ["HVTBASE_comp_2.sqe", "", true]; };
 if (_compHVTBASE3) then { _compositionPool pushBack ["HVTBASE_comp_3.sqe", "", true]; };
 
-// Parse custom compositions from mission folder
-private _customActiveComps = [_customActiveCompsRaw] call _fnc_parseClassnames;
-private _customDestroyedComps = [_customDestroyedCompsRaw] call _fnc_parseClassnames;
-
-// Add custom compositions to pool
-{
-    private _activeComp = _x;
-    private _destroyedComp = if (_forEachIndex < count _customDestroyedComps) then {
-        _customDestroyedComps select _forEachIndex
-    } else {
-        ""
-    };
-    _compositionPool pushBack [_activeComp, _destroyedComp, false]; // false = mission path
-} forEach _customActiveComps;
+// Register the pasted custom composition (if enabled) and add it to the pool.
+private _customTokens = [_customCompEnabled, _customCompData, _customDestroyedData, format ["%1_%2", _markerPrefix, _objectiveName]] call Recondo_fnc_registerCustomComposition;
+_customTokens params ["_customActiveToken", "_customDestroyedToken"];
+if (_customActiveToken != "") then {
+    _compositionPool pushBack [_customActiveToken, _customDestroyedToken, false];
+};
 
 // Validate composition pool
 if (count _compositionPool == 0) exitWith {
@@ -194,6 +187,8 @@ private _settings = createHashMapFromArray [
     ["markerPrefix", _markerPrefix],
     ["compositionPool", _compositionPool],
     ["customCompPath", _customCompPath],
+    ["compositionPath", _customCompPath],
+    ["destroyedCompositions", (if (_customDestroyedToken != "") then { [_customDestroyedToken] } else { [] })],
     ["clearRadius", _clearRadius],
     ["disableSimulation", _disableSimulation],
     ["targetClassname", _targetClassname],

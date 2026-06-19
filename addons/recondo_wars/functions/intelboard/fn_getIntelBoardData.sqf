@@ -211,7 +211,7 @@ if (_enableDestroy && !isNil "RECONDO_OBJDESTROY_INSTANCES" && {count RECONDO_OB
     {
         private _destroySettings = _x;
         private _objectiveName = _destroySettings get "objectiveName";
-        private _objectiveDescription = _destroySettings getOrDefault ["objectiveDescription", ""];
+        private _objectiveDescription = _destroySettings getOrDefault ["objectiveDescription", _destroySettings getOrDefault ["objectiveDesc", ""]];
         private _categoryName = _destroySettings getOrDefault ["intelBoardCategoryName", ""];
         
         // Use default if empty
@@ -253,7 +253,7 @@ if (_enableHubSubs && !isNil "RECONDO_HUBSUBS_INSTANCES" && {count RECONDO_HUBSU
     {
         private _hubSettings = _x;
         private _objectiveName = _hubSettings get "objectiveName";
-        private _objectiveDescription = _hubSettings getOrDefault ["objectiveDescription", ""];
+        private _objectiveDescription = _hubSettings getOrDefault ["objectiveDescription", _hubSettings getOrDefault ["objectiveDesc", ""]];
         private _categoryName = _hubSettings getOrDefault ["intelBoardCategoryName", ""];
         
         // Use default if empty
@@ -295,7 +295,7 @@ if (_enableJammer && !isNil "RECONDO_JAMMER_INSTANCES" && {count RECONDO_JAMMER_
     {
         private _jammerSettings = _x;
         private _objectiveName = _jammerSettings get "objectiveName";
-        private _objectiveDescription = _jammerSettings getOrDefault ["objectiveDesc", "ACRE Radio Jamming Installation"];
+        private _objectiveDescription = _jammerSettings getOrDefault ["objectiveDescription", _jammerSettings getOrDefault ["objectiveDesc", "ACRE Radio Jamming Installation"]];
         private _categoryName = _jammerSettings getOrDefault ["intelBoardCategoryName", ""];
         
         // Use default if empty
@@ -337,7 +337,7 @@ if (_enablePhotos && !isNil "RECONDO_PHOTO_INSTANCES" && {count RECONDO_PHOTO_IN
     {
         private _photoSettings = _x;
         private _objectiveName = _photoSettings get "objectiveName";
-        private _objectiveDescription = _photoSettings getOrDefault ["objectiveDesc", ""];
+        private _objectiveDescription = _photoSettings getOrDefault ["objectiveDescription", _photoSettings getOrDefault ["objectiveDesc", ""]];
         private _categoryName = _photoSettings getOrDefault ["intelBoardCategoryName", ""];
         private _instanceId = _photoSettings get "instanceId";
         
@@ -392,7 +392,7 @@ if (_enableSoilSample && !isNil "RECONDO_SOIL_INSTANCES" && {count RECONDO_SOIL_
     {
         private _soilSettings = _x;
         private _objectiveName = _soilSettings get "objectiveName";
-        private _objectiveDescription = _soilSettings getOrDefault ["objectiveDescription", ""];
+        private _objectiveDescription = _soilSettings getOrDefault ["objectiveDescription", _soilSettings getOrDefault ["objectiveDesc", ""]];
         private _categoryName = _soilSettings getOrDefault ["intelBoardCategoryName", ""];
         private _samplesRequired = _soilSettings get "samplesRequired";
         private _markerAreas = _soilSettings getOrDefault ["markerAreas", []];
@@ -472,6 +472,7 @@ if (_enablePOO && !isNil "RECONDO_POO_INSTANCES" && {count RECONDO_POO_INSTANCES
         private _pooSettings = _x;
         private _objectiveName = _pooSettings get "objectiveName";
         private _instanceId = _pooSettings get "instanceId";
+        private _objectiveDescription = _pooSettings getOrDefault ["objectiveDescription", _pooSettings getOrDefault ["objectiveDesc", ""]];
         private _categoryName = _pooSettings getOrDefault ["intelBoardCategoryName", ""];
 
         if (_categoryName == "") then {
@@ -492,7 +493,7 @@ if (_enablePOO && !isNil "RECONDO_POO_INSTANCES" && {count RECONDO_POO_INSTANCES
             ["name", _objectiveName],
             ["displayName", _objectiveName],
             ["photo", ""],
-            ["background", ""],
+            ["background", _objectiveDescription],
             ["status", if (_isComplete) then { format ["DESTROYED (%1/%1)", _total] } else { format ["%1/%2 REMAINING", _remaining, _total] }],
             ["statusColor", if (_isComplete) then { [0.5, 0.8, 0.5, 1] } else { [1, 0.5, 0.5, 1] }],
             ["location", ""],

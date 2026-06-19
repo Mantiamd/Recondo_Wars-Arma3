@@ -656,6 +656,31 @@ class Cfg3DEN {
             };
             
             //==========================================
+            // RIVER TRAFFIC MODULE CATEGORIES
+            //==========================================
+            
+            class Recondo_RiverTraffic_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_RiverTraffic_Chances {
+                displayName = "Spawn Chances";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_RiverTraffic_Boats {
+                displayName = "Boat Classnames";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_RiverTraffic_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            //==========================================
             // REINFORCEMENT WAVES MODULE CATEGORIES
             //==========================================
             

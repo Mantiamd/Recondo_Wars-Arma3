@@ -294,12 +294,21 @@ if (count _intelLog > 0) then {
         private _logEntry = _x;
         private _timestamp = _logEntry getOrDefault ["timestamp", ""];
         private _message = _logEntry getOrDefault ["message", ""];
-        
-        // Extract short date (MM-DD HH:MM) from full timestamp (YYYY-MM-DD HH:MM)
-        private _shortDate = if (count _timestamp >= 16) then {
-            (_timestamp select [5, 11])  // "MM-DD HH:MM"
+
+        // Extract compact date for sidebar; tolerate older numeric timestamps.
+        private _shortDate = "";
+        if (_timestamp isEqualType "") then {
+            _shortDate = if (count _timestamp >= 16) then {
+                (_timestamp select [5, 11])  // "MM-DD HH:MM"
+            } else {
+                _timestamp
+            };
         } else {
-            _timestamp
+            if (_timestamp isEqualType 0) then {
+                _shortDate = format ["T+%1s", floor _timestamp];
+            } else {
+                _shortDate = str _timestamp;
+            };
         };
         
         // Truncate message for sidebar display

@@ -25,6 +25,12 @@ if (isNull _display) exitWith {};
 
 RECONDO_NOTEBOOK_OPEN = true;
 
+// Reading pose, broadcast so nearby players see it. Only fires if TSP Animate
+// is loaded; the handler itself no-ops otherwise, so this is safe either way.
+if (!isNil "tsp_fnc_gesture_play") then {
+    ["Recondo_notebookAnim", [player, true]] call CBA_fnc_globalEvent;
+};
+
 // Build read-only image spreads from mission-folder images.
 // Side-specific pages (notebook\<side>\imageN.jpg) come first, then shared global
 // pages (notebook\global\imageN.jpg). The scan probes a fixed range and skips gaps,
@@ -268,6 +274,11 @@ _display displayAddEventHandler ["Unload", {
         [_pfh] call CBA_fnc_removePerFrameHandler;
     };
     uiNamespace setVariable ["Recondo_NotebookCursorPFH", -1];
+
+    // End the reading pose on every machine (matches the open broadcast).
+    if (!isNil "tsp_fnc_gesture_stop") then {
+        ["Recondo_notebookAnim", [player, false]] call CBA_fnc_globalEvent;
+    };
 }];
 
 private _fnc_renderSpread = {

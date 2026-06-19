@@ -3330,12 +3330,32 @@ class CfgVehicles {
             };
             class SoundInterval {
                 displayName = "Sound Interval (sec)";
-                tooltip = "Seconds between tracker sounds. Set to 0 to disable sounds.";
+                tooltip = "Seconds between tracker group ambient sounds.";
                 control = "Edit";
                 property = "Recondo_Trackers_SoundInterval";
                 expression = "_this setVariable ['soundinterval', parseNumber _value, true];";
                 typeName = "STRING";
                 defaultValue = """30""";
+                category = "Recondo_Trackers_Behavior";
+            };
+            class EnableBambooSounds {
+                displayName = "Enable Bamboo Sounds";
+                tooltip = "If enabled, no-dog tracker groups play bamboo/wood ambience. Dog barks and detection sounds are unaffected.";
+                control = "Checkbox";
+                property = "Recondo_Trackers_EnableBambooSounds";
+                expression = "_this setVariable ['enablebamboosounds', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_Trackers_Behavior";
+            };
+            class EnableWhistling {
+                displayName = "Enable Whistling";
+                tooltip = "If enabled, no-dog tracker groups can play enemy whistle/whistling ambience. Combines with Bamboo Sounds when both are enabled.";
+                control = "Checkbox";
+                property = "Recondo_Trackers_EnableWhistling";
+                expression = "_this setVariable ['enablewhistling', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
                 category = "Recondo_Trackers_Behavior";
             };
             class PredictiveDistanceMin {
@@ -3665,12 +3685,32 @@ class CfgVehicles {
             };
             class SoundInterval {
                 displayName = "Sound Interval (sec)";
-                tooltip = "Seconds between tracker sounds for Wave 1 groups. 0 to disable.";
+                tooltip = "Seconds between Wave 1 reinforcement group ambient sounds. 0 to disable interval sounds.";
                 control = "Edit";
                 property = "Recondo_RW_SoundInterval";
                 expression = "_this setVariable ['soundinterval', parseNumber _value, true];";
                 typeName = "STRING";
                 defaultValue = """30""";
+                category = "Recondo_RW_Wave1";
+            };
+            class EnableBambooSticks {
+                displayName = "Enable Bamboo Sticks";
+                tooltip = "If enabled, no-dog Wave 1 groups play bamboo stick ambience. Dog bark/detection/death sounds are unaffected.";
+                control = "Checkbox";
+                property = "Recondo_RW_EnableBambooSticks";
+                expression = "_this setVariable ['enablebamboosticks', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_RW_Wave1";
+            };
+            class EnableWhistling {
+                displayName = "Enable Whistling";
+                tooltip = "If enabled, no-dog Wave 1 groups can play enemy whistle/whistling ambience. Combines with Bamboo Sticks when both are enabled.";
+                control = "Checkbox";
+                property = "Recondo_RW_EnableWhistling";
+                expression = "_this setVariable ['enablewhistling', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
                 category = "Recondo_RW_Wave1";
             };
             
@@ -5004,32 +5044,32 @@ class CfgVehicles {
             // ========================================
             // CUSTOM COMPOSITIONS
             // ========================================
-            class CustomCompositionPath {
-                displayName = "CUSTOM - Folder Path";
-                tooltip = "Path to compositions folder relative to mission root for custom compositions.";
-                control = "Edit";
-                property = "Recondo_ObjDestroy_CustomCompPath";
-                expression = "_this setVariable ['customcomppath', _value, true];";
-                typeName = "STRING";
-                defaultValue = """compositions""";
+            class EnableCustomComposition {
+                displayName = "CUSTOM - Enable";
+                tooltip = "Enable a custom composition pasted below. When enabled it is added to the pool alongside any checked default compositions.";
+                control = "Checkbox";
+                property = "Recondo_ObjDestroy_CustomCompEnabled";
+                expression = "_this setVariable ['customcompenabled', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
                 category = "Recondo_ObjDestroy_CompCustom";
             };
-            class CustomActiveCompositions {
-                displayName = "CUSTOM - Active Compositions";
-                tooltip = "Names of your custom composition files (with or without .sqe extension), one per line or comma-separated. Random selection per objective.";
+            class CustomCompositionData {
+                displayName = "CUSTOM - Active Composition";
+                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries, e.g. [[""Land_Cargo_HQ_V1_F"",[0,0,0],0]]. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
-                property = "Recondo_ObjDestroy_CustomActiveComps";
-                expression = "_this setVariable ['customactivecomps', _value, true];";
+                property = "Recondo_ObjDestroy_CustomCompData";
+                expression = "_this setVariable ['customcompdata', _value, true];";
                 typeName = "STRING";
                 defaultValue = """""";
                 category = "Recondo_ObjDestroy_CompCustom";
             };
-            class CustomDestroyedCompositions {
-                displayName = "CUSTOM - Destroyed Compositions";
-                tooltip = "Names of custom destroyed variant composition files (with or without .sqe extension), one per line or comma-separated. Leave empty to spawn nothing after destruction.";
+            class CustomDestroyedData {
+                displayName = "CUSTOM - Destroyed Composition";
+                tooltip = "Optional. Paste the destroyed variant here in the same [classname, [relX,relY,relZ], dir] format. Leave empty to spawn nothing after destruction.";
                 control = "EditCodeMulti5";
-                property = "Recondo_ObjDestroy_CustomDestroyedComps";
-                expression = "_this setVariable ['customdestroyedcomps', _value, true];";
+                property = "Recondo_ObjDestroy_CustomDestroyedData";
+                expression = "_this setVariable ['customdestroyeddata', _value, true];";
                 typeName = "STRING";
                 defaultValue = """""";
                 category = "Recondo_ObjDestroy_CompCustom";
@@ -5641,32 +5681,32 @@ class CfgVehicles {
             // ========================================
             // CUSTOM COMPOSITIONS
             // ========================================
-            class CustomCompositionPath {
-                displayName = "CUSTOM - Folder Path";
-                tooltip = "Folder path relative to mission root containing your custom composition files.";
-                control = "Edit";
-                property = "Recondo_HubSubs_CustomCompPath";
-                expression = "_this setVariable ['customcomppath', _value, true];";
-                typeName = "STRING";
-                defaultValue = """compositions""";
+            class EnableCustomComposition {
+                displayName = "CUSTOM - Enable";
+                tooltip = "Enable a custom composition pasted below. When enabled it is added to the pool alongside any checked default compositions.";
+                control = "Checkbox";
+                property = "Recondo_HubSubs_CustomCompEnabled";
+                expression = "_this setVariable ['customcompenabled', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
                 category = "Recondo_HubSubs_CompCustom";
             };
-            class CustomActiveCompositions {
-                displayName = "CUSTOM - Active Compositions";
-                tooltip = "Your custom composition names for active hubs (with or without .sqe extension). One per line or comma-separated.";
+            class CustomCompositionData {
+                displayName = "CUSTOM - Active Composition";
+                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
-                property = "Recondo_HubSubs_CustomActiveComps";
-                expression = "_this setVariable ['customactivecomps', _value, true];";
+                property = "Recondo_HubSubs_CustomCompData";
+                expression = "_this setVariable ['customcompdata', _value, true];";
                 typeName = "STRING";
                 defaultValue = """""";
                 category = "Recondo_HubSubs_CompCustom";
             };
-            class CustomDestroyedCompositions {
-                displayName = "CUSTOM - Destroyed Compositions";
-                tooltip = "Your custom composition names for destroyed hubs (with or without .sqe extension). One per line or comma-separated.";
+            class CustomDestroyedData {
+                displayName = "CUSTOM - Destroyed Composition";
+                tooltip = "Optional. Paste the destroyed variant here in the same [classname, [relX,relY,relZ], dir] format. Spawned when a custom hub is destroyed. Leave empty for none.";
                 control = "EditCodeMulti5";
-                property = "Recondo_HubSubs_CustomDestroyedComps";
-                expression = "_this setVariable ['customdestroyedcomps', _value, true];";
+                property = "Recondo_HubSubs_CustomDestroyedData";
+                expression = "_this setVariable ['customdestroyeddata', _value, true];";
                 typeName = "STRING";
                 defaultValue = """""";
                 category = "Recondo_HubSubs_CompCustom";
@@ -6432,22 +6472,22 @@ class CfgVehicles {
             // ========================================
             // CUSTOM COMPOSITION SETTINGS
             // ========================================
-            class CustomCompositionPath {
-                displayName = "CUSTOM - Folder Path";
-                tooltip = "Folder path relative to mission root containing your custom composition files.";
-                control = "Edit";
-                property = "Recondo_HVT_CustomCompPath";
-                expression = "_this setVariable ['customcomppath', _value, true];";
-                typeName = "STRING";
-                defaultValue = """compositions""";
+            class EnableCustomComposition {
+                displayName = "CUSTOM - Enable";
+                tooltip = "Enable a custom composition pasted below. When enabled it is added to the pool alongside any checked default compositions.";
+                control = "Checkbox";
+                property = "Recondo_HVT_CustomCompEnabled";
+                expression = "_this setVariable ['customcompenabled', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
                 category = "Recondo_HVT_CompositionCustom";
             };
-            class CustomActiveCompositions {
-                displayName = "CUSTOM - Composition List";
-                tooltip = "List of your custom composition filenames (with or without .sqe extension).\nOne per line or comma-separated. These are added to the pool alongside checked compositions above.";
+            class CustomCompositionData {
+                displayName = "CUSTOM - Composition";
+                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
-                property = "Recondo_HVT_CustomActiveComps";
-                expression = "_this setVariable ['customactivecomps', _value, true];";
+                property = "Recondo_HVT_CustomCompData";
+                expression = "_this setVariable ['customcompdata', _value, true];";
                 typeName = "STRING";
                 defaultValue = """""";
                 category = "Recondo_HVT_CompositionCustom";
@@ -7384,22 +7424,22 @@ class CfgVehicles {
             // ========================================
             // CUSTOM COMPOSITION SETTINGS
             // ========================================
-            class CustomCompositionPath {
-                displayName = "CUSTOM - Folder Path";
-                tooltip = "Folder path relative to mission root containing your custom composition files.";
-                control = "Edit";
-                property = "Recondo_Hostage_CustomCompPath";
-                expression = "_this setVariable ['customcomppath', _value, true];";
-                typeName = "STRING";
-                defaultValue = """compositions""";
+            class EnableCustomComposition {
+                displayName = "CUSTOM - Enable";
+                tooltip = "Enable a custom composition pasted below. When enabled it is added to the pool alongside any checked default compositions.";
+                control = "Checkbox";
+                property = "Recondo_Hostage_CustomCompEnabled";
+                expression = "_this setVariable ['customcompenabled', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
                 category = "Recondo_Hostage_CompositionCustom";
             };
-            class CustomActiveCompositions {
-                displayName = "CUSTOM - Composition List";
-                tooltip = "List of your custom composition filenames (with or without .sqe extension).\nOne per line or comma-separated. These are added to the pool alongside checked compositions above.";
+            class CustomCompositionData {
+                displayName = "CUSTOM - Composition";
+                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
-                property = "Recondo_Hostage_CustomActiveComps";
-                expression = "_this setVariable ['customactivecomps', _value, true];";
+                property = "Recondo_Hostage_CustomCompData";
+                expression = "_this setVariable ['customcompdata', _value, true];";
                 typeName = "STRING";
                 defaultValue = """""";
                 category = "Recondo_Hostage_CompositionCustom";
@@ -8006,32 +8046,32 @@ class CfgVehicles {
             // ========================================
             // CUSTOM COMPOSITIONS (MISSION FOLDER)
             // ========================================
-            class CustomCompositionPath {
-                displayName = "CUSTOM - Folder Path";
-                tooltip = "Path in mission folder for custom compositions (e.g., 'compositions'). Custom compositions are added to the pool alongside any enabled default compositions.";
-                control = "Edit";
-                property = "Recondo_Jammer_CustomCompPath";
-                expression = "_this setVariable ['customcomppath', _value, true];";
-                typeName = "STRING";
-                defaultValue = """compositions""";
+            class EnableCustomComposition {
+                displayName = "CUSTOM - Enable";
+                tooltip = "Enable a custom composition pasted below. When enabled it is added to the pool alongside any enabled default compositions.";
+                control = "Checkbox";
+                property = "Recondo_Jammer_CustomCompEnabled";
+                expression = "_this setVariable ['customcompenabled', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
                 category = "Recondo_Jammer_CustomComp";
             };
-            class CustomActiveCompositions {
-                displayName = "Active Compositions";
-                tooltip = "List of custom composition filenames for active jammers (with or without .sqe extension). One per line or comma-separated. These must have matching destroyed versions with '_destroyed' suffix.";
+            class CustomCompositionData {
+                displayName = "CUSTOM - Active Composition";
+                tooltip = "Paste your active jammer composition here as an array of [classname, [relX,relY,relZ], dir] entries. Must include the jammer classname object. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
-                property = "Recondo_Jammer_CustomActiveComps";
-                expression = "_this setVariable ['customactivecomps', _value, true];";
+                property = "Recondo_Jammer_CustomCompData";
+                expression = "_this setVariable ['customcompdata', _value, true];";
                 typeName = "STRING";
                 defaultValue = """""";
                 category = "Recondo_Jammer_CustomComp";
             };
-            class CustomDestroyedCompositions {
-                displayName = "Destroyed Compositions";
-                tooltip = "List of custom composition filenames for destroyed jammers (with or without .sqe extension). Should match the order of Active Compositions. If empty, '_destroyed' suffix is auto-appended to active names.";
+            class CustomDestroyedData {
+                displayName = "CUSTOM - Destroyed Composition";
+                tooltip = "Optional. Paste the destroyed variant here in the same [classname, [relX,relY,relZ], dir] format. Leave empty to spawn nothing after destruction.";
                 control = "EditCodeMulti5";
-                property = "Recondo_Jammer_CustomDestroyedComps";
-                expression = "_this setVariable ['customdestroyedcomps', _value, true];";
+                property = "Recondo_Jammer_CustomDestroyedData";
+                expression = "_this setVariable ['customdestroyeddata', _value, true];";
                 typeName = "STRING";
                 defaultValue = """""";
                 category = "Recondo_Jammer_CustomComp";
@@ -10477,34 +10517,14 @@ class CfgVehicles {
                 defaultValue = "false";
                 category = "Recondo_OutpostTele_Compositions";
             };
-            class CompositionPath {
-                displayName = "Composition Path";
-                tooltip = "Folder path for compositions relative to mission root. Example: 'compositions'";
-                control = "Edit";
-                property = "Recondo_OutpostTele_CompositionPath";
-                expression = "_this setVariable ['compositionpath', _value, true];";
-                typeName = "STRING";
-                defaultValue = """compositions""";
-                category = "Recondo_OutpostTele_Compositions";
-            };
-            class CompositionList {
-                displayName = "Composition List";
-                tooltip = "List of composition filenames (.sqe). One per line or comma-separated. Matched to markers in order, or randomly assigned if fewer compositions than markers.\nExample:\noutpost_small.sqe\noutpost_medium.sqe";
-                control = "EditMulti5";
-                property = "Recondo_OutpostTele_CompositionList";
-                expression = "_this setVariable ['compositionlist', _value, true];";
+            class CustomCompositionData {
+                displayName = "Composition";
+                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries. The same composition is spawned at every outpost marker. Requires the Enable checkbox above.";
+                control = "EditCodeMulti5";
+                property = "Recondo_OutpostTele_CustomCompData";
+                expression = "_this setVariable ['customcompdata', _value, true];";
                 typeName = "STRING";
                 defaultValue = """""";
-                category = "Recondo_OutpostTele_Compositions";
-            };
-            class UseModCompositions {
-                displayName = "Use Mod Compositions";
-                tooltip = "Load compositions from the mod's compositions folder instead of mission folder.";
-                control = "Checkbox";
-                property = "Recondo_OutpostTele_UseModCompositions";
-                expression = "_this setVariable ['usemodcompositions', _value, true];";
-                typeName = "BOOL";
-                defaultValue = "false";
                 category = "Recondo_OutpostTele_Compositions";
             };
             class ClearRadius {
@@ -11489,22 +11509,22 @@ class CfgVehicles {
             // ========================================
             // CUSTOM COMPOSITIONS
             // ========================================
-            class CustomCompositionPath {
-                displayName = "CUSTOM - Folder Path";
-                tooltip = "Path to compositions folder in mission directory for your custom compositions.";
-                control = "Edit";
-                property = "Recondo_CampsRandom_CustomCompPath";
-                expression = "_this setVariable ['customcomppath', _value, true];";
-                typeName = "STRING";
-                defaultValue = """compositions""";
+            class EnableCustomComposition {
+                displayName = "CUSTOM - Enable";
+                tooltip = "Enable a custom composition pasted below. When enabled it is added to the pool alongside any checked default compositions.";
+                control = "Checkbox";
+                property = "Recondo_CampsRandom_CustomCompEnabled";
+                expression = "_this setVariable ['customcompenabled', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
                 category = "Recondo_CampsRandom_CompCustom";
             };
-            class CustomCompositions {
-                displayName = "CUSTOM - Composition List";
-                tooltip = "Your custom composition filenames (with or without .sqe extension). One per line or comma-separated. These are added to checked compositions above.";
+            class CustomCompositionData {
+                displayName = "CUSTOM - Composition";
+                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
-                property = "Recondo_CampsRandom_CustomComps";
-                expression = "_this setVariable ['customcompositions', _value, true];";
+                property = "Recondo_CampsRandom_CustomCompData";
+                expression = "_this setVariable ['customcompdata', _value, true];";
                 typeName = "STRING";
                 defaultValue = """""";
                 category = "Recondo_CampsRandom_CompCustom";
@@ -13266,22 +13286,22 @@ class CfgVehicles {
             // ========================================
             // COMPOSITION SETTINGS
             // ========================================
-            class CompositionPath {
-                displayName = "Composition Folder Path";
-                tooltip = "Path to compositions folder relative to mission root.";
-                control = "Edit";
-                property = "Recondo_CSS_CompositionPath";
-                expression = "_this setVariable ['compositionpath', _value, true];";
-                typeName = "STRING";
-                defaultValue = """compositions""";
+            class EnableCustomComposition {
+                displayName = "Enable Custom Composition";
+                tooltip = "Enable the custom composition pasted below. Required for this module to spawn anything.";
+                control = "Checkbox";
+                property = "Recondo_CSS_CustomCompEnabled";
+                expression = "_this setVariable ['customcompenabled', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
                 category = "Recondo_CSS_Compositions";
             };
-            class CompositionList {
-                displayName = "Composition Files";
-                tooltip = "List of composition filenames (with or without .sqe extension). One per line or comma-separated. A random composition is selected per site.";
+            class CustomCompositionData {
+                displayName = "Composition";
+                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries. The same composition is spawned at each selected site. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
-                property = "Recondo_CSS_CompositionList";
-                expression = "_this setVariable ['compositionlist', _value, true];";
+                property = "Recondo_CSS_CustomCompData";
+                expression = "_this setVariable ['customcompdata', _value, true];";
                 typeName = "STRING";
                 defaultValue = """""";
                 category = "Recondo_CSS_Compositions";
@@ -13851,6 +13871,16 @@ class CfgVehicles {
                 defaultValue = """POO Site""";
                 category = "Recondo_POO_General";
             };
+            class ObjectiveDescription {
+                displayName = "Objective Description";
+                tooltip = "Description shown on the Intel Board detail panel.";
+                control = "EditMulti5";
+                property = "Recondo_POO_ObjectiveDescription";
+                expression = "_this setVariable ['objectivedescription', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Destroy active mortar points of origin before they can continue bombardment.""";
+                category = "Recondo_POO_General";
+            };
             class POOMarkerPrefix {
                 displayName = "POO Site Marker Prefix";
                 tooltip = "Prefix for the map markers that define possible artillery spawn locations (e.g. POO_ matches POO_1, POO_2, etc.).";
@@ -14200,22 +14230,22 @@ class CfgVehicles {
             // ========================================
             // CUSTOM COMPOSITIONS
             // ========================================
-            class CustomCompositionPath {
-                displayName = "CUSTOM - Folder Path";
-                tooltip = "Relative path to custom composition folder in the mission directory.";
-                control = "Edit";
-                property = "Recondo_Photo_CustomCompPath";
-                expression = "_this setVariable ['customcomppath', _value, true];";
-                typeName = "STRING";
-                defaultValue = """compositions""";
+            class EnableCustomComposition {
+                displayName = "CUSTOM - Enable";
+                tooltip = "Enable a custom composition pasted below. When enabled it is added to the pool alongside any checked default compositions.";
+                control = "Checkbox";
+                property = "Recondo_Photo_CustomCompEnabled";
+                expression = "_this setVariable ['customcompenabled', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
                 category = "Recondo_Photo_Composition";
             };
-            class CustomActiveCompositions {
-                displayName = "Custom Composition Filenames";
-                tooltip = "Custom .sqe filenames from mission folder. One per line or comma-separated.";
+            class CustomCompositionData {
+                displayName = "CUSTOM - Composition";
+                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries. Set the target classname below. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
-                property = "Recondo_Photo_CustomActiveComps";
-                expression = "_this setVariable ['customactivecomps', _value, true];";
+                property = "Recondo_Photo_CustomCompData";
+                expression = "_this setVariable ['customcompdata', _value, true];";
                 typeName = "STRING";
                 defaultValue = """""";
                 category = "Recondo_Photo_Composition";
@@ -16667,6 +16697,232 @@ class CfgVehicles {
                 category = "Recondo_Outpost_Debug";
             };
             
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+
+    class Recondo_Module_RiverTraffic: Module_F {
+        scope = 2;
+        displayName = "River Traffic";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\move_ca.paa";
+        function = "Recondo_fnc_moduleRiverTraffic";
+        functionPriority = 5;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        canSetArea = 0;
+
+        class ModuleDescription: ModuleDescription {
+            description = "Spawns dynamic boat patrols along the map's river network (Rung Sat / vnx_rssz) near players inside the module zone. Boats are steered by a server-side engine and are dedicated-server safe. Place multiple modules for separate river zones. Set boat classnames per side and a spawn chance for each.";
+            sync[] = {};
+        };
+
+        class Attributes: AttributesBase {
+
+            // ========================================
+            // GENERAL SETTINGS
+            // ========================================
+            class ModuleRadius {
+                displayName = "Zone Radius (m)";
+                tooltip = "Radius around this module within which river traffic activates and boats may spawn.";
+                control = "Edit";
+                property = "Recondo_RiverTraffic_ModuleRadius";
+                expression = "_this setVariable ['moduleradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """1500""";
+                category = "Recondo_RiverTraffic_General";
+            };
+            class ActivationDistance {
+                displayName = "Player Activation Distance (m)";
+                tooltip = "A river point becomes a spawn candidate only if a qualifying player is within this distance of it.";
+                control = "Edit";
+                property = "Recondo_RiverTraffic_ActivationDistance";
+                expression = "_this setVariable ['activationdistance', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """800""";
+                category = "Recondo_RiverTraffic_General";
+            };
+            class MinSpawnAway {
+                displayName = "Min Spawn Distance From Players (m)";
+                tooltip = "Boats will not spawn closer than this to any player, preventing pop-in.";
+                control = "Edit";
+                property = "Recondo_RiverTraffic_MinSpawnAway";
+                expression = "_this setVariable ['minspawnaway', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """300""";
+                category = "Recondo_RiverTraffic_General";
+            };
+            class DespawnDistance {
+                displayName = "Despawn Distance (m)";
+                tooltip = "A boat is removed once no player is within this distance of it.";
+                control = "Edit";
+                property = "Recondo_RiverTraffic_DespawnDistance";
+                expression = "_this setVariable ['despawndistance', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """1200""";
+                category = "Recondo_RiverTraffic_General";
+            };
+            class HeightLimit {
+                displayName = "Activation Height Limit (m)";
+                tooltip = "Players higher than this above ground, or in any aircraft, will NOT trigger boat spawns.";
+                control = "Edit";
+                property = "Recondo_RiverTraffic_HeightLimit";
+                expression = "_this setVariable ['heightlimit', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """20""";
+                category = "Recondo_RiverTraffic_General";
+            };
+            class ScanInterval {
+                displayName = "Scan Interval (s)";
+                tooltip = "How often this module checks for players and rolls new boat spawns.";
+                control = "Edit";
+                property = "Recondo_RiverTraffic_ScanInterval";
+                expression = "_this setVariable ['scaninterval', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """15""";
+                category = "Recondo_RiverTraffic_General";
+            };
+            class MaxBoats {
+                displayName = "Max Concurrent Boats";
+                tooltip = "Global cap on simultaneously active river boats (shared across all River Traffic modules).";
+                control = "Edit";
+                property = "Recondo_RiverTraffic_MaxBoats";
+                expression = "_this setVariable ['maxboats', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """6""";
+                category = "Recondo_RiverTraffic_General";
+            };
+            class BoatSpeed {
+                displayName = "Boat Speed (km/h)";
+                tooltip = "Cruise speed of river boats.";
+                control = "Edit";
+                property = "Recondo_RiverTraffic_BoatSpeed";
+                expression = "_this setVariable ['boatspeed', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """22""";
+                category = "Recondo_RiverTraffic_General";
+            };
+
+            // ========================================
+            // SPAWN CHANCES
+            // ========================================
+            class CivChance {
+                displayName = "Civilian Spawn Chance (%)";
+                tooltip = "Per scan tick, chance to spawn a civilian boat (if under the boat cap and classnames are set).";
+                control = "Slider";
+                property = "Recondo_RiverTraffic_CivChance";
+                expression = "_this setVariable ['civchance', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "50";
+                class Slider { range[] = {0, 100}; };
+                category = "Recondo_RiverTraffic_Chances";
+            };
+            class OpforChance {
+                displayName = "OPFOR Spawn Chance (%)";
+                tooltip = "Per scan tick, chance to spawn an OPFOR boat. OPFOR boats engage hostile players while moving.";
+                control = "Slider";
+                property = "Recondo_RiverTraffic_OpforChance";
+                expression = "_this setVariable ['opforchance', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "25";
+                class Slider { range[] = {0, 100}; };
+                category = "Recondo_RiverTraffic_Chances";
+            };
+            class BluforChance {
+                displayName = "BLUFOR Spawn Chance (%)";
+                tooltip = "Per scan tick, chance to spawn a friendly BLUFOR boat. BLUFOR boats stay non-engaging.";
+                control = "Slider";
+                property = "Recondo_RiverTraffic_BluforChance";
+                expression = "_this setVariable ['bluforchance', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                class Slider { range[] = {0, 100}; };
+                category = "Recondo_RiverTraffic_Chances";
+            };
+
+            // ========================================
+            // BOAT CLASSNAMES
+            // ========================================
+            class CivClassnames {
+                displayName = "Civilian Boat Classnames";
+                tooltip = "Comma/newline-separated boat classnames for civilian traffic. One is picked at random per spawn. Leave blank to disable.";
+                control = "EditMulti3";
+                property = "Recondo_RiverTraffic_CivClassnames";
+                expression = "_this setVariable ['civclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """vn_c_boat_01_01,vn_c_boat_07_01,vn_c_boat_07_02""";
+                category = "Recondo_RiverTraffic_Boats";
+            };
+            class CivCrew {
+                displayName = "Civilian Crew Classnames";
+                tooltip = "Crew unit classnames for civilian boats. Leave blank to auto-crew with the boat's default crew.";
+                control = "EditMulti3";
+                property = "Recondo_RiverTraffic_CivCrew";
+                expression = "_this setVariable ['civcrew', _value, true];";
+                typeName = "STRING";
+                defaultValue = """vn_c_men_11,vn_c_men_14,vn_c_men_24,vn_c_men_31""";
+                category = "Recondo_RiverTraffic_Boats";
+            };
+            class OpforClassnames {
+                displayName = "OPFOR Boat Classnames";
+                tooltip = "Comma/newline-separated boat classnames for OPFOR traffic. One is picked at random per spawn. Leave blank to disable.";
+                control = "EditMulti3";
+                property = "Recondo_RiverTraffic_OpforClassnames";
+                expression = "_this setVariable ['opforclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """vn_o_boat_01_mg_00_kr,vn_o_boat_02_00_pl,vn_o_boat_02_mg_00_pl""";
+                category = "Recondo_RiverTraffic_Boats";
+            };
+            class OpforCrew {
+                displayName = "OPFOR Crew Classnames";
+                tooltip = "Crew unit classnames for OPFOR boats. Leave blank to auto-crew with the boat's default crew.";
+                control = "EditMulti3";
+                property = "Recondo_RiverTraffic_OpforCrew";
+                expression = "_this setVariable ['opforcrew', _value, true];";
+                typeName = "STRING";
+                defaultValue = """vn_o_men_vc_regional_14,vn_o_men_vc_local_12,vn_o_men_vc_local_07,vn_o_men_vc_regional_07,vn_o_men_nva_dc_06,vn_o_men_nva_dc_07,vn_o_men_nva_dc_03,vn_o_men_nva_dc_13,vn_o_men_nva_65_07,vn_o_men_nva_65_14""";
+                category = "Recondo_RiverTraffic_Boats";
+            };
+            class BluforClassnames {
+                displayName = "BLUFOR Boat Classnames";
+                tooltip = "Comma/newline-separated boat classnames for BLUFOR traffic. One is picked at random per spawn. Leave blank to disable.";
+                control = "EditMulti3";
+                property = "Recondo_RiverTraffic_BluforClassnames";
+                expression = "_this setVariable ['bluforclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """vn_b_boat_12_03,vn_b_boat_12_04,vn_b_boat_13_03,vn_b_boat_13_04""";
+                category = "Recondo_RiverTraffic_Boats";
+            };
+            class BluforCrew {
+                displayName = "BLUFOR Crew Classnames";
+                tooltip = "Crew unit classnames for BLUFOR boats. Leave blank to auto-crew with the boat's default crew.";
+                control = "EditMulti3";
+                property = "Recondo_RiverTraffic_BluforCrew";
+                expression = "_this setVariable ['bluforcrew', _value, true];";
+                typeName = "STRING";
+                defaultValue = """vn_b_men_navy_02,vn_b_men_navy_03,vn_b_men_navy_04,vn_b_men_navy_05,vn_b_men_navy_06""";
+                category = "Recondo_RiverTraffic_Boats";
+            };
+
+            // ========================================
+            // DEBUG SETTINGS
+            // ========================================
+            class DebugLogging {
+                displayName = "Debug Logging";
+                tooltip = "Enable detailed RPT logging for this module.";
+                control = "Checkbox";
+                property = "Recondo_RiverTraffic_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_RiverTraffic_Debug";
+            };
+
             class ModuleDescription: ModuleDescription {};
         };
     };

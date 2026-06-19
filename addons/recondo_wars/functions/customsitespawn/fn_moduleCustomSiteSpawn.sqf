@@ -30,8 +30,9 @@ private _markerPrefix = _logic getVariable ["markerprefix", "SITE_"];
 private _activeCount = _logic getVariable ["activecount", 3];
 private _enablePersistence = _logic getVariable ["enablepersistence", true];
 
-private _compositionPath = _logic getVariable ["compositionpath", "compositions"];
-private _compositionListRaw = _logic getVariable ["compositionlist", ""];
+private _compositionPath = "compositions";
+private _customCompEnabled = _logic getVariable ["customcompenabled", true];
+private _customCompData = _logic getVariable ["customcompdata", ""];
 private _clearRadius = _logic getVariable ["clearradius", 25];
 private _disableSimulation = _logic getVariable ["disablesimulation", true];
 
@@ -60,12 +61,19 @@ private _debugMarkers = _logic getVariable ["debugmarkers", false];
 // PARSE CONFIGURATIONS
 // ========================================
 
-private _compositionList = if (_compositionListRaw != "") then {
-    ((_compositionListRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" && !(_x select [0, 2] == "//") }
-} else { [] };
+// Register the pasted custom composition (if enabled). The same composition is
+// used at every selected site, so the list holds a single token when set.
+private _compositionList = [];
+if (_customCompEnabled) then {
+    private _customTokens = [true, _customCompData, "", format ["css_%1", _siteName]] call Recondo_fnc_registerCustomComposition;
+    private _customActiveToken = _customTokens select 0;
+    if (_customActiveToken != "") then {
+        _compositionList = [_customActiveToken];
+    };
+};
 
 if (count _compositionList == 0) exitWith {
-    diag_log format ["[RECONDO_CSS] ERROR: No compositions specified for '%1'. Add at least one composition filename.", _siteName];
+    diag_log format ["[RECONDO_CSS] ERROR: No custom composition set for '%1'. Enable the checkbox and paste a composition.", _siteName];
 };
 
 private _garrisonClassnames = if (_garrisonClassnamesRaw != "") then {

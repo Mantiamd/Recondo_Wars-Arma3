@@ -48,9 +48,9 @@ private _outpostRadius = _logic getVariable ["outpostradius", 25];
 
 // Composition Settings
 private _enableCompositions = _logic getVariable ["enablecompositions", false];
-private _compositionPath = _logic getVariable ["compositionpath", "compositions"];
-private _compositionListRaw = _logic getVariable ["compositionlist", ""];
-private _useModCompositions = _logic getVariable ["usemodcompositions", false];
+private _customCompData = _logic getVariable ["customcompdata", ""];
+private _compositionPath = "compositions";
+private _useModCompositions = false;
 private _clearRadius = _logic getVariable ["clearradius", 15];
 
 // Destruction Settings
@@ -85,8 +85,16 @@ private _markerList = ((_markerListRaw splitString (toString [10, 13] + ",")) ap
 // Parse display names
 private _displayNames = ((_displayNamesRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" && !(_x select [0, 2] == "//") };
 
-// Parse composition list
-private _compositionList = ((_compositionListRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" && !(_x select [0, 2] == "//") };
+// Register the pasted custom composition (if enabled). The same composition is
+// used at every outpost marker, so the list holds a single token when set.
+private _compositionList = [];
+if (_enableCompositions) then {
+    private _customTokens = [true, _customCompData, "", format ["outposttele_%1", _markerPrefix]] call Recondo_fnc_registerCustomComposition;
+    private _customActiveToken = _customTokens select 0;
+    if (_customActiveToken != "") then {
+        _compositionList = [_customActiveToken];
+    };
+};
 
 // ========================================
 // GENERATE UNIQUE INSTANCE ID
