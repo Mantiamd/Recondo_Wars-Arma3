@@ -153,17 +153,26 @@ if (_profileHostageCalloway) then { _profilePoolList pushBack "Hostage_Calloway.
 if (_profileHostageVandermeer) then { _profilePoolList pushBack "Hostage_Vandermeer.sqf"; };
 if (_profileHostageGreer) then { _profilePoolList pushBack "Hostage_Greer.sqf"; };
 
-// Validate - at least one profile must be selected
-if (count _profilePoolList == 0) exitWith {
-    diag_log format ["[RECONDO_HOSTAGE] ERROR: No hostage profiles selected for '%1'. Check at least one profile in the module settings.", _objectiveName];
+// Gather any synced custom hostage profile modules (each becomes one hostage).
+([_logic, "Recondo_Module_CustomHostageProfile", _debugLogging] call Recondo_fnc_gatherCustomProfiles) params ["_customProfileTokens", "_customProfilesMap"];
+
+// Validate - at least one profile (checkbox or custom) must be available
+if (count _profilePoolList == 0 && {count _customProfileTokens == 0}) exitWith {
+    diag_log format ["[RECONDO_HOSTAGE] ERROR: No hostage profiles selected for '%1'. Check at least one profile or sync a Custom Hostage Profile module.", _objectiveName];
 };
 
 if (_debugLogging) then {
-    diag_log format ["[RECONDO_HOSTAGE] Using %1 hostage profiles: %2", count _profilePoolList, _profilePoolList];
+    diag_log format ["[RECONDO_HOSTAGE] Using %1 checked + %2 custom hostage profiles", count _profilePoolList, count _customProfileTokens];
 };
 
-// Load all checked profiles from mod
-private _loadedProfiles = ["hostages", _profilePoolList, false, "", _debugLogging] call Recondo_fnc_loadProfiles;
+// Load all checked profiles from mod (skip the loader when none are checked)
+private _loadedProfiles = [];
+if (count _profilePoolList > 0) then {
+    _loadedProfiles = ["hostages", _profilePoolList, false, "", _debugLogging] call Recondo_fnc_loadProfiles;
+};
+
+// Append synced custom profiles (re-read fresh from the modules on each load)
+{ _loadedProfiles pushBack (_customProfilesMap get _x); } forEach _customProfileTokens;
 
 if (count _loadedProfiles == 0) exitWith {
     diag_log format ["[RECONDO_HOSTAGE] ERROR: Failed to load hostage profiles for '%1'. Check profile files exist.", _objectiveName];

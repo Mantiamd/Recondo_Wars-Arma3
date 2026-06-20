@@ -133,8 +133,8 @@ You'll see this warning in system chat if a module can't find its markers. Make 
 Use the module's **AI Side** or **Garrison AI Side** setting. If using unit classnames from a different faction (e.g., independent classnames but want OPFOR), the module will force them to the configured side.
 
 ### Compositions not appearing
-- Check that the composition source is set correctly (Default, Custom, or Both)
-- For custom compositions, verify the folder path is relative to your mission root
+- Check that at least one default composition is enabled in the pool
+- For a custom composition, tick **CUSTOM - Enable Custom Composition** and make sure the paste box is not empty. Generate the text with `[getPos player, 25, true] call BIS_fnc_objectsGrabber;` — see the [Custom Compositions](../README.md#custom-compositions) section in the README
 - Enable debug logging to see composition spawn messages in RPT
 
 ### Persistence not saving

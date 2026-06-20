@@ -5056,7 +5056,7 @@ class CfgVehicles {
             };
             class CustomCompositionData {
                 displayName = "CUSTOM - Active Composition";
-                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries, e.g. [[""Land_Cargo_HQ_V1_F"",[0,0,0],0]]. Requires the Enable checkbox above.";
+                tooltip = "Paste a composition here (format: [classname, [relX,relY,relZ], dir]). To make one: stand at the centre of your build, open the debug console and run  [getPos player, 25, true] call BIS_fnc_objectsGrabber;  - it copies to your clipboard - then paste the result here. Raise 25 for a wider grab. See the README for full steps. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
                 property = "Recondo_ObjDestroy_CustomCompData";
                 expression = "_this setVariable ['customcompdata', _value, true];";
@@ -5066,7 +5066,7 @@ class CfgVehicles {
             };
             class CustomDestroyedData {
                 displayName = "CUSTOM - Destroyed Composition";
-                tooltip = "Optional. Paste the destroyed variant here in the same [classname, [relX,relY,relZ], dir] format. Leave empty to spawn nothing after destruction.";
+                tooltip = "Optional. Paste the destroyed variant here, grabbed the same way as the active composition (same [classname, [relX,relY,relZ], dir] format). Leave empty to spawn nothing after destruction.";
                 control = "EditCodeMulti5";
                 property = "Recondo_ObjDestroy_CustomDestroyedData";
                 expression = "_this setVariable ['customdestroyeddata', _value, true];";
@@ -5693,7 +5693,7 @@ class CfgVehicles {
             };
             class CustomCompositionData {
                 displayName = "CUSTOM - Active Composition";
-                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries. Requires the Enable checkbox above.";
+                tooltip = "Paste a composition here (format: [classname, [relX,relY,relZ], dir]). To make one: stand at the centre of your build, open the debug console and run  [getPos player, 25, true] call BIS_fnc_objectsGrabber;  - it copies to your clipboard - then paste the result here. Raise 25 for a wider grab. See the README for full steps. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
                 property = "Recondo_HubSubs_CustomCompData";
                 expression = "_this setVariable ['customcompdata', _value, true];";
@@ -5703,7 +5703,7 @@ class CfgVehicles {
             };
             class CustomDestroyedData {
                 displayName = "CUSTOM - Destroyed Composition";
-                tooltip = "Optional. Paste the destroyed variant here in the same [classname, [relX,relY,relZ], dir] format. Spawned when a custom hub is destroyed. Leave empty for none.";
+                tooltip = "Optional. Paste the destroyed variant here, grabbed the same way as the active composition (same [classname, [relX,relY,relZ], dir] format). Spawned when a custom hub is destroyed. Leave empty for none.";
                 control = "EditCodeMulti5";
                 property = "Recondo_HubSubs_CustomDestroyedData";
                 expression = "_this setVariable ['customdestroyeddata', _value, true];";
@@ -6484,7 +6484,7 @@ class CfgVehicles {
             };
             class CustomCompositionData {
                 displayName = "CUSTOM - Composition";
-                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries. Requires the Enable checkbox above.";
+                tooltip = "Paste a composition here (format: [classname, [relX,relY,relZ], dir]). To make one: stand at the centre of your build, open the debug console and run  [getPos player, 25, true] call BIS_fnc_objectsGrabber;  - it copies to your clipboard - then paste the result here. Raise 25 for a wider grab. See the README for full steps. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
                 property = "Recondo_HVT_CustomCompData";
                 expression = "_this setVariable ['customcompdata', _value, true];";
@@ -6688,7 +6688,7 @@ class CfgVehicles {
                 property = "Recondo_HVT_GarrisonClassnames";
                 expression = "_this setVariable ['garrisonclassnames', _value, true];";
                 typeName = "STRING";
-                defaultValue = """O_G_Soldier_F,O_G_Soldier_A_F,O_G_Soldier_AR_F,O_G_medic_F,O_G_Soldier_GL_F,O_G_Soldier_M_F,O_G_Soldier_SL_F,O_G_Soldier_TL_F""";
+                defaultValue = """vn_o_men_vc_local_01,vn_o_men_vc_local_02,vn_o_men_vc_local_03,vn_o_men_vc_local_04,vn_o_men_vc_local_05,vn_o_men_vc_local_06,vn_o_men_vc_local_07,vn_o_men_vc_local_08,vn_o_men_vc_local_09,vn_o_men_vc_local_10,vn_o_men_vc_local_11,vn_o_men_vc_local_12,vn_o_men_vc_local_13,vn_o_men_vc_local_14,vn_o_men_vc_local_29,vn_o_men_vc_local_30""";
                 category = "Recondo_HVT_GarrisonAI";
             };
             class GarrisonMin {
@@ -6764,7 +6764,7 @@ class CfgVehicles {
                 property = "Recondo_HVT_CivilianClassnames";
                 expression = "_this setVariable ['civilianclassnames', _value, true];";
                 typeName = "STRING";
-                defaultValue = """C_man_1,C_Man_casual_1_F,C_Man_casual_2_F,C_Man_casual_3_F""";
+                defaultValue = """vn_c_men_01,vn_c_men_02,vn_c_men_03,vn_c_men_04,vn_c_men_05""";
                 category = "Recondo_HVT_Civilians";
             };
             
@@ -7436,7 +7436,7 @@ class CfgVehicles {
             };
             class CustomCompositionData {
                 displayName = "CUSTOM - Composition";
-                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries. Requires the Enable checkbox above.";
+                tooltip = "Paste a composition here (format: [classname, [relX,relY,relZ], dir]). To make one: stand at the centre of your build, open the debug console and run  [getPos player, 25, true] call BIS_fnc_objectsGrabber;  - it copies to your clipboard - then paste the result here. Raise 25 for a wider grab. See the README for full steps. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
                 property = "Recondo_Hostage_CustomCompData";
                 expression = "_this setVariable ['customcompdata', _value, true];";
@@ -7570,7 +7570,7 @@ class CfgVehicles {
                 property = "Recondo_Hostage_GarrisonClassnames";
                 expression = "_this setVariable ['garrisonclassnames', _value, true];";
                 typeName = "STRING";
-                defaultValue = """""";
+                defaultValue = """vn_o_men_vc_local_01,vn_o_men_vc_local_02,vn_o_men_vc_local_03,vn_o_men_vc_local_04,vn_o_men_vc_local_05,vn_o_men_vc_local_06,vn_o_men_vc_local_07,vn_o_men_vc_local_08,vn_o_men_vc_local_09,vn_o_men_vc_local_10,vn_o_men_vc_local_11,vn_o_men_vc_local_12,vn_o_men_vc_local_13,vn_o_men_vc_local_14,vn_o_men_vc_local_29,vn_o_men_vc_local_30""";
                 category = "Recondo_Hostage_GarrisonAI";
             };
             class GarrisonMin {
@@ -7646,7 +7646,7 @@ class CfgVehicles {
                 property = "Recondo_Hostage_CivilianClassnames";
                 expression = "_this setVariable ['civilianclassnames', _value, true];";
                 typeName = "STRING";
-                defaultValue = """C_man_1,C_Man_casual_1_F,C_Man_casual_2_F,C_Man_casual_3_F""";
+                defaultValue = """vn_c_men_01,vn_c_men_02,vn_c_men_03,vn_c_men_04,vn_c_men_05""";
                 category = "Recondo_Hostage_Civilians";
             };
             
@@ -7919,6 +7919,226 @@ class CfgVehicles {
     };
     
     //==========================================
+    // CUSTOM HVT PROFILE MODULE
+    // Data carrier: sync to an Objective - HVT module
+    //==========================================
+    class Recondo_Module_CustomHVTProfile: Module_F {
+        scope = 2;
+        displayName = "Objective - Custom HVT Profile";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\kill_ca.paa";
+        functionPriority = 3;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        canSetArea = 0;
+
+        class ModuleDescription: ModuleDescription {
+            description = "Defines a custom HVT profile. Set a Variable Name on this module, fill in the fields, then sync it to an Objective - HVT module to add it to that objective's profile pool.";
+            sync[] = {"Recondo_Module_ObjectiveHVT"};
+        };
+
+        class Attributes: AttributesBase {
+            class Enabled {
+                displayName = "Enable This Profile";
+                tooltip = "Include this custom profile in the synced HVT module's pool. Uncheck to disable without unsyncing.";
+                control = "Checkbox";
+                property = "Recondo_CustomHVTProfile_Enabled";
+                expression = "_this setVariable ['customprofileenabled', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_CustomHVTProfile_General";
+            };
+            class ProfileName {
+                displayName = "Name";
+                tooltip = "Display name for the target (shown on the Intel Board).";
+                control = "Edit";
+                property = "Recondo_CustomHVTProfile_Name";
+                expression = "_this setVariable ['name', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Custom HVT""";
+                category = "Recondo_CustomHVTProfile_General";
+            };
+            class Classname {
+                displayName = "Unit Classname";
+                tooltip = "Classname of the unit spawned as the HVT.";
+                control = "Edit";
+                property = "Recondo_CustomHVTProfile_Classname";
+                expression = "_this setVariable ['classname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """C_man_1""";
+                category = "Recondo_CustomHVTProfile_General";
+            };
+            class Background {
+                displayName = "Background";
+                tooltip = "Background text shown on the Intel Board.";
+                control = "EditMulti5";
+                property = "Recondo_CustomHVTProfile_Background";
+                expression = "_this setVariable ['background', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CustomHVTProfile_General";
+            };
+            class PhotoPath {
+                displayName = "Photo Path";
+                tooltip = "Path to the intel photo, relative to the mission folder (e.g. notebook\hvt1.jpg). Both .jpg and .paa work. Leave blank for the default photo.";
+                control = "Edit";
+                property = "Recondo_CustomHVTProfile_Photo";
+                expression = "_this setVariable ['photo', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CustomHVTProfile_Appearance";
+            };
+            class Face {
+                displayName = "Face";
+                tooltip = "Optional face class (CfgFaces). Leave blank to use the unit's default.";
+                control = "Edit";
+                property = "Recondo_CustomHVTProfile_Face";
+                expression = "_this setVariable ['face', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CustomHVTProfile_Appearance";
+            };
+            class Speaker {
+                displayName = "Voice / Speaker";
+                tooltip = "Optional voice class (CfgVoice). Leave blank to use the unit's default.";
+                control = "Edit";
+                property = "Recondo_CustomHVTProfile_Speaker";
+                expression = "_this setVariable ['speaker', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CustomHVTProfile_Appearance";
+            };
+            class Loadout {
+                displayName = "Loadout";
+                tooltip = "Optional loadout array. In Arsenal, set up the gear, then run  copyToClipboard str getUnitLoadout player  in the debug console and paste the result here. Leave blank to keep the unit's default gear.";
+                control = "EditCodeMulti5";
+                property = "Recondo_CustomHVTProfile_Loadout";
+                expression = "_this setVariable ['loadoutdata', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CustomHVTProfile_Appearance";
+            };
+
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+
+    //==========================================
+    // CUSTOM HOSTAGE PROFILE MODULE
+    // Data carrier: sync to an Objective - Hostages module
+    //==========================================
+    class Recondo_Module_CustomHostageProfile: Module_F {
+        scope = 2;
+        displayName = "Objective - Custom Hostage Profile";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Objectives";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa";
+        functionPriority = 3;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        canSetArea = 0;
+
+        class ModuleDescription: ModuleDescription {
+            description = "Defines a custom hostage profile. Set a Variable Name on this module, fill in the fields, then sync it to an Objective - Hostages module to add it as an extra hostage. Each synced custom profile becomes one additional hostage.";
+            sync[] = {"Recondo_Module_ObjectiveHostages"};
+        };
+
+        class Attributes: AttributesBase {
+            class Enabled {
+                displayName = "Enable This Profile";
+                tooltip = "Include this custom hostage in the synced Hostages module. Uncheck to disable without unsyncing.";
+                control = "Checkbox";
+                property = "Recondo_CustomHostageProfile_Enabled";
+                expression = "_this setVariable ['customprofileenabled', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_CustomHostageProfile_General";
+            };
+            class ProfileName {
+                displayName = "Name";
+                tooltip = "Display name for the hostage (shown on the Intel Board).";
+                control = "Edit";
+                property = "Recondo_CustomHostageProfile_Name";
+                expression = "_this setVariable ['name', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Custom Hostage""";
+                category = "Recondo_CustomHostageProfile_General";
+            };
+            class Classname {
+                displayName = "Unit Classname";
+                tooltip = "Classname of the unit spawned as the hostage.";
+                control = "Edit";
+                property = "Recondo_CustomHostageProfile_Classname";
+                expression = "_this setVariable ['classname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """C_man_1""";
+                category = "Recondo_CustomHostageProfile_General";
+            };
+            class Background {
+                displayName = "Background";
+                tooltip = "Background text shown on the Intel Board.";
+                control = "EditMulti5";
+                property = "Recondo_CustomHostageProfile_Background";
+                expression = "_this setVariable ['background', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CustomHostageProfile_General";
+            };
+            class PhotoPath {
+                displayName = "Photo Path";
+                tooltip = "Path to the intel photo, relative to the mission folder (e.g. notebook\pilot1.jpg). Both .jpg and .paa work. Leave blank for the default photo.";
+                control = "Edit";
+                property = "Recondo_CustomHostageProfile_Photo";
+                expression = "_this setVariable ['photo', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CustomHostageProfile_Appearance";
+            };
+            class Face {
+                displayName = "Face";
+                tooltip = "Optional face class (CfgFaces). Leave blank to use the unit's default.";
+                control = "Edit";
+                property = "Recondo_CustomHostageProfile_Face";
+                expression = "_this setVariable ['face', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CustomHostageProfile_Appearance";
+            };
+            class Speaker {
+                displayName = "Voice / Speaker";
+                tooltip = "Optional voice class (CfgVoice). Leave blank to use the unit's default.";
+                control = "Edit";
+                property = "Recondo_CustomHostageProfile_Speaker";
+                expression = "_this setVariable ['speaker', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CustomHostageProfile_Appearance";
+            };
+            class Loadout {
+                displayName = "Loadout";
+                tooltip = "Optional loadout array. In Arsenal, set up the gear, then run  copyToClipboard str getUnitLoadout player  in the debug console and paste the result here. Leave blank to keep the unit's default gear.";
+                control = "EditCodeMulti5";
+                property = "Recondo_CustomHostageProfile_Loadout";
+                expression = "_this setVariable ['loadoutdata', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CustomHostageProfile_Appearance";
+            };
+
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+
+    //==========================================
     // OBJECTIVE JAMMER (ACRE JAMMING) MODULE
     // Creates ACRE radio jamming objectives
     //==========================================
@@ -8058,7 +8278,7 @@ class CfgVehicles {
             };
             class CustomCompositionData {
                 displayName = "CUSTOM - Active Composition";
-                tooltip = "Paste your active jammer composition here as an array of [classname, [relX,relY,relZ], dir] entries. Must include the jammer classname object. Requires the Enable checkbox above.";
+                tooltip = "Paste the active jammer composition here (format: [classname, [relX,relY,relZ], dir]); it must include the jammer object's classname. To make one: stand at the centre of your build, open the debug console and run  [getPos player, 25, true] call BIS_fnc_objectsGrabber;  - it copies to your clipboard - then paste the result here. See the README for full steps. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
                 property = "Recondo_Jammer_CustomCompData";
                 expression = "_this setVariable ['customcompdata', _value, true];";
@@ -8068,7 +8288,7 @@ class CfgVehicles {
             };
             class CustomDestroyedData {
                 displayName = "CUSTOM - Destroyed Composition";
-                tooltip = "Optional. Paste the destroyed variant here in the same [classname, [relX,relY,relZ], dir] format. Leave empty to spawn nothing after destruction.";
+                tooltip = "Optional. Paste the destroyed variant here, grabbed the same way as the active composition (same [classname, [relX,relY,relZ], dir] format). Leave empty to spawn nothing after destruction.";
                 control = "EditCodeMulti5";
                 property = "Recondo_Jammer_CustomDestroyedData";
                 expression = "_this setVariable ['customdestroyeddata', _value, true];";
@@ -10519,7 +10739,7 @@ class CfgVehicles {
             };
             class CustomCompositionData {
                 displayName = "Composition";
-                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries. The same composition is spawned at every outpost marker. Requires the Enable checkbox above.";
+                tooltip = "Paste a composition here (format: [classname, [relX,relY,relZ], dir]); the same composition spawns at every outpost marker. To make one: stand at the centre of your build, open the debug console and run  [getPos player, 25, true] call BIS_fnc_objectsGrabber;  - it copies to your clipboard - then paste the result here. Raise 25 for a wider grab. See the README for full steps. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
                 property = "Recondo_OutpostTele_CustomCompData";
                 expression = "_this setVariable ['customcompdata', _value, true];";
@@ -11521,7 +11741,7 @@ class CfgVehicles {
             };
             class CustomCompositionData {
                 displayName = "CUSTOM - Composition";
-                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries. Requires the Enable checkbox above.";
+                tooltip = "Paste a composition here (format: [classname, [relX,relY,relZ], dir]). To make one: stand at the centre of your build, open the debug console and run  [getPos player, 25, true] call BIS_fnc_objectsGrabber;  - it copies to your clipboard - then paste the result here. Raise 25 for a wider grab. See the README for full steps. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
                 property = "Recondo_CampsRandom_CustomCompData";
                 expression = "_this setVariable ['customcompdata', _value, true];";
@@ -13298,7 +13518,7 @@ class CfgVehicles {
             };
             class CustomCompositionData {
                 displayName = "Composition";
-                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries. The same composition is spawned at each selected site. Requires the Enable checkbox above.";
+                tooltip = "Paste a composition here (format: [classname, [relX,relY,relZ], dir]); the same composition spawns at each selected site. To make one: stand at the centre of your build, open the debug console and run  [getPos player, 25, true] call BIS_fnc_objectsGrabber;  - it copies to your clipboard - then paste the result here. Raise 25 for a wider grab. See the README for full steps. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
                 property = "Recondo_CSS_CustomCompData";
                 expression = "_this setVariable ['customcompdata', _value, true];";
@@ -14242,7 +14462,7 @@ class CfgVehicles {
             };
             class CustomCompositionData {
                 displayName = "CUSTOM - Composition";
-                tooltip = "Paste your composition here as an array of [classname, [relX,relY,relZ], dir] entries. Set the target classname below. Requires the Enable checkbox above.";
+                tooltip = "Paste a composition here (format: [classname, [relX,relY,relZ], dir]); also set the Target Classname below. To make one: stand at the centre of your build, open the debug console and run  [getPos player, 25, true] call BIS_fnc_objectsGrabber;  - it copies to your clipboard - then paste the result here. Raise 25 for a wider grab. See the README for full steps. Requires the Enable checkbox above.";
                 control = "EditCodeMulti5";
                 property = "Recondo_Photo_CustomCompData";
                 expression = "_this setVariable ['customcompdata', _value, true];";

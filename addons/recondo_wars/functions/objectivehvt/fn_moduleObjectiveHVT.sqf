@@ -154,9 +154,13 @@ if (_profileVCTaxman) then { _profilePoolList pushBack "VC_Taxman.sqf"; };
 if (_profileVCResupplyCoord) then { _profilePoolList pushBack "VC_ResupplyCoord.sqf"; };
 if (_profileVCSpy) then { _profilePoolList pushBack "VC_Spy.sqf"; };
 
+// Add any synced custom HVT profile modules to the pool (additive).
+([_logic, "Recondo_Module_CustomHVTProfile", _debugLogging] call Recondo_fnc_gatherCustomProfiles) params ["_customProfileTokens", "_customProfilesMap"];
+{ _profilePoolList pushBack _x; } forEach _customProfileTokens;
+
 // Validate - at least one profile must be selected
 if (count _profilePoolList == 0) exitWith {
-    diag_log format ["[RECONDO_HVT] ERROR: No HVT profiles selected for '%1'. Check at least one profile in the module settings.", _objectiveName];
+    diag_log format ["[RECONDO_HVT] ERROR: No HVT profiles selected for '%1'. Check at least one profile or sync a Custom HVT Profile module.", _objectiveName];
 };
 
 if (_debugLogging) then {
@@ -167,12 +171,10 @@ if (_debugLogging) then {
 private _profilePersistenceKey = format ["HVT_%1_%2_PROFILE", _markerPrefix, _objectiveName];
 private _savedProfileFile = [_profilePersistenceKey, ""] call Recondo_fnc_getSaveData;
 
-private _profileToLoad = [];
 private _selectedProfileFile = "";
 
 if (!isNil "_savedProfileFile" && {_savedProfileFile isEqualType "" && {_savedProfileFile != ""}}) then {
-    // Use saved profile filename
-    _profileToLoad = [_savedProfileFile];
+    // Use saved profile (filename or CUSTOM:: token)
     _selectedProfileFile = _savedProfileFile;
     if (_debugLogging) then {
         diag_log format ["[RECONDO_HVT] Loading saved profile: %1", _savedProfileFile];
@@ -180,22 +182,36 @@ if (!isNil "_savedProfileFile" && {_savedProfileFile isEqualType "" && {_savedPr
 } else {
     // No saved profile - select one random profile and save
     _selectedProfileFile = selectRandom _profilePoolList;
-    _profileToLoad = [_selectedProfileFile];
     [_profilePersistenceKey, _selectedProfileFile] call Recondo_fnc_setSaveData;
     if (_debugLogging) then {
         diag_log format ["[RECONDO_HVT] Selected random profile: %1", _selectedProfileFile];
     };
 };
 
-// Load the selected profile from mod
-private _loadedProfiles = ["hvt", _profileToLoad, false, "", _debugLogging] call Recondo_fnc_loadProfiles;
-
-if (count _loadedProfiles == 0) exitWith {
-    diag_log format ["[RECONDO_HVT] ERROR: Failed to load HVT profile '%1' for '%2'. Check profile file exists.", _selectedProfileFile, _objectiveName];
+// A saved custom-profile token only resolves if that synced module still
+// exists; if it was removed, fall back to a fresh pick from the current pool.
+private _isCustomSel = ((_selectedProfileFile select [0, 8]) == "CUSTOM::");
+if (_isCustomSel && {!(_selectedProfileFile in keys _customProfilesMap)}) then {
+    diag_log format ["[RECONDO_HVT] Saved custom profile '%1' is no longer synced; reselecting from pool.", _selectedProfileFile];
+    _selectedProfileFile = selectRandom _profilePoolList;
+    [_profilePersistenceKey, _selectedProfileFile] call Recondo_fnc_setSaveData;
+    _isCustomSel = ((_selectedProfileFile select [0, 8]) == "CUSTOM::");
 };
 
-// Get profile data
-private _profile = _loadedProfiles select 0;
+// Resolve the selected profile: custom tokens come from the synced module,
+// everything else is loaded from the mod's profile files.
+private _profile = createHashMap;
+if (_isCustomSel) then {
+    _profile = _customProfilesMap getOrDefault [_selectedProfileFile, createHashMap];
+} else {
+    private _loadedProfiles = ["hvt", [_selectedProfileFile], false, "", _debugLogging] call Recondo_fnc_loadProfiles;
+    if (count _loadedProfiles > 0) then { _profile = _loadedProfiles select 0; };
+};
+
+// Top-level validation so it exits the function cleanly.
+if (count keys _profile == 0) exitWith {
+    diag_log format ["[RECONDO_HVT] ERROR: Failed to resolve HVT profile '%1' for '%2'.", _selectedProfileFile, _objectiveName];
+};
 
 // Set all HVT values from profile
 _hvtName = _profile getOrDefault ["name", "Unknown Target"];

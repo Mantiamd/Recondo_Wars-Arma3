@@ -2600,5 +2600,35 @@ class Cfg3DEN {
             };
         };
     };
+
+    class Recondo_Module_CustomHVTProfile {
+        class AttributeCategories {
+            class Recondo_CustomHVTProfile_General {
+                displayName = "Profile";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_CustomHVTProfile_Appearance {
+                displayName = "Appearance & Loadout";
+                collapsed = 0;
+                class Attributes {};
+            };
+        };
+    };
+
+    class Recondo_Module_CustomHostageProfile {
+        class AttributeCategories {
+            class Recondo_CustomHostageProfile_General {
+                displayName = "Profile";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_CustomHostageProfile_Appearance {
+                displayName = "Appearance & Loadout";
+                collapsed = 0;
+                class Attributes {};
+            };
+        };
+    };
     
 };

@@ -318,6 +318,7 @@ class CfgFunctions {
             file = "\recondo_wars\functions\profiles";
             class loadProfiles {};
             class selectRandomProfiles {};
+            class gatherCustomProfiles {};
         };
         
         // Camps Random Module Functions

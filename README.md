@@ -118,6 +118,48 @@ All features are accessed through **Eden Editor modules**:
 5. Some modules require synchronization with objects or units
 6. Hover over any attribute to see its tooltip with description and examples
 
+## Custom Compositions
+
+Several modules let you spawn your own custom composition (a saved arrangement of objects) instead of, or in addition to, the built-in ones. The composition is **pasted directly into the module** in Eden Editor — there is no need to ship a separate `.sqe` file with the mission.
+
+Modules with a custom-composition paste box:
+
+- Objective Destroy *(+ optional destroyed variant)*
+- Objective Hub & Sub-Sites *(+ optional destroyed variant)*
+- Objective Jammer *(+ optional destroyed variant)*
+- Objective HVT
+- Objective Hostages
+- Objective Photographs
+- Camps Random
+- Outpost Teleport
+- Custom Site Spawn
+
+### How to create a composition
+
+The mod uses Bohemia's built-in [`BIS_fnc_objectsGrabber`](https://community.bistudio.com/wiki/BIS_fnc_objectsGrabber) to turn placed objects into pasteable text.
+
+1. In the Eden Editor (or in-game with the debug console available), **build your composition** out of map objects — buildings, walls, props, etc.
+2. Place your player/character at the **centre** of the composition. Everything is captured relative to this point, so it becomes the module's anchor/spawn position.
+3. Open the **debug console** (Esc → Debug Console) and run:
+
+```sqf
+[getPos player, 25, true] call BIS_fnc_objectsGrabber;
+```
+
+   - `25` is the grab radius in metres — increase it for larger compositions.
+   - `true` captures object pitch/bank (orientation). Leave it as `true` for sloped or angled props.
+   - The result is **automatically copied to your clipboard**.
+
+4. Open the module, tick **CUSTOM – Enable Custom Composition**, and **paste** the clipboard text into the **CUSTOM – Composition** (or **Active Composition**) box.
+5. For modules with a destroyed variant (Objective Destroy, Hub & Sub-Sites, Objective Jammer), repeat the grab for the wrecked/destroyed version and paste it into the **CUSTOM – Destroyed Composition** box. Leave it empty to spawn nothing after destruction.
+
+### Notes
+
+- The clipboard text may begin with a short `/* Grab data: ... */` header above the array. It is harmless (SQF ignores comments), but you can delete it so the text starts at `[` if you prefer a clean entry.
+- The expected format is an array of `[classname, [relX, relY, relZ], dir]` entries — exactly what the grabber produces.
+- Compositions are spawned at the module/marker position with the anchor point you chose in step 2 as their centre.
+- Only the small reference to *which* composition spawned is persisted. The pasted text itself is re-read from the module on each mission load, so editing the box and reloading updates the composition.
+
 ## Building
 
 To build the PBO:
