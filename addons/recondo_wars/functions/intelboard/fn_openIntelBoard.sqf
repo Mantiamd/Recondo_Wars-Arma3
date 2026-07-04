@@ -219,6 +219,34 @@ if (!isNil "RECONDO_ELDESTSON_SETTINGS") then {
     _controls pushBack _eldestSonCtrl;
 };
 
+// Psychological Warfare demoralization display (if any instance is active)
+if (!isNil "RECONDO_PSYWAR_READOUT" && {count RECONDO_PSYWAR_READOUT > 0}) then {
+    // Prefer the readout for the viewing player's enemy side; fall back to the first.
+    private _entry = [];
+    {
+        private _sVal = [east, west, independent, civilian] select (_x select 0);
+        if ((playerSide getFriend _sVal) < 0.6) exitWith { _entry = _x; };
+    } forEach RECONDO_PSYWAR_READOUT;
+    if (_entry isEqualTo []) then { _entry = RECONDO_PSYWAR_READOUT select 0; };
+
+    _entry params ["_psyNum", "_psyTier", "_psyMessage"];
+
+    // Own full-width row just above the footer / Eldest Son line.
+    private _psyCtrl = _display ctrlCreate ["RscStructuredText", -1];
+    _psyCtrl ctrlSetPosition [_panelX + 0.01, _panelY + _panelH - _screenH * 0.075, _panelW - 0.02, _screenH * 0.035];
+
+    private _psyColor = switch (_psyTier) do {
+        case 2: { "#88CC88" };   // broken
+        case 1: { "#FFCC00" };   // rattled
+        default { "#888888" };   // dormant
+    };
+    private _psyText = format ["<t color='%1'>PSY-OP: %2</t>", _psyColor, _psyMessage];
+
+    _psyCtrl ctrlSetStructuredText parseText _psyText;
+    _psyCtrl ctrlCommit 0;
+    _controls pushBack _psyCtrl;
+};
+
 // ========================================
 // STORE CONTROL REFERENCES
 // ========================================

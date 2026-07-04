@@ -64,7 +64,9 @@ RECONDO_PLAYER_PERSISTENCE_RESTORED = createHashMap;
             };
 
             if (count _savedLoadout > 0) then {
-                [_player, _savedLoadout] remoteExec ["setUnitLoadout", _owner];
+                // Strip baked ACRE radio ids on the owning client before applying
+                // (avoids duplicate-radio-id receive-death on restore).
+                [_player, _savedLoadout] remoteExec ["Recondo_fnc_applyPersistedLoadout", _owner];
             };
 
             if (_debug) then {

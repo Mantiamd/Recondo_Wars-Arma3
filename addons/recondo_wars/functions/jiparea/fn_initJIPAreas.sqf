@@ -13,13 +13,18 @@
 // Only run on clients with interface
 if (!hasInterface) exitWith {};
 
+// Stamp this client's join moment (real seconds) for the join grace window.
+// Re-runs on reconnect, so the window restarts each time the player joins.
+RECONDO_JIP_JOINTIME = diag_tickTime;
+
 // Wait for JIP areas array to be defined
 [{
     !isNil "RECONDO_JIPAREAS"
 }, {
-    // If no areas defined, exit silently
-    if (count RECONDO_JIPAREAS == 0) exitWith {
-        diag_log "[RECONDO_JIPAREA] No JIP areas defined.";
+    // Exit only when there is nothing to offer: no areas AND no join grace.
+    private _graceEnabled = !isNil "RECONDO_JIP_GRACE_ENABLED" && {RECONDO_JIP_GRACE_ENABLED};
+    if (count RECONDO_JIPAREAS == 0 && {!_graceEnabled}) exitWith {
+        diag_log "[RECONDO_JIPAREA] No JIP areas defined and join grace disabled.";
     };
     
     // Helper function to check if player is in any JIP area
@@ -61,6 +66,14 @@ if (!hasInterface) exitWith {};
         } forEach RECONDO_JIPAREAS;
         
         _inArea
+    };
+
+    // Helper: is the player still within their post-join grace window?
+    // While active, every player can teleport to their group from anywhere.
+    RECONDO_fnc_isJIPGraceActive = {
+        (!isNil "RECONDO_JIP_GRACE_ENABLED" && {RECONDO_JIP_GRACE_ENABLED})
+        && {!isNil "RECONDO_JIP_JOINTIME"}
+        && {(diag_tickTime - RECONDO_JIP_JOINTIME) < RECONDO_JIP_GRACE_TIME}
     };
     
     // Create the confirmation action (child)
@@ -134,9 +147,9 @@ if (!hasInterface) exitWith {};
             };
         },
         {
-            // Condition - same as parent (in JIP area)
+            // Condition - same as parent (in JIP area or within join grace)
             params ["_target", "_player", "_params"];
-            [_player] call RECONDO_fnc_isInJIPArea
+            ([_player] call RECONDO_fnc_isInJIPArea) || ([] call RECONDO_fnc_isJIPGraceActive)
         }
     ] call ace_interact_menu_fnc_createAction;
     
@@ -147,9 +160,9 @@ if (!hasInterface) exitWith {};
         "\a3\ui_f\data\IGUI\Cfg\simpleTasks\types\move_ca.paa",
         {},  // Empty statement - uses child actions
         {
-            // Condition - check if player is in any JIP area
+            // Condition - in any JIP area, or within the post-join grace window
             params ["_target", "_player", "_params"];
-            [_player] call RECONDO_fnc_isInJIPArea
+            ([_player] call RECONDO_fnc_isInJIPArea) || ([] call RECONDO_fnc_isJIPGraceActive)
         }
     ] call ace_interact_menu_fnc_createAction;
     

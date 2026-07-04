@@ -32,6 +32,7 @@ private _sentryMaxCount = _settings get "sentryMaxCount";
 private _sentrySide = _settings get "sentrySide";
 private _sentryAnimations = _settings get "sentryAnimations";
 private _enableIntelUnit = _settings get "enableIntelUnit";
+private _intelItemPool = _settings getOrDefault ["intelItemPool", []];
 private _debugLogging = _settings get "debugLogging";
 
 if (count _sentryClassnames == 0) exitWith {
@@ -190,18 +191,40 @@ _sentryGroup enableDynamicSimulation false;
 // ADD INTEL TO ONE RANDOM UNIT (IF ENABLED)
 // ========================================
 
-if (_enableIntelUnit && {!isNil "RECONDO_INTELITEMS_SETTINGS"} && {count _spawnedUnits > 0}) then {
-    // Select one random unit to carry intel
+// Place one random item from the camp's own pool onto one random sentry.
+// Self-contained: does not require the IntelItems module. The item is made
+// lootable via the shared take-intel action so it can be searched and turned in.
+if (_enableIntelUnit && {count _intelItemPool > 0} && {count _spawnedUnits > 0}) then {
     private _intelUnit = selectRandom _spawnedUnits;
-    
-    // Add intel directly (bypasses chance roll - guaranteed intel on this unit)
-    [_intelUnit] call Recondo_fnc_addIntelToUnit;
-    
-    // Mark this unit as the intel carrier for reference
-    _intelUnit setVariable ["RECONDO_CAMPS_intelCarrier", true, true];
-    
-    if (_debugLogging) then {
-        diag_log format ["[RECONDO_CAMPS] Added intel to unit %1 at %2", _intelUnit, _markerId];
+    private _itemClass = selectRandom _intelItemPool;
+
+    // Validate the classname exists before adding it
+    private _validItem = isClass (configFile >> "CfgWeapons" >> _itemClass) ||
+        {isClass (configFile >> "CfgMagazines" >> _itemClass)} ||
+        {isClass (configFile >> "CfgVehicles" >> _itemClass)};
+
+    if (_validItem) then {
+        _intelUnit addItem _itemClass;
+
+        // Resolve a human-readable label from the item's config for the loot action
+        private _displayName = getText (configFile >> "CfgMagazines" >> _itemClass >> "displayName");
+        if (_displayName == "") then { _displayName = getText (configFile >> "CfgWeapons" >> _itemClass >> "displayName"); };
+        if (_displayName == "") then { _displayName = _itemClass; };
+
+        // Track intel inventory and register the lootable take action (same pattern as IntelItems)
+        private _unitIntelItems = [[_displayName, _itemClass]];
+        _intelUnit setVariable ["RECONDO_INTELITEMS_inventory", _unitIntelItems, true];
+        [_intelUnit, _unitIntelItems] call Recondo_fnc_addTakeIntelAction;
+
+        _intelUnit setVariable ["RECONDO_CAMPS_intelCarrier", true, true];
+
+        if (_debugLogging) then {
+            diag_log format ["[RECONDO_CAMPS] Placed intel '%1' (%2) on unit %3 at %4", _displayName, _itemClass, _intelUnit, _markerId];
+        };
+    } else {
+        if (_debugLogging) then {
+            diag_log format ["[RECONDO_CAMPS] WARNING: Invalid intel item classname '%1' - skipped at %2", _itemClass, _markerId];
+        };
     };
 };
 

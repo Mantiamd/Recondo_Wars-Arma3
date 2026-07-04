@@ -51,6 +51,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **Ambient Sound** - Configurable ambient sound zones
 - **Civilians Working** - Working civilians in fields and villages
 - **Civilian Traffic** - Ambient civilian vehicle traffic on roads with optional vehicle invincibility
+- **River Traffic** - Marker-driven dynamic boat patrols (civilian/OPFOR/BLUFOR) that spawn near players and follow designer-placed river paths on **any** map. Fully dedicated-server safe. See [River Traffic (Marker-Driven)](#river-traffic-marker-driven)
 - **Civilian POL** - Persistent civilian pattern-of-life system
 - **Custom Site Spawn** - Spawn custom compositions at markers with garrison AI, patrols, and night lighting
 - **Camps Random** - Randomized camp placement with composition support
@@ -160,12 +161,49 @@ The mod uses Bohemia's built-in [`BIS_fnc_objectsGrabber`](https://community.bis
 - Compositions are spawned at the module/marker position with the anchor point you chose in step 2 as their centre.
 - Only the small reference to *which* composition spawned is persisted. The pasted text itself is re-read from the module on each mission load, so editing the box and reloading updates the composition.
 
+## River Traffic (Marker-Driven)
+
+The **River Traffic** module spawns dynamic boat patrols along rivers you define with **invisible map markers**, so it works on any map with no per-map code. Place the module anywhere; it reads the markers at mission start (JIP and save/load safe, dedicated-server safe).
+
+### Marker naming contract
+
+Name each marker:
+
+```
+<prefix><riverId>_<NNN>
+```
+
+- `<prefix>` — the module's **Marker Prefix** setting (default `river_`). Only markers starting with this prefix are read by that module instance, so you can run several River Traffic modules over different marker sets by giving each a unique prefix.
+- `<NNN>` — a zero-padded sequence index of **at least 3 digits** (`001`, `002`, ...). The markers form the river's path from `001` to the highest number.
+- `<riverId>` — any token identifying one river. All markers sharing the same `<riverId>` (under the same prefix) form one river.
+- **Travel direction:** each boat spawns at a **random end** of the river (50/50) and runs straight through to the other end, then despawns. So a boat may travel `001 → highest` or `highest → 001`.
+- Optional `<riverId>` prefix:
+  - `big…` — a **big** river. The side's *Big-River Boat Classnames* are added to the spawn pool so larger boats can appear (e.g. `river_big00_012`).
+
+### Rules & tips
+
+- **Minimum 11 markers per river.** Rivers with 10 or fewer markers are skipped (a warning is logged with the `riverId`).
+- **Place markers over water.** Markers do not create water — a marker over land will beach boats.
+- **Spacing controls smoothness.** Put markers ~20–40 m apart on curves and space them out on straights. Make rivers well over ~550 m long so boats spawn off-screen.
+- **Make them invisible:** set each marker's **Alpha to 0** in Eden (marker attributes). The builder reads markers regardless of alpha, so they stay hidden in-game with no scripting.
+
+### Module settings (all in Eden)
+
+- **Marker Prefix** — the marker name prefix this instance reads (default `river_`). Use a unique prefix per module to manage separate river sets.
+- Spawn chances per side (Civilian / OPFOR / BLUFOR), max concurrent boats, boat speed.
+- **Zone Radius** (which rivers/markers belong to this module) and **Activation Distance** — boats spawn only while a player is within Activation Distance of the **module's placement position**. Plus minimum spawn distance from players (so a boat won't pop in on a player standing at a river end) and an activation height limit (so aircraft overhead don't trigger spawns).
+- Boat and crew classnames per side, plus **Big-River Boat Classnames** per side (used only on `big…` rivers).
+- **Headgear Override** (Civilian / OPFOR, on by default) — replaces each spawned crew member's headgear with a random entry from a per-side headgear classname list (default conical hats + VC headwear). BLUFOR crew are unaffected.
+- **Clear Bank Vegetation** (checkbox) + **Vegetation Clear Radius** — hides trees/bushes along a river's marker path the first time a boat spawns on it, so boats don't snag.
+
 ## Building
 
-To build the PBO:
-1. Use Arma 3 Tools - Addon Builder
-2. Point to the `addons/recondo_wars` folder
-3. Build to your mod output directory
+The mod ships as **two PBOs**, so build each one with Arma 3 Tools - Addon Builder into the same mod output directory:
+
+1. **Core PBO** — point Addon Builder at the `addons/recondo_wars` folder and build.
+2. **Objects PBO** — point Addon Builder at the `addons/rw_objects` folder and build (this packages the RW inventory objects: death cards, Eldest Son rounds, film rolls, intel items, PRC-77 batteries, etc.).
+
+`addons/rw_objects` carries its own `$PBOPREFIX$` (`rw_objects`). Recondo Wars declares a hard dependency on `rw_objects`, so both PBOs must be present and `rw_objects` loads first.
 
 ## FAQ
 
@@ -225,7 +263,7 @@ Want to support continued development? [Buy me a coffee or Baja Blast on Patreon
 
 - The unnamed group of elite Arma 3 operators that have inspired so many of these modules, tested, and make playing Arma 3 enjoyable. Without them I wouldn't be taking the time to create any of this.
 - **Dexter** - For the ideas and knowledge on so many of the tools used to create this, as well as bouncing ideas off of and brainstorming how to achieve things within Arma.
-- **THEDUDE** - Contributing ideas for many of these modules but mostly for his contributions to the SOG PF community with his RTBF SOG Gear and Terrains. These modules were designed with the intent of using on his terrains — they truly change the way Arma plays.
+- **THEDUDE** - Contributing ideas for many of these modules but mostly for his contributions to the SOG PF community with his RTBF SOG Gear and Terrains. These modules were designed with the intent of using on his terrains — they truly change the way Arma plays. Huge thanks as well for creating the **RW inventory objects** (the `rw_objects` PBO) that ship with this mod, including all of the **intel items** now wired in as the default pickups and rewards across the mod — enemy maps, infiltration/death cards, officer ID cards, the ledger, journal pages, film rolls, Eldest Son rounds, PRC-77 batteries, cassettes, tin cans, and more.
 - **RTBF** - Contributing a lot of ideas, feedback, and testing.
 - **Moon** - Testing and troubleshooting from a mission maker's perspective using these modules within the Eden Editor.
 - **Miller** - Contributing to some of the compositions used within the objective modules.

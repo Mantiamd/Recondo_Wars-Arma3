@@ -106,9 +106,26 @@ if (_debugLogging) then {
                         
                         // Get target group for tracking
                         private _targetGroup = group _target;
-                        
-                        // Spawn reinforcements
-                        [_moduleSettings, _detector, _targetGroup] call Recondo_fnc_spawnReinforcementParty;
+
+                        // Delay first-wave spawn to create a reaction window:
+                        // randomized between 30 and 60 seconds.
+                        private _spawnDelay = 30 + random 30;
+
+                        if (_debugLogging) then {
+                            diag_log format [
+                                "[RECONDO_RW] Module %1: Wave 1 scheduled in %2s (detector %3, target group %4)",
+                                _moduleId,
+                                round _spawnDelay,
+                                _detector,
+                                _targetGroup
+                            ];
+                        };
+
+                        [_moduleSettings, _detector, _targetGroup, _spawnDelay] spawn {
+                            params ["_moduleSettings", "_detector", "_targetGroup", "_spawnDelay"];
+                            sleep _spawnDelay;
+                            [_moduleSettings, _detector, _targetGroup] call Recondo_fnc_spawnReinforcementParty;
+                        };
                     } else {
                         // Failed reinforcement chance - still mark as triggered
                         RECONDO_RW_TRIGGERED_MODULES pushBack _moduleId;

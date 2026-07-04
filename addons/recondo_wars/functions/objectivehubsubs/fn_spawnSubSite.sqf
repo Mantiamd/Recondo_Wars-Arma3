@@ -75,6 +75,13 @@ if (_debugLogging) then {
     
     // Ensure object is on ground
     _spawnedObject setPosATL [getPosATL _spawnedObject select 0, getPosATL _spawnedObject select 1, 0];
+
+    // Place a clutter cutter at sub-site center to clear grass around the active site.
+    private _clutterCutter = createVehicle ["Land_ClutterCutter_large_F", _markerPos, [], 0, "CAN_COLLIDE"];
+    if (!isNull _clutterCutter) then {
+        _clutterCutter setPosATL [_markerPos select 0, _markerPos select 1, 0];
+        RECONDO_HUBSUBS_SPAWNED_OBJECTS pushBack _clutterCutter;
+    };
     
     // Track spawned object
     RECONDO_HUBSUBS_SPAWNED_OBJECTS pushBack _spawnedObject;
@@ -90,6 +97,9 @@ if (_debugLogging) then {
     
     if (_debugLogging) then {
         diag_log format ["[RECONDO_HUBSUBS] Spawned %1 at sub-site %2, facing: %3", _classname, _subSiteMarker, getDir _spawnedObject];
+        if (!isNull _clutterCutter) then {
+            diag_log format ["[RECONDO_HUBSUBS] Added clutter cutter at sub-site %1 center", _subSiteMarker];
+        };
     };
     
     // Schedule garrison spawn after 20 seconds

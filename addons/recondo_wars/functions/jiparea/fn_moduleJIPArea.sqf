@@ -42,6 +42,21 @@ private _areaWidth = _logic getVariable ["areawidth", 100];
 private _areaLength = _logic getVariable ["arealength", 100];
 private _areaHeight = _logic getVariable ["areaheight", 25];
 
+// Join grace settings (global feature; combine across all placed modules)
+private _enableJoinGrace = _logic getVariable ["enablejoingrace", true];
+private _joinGraceTime = _logic getVariable ["joingracetime", 120];
+
+if (_enableJoinGrace) then {
+    RECONDO_JIP_GRACE_ENABLED = true;
+    RECONDO_JIP_GRACE_TIME = RECONDO_JIP_GRACE_TIME max _joinGraceTime;
+    publicVariable "RECONDO_JIP_GRACE_ENABLED";
+    publicVariable "RECONDO_JIP_GRACE_TIME";
+
+    if (_debug) then {
+        diag_log format ["[RECONDO_JIPAREA] Join grace enabled: every player can teleport from anywhere for %1s after joining.", RECONDO_JIP_GRACE_TIME];
+    };
+};
+
 // Create area data entry
 private _areaData = createHashMap;
 _areaData set ["position", _pos];

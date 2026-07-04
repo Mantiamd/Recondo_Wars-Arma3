@@ -56,15 +56,10 @@ private _sentryMaxCount = _logic getVariable ["sentrymaxcount", 3];
 private _sentrySideNum = _logic getVariable ["sentryside", 0];
 private _sentryAnimationsRaw = _logic getVariable ["sentryanimations", "AmovPsitMstpSrasWrflDnon, AmovPsitMstpSrasWrflDnon_WeaponCheck1, AmovPsitMstpSrasWrflDnon_WeaponCheck2, AmovPsitMstpSrasWrflDnon_Smoking"];
 
-// Intel Object Settings
-private _enableIntelObject = _logic getVariable ["enableintelobject", true];
-private _intelObjectClassname = _logic getVariable ["intelobjectclassname", "Land_File1_F"];
-private _intelObjectActionText = _logic getVariable ["intelobjectactiontext", "Take Documents"];
-private _intelObjectDisplayName = _logic getVariable ["intelobjectdisplayname", "Field Documents"];
-private _intelObjectItemClassname = _logic getVariable ["intelobjectitemclassname", ""];
-
 // Intel Unit Settings
-private _enableIntelUnit = _logic getVariable ["enableintelunit", false];
+// Pool of intel item classnames; one is placed on a random sentry when a camp spawns.
+private _enableIntelUnit = _logic getVariable ["enableintelunit", true];
+private _intelItemPoolRaw = _logic getVariable ["intelobjectitemclassname", ""];
 private _intelUnitChance = _logic getVariable ["intelunitchance", 0.5];
 
 // Intel Integration
@@ -99,6 +94,11 @@ private _sentryAnimations = if (_sentryAnimationsRaw != "") then {
 // Parse simple object exclusions (one per line or comma-separated)
 private _simpleObjectExclusions = if (_simpleObjectExclusionsRaw != "") then {
     ((_simpleObjectExclusionsRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" }
+} else { [] };
+
+// Parse intel item pool (one per line or comma-separated)
+private _intelItemPool = if (_intelItemPoolRaw != "") then {
+    ((_intelItemPoolRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" }
 } else { [] };
 
 // ========================================
@@ -190,12 +190,8 @@ private _settings = createHashMapFromArray [
     ["sentryMaxCount", _sentryMaxCount],
     ["sentrySide", _sentrySide],
     ["sentryAnimations", _sentryAnimations],
-    ["enableIntelObject", _enableIntelObject],
-    ["intelObjectClassname", _intelObjectClassname],
-    ["intelObjectActionText", _intelObjectActionText],
-    ["intelObjectDisplayName", _intelObjectDisplayName],
-    ["intelObjectItemClassname", _intelObjectItemClassname],
     ["enableIntelUnit", _enableIntelUnit],
+    ["intelItemPool", _intelItemPool],
     ["intelUnitChance", _intelUnitChance],
     ["intelWeight", _intelWeight],
     ["enableSmellHints", _enableSmellHints],
@@ -334,6 +330,5 @@ if (_debugLogging) then {
     diag_log format ["[RECONDO_CAMPS] Marker Prefix: %1", _markerPrefix];
     diag_log format ["[RECONDO_CAMPS] Composition Pool: %1 entries", count _compositionPool];
     diag_log format ["[RECONDO_CAMPS] Sentry Classnames: %1", _sentryClassnames];
-    diag_log format ["[RECONDO_CAMPS] Intel Object Enabled: %1", _enableIntelObject];
-    diag_log format ["[RECONDO_CAMPS] Intel Unit Enabled: %1", _enableIntelUnit];
+    diag_log format ["[RECONDO_CAMPS] Intel Drop Enabled: %1 (pool: %2 items)", _enableIntelUnit, count _intelItemPool];
 };

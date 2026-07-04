@@ -1420,6 +1420,28 @@ class CfgVehicles {
                 defaultValue = "25";
                 category = "Recondo_JIPArea_Area";
             };
+
+            // JOIN GRACE
+            class EnableJoinGrace {
+                displayName = "JOIN GRACE - Enable";
+                tooltip = "Allow every player to teleport to their group from ANYWHERE for a short window after joining. Helps players who get disconnected return to their squad. Combined across all placed JIP Area modules.";
+                control = "Checkbox";
+                property = "Recondo_JIPArea_EnableJoinGrace";
+                expression = "_this setVariable ['enablejoingrace', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_JIPArea_JoinGrace";
+            };
+            class JoinGraceTime {
+                displayName = "Grace Window (seconds)";
+                tooltip = "How long after joining a player may teleport from anywhere. Measured in real seconds and restarts on every (re)connect. Default: 120. If multiple JIP Area modules are placed, the largest value is used.";
+                control = "Edit";
+                property = "Recondo_JIPArea_JoinGraceTime";
+                expression = "_this setVariable ['joingracetime', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """120""";
+                category = "Recondo_JIPArea_JoinGrace";
+            };
             
             // DEBUG
             class EnableDebugJIP {
@@ -2811,7 +2833,7 @@ class CfgVehicles {
                 property = "Recondo_RWR_BatteryItems";
                 expression = "_this setVariable ['batteryitems', _value, true];";
                 typeName = "STRING";
-                defaultValue = """""";
+                defaultValue = """rw_inv_prc77_battery""";
                 category = "Recondo_RWR_Battery";
             };
             class LowBatteryWarning {
@@ -4152,7 +4174,7 @@ class CfgVehicles {
                 property = "Recondo_IntelItems_ItemsConfig";
                 expression = "_this setVariable ['intelitemsconfig', _value, true];";
                 typeName = "STRING";
-                defaultValue = """""";
+                defaultValue = """Enemy Map 01:rw_inv_enemy_map_01:5\nEnemy Map 02:rw_inv_enemy_map_02:5\nEnemy Map 03:rw_inv_enemy_map_03:5\nEnemy Map 04:rw_inv_enemy_map_04:5\nEnemy Map 05:rw_inv_enemy_map_05:5\nEnemy Map 06:rw_inv_enemy_map_06:5\nEnemy Map 07:rw_inv_enemy_map_07:5\nEnemy Map 08:rw_inv_enemy_map_08:5\nEnemy Map 09:rw_inv_enemy_map_09:5\nEnemy Map 10:rw_inv_enemy_map_10:5\nInfiltration Card 1:rw_inv_infil_card_1:5\nInfiltration Card 2:rw_inv_infil_card_2:5\nInfiltration Card 3:rw_inv_infil_card_3:5\nInfiltration Card 4:rw_inv_infil_card_4:5\nLedger:rw_inv_ledger:5\nOfficer ID Card 1:rw_inv_officer_id_1:5\nOfficer ID Card 2:rw_inv_officer_id_2:5\nOfficer ID Card 3:rw_inv_officer_id_3:5\nOfficer ID Card 4:rw_inv_officer_id_4:5\nJournal Page:rw_inv_page:5\nSR71 MADAR Box:rw_inv_madar:5\nTin Can:rw_inv_tin_can:5\n35mm Film Roll:rw_inv_film_roll:5""";
                 category = "Recondo_IntelItems_Items";
             };
             class TakeActionText {
@@ -4536,7 +4558,7 @@ class CfgVehicles {
                 property = "Recondo_Wiretap_RewardItem";
                 expression = "_this setVariable ['rewarditem', _value, true];";
                 typeName = "STRING";
-                defaultValue = """""";
+                defaultValue = """rw_inv_cassette_1""";
                 category = "Recondo_Wiretap_Items";
             };
             
@@ -11418,7 +11440,7 @@ class CfgVehicles {
                 property = "Recondo_CivPOL_DocumentClass";
                 expression = "_this setVariable ['documentclass', _value, true];";
                 typeName = "STRING";
-                defaultValue = """ACE_Documents""";
+                defaultValue = """rw_inv_enemy_map_10""";
                 category = "Recondo_CivPOL_Interaction";
             };
             
@@ -11906,76 +11928,28 @@ class CfgVehicles {
             };
             
             // ========================================
-            // INTEL - GROUND OBJECT
-            // ========================================
-            
-            class EnableIntelObject {
-                displayName = "INTEL OBJ - Enable Intel Object";
-                tooltip = "Spawn a physical intel object at camps that players can pick up.";
-                control = "Checkbox";
-                property = "Recondo_CampsRandom_EnableIntelObject";
-                expression = "_this setVariable ['enableintelobject', _value, true];";
-                typeName = "BOOL";
-                defaultValue = "true";
-                category = "Recondo_CampsRandom_IntelObject";
-            };
-            
-            class IntelObjectClassname {
-                displayName = "Intel Object Classname";
-                tooltip = "Classname of the intel object to spawn (e.g., Land_File1_F, Land_Map_F).";
-                control = "Edit";
-                property = "Recondo_CampsRandom_IntelObjectClassname";
-                expression = "_this setVariable ['intelobjectclassname', _value, true];";
-                typeName = "STRING";
-                defaultValue = """Land_File1_F""";
-                category = "Recondo_CampsRandom_IntelObject";
-            };
-            
-            class IntelObjectActionText {
-                displayName = "Pickup Action Text";
-                tooltip = "Text shown for the ACE interaction to pick up the intel.";
-                control = "Edit";
-                property = "Recondo_CampsRandom_IntelObjectActionText";
-                expression = "_this setVariable ['intelobjectactiontext', _value, true];";
-                typeName = "STRING";
-                defaultValue = """Take Documents""";
-                category = "Recondo_CampsRandom_IntelObject";
-            };
-            
-            class IntelObjectDisplayName {
-                displayName = "Intel Display Name";
-                tooltip = "Name shown in intel card when examining picked up intel.";
-                control = "Edit";
-                property = "Recondo_CampsRandom_IntelObjectDisplayName";
-                expression = "_this setVariable ['intelobjectdisplayname', _value, true];";
-                typeName = "STRING";
-                defaultValue = """Field Documents""";
-                category = "Recondo_CampsRandom_IntelObject";
-            };
-            
-            class IntelObjectItemClassname {
-                displayName = "Inventory Item Classname";
-                tooltip = "Item classname added to player inventory when picking up intel (from Intel module's intel items list).";
-                control = "Edit";
-                property = "Recondo_CampsRandom_IntelObjectItemClassname";
-                expression = "_this setVariable ['intelobjectitemclassname', _value, true];";
-                typeName = "STRING";
-                defaultValue = """""";
-                category = "Recondo_CampsRandom_IntelObject";
-            };
-            
-            // ========================================
             // INTEL - UNIT INVENTORY
             // ========================================
             
             class EnableIntelUnit {
-                displayName = "INTEL UNIT - Enable Intel on Units";
-                tooltip = "Add intel items to sentry unit inventories (uses IntelItems module if available).";
+                displayName = "INTEL UNIT - Enable Intel Drop";
+                tooltip = "Place one random item from the pool below into one random camp sentry's inventory. The item is lootable and turned in as intel.";
                 control = "Checkbox";
                 property = "Recondo_CampsRandom_EnableIntelUnit";
                 expression = "_this setVariable ['enableintelunit', _value, true];";
                 typeName = "BOOL";
-                defaultValue = "false";
+                defaultValue = "true";
+                category = "Recondo_CampsRandom_IntelUnit";
+            };
+            
+            class IntelObjectItemClassname {
+                displayName = "INTEL UNIT - Item Classnames";
+                tooltip = "Pool of intel item classnames. One is picked at random and placed on one camp sentry. Comma-separated or one per line.";
+                control = "EditMulti5";
+                property = "Recondo_CampsRandom_IntelObjectItemClassname";
+                expression = "_this setVariable ['intelobjectitemclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """rw_inv_enemy_map_01,rw_inv_enemy_map_02,rw_inv_enemy_map_03,rw_inv_enemy_map_04,rw_inv_enemy_map_05,rw_inv_enemy_map_06,rw_inv_enemy_map_07,rw_inv_enemy_map_08,rw_inv_enemy_map_09,rw_inv_enemy_map_10,rw_inv_infil_card_1,rw_inv_infil_card_2,rw_inv_infil_card_3,rw_inv_infil_card_4,rw_inv_ledger,rw_inv_officer_id_1,rw_inv_officer_id_2,rw_inv_officer_id_3,rw_inv_officer_id_4,rw_inv_page""";
                 category = "Recondo_CampsRandom_IntelUnit";
             };
             
@@ -12474,7 +12448,7 @@ class CfgVehicles {
                 property = "Recondo_EldestSon_PoisonItems";
                 expression = "_this setVariable ['poisonitems', _value, true];";
                 typeName = "STRING";
-                defaultValue = """uns_ak47mag""";
+                defaultValue = """rw_inv_eldest_son_rounds""";
                 category = "Recondo_EldestSon_Items";
             };
             
@@ -12490,6 +12464,163 @@ class CfgVehicles {
                 typeName = "BOOL";
                 defaultValue = "false";
                 category = "Recondo_EldestSon_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    //==========================================
+    // PSYCHOLOGICAL WARFARE MODULE
+    //==========================================
+    class Recondo_Module_PsychWarfare: Module_F {
+        scope = 2;
+        displayName = "Psychological Warfare (Demoralize)";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Objectives";
+        function = "Recondo_fnc_modulePsychWarfare";
+        functionPriority = 5;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 1;
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\intel_ca.paa";
+        
+        class ModuleDescription: ModuleDescription {
+            description = "Psychological Warfare - Players plant 'psy-op' items on dead enemy bodies. Once a minimum number have been planted, the target side's COURAGE and COMMANDING skills are progressively lowered (enemies panic, suppress and coordinate worse), deepening with each additional item down to a floor. Works alongside AI Tweaks without conflict: when an AI Tweaks module exists for the same side, it remains the only skill writer and simply applies this reduction; otherwise this module applies it directly. Place one per side. Multiplayer/dedicated-server safe and persistent.";
+            sync[] = {};
+        };
+        
+        class Attributes: AttributesBase {
+            
+            // ========================================
+            // GENERAL SETTINGS
+            // ========================================
+            class TargetSide {
+                displayName = "GENERAL - Target Side";
+                tooltip = "Which side's units are demoralized. Place one Psychological Warfare module per side.";
+                control = "Combo";
+                property = "Recondo_PsychWarfare_TargetSide";
+                expression = "_this setVariable ['targetside', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                class Values {
+                    class OPFOR { name = "OPFOR"; value = 0; default = 1; };
+                    class BLUFOR { name = "BLUFOR"; value = 1; };
+                    class INDFOR { name = "Independent"; value = 2; };
+                    class CIV { name = "Civilian"; value = 3; };
+                };
+                category = "Recondo_PsychWarfare_General";
+            };
+            
+            class MinThreshold {
+                displayName = "Minimum Items Threshold";
+                tooltip = "How many planted items must be found before ANY skill reduction begins. Below this, configured (AI Tweaks/default) skills are untouched. Default: 3";
+                control = "Edit";
+                property = "Recondo_PsychWarfare_MinThreshold";
+                expression = "_this setVariable ['minthreshold', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "3";
+                category = "Recondo_PsychWarfare_General";
+            };
+            
+            class ReductionPerItem {
+                displayName = "Reduction Per Item (%)";
+                tooltip = "Percent that courage/commanding drop for each item, starting at the threshold and scaling per additional item down to the floor. Default: 10";
+                control = "Edit";
+                property = "Recondo_PsychWarfare_ReductionPerItem";
+                expression = "_this setVariable ['reductionperitem', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "10";
+                category = "Recondo_PsychWarfare_General";
+            };
+            
+            class FloorPercent {
+                displayName = "Skill Floor (%)";
+                tooltip = "Lowest courage/commanding can fall to, as a percent of the configured value. Prevents AI from becoming completely broken. Default: 25";
+                control = "Edit";
+                property = "Recondo_PsychWarfare_FloorPercent";
+                expression = "_this setVariable ['floorpercent', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "25";
+                category = "Recondo_PsychWarfare_General";
+            };
+            
+            class ScanInterval {
+                displayName = "Body Scan Interval (seconds)";
+                tooltip = "How often to scan dead bodies for psy-op items. Default: 60";
+                control = "Edit";
+                property = "Recondo_PsychWarfare_ScanInterval";
+                expression = "_this setVariable ['scaninterval', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "60";
+                category = "Recondo_PsychWarfare_General";
+            };
+            
+            // ========================================
+            // PSY-OP ITEMS
+            // ========================================
+            class PsyItems {
+                displayName = "PSY-OP - Item Classnames";
+                tooltip = "Classnames of items players plant in bodies to demoralize the enemy. Comma-separated or one per line. Example:\nACE_Chemlight_HiRed\nFlag_US_F";
+                control = "EditMulti5";
+                property = "Recondo_PsychWarfare_PsyItems";
+                expression = "_this setVariable ['psyitems', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_PsychWarfare_Items";
+            };
+            
+            // ========================================
+            // STATUS READINGS (intel board)
+            // ========================================
+            class ReadingDormant {
+                displayName = "READINGS - Tier 0 (Dormant)";
+                tooltip = "Intel board text shown while the enemy is unaffected (item count below the threshold).";
+                control = "Edit";
+                property = "Recondo_PsychWarfare_ReadingDormant";
+                expression = "_this setVariable ['readingdormant', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Your unit has not yet drawn the enemy's attention.""";
+                category = "Recondo_PsychWarfare_Readings";
+            };
+            
+            class ReadingRattled {
+                displayName = "Tier 1 (Rattled)";
+                tooltip = "Intel board text shown once demoralization has begun (any reduction, before the floor).";
+                control = "Edit";
+                property = "Recondo_PsychWarfare_ReadingRattled";
+                expression = "_this setVariable ['readingrattled', _value, true];";
+                typeName = "STRING";
+                defaultValue = """The jungle carries rumors faster than the radios do.""";
+                category = "Recondo_PsychWarfare_Readings";
+            };
+            
+            class ReadingBroken {
+                displayName = "Tier 2 (Broken)";
+                tooltip = "Intel board text shown when demoralization has bottomed out at the skill floor.";
+                control = "Edit";
+                property = "Recondo_PsychWarfare_ReadingBroken";
+                expression = "_this setVariable ['readingbroken', _value, true];";
+                typeName = "STRING";
+                defaultValue = """The enemy fears the Men with Green Faces""";
+                category = "Recondo_PsychWarfare_Readings";
+            };
+            
+            // ========================================
+            // DEBUG
+            // ========================================
+            class EnableDebug {
+                displayName = "DEBUG - Enable Debug Logging";
+                tooltip = "Enable detailed RPT logging for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_PsychWarfare_EnableDebug";
+                expression = "_this setVariable ['enabledebug', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_PsychWarfare_Debug";
             };
             
             class ModuleDescription: ModuleDescription {};
@@ -14531,7 +14662,7 @@ class CfgVehicles {
                 property = "Recondo_Photo_RewardItem";
                 expression = "_this setVariable ['rewarditemclassname', _value, true];";
                 typeName = "STRING";
-                defaultValue = """vn_b_item_map""";
+                defaultValue = """rw_inv_film_roll""";
                 category = "Recondo_Photo_Photography";
             };
             class SuccessMessage {
@@ -15632,7 +15763,7 @@ class CfgVehicles {
                 property = "Recondo_Soil_RewardItem";
                 expression = "_this setVariable ['rewarditem', _value, true];";
                 typeName = "STRING";
-                defaultValue = """""";
+                defaultValue = """rw_inv_tin_can""";
                 category = "Recondo_Soil_General";
             };
             
@@ -16938,7 +17069,7 @@ class CfgVehicles {
         canSetArea = 0;
 
         class ModuleDescription: ModuleDescription {
-            description = "Spawns dynamic boat patrols along the map's river network (Rung Sat / vnx_rssz) near players inside the module zone. Boats are steered by a server-side engine and are dedicated-server safe. Place multiple modules for separate river zones. Set boat classnames per side and a spawn chance for each.";
+            description = "Spawns dynamic boat patrols along river paths you define with invisible markers, near players inside the module zone. Map-agnostic: place markers named <prefix><id>_001, <prefix><id>_002... (min 11 per river, alpha 0). Boats are steered by a server-side engine and are dedicated-server safe. Place multiple modules with unique Marker Prefixes for separate river sets. Set boat classnames per side and a spawn chance for each.";
             sync[] = {};
         };
 
@@ -16947,6 +17078,16 @@ class CfgVehicles {
             // ========================================
             // GENERAL SETTINGS
             // ========================================
+            class MarkerPrefix {
+                displayName = "Marker Prefix";
+                tooltip = "Prefix for this instance's invisible river markers. Default 'river_' matches river_<id>_001, river_<id>_002... Use a '1way' id (e.g. river_1wayA_001) for cyclic rivers and a 'big' id (e.g. river_bigA_001) for larger boat classes. Give each module a unique prefix to cover separate marker sets.";
+                control = "Edit";
+                property = "Recondo_RiverTraffic_MarkerPrefix";
+                expression = "_this setVariable ['markerprefix', _value, true];";
+                typeName = "STRING";
+                defaultValue = """river_""";
+                category = "Recondo_RiverTraffic_General";
+            };
             class ModuleRadius {
                 displayName = "Zone Radius (m)";
                 tooltip = "Radius around this module within which river traffic activates and boats may spawn.";
@@ -16959,7 +17100,7 @@ class CfgVehicles {
             };
             class ActivationDistance {
                 displayName = "Player Activation Distance (m)";
-                tooltip = "A river point becomes a spawn candidate only if a qualifying player is within this distance of it.";
+                tooltip = "Boats spawn only while a player is within this distance of the module's placement position. Boats then launch from a random end of each river in the zone.";
                 control = "Edit";
                 property = "Recondo_RiverTraffic_ActivationDistance";
                 expression = "_this setVariable ['activationdistance', parseNumber _value, true];";
@@ -17015,6 +17156,26 @@ class CfgVehicles {
                 expression = "_this setVariable ['maxboats', parseNumber _value, true];";
                 typeName = "STRING";
                 defaultValue = """6""";
+                category = "Recondo_RiverTraffic_General";
+            };
+            class ClearObstacles {
+                displayName = "Clear Bank Vegetation";
+                tooltip = "Hide trees/bushes along each river's marker path (done once per river when a boat first spawns on it) so boats don't snag. Disable if your rivers are already clear.";
+                control = "Checkbox";
+                property = "Recondo_RiverTraffic_ClearObstacles";
+                expression = "_this setVariable ['clearobstacles', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_RiverTraffic_General";
+            };
+            class ClearRadius {
+                displayName = "Vegetation Clear Radius (m)";
+                tooltip = "Radius around each river marker point to clear trees/bushes.";
+                control = "Edit";
+                property = "Recondo_RiverTraffic_ClearRadius";
+                expression = "_this setVariable ['clearradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """8""";
                 category = "Recondo_RiverTraffic_General";
             };
             class BoatSpeed {
@@ -17118,6 +17279,36 @@ class CfgVehicles {
                 defaultValue = """vn_b_boat_12_03,vn_b_boat_12_04,vn_b_boat_13_03,vn_b_boat_13_04""";
                 category = "Recondo_RiverTraffic_Boats";
             };
+            class CivBigClassnames {
+                displayName = "Civilian Big-River Boat Classnames";
+                tooltip = "Extra civilian boat classes added to the pool on 'big' rivers (marker riverId starting with 'big'). Leave blank to use the normal civilian pool.";
+                control = "Edit";
+                property = "Recondo_RiverTraffic_CivBigClassnames";
+                expression = "_this setVariable ['civbigclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_RiverTraffic_Boats";
+            };
+            class OpforBigClassnames {
+                displayName = "OPFOR Big-River Boat Classnames";
+                tooltip = "Extra OPFOR boat classes added to the pool on 'big' rivers (marker riverId starting with 'big').";
+                control = "Edit";
+                property = "Recondo_RiverTraffic_OpforBigClassnames";
+                expression = "_this setVariable ['opforbigclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """vn_o_boat_03_01,vn_o_boat_03_02,vn_o_boat_04_01""";
+                category = "Recondo_RiverTraffic_Boats";
+            };
+            class BluforBigClassnames {
+                displayName = "BLUFOR Big-River Boat Classnames";
+                tooltip = "Extra BLUFOR boat classes added to the pool on 'big' rivers (marker riverId starting with 'big').";
+                control = "Edit";
+                property = "Recondo_RiverTraffic_BluforBigClassnames";
+                expression = "_this setVariable ['bluforbigclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """vn_b_boat_05_01,vn_b_boat_05_02,vn_b_boat_06_01,vn_b_boat_06_02""";
+                category = "Recondo_RiverTraffic_Boats";
+            };
             class BluforCrew {
                 displayName = "BLUFOR Crew Classnames";
                 tooltip = "Crew unit classnames for BLUFOR boats. Leave blank to auto-crew with the boat's default crew.";
@@ -17126,6 +17317,46 @@ class CfgVehicles {
                 expression = "_this setVariable ['bluforcrew', _value, true];";
                 typeName = "STRING";
                 defaultValue = """vn_b_men_navy_02,vn_b_men_navy_03,vn_b_men_navy_04,vn_b_men_navy_05,vn_b_men_navy_06""";
+                category = "Recondo_RiverTraffic_Boats";
+            };
+            class CivHeadgearEnable {
+                displayName = "Civilian Headgear Override";
+                tooltip = "When enabled, every civilian boat crew member's headgear is replaced with a random entry from the Civilian Headgear list below.";
+                control = "Checkbox";
+                property = "Recondo_RiverTraffic_CivHeadgearEnable";
+                expression = "_this setVariable ['civheadgearenable', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_RiverTraffic_Boats";
+            };
+            class CivHeadgear {
+                displayName = "Civilian Headgear Classnames";
+                tooltip = "Comma/newline-separated headgear classnames for civilian crew. Each unit gets a random one. Only used when Civilian Headgear Override is enabled.";
+                control = "EditMulti3";
+                property = "Recondo_RiverTraffic_CivHeadgear";
+                expression = "_this setVariable ['civheadgear', _value, true];";
+                typeName = "STRING";
+                defaultValue = """vn_c_conehat_01,vn_c_conehat_02,seal_vc_1_a,seal_vc_1_b,seal_vc_2_a,seal_vc_2_b""";
+                category = "Recondo_RiverTraffic_Boats";
+            };
+            class OpforHeadgearEnable {
+                displayName = "OPFOR Headgear Override";
+                tooltip = "When enabled, every OPFOR boat crew member's headgear is replaced with a random entry from the OPFOR Headgear list below.";
+                control = "Checkbox";
+                property = "Recondo_RiverTraffic_OpforHeadgearEnable";
+                expression = "_this setVariable ['opforheadgearenable', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_RiverTraffic_Boats";
+            };
+            class OpforHeadgear {
+                displayName = "OPFOR Headgear Classnames";
+                tooltip = "Comma/newline-separated headgear classnames for OPFOR crew. Each unit gets a random one. Only used when OPFOR Headgear Override is enabled.";
+                control = "EditMulti3";
+                property = "Recondo_RiverTraffic_OpforHeadgear";
+                expression = "_this setVariable ['opforheadgear', _value, true];";
+                typeName = "STRING";
+                defaultValue = """vn_c_conehat_01,vn_c_conehat_02,seal_vc_1_a,seal_vc_1_b,seal_vc_2_a,seal_vc_2_b""";
                 category = "Recondo_RiverTraffic_Boats";
             };
 

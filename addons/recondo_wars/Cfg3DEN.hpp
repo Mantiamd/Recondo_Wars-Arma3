@@ -247,6 +247,13 @@ class Cfg3DEN {
                 collapsed = 0;
                 class Attributes {};
             };
+
+            // Join Grace
+            class Recondo_JIPArea_JoinGrace {
+                displayName = "Join Grace";
+                collapsed = 0;
+                class Attributes {};
+            };
             
             // Debug
             class Recondo_JIPArea_Debug {
@@ -1253,17 +1260,10 @@ class Cfg3DEN {
                 class Attributes {};
             };
             
-            // Intel Settings - Object
-            class Recondo_CampsRandom_IntelObject {
-                displayName = "Intel - Ground Object";
-                collapsed = 0;
-                class Attributes {};
-            };
-            
             // Intel Settings - Unit Inventory
             class Recondo_CampsRandom_IntelUnit {
                 displayName = "Intel - Unit Inventory";
-                collapsed = 1;
+                collapsed = 0;
                 class Attributes {};
             };
             
@@ -1386,6 +1386,38 @@ class Cfg3DEN {
             
             // Debug
             class Recondo_EldestSon_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            //==========================================
+            // PSYCHOLOGICAL WARFARE MODULE CATEGORIES
+            //==========================================
+            
+            // General Settings
+            class Recondo_PsychWarfare_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            // Psy-Op Items
+            class Recondo_PsychWarfare_Items {
+                displayName = "Psy-Op Items";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            // Status Readings
+            class Recondo_PsychWarfare_Readings {
+                displayName = "Status Readings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            // Debug
+            class Recondo_PsychWarfare_Debug {
                 displayName = "Debug";
                 collapsed = 1;
                 class Attributes {};

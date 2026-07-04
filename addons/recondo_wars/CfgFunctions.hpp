@@ -151,8 +151,6 @@ class CfgFunctions {
             file = "\recondo_wars\functions\rwradio";
             class moduleRWRadio {};
             class initRadioClient {};
-            class safeZoneLeaderMonitor {};
-            class resetTriangulationForGroup {};
             class startTransmission {};
             class stopTransmission {};
             class getBatteryLevel {};
@@ -201,7 +199,7 @@ class CfgFunctions {
         class RiverTraffic {
             file = "\recondo_wars\functions\rivertraffic";
             class moduleRiverTraffic {};
-            class riverTrafficDefineRivers {};
+            class riverTrafficBuildRiversFromMarkers {};
             class riverTrafficClearObstacles {};
             class riverTrafficScanLoop {};
             class spawnRiverBoat {};
@@ -516,6 +514,16 @@ class CfgFunctions {
             class handleEldestSonFired {};
         };
         
+        // Psychological Warfare (Skill Suppression) Module Functions
+        class PsychWarfare {
+            file = "\recondo_wars\functions\psychwarfare";
+            class modulePsychWarfare {};
+            class scanPsychWarfareBodies {};
+            class initPsychWarfareUnit {};
+            class applyPsychWarfareFactor {};
+            class updatePsychWarfareReadout {};
+        };
+        
         // Deployable Rallypoint System Module Functions
         class DeployableRallypoint {
             file = "\recondo_wars\functions\deployablerallypoint";
@@ -684,6 +692,7 @@ class CfgFunctions {
             class modulePlayerPersistence {};
             class savePlayers {};
             class loadPlayers {};
+            class applyPersistedLoadout {};
         };
         
         // Vehicle Persistence Module Functions

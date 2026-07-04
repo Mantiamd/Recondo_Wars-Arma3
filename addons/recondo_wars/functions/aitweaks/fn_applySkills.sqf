@@ -22,6 +22,14 @@ params [["_unit", objNull, [objNull]], ["_unitType", "base", [""]], ["_settings"
 
 if (isNull _unit) exitWith {};
 
+// Psychological Warfare demoralization multiplier for courage/commanding.
+// Stays 1.0 until that system crosses its item threshold for this side, so
+// the configured values below are used unchanged in normal play.
+private _psyFactor = 1;
+if (!isNil "RECONDO_PSYWAR_FACTORS") then {
+    _psyFactor = RECONDO_PSYWAR_FACTORS getOrDefault [side _unit, 1];
+};
+
 switch (_unitType) do {
     case "elite": {
         _unit setSkill ["aimingAccuracy", _settings get "eliteAimingAccuracy"];
@@ -29,8 +37,8 @@ switch (_unitType) do {
         _unit setSkill ["aimingSpeed", _settings get "eliteAimingSpeed"];
         _unit setSkill ["spotDistance", _settings get "eliteSpotDistance"];
         _unit setSkill ["spotTime", _settings get "eliteSpotTime"];
-        _unit setSkill ["courage", _settings get "eliteCourage"];
-        _unit setSkill ["commanding", _settings get "eliteCommanding"];
+        _unit setSkill ["courage", (_settings get "eliteCourage") * _psyFactor];
+        _unit setSkill ["commanding", (_settings get "eliteCommanding") * _psyFactor];
         _unit setSkill ["general", _settings get "eliteGeneral"];
         _unit setSkill ["reloadSpeed", _settings get "eliteReloadSpeed"];
     };
@@ -40,8 +48,8 @@ switch (_unitType) do {
         _unit setSkill ["aimingSpeed", _settings get "aaAimingSpeed"];
         _unit setSkill ["spotDistance", _settings get "aaSpotDistance"];
         _unit setSkill ["spotTime", _settings get "aaSpotTime"];
-        _unit setSkill ["courage", _settings get "aaCourage"];
-        _unit setSkill ["commanding", _settings get "aaCommanding"];
+        _unit setSkill ["courage", (_settings get "aaCourage") * _psyFactor];
+        _unit setSkill ["commanding", (_settings get "aaCommanding") * _psyFactor];
         _unit setSkill ["general", _settings get "aaGeneral"];
         _unit setSkill ["reloadSpeed", _settings get "aaReloadSpeed"];
     };
@@ -51,8 +59,8 @@ switch (_unitType) do {
         _unit setSkill ["aimingSpeed", _settings get "baseAimingSpeed"];
         _unit setSkill ["spotDistance", _settings get "baseSpotDistance"];
         _unit setSkill ["spotTime", _settings get "baseSpotTime"];
-        _unit setSkill ["courage", _settings get "baseCourage"];
-        _unit setSkill ["commanding", _settings get "baseCommanding"];
+        _unit setSkill ["courage", (_settings get "baseCourage") * _psyFactor];
+        _unit setSkill ["commanding", (_settings get "baseCommanding") * _psyFactor];
         _unit setSkill ["general", _settings get "baseGeneral"];
         _unit setSkill ["reloadSpeed", _settings get "baseReloadSpeed"];
     };

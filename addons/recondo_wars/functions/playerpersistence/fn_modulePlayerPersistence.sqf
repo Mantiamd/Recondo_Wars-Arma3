@@ -221,7 +221,9 @@ addMissionEventHandler ["PlayerConnected", {
             };
 
             if (count _savedLoadout > 0) then {
-                [_unit, _savedLoadout] remoteExec ["setUnitLoadout", _owner];
+                // Strip baked ACRE radio ids on the owning client before applying
+                // (avoids duplicate-radio-id receive-death on restore).
+                [_unit, _savedLoadout] remoteExec ["Recondo_fnc_applyPersistedLoadout", _owner];
             };
 
             if (RECONDO_PLAYER_PERSISTENCE_DEBUG) then {

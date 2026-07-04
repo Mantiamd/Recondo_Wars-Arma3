@@ -38,6 +38,10 @@ RECONDO_DISABLERATIONSAREAS = [];
 
 // JIP to Group Leader Area globals
 RECONDO_JIPAREAS = [];
+// Join grace: brief window after a player joins where they can teleport to
+// their group from anywhere (combined across all placed JIP Area modules).
+RECONDO_JIP_GRACE_ENABLED = false;
+RECONDO_JIP_GRACE_TIME = 0;
 
 // ACE Spectator Object globals
 RECONDO_SPECTATOROBJECTS = [];
@@ -323,5 +327,12 @@ RECONDO_OPORD_OPEN = false;
 
 // Outpost System global variables
 RECONDO_OUTPOST_INSTANCES = [];
+
+// Psychological Warfare global variables
+RECONDO_PSYWAR_INSTANCES = [];                // Per-side settings hashmaps
+RECONDO_PSYWAR_FACTORS = createHashMap;       // sideValue -> courage/commanding multiplier (read by AI Tweaks fn_applySkills)
+RECONDO_PSYWAR_ITEMS = createHashMap;         // sideValue -> accumulated planted-item count
+RECONDO_PSYWAR_EH_REGISTERED = false;         // Shared EntityCreated handler guard
+RECONDO_PSYWAR_READOUT = [];                  // Broadcast to clients for intel board: [[sideNum, tier, messageText], ...]
 
 diag_log format ["[RECONDO_WARS] PreInit complete. Version: %1", RECONDO_WARS_VERSION];

@@ -96,22 +96,19 @@ RECONDO_RWR_GROUP_TIMES = createHashMap;           // groupId -> cumulative tran
 RECONDO_RWR_GROUP_MARKERS = createHashMap;         // groupId -> [markerName, textMarkerName]
 RECONDO_RWR_CALL_COUNT = 0;                        // Global radio call counter for enemy spawn
 RECONDO_RWR_LAST_ENEMY_COUNT = 0;                  // Track enemy spawn threshold
-RECONDO_RWR_SAFEZONE_LEADER_STATE = createHashMap; // groupId -> whether leader currently in safe zone
 
-// Load from persistence if enabled
+// Load from persistence if enabled.
+// Only battery life persists; triangulation time and the enemy-spawn call
+// counter intentionally start fresh each mission so they never carry over.
 private _enablePersistence = _settings get "enablePersistence";
 if (_enablePersistence && {!isNil "RECONDO_PERSISTENCE_SETTINGS"}) then {
     private _savedBatteries = ["RWR_Batteries", createHashMap] call Recondo_fnc_getSaveData;
-    private _savedGroupTimes = ["RWR_GroupTimes", createHashMap] call Recondo_fnc_getSaveData;
-    private _savedCallCount = ["RWR_CallCount", 0] call Recondo_fnc_getSaveData;
     
     RECONDO_RWR_BATTERY_LEVELS = _savedBatteries;
-    RECONDO_RWR_GROUP_TIMES = _savedGroupTimes;
-    RECONDO_RWR_CALL_COUNT = _savedCallCount;
     
     if (_debug) then {
-        diag_log format ["[RECONDO_RWR] Loaded from persistence - Batteries: %1, GroupTimes: %2, CallCount: %3", 
-            count keys RECONDO_RWR_BATTERY_LEVELS, count keys RECONDO_RWR_GROUP_TIMES, RECONDO_RWR_CALL_COUNT];
+        diag_log format ["[RECONDO_RWR] Loaded from persistence - Batteries: %1 (triangulation/call count reset)", 
+            count keys RECONDO_RWR_BATTERY_LEVELS];
     };
 };
 
@@ -150,11 +147,6 @@ addMissionEventHandler ["PlayerConnected", {
     [] remoteExec ["Recondo_fnc_initRadioClient", 0, true];
 }, [], 1] call CBA_fnc_waitAndExecute;
 
-// Monitor NO_RADIO safe-zone entry by player group leaders.
-if (isNil "RECONDO_RWR_SAFEZONE_MONITOR_EH") then {
-    RECONDO_RWR_SAFEZONE_MONITOR_EH = [Recondo_fnc_safeZoneLeaderMonitor, 1, []] call CBA_fnc_addPerFrameHandler;
-};
-
 // Auto-save if persistence enabled
 if (_enablePersistence && {!isNil "RECONDO_PERSISTENCE_SETTINGS"}) then {
     // Save every 5 minutes
@@ -162,13 +154,12 @@ if (_enablePersistence && {!isNil "RECONDO_PERSISTENCE_SETTINGS"}) then {
         if (isNil "RECONDO_RWR_SETTINGS") exitWith {};
         if !(RECONDO_RWR_SETTINGS get "enablePersistence") exitWith {};
         
+        // Only battery life persists; triangulation/call count are not saved.
         ["RWR_Batteries", RECONDO_RWR_BATTERY_LEVELS] call Recondo_fnc_setSaveData;
-        ["RWR_GroupTimes", RECONDO_RWR_GROUP_TIMES] call Recondo_fnc_setSaveData;
-        ["RWR_CallCount", RECONDO_RWR_CALL_COUNT] call Recondo_fnc_setSaveData;
         call Recondo_fnc_queueSave;
         
         if (RECONDO_RWR_SETTINGS get "enableDebug") then {
-            diag_log "[RECONDO_RWR] Auto-saved battery and triangulation data";
+            diag_log "[RECONDO_RWR] Auto-saved battery data";
         };
     }, 300, []] call CBA_fnc_addPerFrameHandler;
 };

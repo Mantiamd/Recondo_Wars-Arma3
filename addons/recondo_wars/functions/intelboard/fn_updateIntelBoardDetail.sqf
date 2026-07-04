@@ -25,6 +25,23 @@ if (isNull _listbox || _selectedIndex < 0) exitWith {};
 
 disableSerialization;
 
+// Escape characters that are special to structured text (& < >). An unescaped
+// one (e.g. the "&" in a header or a user description) makes parseText choke and
+// the whole control renders blank. Done per code point so it never loses data.
+private _fnc_escapeText = {
+    params [["_s", "", [""]]];
+    private _out = "";
+    {
+        _out = _out + (switch (_x) do {
+            case 38: { "&amp;" };
+            case 60: { "&lt;" };
+            case 62: { "&gt;" };
+            default { toString [_x] };
+        });
+    } forEach (toArray _s);
+    _out
+};
+
 // Get stored data
 private _data = _listbox lbData _selectedIndex;
 
@@ -114,9 +131,9 @@ if (_type == "log") exitWith {
     // Check for sensor full log data
     private _fullLog = _target getOrDefault ["fullLog", ""];
     if (_fullLog != "" && _source == "sensor") then {
-        _detailText = _detailText + format ["<t color='#CCCCCC'>%1</t>", _fullLog];
+        _detailText = _detailText + format ["<t color='#CCCCCC'>%1</t>", [_fullLog] call _fnc_escapeText];
     } else {
-        _detailText = _detailText + format ["<t color='#CCCCCC'>%1</t>", _logMessage];
+        _detailText = _detailText + format ["<t color='#CCCCCC'>%1</t>", [_logMessage] call _fnc_escapeText];
     };
     
     // Add metadata
@@ -136,7 +153,7 @@ if (_type == "log") exitWith {
         };
         
         if (_targetName != "" && toLower _targetType in ["hvt", "hostage"]) then {
-            _detailText = _detailText + format ["<t color='#888888'>Subject: %1</t><br/>", _targetName];
+            _detailText = _detailText + format ["<t color='#888888'>Subject: %1</t><br/>", [_targetName] call _fnc_escapeText];
         };
         
         if (_source != "") then {
@@ -168,7 +185,7 @@ private _statusColorHex = format ["#%1%2%3",
 ];
 
 // Set target name
-_nameCtrl ctrlSetStructuredText parseText format ["<t color='#FFFFFF' size='1.4' font='PuristaBold'>%1</t>", toUpper _name];
+_nameCtrl ctrlSetStructuredText parseText format ["<t color='#FFFFFF' size='1.4' font='PuristaBold'>%1</t>", [toUpper _name] call _fnc_escapeText];
 
 // Set status
 _statusCtrl ctrlSetStructuredText parseText format ["<t color='%1' size='1.1'>Status: %2</t>", _statusColorHex, _status];
@@ -210,18 +227,18 @@ switch (_type) do {
         _backgroundText = "<t color='#88CCFF' size='1.1'>DESTRUCTION OBJECTIVE</t><br/><br/>";
     };
     case "hubsubs": {
-        _backgroundText = "<t color='#88CCFF' size='1.1'>HUB & SUBS TARGET</t><br/><br/>";
+        _backgroundText = "<t color='#88CCFF' size='1.1'>HUB &amp; SUBS TARGET</t><br/><br/>";
     };
 };
 
 // Add objective name if different
 if (_objectiveName != _name && _objectiveName != "") then {
-    _backgroundText = _backgroundText + format ["<t color='#AAAAAA'>Objective: %1</t><br/><br/>", _objectiveName];
+    _backgroundText = _backgroundText + format ["<t color='#AAAAAA'>Objective: %1</t><br/><br/>", [_objectiveName] call _fnc_escapeText];
 };
 
 // Add background info
 if (_background != "") then {
-    _backgroundText = _backgroundText + format ["<t color='#CCCCCC'>%1</t>", _background];
+    _backgroundText = _backgroundText + format ["<t color='#CCCCCC'>%1</t>", [_background] call _fnc_escapeText];
 } else {
     private _defaultText = switch (_type) do {
         case "hvt": { "No additional intelligence available on this target." };

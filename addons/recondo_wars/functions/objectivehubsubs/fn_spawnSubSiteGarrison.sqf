@@ -53,56 +53,50 @@ if (isNull _group) exitWith {
 // Get turret paths for the object
 private _turretPaths = fullCrew [_spawnedObject, "gunner", true] apply { _x select 3 };
 
-// Calculate how many crew to spawn (limited by available positions)
-private _maxCrew = count _turretPaths max 1;
+// Garrison size comes from the configured min/max only. Turret seats are just
+// where the first units go; any surplus is posted as static defenders so the
+// configured minimum is honored even on objects with few/no gunner seats.
 private _garrisonSize = _garrisonMin + floor random ((_garrisonMax - _garrisonMin) + 1);
-_garrisonSize = (_garrisonSize max 1) min _maxCrew;
+_garrisonSize = _garrisonSize max 1;
 
 private _unitsCreated = 0;
 
-if (count _turretPaths > 0) then {
-    // Object has turret positions - fill them
-    for "_i" from 0 to (_garrisonSize - 1) do {
-        if (_i >= count _turretPaths) exitWith {};
-        
-        private _turretPath = _turretPaths select _i;
-        private _class = selectRandom _aiClassnames;
-        
-        if (isClass (configFile >> "CfgVehicles" >> _class)) then {
-            private _unit = _group createUnit [_class, _markerPos, [], 5, "NONE"];
-            if (!isNull _unit) then {
-                _unit moveInTurret [_spawnedObject, _turretPath];
-                _unitsCreated = _unitsCreated + 1;
-                
-                if (_debugLogging) then {
-                    diag_log format ["[RECONDO_HUBSUBS] Unit manned turret %1 on %2 at %3", _turretPath, typeOf _spawnedObject, _subSiteMarker];
-                };
-            };
-        };
-    };
-} else {
-    // Object has no turrets - try to use it as a simple static weapon (fallback)
+// First, seat units into any available gunner turrets on the object.
+{
+    if (_unitsCreated >= _garrisonSize) exitWith {};
+    
+    private _turretPath = _x;
     private _class = selectRandom _aiClassnames;
     
     if (isClass (configFile >> "CfgVehicles" >> _class)) then {
         private _unit = _group createUnit [_class, _markerPos, [], 5, "NONE"];
         if (!isNull _unit) then {
-            _unit moveInGunner _spawnedObject;
+            _unit moveInTurret [_spawnedObject, _turretPath];
+            _unitsCreated = _unitsCreated + 1;
             
-            if (vehicle _unit == _spawnedObject) then {
-                _unitsCreated = _unitsCreated + 1;
-                if (_debugLogging) then {
-                    diag_log format ["[RECONDO_HUBSUBS] Unit manned gunner seat on %1 at %2", typeOf _spawnedObject, _subSiteMarker];
-                };
-            } else {
-                // Failed to enter - position unit nearby
-                _unit setPos (_markerPos vectorAdd [random 3 - 1.5, random 3 - 1.5, 0]);
+            if (_debugLogging) then {
+                diag_log format ["[RECONDO_HUBSUBS] Unit manned turret %1 on %2 at %3", _turretPath, typeOf _spawnedObject, _subSiteMarker];
+            };
+        };
+    };
+} forEach _turretPaths;
+
+// Post any remaining units as static infantry defenders around the sub-site.
+private _remaining = _garrisonSize - _unitsCreated;
+if (_remaining > 0) then {
+    for "_i" from 1 to _remaining do {
+        private _class = selectRandom _aiClassnames;
+        if (isClass (configFile >> "CfgVehicles" >> _class)) then {
+            private _spawnPos = _markerPos vectorAdd [(random 6) - 3, (random 6) - 3, 0];
+            private _unit = _group createUnit [_class, _spawnPos, [], 3, "NONE"];
+            if (!isNull _unit) then {
+                _unit setPosATL _spawnPos;
                 _unit setUnitPos "UP";
                 doStop _unit;
                 _unitsCreated = _unitsCreated + 1;
                 
                 if (_debugLogging) then {
-                    diag_log format ["[RECONDO_HUBSUBS] Unit stationed near %1 at %2 (no gunner seat)", typeOf _spawnedObject, _subSiteMarker];
+                    diag_log format ["[RECONDO_HUBSUBS] Static defender stationed at sub-site %1", _subSiteMarker];
                 };
             };
         };
