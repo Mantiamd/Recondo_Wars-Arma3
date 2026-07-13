@@ -103,6 +103,9 @@ if (hasInterface) then {
     
     // Initialize Player Limitations (client-side inventory enforcement)
     [] call Recondo_fnc_initPlayerLimitations;
+
+    // Build the in-game Field Guide (map diary/notes tabs)
+    [] spawn Recondo_fnc_initFieldGuide;
 };
 
 // Server-side module validation (delayed to allow all modules to initialize)

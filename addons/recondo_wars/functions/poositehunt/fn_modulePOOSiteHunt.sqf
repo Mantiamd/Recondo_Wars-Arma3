@@ -47,6 +47,18 @@ private _crewSideStr       = _logic getVariable ["crewside", "EAST"];
 private _firingInterval    = parseNumber str (_logic getVariable ["firinginterval", 5]);
 private _invulnTime        = parseNumber str (_logic getVariable ["invulntime", 20]);
 
+private _enableAreaPatrol  = _logic getVariable ["enableareapatrol", false];
+private _patrolClassnamesRaw = _logic getVariable ["patrolclassnames", ""];
+private _patrolGroupCount  = parseNumber str (_logic getVariable ["patrolgroupcount", 1]);
+private _patrolMinSize     = parseNumber str (_logic getVariable ["patrolminsize", 3]);
+private _patrolMaxSize     = parseNumber str (_logic getVariable ["patrolmaxsize", 4]);
+private _patrolRadius      = parseNumber str (_logic getVariable ["patrolradius", 150]);
+private _patrolFormation   = _logic getVariable ["patrolformation", "WEDGE"];
+
+private _patrolClassnames = if (_patrolClassnamesRaw != "") then {
+    [_patrolClassnamesRaw] call Recondo_fnc_parseClassnames
+} else { [] };
+
 private _debugLogging      = _logic getVariable ["debuglogging", false];
 if (RECONDO_MASTER_DEBUG) then { _debugLogging = true; };
 private _debugMarkers      = _logic getVariable ["debugmarkers", false];
@@ -97,6 +109,13 @@ private _settings = createHashMapFromArray [
     ["crewSide", _crewSide],
     ["firingInterval", _firingInterval],
     ["invulnTime", _invulnTime],
+    ["enableAreaPatrol", _enableAreaPatrol],
+    ["patrolClassnames", _patrolClassnames],
+    ["patrolGroupCount", _patrolGroupCount],
+    ["patrolMinSize", _patrolMinSize],
+    ["patrolMaxSize", _patrolMaxSize],
+    ["patrolRadius", _patrolRadius],
+    ["patrolFormation", _patrolFormation],
     ["debugLogging", _debugLogging],
     ["debugMarkers", _debugMarkers],
     ["intelBoardCategoryName", _intelBoardCategoryName]

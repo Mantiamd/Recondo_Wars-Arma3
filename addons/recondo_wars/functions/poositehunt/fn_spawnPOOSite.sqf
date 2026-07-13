@@ -102,6 +102,14 @@ if (_debugLogging) then {
 };
 
 // ========================================
+// AREA PATROL (optional)
+// ========================================
+
+if (_settings get "enableAreaPatrol") then {
+    [_settings, _markerPos] call Recondo_fnc_spawnPOOPatrol;
+};
+
+// ========================================
 // INVULNERABILITY PERIOD
 // ========================================
 

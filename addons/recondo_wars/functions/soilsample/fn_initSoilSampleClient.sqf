@@ -34,27 +34,29 @@ private _action = [
         private _markerPrefix = _settings get "markerPrefix";
         private _markerAreas = _settings get "markerAreas";
 
-        // Must have required item
-        private _hasItem = [player, _requiredItem] call BIS_fnc_hasItem;
-        if (!_hasItem) exitWith { false };
+        // Must have required item (magazine-safe; cheap enough for a menu condition)
+        if !(_requiredItem in (itemsWithMagazines player)) exitWith { false };
 
         // Must not be in a vehicle
         if !(isNull objectParent player) exitWith { false };
 
-        // Must be near a road
-        private _roads = (getPosATL player) nearRoads _roadDistance;
-        if (count _roads == 0) exitWith { false };
+        // Must be on or near a road/trail. isOnRoad catches being on the road
+        // surface regardless of how sparsely road segment centers are spaced.
+        private _onRoad = isOnRoad player;
+        if (!_onRoad) then { _onRoad = count ((getPosATL player) nearRoads _roadDistance) > 0; };
+        if (!_onRoad) exitWith { false };
 
         // Check cooldown (-99999 default so first collection is always allowed)
         private _lastCollect = player getVariable ["RECONDO_SOIL_LastCollect", -99999];
         if (time - _lastCollect < _cooldownSeconds) exitWith { false };
 
-        // Check marker area restriction (if configured)
+        // Check marker area restriction (if configured).
+        // Entries are [markerName, [center, sizeX, sizeZ, angle, isRectangle]].
         if (_markerPrefix != "" && count _markerAreas > 0) then {
             private _inArea = false;
             private _playerPos = getPosATL player;
             {
-                if (_playerPos inArea _x) exitWith { _inArea = true; };
+                if (_playerPos inArea (_x select 1)) exitWith { _inArea = true; };
             } forEach _markerAreas;
             _inArea
         } else {

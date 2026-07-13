@@ -11,6 +11,12 @@ class CfgFunctions {
             class registerCustomComposition {};
             class validateModules {};
         };
+
+        // Field Guide (in-game help via map diary)
+        class FieldGuide {
+            file = "\recondo_wars\functions\fieldguide";
+            class initFieldGuide {};
+        };
         
         // Centralized Simulation Monitoring System Functions
         class Simulation {
@@ -613,6 +619,7 @@ class CfgFunctions {
             class spawnCustomSite {};
             class createCustomSiteTrigger {};
             class updateCustomSiteNightLights {};
+            class cssDefaultCompositions {};
         };
         
         // Bad Civi Module Functions
@@ -629,6 +636,7 @@ class CfgFunctions {
             class modulePOOSiteHunt {};
             class createPOOTrigger {};
             class spawnPOOSite {};
+            class spawnPOOPatrol {};
             class startArtilleryFire {};
             class handlePOODestroyed {};
         };
@@ -762,6 +770,21 @@ class CfgFunctions {
             class outpostSupplyLoop {};
             class outpostQRFLoad {};
             class outpostQRFDismount {};
+        };
+
+        // Commander System Module Functions
+        class Commander {
+            file = "\recondo_wars\functions\commander";
+            class moduleCommander {};
+            class addCommanderActionClient {};
+            class commanderSpawnSquad {};
+            class commanderSetupSquadClient {};
+            class commanderIssueOrder {};
+            class commanderOpenCommandMap {};
+            class commanderGridToPos {};
+            class commanderMapClick {};
+            class commanderMapDrawIcons {};
+            class commanderMenuPanel {};
         };
 
     };

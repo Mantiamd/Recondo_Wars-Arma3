@@ -5669,6 +5669,56 @@ class CfgVehicles {
                 defaultValue = "false";
                 category = "Recondo_HubSubs_CompPool";
             };
+            class Comp_Cache1 {
+                displayName = "Cache 1";
+                tooltip = "Enable this composition in the selection pool (Cache_1.sqe / Cache_1_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_HubSubs_Comp_Cache1";
+                expression = "_this setVariable ['comp_cache1', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HubSubs_CompPool";
+            };
+            class Comp_Cache2 {
+                displayName = "Cache 2";
+                tooltip = "Enable this composition in the selection pool (Cache_2.sqe / Cache_2_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_HubSubs_Comp_Cache2";
+                expression = "_this setVariable ['comp_cache2', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HubSubs_CompPool";
+            };
+            class Comp_Cache3 {
+                displayName = "Cache 3";
+                tooltip = "Enable this composition in the selection pool (Cache_3.sqe / Cache_3_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_HubSubs_Comp_Cache3";
+                expression = "_this setVariable ['comp_cache3', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HubSubs_CompPool";
+            };
+            class Comp_Cache4 {
+                displayName = "Cache 4";
+                tooltip = "Enable this composition in the selection pool (Cache_4.sqe / Cache_4_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_HubSubs_Comp_Cache4";
+                expression = "_this setVariable ['comp_cache4', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HubSubs_CompPool";
+            };
+            class Comp_Cache5 {
+                displayName = "Cache 5";
+                tooltip = "Enable this composition in the selection pool (Cache_5.sqe / Cache_5_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_HubSubs_Comp_Cache5";
+                expression = "_this setVariable ['comp_cache5', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HubSubs_CompPool";
+            };
             class Comp_HVTBASE1 {
                 displayName = "HVT Base 1";
                 tooltip = "Enable this composition (HVTBASE_comp_1.sqe - no destroyed variant).";
@@ -13635,11 +13685,45 @@ class CfgVehicles {
             };
             
             // ========================================
+            // DEFAULT COMPOSITIONS
+            // ========================================
+            class Comp_AbandonedCamp {
+                displayName = "Abandoned Camp";
+                tooltip = "Add the built-in Abandoned Camp composition to the site pool.";
+                control = "Checkbox";
+                property = "Recondo_CSS_Comp_AbandonedCamp";
+                expression = "_this setVariable ['comp_abandonedcamp', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_CSS_DefaultComps";
+            };
+            class Comp_NVACCP {
+                displayName = "NVA CCP";
+                tooltip = "Add the built-in NVA Casualty Collection Point composition to the site pool.";
+                control = "Checkbox";
+                property = "Recondo_CSS_Comp_NVACCP";
+                expression = "_this setVariable ['comp_nvaccp', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_CSS_DefaultComps";
+            };
+            class Comp_NVATelegraph {
+                displayName = "NVA Telegraph Station";
+                tooltip = "Add the built-in NVA Telegraph Station composition to the site pool.";
+                control = "Checkbox";
+                property = "Recondo_CSS_Comp_NVATelegraph";
+                expression = "_this setVariable ['comp_nvatelegraph', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_CSS_DefaultComps";
+            };
+
+            // ========================================
             // COMPOSITION SETTINGS
             // ========================================
             class EnableCustomComposition {
                 displayName = "Enable Custom Composition";
-                tooltip = "Enable the custom composition pasted below. Required for this module to spawn anything.";
+                tooltip = "Enable the custom composition pasted below. Adds it to the site pool alongside any checked default compositions.";
                 control = "Checkbox";
                 property = "Recondo_CSS_CustomCompEnabled";
                 expression = "_this setVariable ['customcompenabled', _value, true];";
@@ -14411,6 +14495,102 @@ class CfgVehicles {
                 typeName = "NUMBER";
                 defaultValue = "20";
                 category = "Recondo_POO_Artillery";
+            };
+
+            // ========================================
+            // AREA PATROL
+            // ========================================
+            class EnableAreaPatrol {
+                displayName = "Enable Area Patrol";
+                tooltip = "Spawn infantry patrol group(s) that guard the POO site while it is active. Patrols spawn when the site activates and remain as normal AI if the gun is destroyed.";
+                control = "Checkbox";
+                property = "Recondo_POO_EnableAreaPatrol";
+                expression = "_this setVariable ['enableareapatrol', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_POO_Patrol";
+            };
+            class PatrolClassnames {
+                displayName = "Patrol Classnames";
+                tooltip = "Comma-separated unit classnames for the patrol. One is picked at random per unit. Example: vn_o_men_nva_49,vn_o_men_nva_50";
+                control = "Edit";
+                property = "Recondo_POO_PatrolClassnames";
+                expression = "_this setVariable ['patrolclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """vn_o_men_nva_49""";
+                category = "Recondo_POO_Patrol";
+            };
+            class PatrolGroupCount {
+                displayName = "Patrol Group Count";
+                tooltip = "Number of separate patrol groups to spawn around the site.";
+                control = "Edit";
+                property = "Recondo_POO_PatrolGroupCount";
+                expression = "_this setVariable ['patrolgroupcount', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "1";
+                category = "Recondo_POO_Patrol";
+            };
+            class PatrolMinSize {
+                displayName = "Patrol Min Size";
+                tooltip = "Minimum number of units in each patrol group.";
+                control = "Edit";
+                property = "Recondo_POO_PatrolMinSize";
+                expression = "_this setVariable ['patrolminsize', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "3";
+                category = "Recondo_POO_Patrol";
+            };
+            class PatrolMaxSize {
+                displayName = "Patrol Max Size";
+                tooltip = "Maximum number of units in each patrol group.";
+                control = "Edit";
+                property = "Recondo_POO_PatrolMaxSize";
+                expression = "_this setVariable ['patrolmaxsize', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "4";
+                category = "Recondo_POO_Patrol";
+            };
+            class PatrolRadius {
+                displayName = "Patrol Radius (meters)";
+                tooltip = "Radius around the POO site that the patrol will roam.";
+                control = "Edit";
+                property = "Recondo_POO_PatrolRadius";
+                expression = "_this setVariable ['patrolradius', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "150";
+                category = "Recondo_POO_Patrol";
+            };
+            class PatrolFormation {
+                displayName = "Patrol Formation";
+                tooltip = "Formation the patrol group uses while moving.";
+                control = "Combo";
+                property = "Recondo_POO_PatrolFormation";
+                expression = "_this setVariable ['patrolformation', _value, true];";
+                typeName = "STRING";
+                defaultValue = """WEDGE""";
+                class values {
+                    class Column {
+                        name = "Column";
+                        value = "COLUMN";
+                    };
+                    class StagColumn {
+                        name = "Staggered Column";
+                        value = "STAG COLUMN";
+                    };
+                    class Wedge {
+                        name = "Wedge";
+                        value = "WEDGE";
+                    };
+                    class Vee {
+                        name = "Vee";
+                        value = "VEE";
+                    };
+                    class Line {
+                        name = "Line";
+                        value = "LINE";
+                    };
+                };
+                category = "Recondo_POO_Patrol";
             };
             
             // ========================================
@@ -15753,7 +15933,7 @@ class CfgVehicles {
                 property = "Recondo_Soil_RequiredItem";
                 expression = "_this setVariable ['requireditem', _value, true];";
                 typeName = "STRING";
-                defaultValue = """""";
+                defaultValue = """rw_inv_tin_can_empty""";
                 category = "Recondo_Soil_General";
             };
             class RewardItem {
@@ -15763,7 +15943,7 @@ class CfgVehicles {
                 property = "Recondo_Soil_RewardItem";
                 expression = "_this setVariable ['rewarditem', _value, true];";
                 typeName = "STRING";
-                defaultValue = """rw_inv_tin_can""";
+                defaultValue = """rw_inv_tin_can_full""";
                 category = "Recondo_Soil_General";
             };
             
@@ -17372,6 +17552,149 @@ class CfgVehicles {
                 typeName = "BOOL";
                 defaultValue = "false";
                 category = "Recondo_RiverTraffic_Debug";
+            };
+
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+
+    // ==========================================
+    // COMMANDER SYSTEM MODULE
+    // ==========================================
+    class Recondo_Module_Commander: Module_F {
+        scope = 2;
+        displayName = "Commander System";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Misc";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\move_ca.paa";
+        function = "Recondo_fnc_moduleCommander";
+        functionPriority = 5;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+
+        class ModuleDescription: ModuleDescription {
+            description = "Designated officer units gain ACE self-interactions to spawn AI squads at an invisible map marker and to open a Command Map. From that dedicated map the officer clicks a squad to select it, then issues move, halt, behaviour, and formation orders. Works on dedicated servers: squads stay local to the server (authoritative AI) and orders are sent to the server; each officer sees only their own squads. On officer disconnect their squads are released to the server as normal AI.";
+            sync[] = {};
+        };
+
+        class Attributes: AttributesBase {
+
+            // ========================================
+            // GENERAL SETTINGS
+            // ========================================
+            class OfficerClassnames {
+                displayName = "GENERAL - Officer Unit Classnames";
+                tooltip = "Comma-separated list of unit classnames that receive the ""Spawn Squad"" self-interaction. Any player whose unit type matches one of these gets the command option.";
+                control = "EditCodeMulti5";
+                property = "Recondo_CMD_OfficerClassnames";
+                expression = "_this setVariable ['officerclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CMD_General";
+            };
+            class SoldierClassnames {
+                displayName = "Squad Soldier Classnames";
+                tooltip = "Comma-separated list of unit classnames that make up the spawned squad. One unit is created per classname listed.";
+                control = "EditCodeMulti5";
+                property = "Recondo_CMD_SoldierClassnames";
+                expression = "_this setVariable ['soldierclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CMD_General";
+            };
+            class ActionName {
+                displayName = "ACE Action Label";
+                tooltip = "Text shown for the self-interaction that spawns the squad.";
+                control = "Edit";
+                property = "Recondo_CMD_ActionName";
+                expression = "_this setVariable ['actionname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Spawn Squad""";
+                category = "Recondo_CMD_General";
+            };
+
+            // ========================================
+            // SQUAD SETTINGS
+            // ========================================
+            class SpawnMarker {
+                displayName = "SQUAD - Spawn Marker Name";
+                tooltip = "Name of the (invisible) Eden marker where squads spawn. Place a marker in the editor and enter its variable name here.";
+                control = "Edit";
+                property = "Recondo_CMD_SpawnMarker";
+                expression = "_this setVariable ['spawnmarker', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_CMD_Squad";
+            };
+            class SquadSide {
+                displayName = "Squad Side";
+                tooltip = "Side of the spawned squad. ""Officer's Side"" (recommended) keeps the squad friendly to the officer. Choosing a fixed side that differs from the officer may make the squad neutral or hostile to them.";
+                control = "Combo";
+                property = "Recondo_CMD_SquadSide";
+                expression = "_this setVariable ['squadside', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                class values {
+                    class OfficerSide {
+                        name = "Officer's Side (Recommended)";
+                        value = 0;
+                    };
+                    class East {
+                        name = "EAST (OPFOR)";
+                        value = 1;
+                    };
+                    class West {
+                        name = "WEST (BLUFOR)";
+                        value = 2;
+                    };
+                    class Guer {
+                        name = "GUER (Independent)";
+                        value = 3;
+                    };
+                    class Civ {
+                        name = "CIVILIAN";
+                        value = 4;
+                    };
+                };
+                category = "Recondo_CMD_Squad";
+            };
+            class MaxSquads {
+                displayName = "Max Squads Per Officer";
+                tooltip = "Maximum number of squads a single officer can have active at once. The action is unavailable while at the cap; dead/released squads free up a slot.";
+                control = "Edit";
+                property = "Recondo_CMD_MaxSquads";
+                expression = "_this setVariable ['maxsquads', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "3";
+                category = "Recondo_CMD_Squad";
+            };
+            class SpawnRadius {
+                displayName = "Spawn Spread Radius (m)";
+                tooltip = "Units are scattered within this radius around the marker on spawn.";
+                control = "Edit";
+                property = "Recondo_CMD_SpawnRadius";
+                expression = "_this setVariable ['spawnradius', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "5";
+                category = "Recondo_CMD_Squad";
+            };
+
+            // ========================================
+            // DEBUG SETTINGS
+            // ========================================
+            class DebugLogging {
+                displayName = "DEBUG - Enable Debug Logging";
+                tooltip = "Enable detailed logging to the RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_CMD_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_CMD_Debug";
             };
 
             class ModuleDescription: ModuleDescription {};

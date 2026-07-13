@@ -2148,6 +2148,11 @@ class Cfg3DEN {
                 collapsed = 0;
                 class Attributes {};
             };
+            class Recondo_CSS_DefaultComps {
+                displayName = "Default Compositions";
+                collapsed = 0;
+                class Attributes {};
+            };
             class Recondo_CSS_Compositions {
                 displayName = "Compositions";
                 collapsed = 0;
@@ -2227,6 +2232,11 @@ class Cfg3DEN {
             class Recondo_POO_Artillery {
                 displayName = "Artillery";
                 collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_POO_Patrol {
+                displayName = "Area Patrol";
+                collapsed = 1;
                 class Attributes {};
             };
             class Recondo_POO_Debug {
@@ -2658,6 +2668,29 @@ class Cfg3DEN {
             class Recondo_CustomHostageProfile_Appearance {
                 displayName = "Appearance & Loadout";
                 collapsed = 0;
+                class Attributes {};
+            };
+        };
+    };
+
+    // ==========================================
+    // COMMANDER SYSTEM MODULE CATEGORIES
+    // ==========================================
+    class Recondo_Module_Commander {
+        class AttributeCategories {
+            class Recondo_CMD_General {
+                displayName = "General";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_CMD_Squad {
+                displayName = "Squad";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_CMD_Debug {
+                displayName = "Debug";
+                collapsed = 1;
                 class Attributes {};
             };
         };

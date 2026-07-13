@@ -22,7 +22,7 @@ private _markerAreas = _settings get "markerAreas";
 private _debugLogging = _settings getOrDefault ["debugLogging", false];
 
 // Final validation
-if !([player, _requiredItem] call BIS_fnc_hasItem) exitWith {
+if !(_requiredItem in (itemsWithMagazines player)) exitWith {
     hint "You don't have the required item.";
 };
 
@@ -32,12 +32,13 @@ if (time - _lastCollect < _cooldownSeconds) exitWith {
     hint format ["You must wait %1 seconds before collecting another sample.", _remaining];
 };
 
-// Determine which marker area the player is in (if applicable)
+// Determine which marker area the player is in (if applicable).
+// Entries are [markerName, [center, sizeX, sizeZ, angle, isRectangle]].
 private _collectionMarker = "__GLOBAL__";
 if (_markerPrefix != "" && count _markerAreas > 0) then {
     private _playerPos = getPosATL player;
     {
-        if (_playerPos inArea _x) exitWith { _collectionMarker = _x; };
+        if (_playerPos inArea (_x select 1)) exitWith { _collectionMarker = _x select 0; };
     } forEach _markerAreas;
 };
 
@@ -49,7 +50,7 @@ if (_markerPrefix != "" && count _markerAreas > 0) then {
         params ["_args"];
         _args params ["_requiredItem", "_rewardItem", "_cooldownSeconds", "_debugLogging", "_collectionMarker"];
 
-        if !([player, _requiredItem] call BIS_fnc_hasItem) exitWith {};
+        if !(_requiredItem in (itemsWithMagazines player)) exitWith {};
 
         private _isMag = isClass (configFile >> "CfgMagazines" >> _requiredItem);
         if (_isMag) then { player removeMagazine _requiredItem; } else { player removeItem _requiredItem; };
@@ -73,7 +74,7 @@ if (_markerPrefix != "" && count _markerAreas > 0) then {
     "Collecting soil sample...",
     {
         private _requiredItem = (_this select 0) select 0;
-        ([player, _requiredItem] call BIS_fnc_hasItem) && (isNull objectParent player)
+        (_requiredItem in (itemsWithMagazines player)) && (isNull objectParent player)
     },
     ["isnotinside", "isnotswimming"]
 ] call ace_common_fnc_progressBar;

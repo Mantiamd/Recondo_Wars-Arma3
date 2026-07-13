@@ -603,13 +603,13 @@ class CfgMagazines
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////Tin Can
 
-	class rw_inv_tin_can: CA_Magazine
+	class rw_inv_tin_can_empty: CA_Magazine
 	{
 		author = "TheDUDE";
 		mass = 0.3;
 		scope = 2;
 		value = 1;
-		displayName = "[RW] Tin Can for Soil Samples";
+		displayName = "[RW] Empty Tin Can for Soil Samples";
 		picture = "\rw_objects\data\ui\rw_tin_can_ca.paa";
 		model = "\rw_objects\rw_tin_can.p3d";
 		type = 256;
@@ -617,8 +617,26 @@ class CfgMagazines
 		initSpeed = 18;
 		nameSound = "handgrenade";
 		maxLeadSpeed = 6.94444;
-		descriptionShort = "Tin Can";
-		displayNameShort = "Tin Can";
+		descriptionShort = "Empty Tin Can";
+		displayNameShort = "Empty Tin Can";
+	};
+	
+	class rw_inv_tin_can_full: CA_Magazine
+	{
+		author = "TheDUDE";
+		mass = 0.8;
+		scope = 2;
+		value = 1;
+		displayName = "[RW] Full Tin Can for Soil Samples";
+		picture = "\rw_objects\data\ui\rw_tin_can_ca.paa";
+		model = "\rw_objects\rw_tin_can.p3d";
+		type = 256;
+		count = 1;
+		initSpeed = 18;
+		nameSound = "handgrenade";
+		maxLeadSpeed = 6.94444;
+		descriptionShort = "Full Tin Can";
+		displayNameShort = "Full Tin Can";
 	};
 	
 	

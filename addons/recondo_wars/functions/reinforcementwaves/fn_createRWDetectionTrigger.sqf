@@ -108,8 +108,8 @@ if (_debugLogging) then {
                         private _targetGroup = group _target;
 
                         // Delay first-wave spawn to create a reaction window:
-                        // randomized between 30 and 60 seconds.
-                        private _spawnDelay = 30 + random 30;
+                        // randomized between 10 and 30 seconds.
+                        private _spawnDelay = 10 + random 20;
 
                         if (_debugLogging) then {
                             diag_log format [

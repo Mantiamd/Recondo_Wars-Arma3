@@ -33,6 +33,11 @@ private _enablePersistence = _logic getVariable ["enablepersistence", true];
 private _compositionPath = "compositions";
 private _customCompEnabled = _logic getVariable ["customcompenabled", true];
 private _customCompData = _logic getVariable ["customcompdata", ""];
+
+// Built-in default compositions (checkboxes)
+private _compAbandonedCamp = _logic getVariable ["comp_abandonedcamp", false];
+private _compNVACCP = _logic getVariable ["comp_nvaccp", false];
+private _compNVATelegraph = _logic getVariable ["comp_nvatelegraph", false];
 private _clearRadius = _logic getVariable ["clearradius", 25];
 private _disableSimulation = _logic getVariable ["disablesimulation", true];
 
@@ -61,19 +66,41 @@ private _debugMarkers = _logic getVariable ["debugmarkers", false];
 // PARSE CONFIGURATIONS
 // ========================================
 
-// Register the pasted custom composition (if enabled). The same composition is
-// used at every selected site, so the list holds a single token when set.
+// Build the site composition pool. Any combination of the built-in default
+// compositions and a pasted custom composition can be enabled; each selected
+// site then randomly picks one from the pool.
 private _compositionList = [];
+
+// Built-in defaults: register the shared text through the same path the paste
+// box uses, so Recondo_fnc_loadComposition can spawn from the token.
+private _defaultComps = call Recondo_fnc_cssDefaultCompositions;
+{
+    _x params ["_enabled", "_key"];
+    if (_enabled) then {
+        private _text = _defaultComps getOrDefault [_key, ""];
+        if (_text != "") then {
+            private _tokens = [true, _text, "", format ["css_%1_%2", _siteName, _key]] call Recondo_fnc_registerCustomComposition;
+            private _token = _tokens select 0;
+            if (_token != "") then { _compositionList pushBack _token; };
+        };
+    };
+} forEach [
+    [_compAbandonedCamp, "abandonedcamp"],
+    [_compNVACCP, "nvaccp"],
+    [_compNVATelegraph, "nvatelegraph"]
+];
+
+// Pasted custom composition (if enabled).
 if (_customCompEnabled) then {
     private _customTokens = [true, _customCompData, "", format ["css_%1", _siteName]] call Recondo_fnc_registerCustomComposition;
     private _customActiveToken = _customTokens select 0;
     if (_customActiveToken != "") then {
-        _compositionList = [_customActiveToken];
+        _compositionList pushBack _customActiveToken;
     };
 };
 
 if (count _compositionList == 0) exitWith {
-    diag_log format ["[RECONDO_CSS] ERROR: No custom composition set for '%1'. Enable the checkbox and paste a composition.", _siteName];
+    diag_log format ["[RECONDO_CSS] ERROR: No composition set for '%1'. Tick a default composition or enable and paste a custom one.", _siteName];
 };
 
 private _garrisonClassnames = if (_garrisonClassnamesRaw != "") then {

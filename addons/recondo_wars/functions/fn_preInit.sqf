@@ -335,4 +335,15 @@ RECONDO_PSYWAR_ITEMS = createHashMap;         // sideValue -> accumulated plante
 RECONDO_PSYWAR_EH_REGISTERED = false;         // Shared EntityCreated handler guard
 RECONDO_PSYWAR_READOUT = [];                  // Broadcast to clients for intel board: [[sideNum, tier, messageText], ...]
 
+// Commander System global variables
+RECONDO_CMD_SETTINGS = nil;                   // Settings hashmap (broadcast to clients for the spawn-action condition)
+RECONDO_CMD_INITIALIZED = nil;                // Server singleton guard
+RECONDO_CMD_ACTIONS_ADDED = false;            // Client guard: ACE self-action added only once
+RECONDO_CMD_OFFICER_SQUADS = createHashMap;   // Server: officer UID -> array of commanded groups (for the per-officer cap)
+// Client-side (officer) command-map state
+RECONDO_CMD_CLIENT_SQUADS = [];               // [[group, label], ...] this officer's own squads
+RECONDO_CMD_SELECTED_GROUP = grpNull;         // Currently selected squad in the command map
+RECONDO_CMD_MARKER_COUNT = 0;                 // Squad label counter
+RECONDO_CMD_SQUAD_DEST = createHashMap;       // Client: netId group -> current move destination (for the command-map marker)
+
 diag_log format ["[RECONDO_WARS] PreInit complete. Version: %1", RECONDO_WARS_VERSION];

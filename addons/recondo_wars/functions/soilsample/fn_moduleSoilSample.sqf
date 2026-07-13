@@ -62,21 +62,36 @@ _samplesRequired = _samplesRequired max 1;
 // FIND MARKERS (if prefix set)
 // ========================================
 
+// Each entry: [markerName, [center, sizeX, sizeZ, angle, isRectangle]]
+// The geometry array lets the area restriction keep working after the
+// physical markers are deleted (so players never see the zones on the map).
 private _markerAreas = [];
 
 if (_markerPrefix != "") then {
     private _prefixLength = count _markerPrefix;
+    private _matchedMarkers = [];
     {
         if ((_x select [0, _prefixLength]) == _markerPrefix) then {
-            _markerAreas pushBack _x;
+            _matchedMarkers pushBack _x;
         };
     } forEach allMapMarkers;
+
+    {
+        private _center = getMarkerPos _x;
+        private _size = markerSize _x;
+        private _angle = markerDir _x;
+        private _isRect = (markerShape _x) == "RECTANGLE";
+        _markerAreas pushBack [_x, [_center, _size select 0, _size select 1, _angle, _isRect]];
+    } forEach _matchedMarkers;
+
+    // Delete the physical markers now that their geometry is captured.
+    { deleteMarker _x; } forEach _matchedMarkers;
 
     if (count _markerAreas == 0) then {
         diag_log format ["[RECONDO_SOIL] WARNING: Marker prefix '%1' set but no markers found. Collection will be disabled.", _markerPrefix];
     } else {
         if (_debugLogging) then {
-            diag_log format ["[RECONDO_SOIL] Found %1 area markers with prefix '%2'", count _markerAreas, _markerPrefix];
+            diag_log format ["[RECONDO_SOIL] Found and hid %1 area markers with prefix '%2'", count _markerAreas, _markerPrefix];
         };
     };
 };
@@ -92,8 +107,8 @@ private _objectives = createHashMap;
 
 if (count _markerAreas > 0) then {
     {
-        private _markerName = _x;
-        private _markerPos = getMarkerPos _markerName;
+        _x params ["_markerName", "_geometry"];
+        private _markerPos = _geometry select 0;
         private _grid = [_markerPos] call Recondo_fnc_posToGrid;
         _objectives set [_markerName, createHashMapFromArray [
             ["marker", _markerName],

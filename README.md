@@ -1,3 +1,11 @@
+# What is Recondo Wars?
+
+**Recondo Wars** is a modular Eden Editor framework for Arma 3 that creates persistent, replayable reconnaissance environments inspired by the MACV-SOG operations of the Vietnam War. Through a collection of custom modules, mission makers can populate an Area of Operations with randomized enemy positions, objectives, and intelligence, ensuring every mission unfolds differently.
+
+Instead of following map markers or scripted objectives, players must locate enemy bivouacs, supply caches, POWs, high-value targets, and other objectives through reconnaissance, observation, and intelligence gathering. Wiretaps, captured enemy personnel, and recovered documents can all be turned in to headquarters, rewarding players with actionable intelligence that helps narrow the search for enemy activity.
+
+Supporting these objectives are a variety of dynamic gameplay systems—including enemy tracking, reactive reinforcements, and other immersion mechanics—that create a living battlefield where planning, patience, and teamwork are essential. Recondo Wars is designed to recreate the uncertainty and tension of deep reconnaissance missions, where information is earned, not given.
+
 # Recondo Wars - Arma 3 Mod
 
 A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing Eden Editor modules for mission makers to create immersive reconnaissance and special operations missions.
