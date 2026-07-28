@@ -15,10 +15,10 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 ### AI Systems
 - **AI Tweaks** - Configure AI skill levels, behavior, equipment removal, and mine knowledge per side (supports multiple instances for different sides)
 - **Player Options** - Configure player-specific settings and restrictions
-- **Foot Patrols** - Spawn randomized foot patrol groups with configurable routes
-- **Path Patrols** - Create patrols that follow specific marker paths
+- **Foot Patrols** - Spawn randomized foot patrol groups with configurable routes. Optional Headless Client transfer
+- **Path Patrols** - Create patrols that follow specific marker paths. Optional Headless Client transfer
 - **Add AI Crew** - Dynamically add crew members to player vehicles
-- **Static Defense Randomized** - Spawn randomized static weapon positions
+- **Static Defense Randomized** - Spawn randomized static weapon positions. Optional Headless Client transfer
 - **Eldest Son** - Sabotaged ammunition system that poisons enemy weapons over time
 - **Bad Civi** - Sync to AI units to create concealed-weapon civilians that pull a weapon when a configured side gets close, with configurable chance, distance, and weapon type
 - **Limit Static Weapon Movement** - Restrict ACE carry/drag on static weapons
@@ -43,8 +43,10 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 
 ### Radio & Communications
 - **RW Radio** - Radio transmission system with battery management and triangulation
+- **Survival Radio** - Triangulation for survival/emergency ACRE radios (no battery). Any transmission longer than a threshold (default 3s) spawns a hunter group (default 200m away, random direction) that moves to the triangulated position and relentlessly follows the individual transmitter's footprints. Whistle sounds only, per-player cooldown, and a concurrent group cap. Supports no-count safe zone markers (default `NO_RADIO_` prefix, shared with RW Radio so one marker silences both systems). Coexists with RW Radio via different radio classnames
 - **Trackers** - Enemy tracker teams with dogs that follow player footprints. Dogs bark ambiently when a target player is within ~300m (audio only) and bark/harass on close-range detection
 - **Reinforcement Waves** - Dynamic enemy reinforcement spawning
+- **Wave Attack** - Marker-triggered multi-wave assaults from configurable compass bearings, with whistle audio cues on follow-on waves. Optional Headless Client transfer
 - **QRF Mounted** - Vehicle-mounted quick reaction force that spawns at the nearest road when the QRF side detects the target side. Randomly selects vehicles from a pool (configurable min/max count), fills crew and cargo, moves to the detected target, and dismounts cargo passengers at a configurable distance while drivers and gunners remain mounted
 - **SOG PF Tracker Group** - Defines marker areas where OPFOR tracker-stalker teams spawn and pursue BLUFOR groups using SOG Prairie Fire's tracking system. When a BLUFOR group enters a trigger zone, their tracks become visible and a 2-man stalker team spawns to hunt them. Configurable trigger radius, tracker side, and unit classnames. Requires S.O.G. Prairie Fire DLC
 
@@ -75,9 +77,8 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **Player Persistence** - Save and restore player positions, directions, and full loadouts across sessions. Tracks specified playable units by Eden variable name with configurable restore delay. Saves immediately on disconnect. Resets saved position on respawn so players return to their default spawn
 - **Vehicle Persistence** - Save and restore synchronized vehicle positions across sessions. Destroyed vehicles are removed on load
 - **Inventory Persistence** - Save and restore full cargo contents (weapons, magazines, items, backpacks) of synchronized containers and vehicles across sessions
-- **Intro Screen** - Mission introduction screens
 - **Terminal** - Admin terminal for mission control and persistence reset
-- **Arsenal Area** - Configurable arsenal access zones
+- **Arsenal Area** - Configurable arsenal access zones with optional litter cleanup (dropped gear and player corpses removed every 10 minutes)
 - **Disable Rations Area** - Zones where ACE rations are disabled
 - **Chat Control** - Control chat channel availability
 - **ACE Spectator Object** - Enter spectator mode from objects
@@ -228,6 +229,7 @@ There are two ways:
 |--------|-------------|-------|
 | Hanoi Hannah Loudspeakers | [Hanoi Hannah Loudspeakers Mod](https://steamcommunity.com/sharedfiles/filedetails/?id=3696734884) | Hard dependency — module will not function without it |
 | RW Radio | [ACRE2](https://steamcommunity.com/sharedfiles/filedetails/?id=751965892) | Hard dependency — radio system built on ACRE2 |
+| Survival Radio | [ACRE2](https://steamcommunity.com/sharedfiles/filedetails/?id=751965892) | Hard dependency — transmission detection built on ACRE2 |
 | AI Tweaks | [LAMBS Danger](https://steamcommunity.com/sharedfiles/filedetails/?id=1858075458) | Soft dependency — LAMBS features only apply if loaded |
 | Outpost System | [LAMBS Danger](https://steamcommunity.com/sharedfiles/filedetails/?id=1858075458) | Hard dependency — garrison AI uses `lambs_wp_fnc_taskGarrison` |
 | POO Site Hunt | [SOG Prairie Fire](https://store.steampowered.com/app/1227700/Arma_3_Creator_DLC_SOG_Prairie_Fire/) | Default classnames are SOG assets; replace in module attributes if not using SOG |
@@ -246,6 +248,14 @@ Common causes:
 **Q: Does this work on a dedicated server?**
 Yes. All modules are designed for dedicated server use. AI logic runs on the server where the AI is local. Client-side features (ACE interactions, UI elements) are distributed via `remoteExec`. Persistence saves on the server and restores on reconnect/JIP.
 
+**Q: Is there Headless Client support?**
+Selected modules can offload their AI to a Headless Client: **Foot Patrols**, **Path Patrols**, **Wave Attack**, and **Static Defense Randomized** each have an "Enable Headless Client Transfer" checkbox. When enabled, newly spawned groups are handed to the least-loaded connected HC; if no HC is connected, they stay on the server as normal. A background sweep (every 30s) re-transfers eligible groups, so an HC that connects late or reconnects after a crash automatically picks the AI back up. Requirements:
+- HC IP whitelisted in `server.cfg` (`headlessClients[]`, and `localClient[]` if on the same machine).
+- A **Virtual Entity > Headless Client** slot placed in the mission.
+- The HC launched with the same mods as the server (`-client -connect=...`).
+
+Other modules intentionally keep their AI on the server — their behavior (trackers, hunters, objectives, QRF) is driven by server-side scripts and event handlers that do not survive a locality transfer. If you use ACE's `acex_headless` auto-distribution instead, be aware it will transfer *all* non-blacklisted AI, including groups from those systems, and can break them.
+
 **Q: Can I place multiple instances of the same module?**
 Many modules support multiple instances:
 - AI Tweaks (one per side), Foot Patrols, Path Patrols
@@ -258,8 +268,8 @@ Many modules support multiple instances:
 Single-instance modules (place only one):
 - Terminal, Persistence, Player Persistence, Vehicle Persistence, Inventory Persistence
 - Intel Board, Intel System, Intel Items, Recon Points
-- Weather Control, Intro Screen, Chat Control, Performance Monitor
-- Convoy System, RW Radio, Trackers, STABO, Sensors, OPORD Generator, Roleplay SOF Source
+- Weather Control, Chat Control, Performance Monitor
+- Convoy System, RW Radio, Survival Radio, Trackers, STABO, Sensors, OPORD Generator, Roleplay SOF Source
 
 ## Author
 

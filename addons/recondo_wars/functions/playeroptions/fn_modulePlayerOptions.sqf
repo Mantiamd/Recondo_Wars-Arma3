@@ -57,6 +57,13 @@ _settings set ["exemptClassnamesArray", _exemptClassnamesArray];
 _settings set ["enableTraits", _logic getVariable ["enabletraits", true]];
 _settings set ["camouflageCoef", _logic getVariable ["camouflagecoef", 0.6]];
 _settings set ["audibleCoef", _logic getVariable ["audiblecoef", 0.6]];
+_settings set ["traitOverrideClassnames", _logic getVariable ["traitoverrideclassnames", ""]];
+_settings set ["overrideCamouflageCoef", _logic getVariable ["overridecamouflagecoef", 0.6]];
+_settings set ["overrideAudibleCoef", _logic getVariable ["overrideaudiblecoef", 0.6]];
+
+// Parse trait override classnames, lowercased for case-insensitive typeOf comparison on clients
+private _traitOverrideArray = ([_settings get "traitOverrideClassnames"] call Recondo_fnc_parseClassnames) apply { toLower _x };
+_settings set ["traitOverrideClassnamesArray", _traitOverrideArray];
 
 // Forced Faces
 _settings set ["enableForcedFaces", _logic getVariable ["enableforcedfaces", false]];
@@ -111,7 +118,8 @@ if (_debug) then {
     diag_log format ["[RECONDO_PLAYEROPTIONS] Terrain Grid: %1 (value: %2)", _settings get "enableTerrainGrid", _settings get "terrainGridValue"];
     diag_log format ["[RECONDO_PLAYEROPTIONS] VD Restrictions: %1 (max: %2/%3)", _settings get "enableVDRestrictions", _settings get "maxViewDistance", _settings get "maxObjectViewDistance"];
     diag_log format ["[RECONDO_PLAYEROPTIONS] Exempt Classnames: %1", _exemptClassnamesArray];
-    diag_log format ["[RECONDO_PLAYEROPTIONS] Traits: %1 (camo: %2, audible: %3)", _settings get "enableTraits", _settings get "camouflageCoef", _settings get "audibleCoef"];
+    diag_log format ["[RECONDO_PLAYEROPTIONS] Traits: %1 (default camo: %2, default audible: %3)", _settings get "enableTraits", _settings get "camouflageCoef", _settings get "audibleCoef"];
+    diag_log format ["[RECONDO_PLAYEROPTIONS] Trait Overrides: units: %1 (camo: %2, audible: %3)", _traitOverrideArray, _settings get "overrideCamouflageCoef", _settings get "overrideAudibleCoef"];
     diag_log format ["[RECONDO_PLAYEROPTIONS] Forced Faces: %1 (units: %2, faces: %3)", _settings get "enableForcedFaces", _forcedFaceUnitsArray, _forcedFaceListArray];
     diag_log format ["[RECONDO_PLAYEROPTIONS] Disable Rations: %1 (units: %2)", _settings get "enableDisableRations", _rationsExemptUnitsArray];
     diag_log format ["[RECONDO_PLAYEROPTIONS] Pilot Restrictions: %1 (aircraft: %2, pilots: %3)", _settings get "enablePilotRestrictions", _restrictedAircraftArray, _allowedPilotsArray];

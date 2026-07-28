@@ -157,6 +157,12 @@ if (!isNil "RECONDO_FP_SPAWNED_GROUPS") then {
     RECONDO_FP_SPAWNED_GROUPS pushBack _group;
 };
 
+// Hand the group to a Headless Client if one is connected. The patrol is
+// fully waypoint-driven, so nothing else needs to follow it across.
+if (_settings getOrDefault ["enableHC", false]) then {
+    [_group, _debug] call Recondo_fnc_transferGroupToHC;
+};
+
 if (_debug) then {
     diag_log format ["[RECONDO_FP] Patrol group spawned and configured at marker '%1'", _markerName];
 };

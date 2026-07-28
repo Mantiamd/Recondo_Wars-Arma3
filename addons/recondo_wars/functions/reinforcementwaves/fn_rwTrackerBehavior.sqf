@@ -29,8 +29,8 @@ if (isNull _group) exitWith {};
 private _moduleId = _moduleSettings get "moduleId";
 private _soundInterval = _moduleSettings get "soundInterval";
 private _debugLogging = _moduleSettings get "debugLogging";
-private _soundsNoDog = _moduleSettings get "soundsNoDog";
-private _soundsWithDog = _moduleSettings get "soundsWithDog";
+private _soundPoolsNoDog = _moduleSettings get "soundPoolsNoDog";
+private _soundPoolsWithDog = _moduleSettings get "soundPoolsWithDog";
 
 private _waveNumber = _group getVariable ["RECONDO_RW_waveNumber", 1];
 private _hasDog = _group getVariable ["RECONDO_RW_hasDog", false];
@@ -45,8 +45,9 @@ if (_waveNumber > 1) then {
     _useSounds = false;
 };
 
-// Select sound set based on dog presence
-private _sounds = if (_hasDog) then { _soundsWithDog } else { _soundsNoDog };
+// Select sound category pools based on dog presence.
+// Each tick draws a category with equal chance; an empty category means silence.
+private _soundPools = if (_hasDog) then { _soundPoolsWithDog } else { _soundPoolsNoDog };
 
 if (_debugLogging) then {
     diag_log format ["[RECONDO_RW] Module %1: Tracker behavior started for group %2 (Wave %3, sounds: %4, dog: %5, initialTarget: %6)",
@@ -80,6 +81,15 @@ while {!isNull _group && {count (units _group select {alive _x}) > 0}} do {
         } else {
             break;
         };
+    };
+    
+    // Give up and delete in place once the trail has gone cold
+    if ([_group, _moduleSettings] call Recondo_fnc_rwCheckGiveUp) then {
+        if (_debugLogging) then {
+            diag_log format ["[RECONDO_RW] Module %1: Group %2 gave up cold trail - deleting in place", _moduleId, _group];
+        };
+        [_group, _moduleSettings] call Recondo_fnc_despawnRWGroup;
+        break;
     };
     
     // Filter out aircraft and excluded targets from AI awareness
@@ -185,8 +195,12 @@ while {!isNull _group && {count (units _group select {alive _x}) > 0}} do {
     
     // Play sounds at interval (Wave 1 only)
     if (_useSounds && _groupSoundInterval > 0 && time - _lastSoundTime >= _groupSoundInterval) then {
-        if (count _sounds > 0 && !isNull _leader && alive _leader) then {
-            [_leader, _sounds] remoteExec ["RECONDO_RW_fnc_playSound", 0];
+        if (count _soundPools > 0 && !isNull _leader && alive _leader) then {
+            // Equal-weight category draw; empty pool = silent this interval
+            private _pool = selectRandom _soundPools;
+            if (!(_pool isEqualTo [])) then {
+                [_leader, _pool] remoteExec ["RECONDO_RW_fnc_playSound", 0];
+            };
         };
         _lastSoundTime = time;
     };

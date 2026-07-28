@@ -43,6 +43,10 @@ _settings set ["unitClassnames", _unitClassnames];
 
 // Terrain Settings
 _settings set ["clearRadius", _logic getVariable ["clearradius", 10]];
+_settings set ["elephantGrass", _logic getVariable ["elephantgrass", false]];
+
+// Performance Settings
+_settings set ["enableHC", _logic getVariable ["enablehc", false]];
 
 // Persistence Settings
 _settings set ["enablePersistence", _logic getVariable ["enablepersistence", false]];
@@ -84,6 +88,7 @@ if (_debug) then {
     diag_log format ["[RECONDO_SDR] Static weapons: %1", _staticClassnames];
     diag_log format ["[RECONDO_SDR] Unit classnames: %1", _unitClassnames];
     diag_log format ["[RECONDO_SDR] Clear radius: %1m", _settings get "clearRadius"];
+    diag_log format ["[RECONDO_SDR] Surround with elephant grass: %1", _settings get "elephantGrass"];
     diag_log format ["[RECONDO_SDR] Persistence enabled: %1", _enablePersistence];
 };
 
@@ -164,6 +169,19 @@ RECONDO_SDR_SPAWNED_UNITS = [];
         RECONDO_SDR_SPAWNED_UNITS pushBack _unit;
     };
 } forEach _selectedMarkers;
+
+// Hand gunner groups to a Headless Client. Statics spawn at mission start,
+// when the HC may still be connecting - the transfer helper tags each group
+// HC-eligible, so the periodic sweep picks them up once an HC appears.
+// The static weapons follow their crews. disableAI "PATH" is re-applied on
+// the new owner by the "Local" event handler in fn_preInit.sqf.
+if (_settings get "enableHC") then {
+    {
+        if (!isNull _x && {alive _x}) then {
+            [group _x, _debug] call Recondo_fnc_transferGroupToHC;
+        };
+    } forEach RECONDO_SDR_SPAWNED_UNITS;
+};
 
 // Final log
 diag_log format ["[RECONDO_SDR] Initialized. Spawned %1 static defenses at prefix '%2'.", count RECONDO_SDR_SPAWNED_STATICS, _markerPrefix];

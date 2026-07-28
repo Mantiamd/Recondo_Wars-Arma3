@@ -150,32 +150,6 @@ for "_i" from 0 to (_vehicleCount - 1) do {
         clearBackpackCargoGlobal _vehicle;
     };
     
-    if (count _vehicleCargoItems > 0) then {
-        {
-            private _class = _x;
-            if (isClass (configFile >> "CfgMagazines" >> _class)) then {
-                _vehicle addMagazineCargoGlobal [_class, 1];
-            } else {
-                if (isClass (configFile >> "CfgWeapons" >> _class)) then {
-                    private _type = getNumber (configFile >> "CfgWeapons" >> _class >> "type");
-                    if (_type in [1, 2, 4]) then {
-                        _vehicle addWeaponCargoGlobal [_class, 1];
-                    } else {
-                        _vehicle addItemCargoGlobal [_class, 1];
-                    };
-                } else {
-                    if (isClass (configFile >> "CfgVehicles" >> _class)) then {
-                        _vehicle addBackpackCargoGlobal [_class, 1];
-                    } else {
-                        if (_debugLogging) then {
-                            diag_log format ["[RECONDO_CONVOY] WARNING: Unknown cargo classname '%1', skipping", _class];
-                        };
-                    };
-                };
-            };
-        } forEach _vehicleCargoItems;
-    };
-    
     // Get crew positions
     private _crewPositions = fullCrew [_vehicle, "", true];
     
@@ -243,6 +217,38 @@ if (count _vehicles == 0) exitWith {
 };
 
 private _leaderVeh = _vehicles select 0;
+
+// Place one randomly-chosen cargo item into one random convoy vehicle.
+// The "Vehicle Cargo Classnames" list acts as the pool to pick from.
+if (count _vehicleCargoItems > 0) then {
+    private _class = selectRandom _vehicleCargoItems;
+    private _dropVehicle = selectRandom _vehicles;
+
+    if (isClass (configFile >> "CfgMagazines" >> _class)) then {
+        _dropVehicle addMagazineCargoGlobal [_class, 1];
+    } else {
+        if (isClass (configFile >> "CfgWeapons" >> _class)) then {
+            private _type = getNumber (configFile >> "CfgWeapons" >> _class >> "type");
+            if (_type in [1, 2, 4]) then {
+                _dropVehicle addWeaponCargoGlobal [_class, 1];
+            } else {
+                _dropVehicle addItemCargoGlobal [_class, 1];
+            };
+        } else {
+            if (isClass (configFile >> "CfgVehicles" >> _class)) then {
+                _dropVehicle addBackpackCargoGlobal [_class, 1];
+            } else {
+                if (_debugLogging) then {
+                    diag_log format ["[RECONDO_CONVOY] WARNING: Unknown cargo classname '%1', skipping", _class];
+                };
+            };
+        };
+    };
+
+    if (_debugLogging) then {
+        diag_log format ["[RECONDO_CONVOY] Dropped cargo item '%1' into a convoy vehicle", _class];
+    };
+};
 
 // Set group behavior - CARELESS so drivers don't stop for combat
 _group setBehaviour "CARELESS";

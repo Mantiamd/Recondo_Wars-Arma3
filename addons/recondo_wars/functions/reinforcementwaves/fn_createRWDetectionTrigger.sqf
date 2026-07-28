@@ -58,8 +58,10 @@ if (_debugLogging) then {
     private _reinforcementChance = _moduleSettings get "reinforcementChance";
     private _debugLogging = _moduleSettings get "debugLogging";
     
-    // Wait for mission to fully initialize
-    sleep 5;
+    // Wait for mission to fully initialize.
+    // Random offset staggers multiple module instances so their
+    // detection sweeps don't all land on the same scheduler frames.
+    sleep (5 + random 4);
     
     private _triggered = false;
     
@@ -92,9 +94,27 @@ if (_debugLogging) then {
                 private _knowsAbout = _detector knowsAbout _target;
                 
                 if (_knowsAbout >= _detectionThreshold) then {
+                    private _targetGroupId = groupId (group _target);
+                    
+                    // Cross-module suppression: skip (module stays armed) if
+                    // another RW module recently triggered on this group, or
+                    // the global concurrent-party cap is reached. Prevents
+                    // overlapping modules dogpiling one detection event.
+                    private _lastTrigger = RECONDO_RW_GROUP_COOLDOWNS getOrDefault [_targetGroupId, -1e7];
+                    private _onCooldown = (serverTime - _lastTrigger) < RECONDO_RW_GROUP_COOLDOWN_SECONDS;
+                    private _capReached = (call Recondo_fnc_getActiveRWPartyCount) >= RECONDO_RW_MAX_ACTIVE_PARTIES;
+                    
+                    if (_onCooldown || _capReached) exitWith {
+                        if (_debugLogging) then {
+                            diag_log format ["[RECONDO_RW] Module %1: Detection of group %2 suppressed (cooldown: %3, cap reached: %4)",
+                                _moduleId, _targetGroupId, _onCooldown, _capReached];
+                        };
+                    };
+                    
                     // Detection! Check reinforcement chance
                     if (random 1 <= _reinforcementChance) then {
-                        // Mark as triggered
+                        // Mark as triggered and start the cross-module cooldown for this group
+                        RECONDO_RW_GROUP_COOLDOWNS set [_targetGroupId, serverTime];
                         RECONDO_RW_TRIGGERED_MODULES pushBack _moduleId;
                         _moduleSettings set ["triggered", true];
                         _triggered = true;
@@ -145,7 +165,7 @@ if (_debugLogging) then {
         } forEach _detectorUnits;
         
         if (!_triggered) then {
-            sleep 5;
+            sleep (4 + random 2); // ~5s polling, jittered to stagger module instances
         };
     };
     

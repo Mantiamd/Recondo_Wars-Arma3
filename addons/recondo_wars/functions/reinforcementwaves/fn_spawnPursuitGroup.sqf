@@ -73,7 +73,6 @@ _pursuitGroup setVariable ["RECONDO_RW_targetGroup", _targetGroup];
 _pursuitGroup setVariable ["RECONDO_RW_targetGroupId", groupId _targetGroup];
 _pursuitGroup setVariable ["RECONDO_RW_waveNumber", _waveNumber];
 _pursuitGroup setVariable ["RECONDO_RW_isMainGroup", false];
-_pursuitGroup setVariable ["RECONDO_RW_isFlanker", false];
 _pursuitGroup setVariable ["RECONDO_RW_isPursuit", true];
 _pursuitGroup setVariable ["RECONDO_RW_partyId", _partyId];
 _pursuitGroup setVariable ["RECONDO_RW_originPos", _spawnPos];

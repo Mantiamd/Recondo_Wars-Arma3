@@ -25,8 +25,8 @@ if (!local _unit) exitWith {};
 // Check if already tagged
 if (!isNil {_unit getVariable "RECONDO_ELDESTSON_TAGGED"}) exitWith {};
 
-// Mark as tagged
-_unit setVariable ["RECONDO_ELDESTSON_TAGGED", true, true];
+// Mark as tagged (local only - all readers run on the server where AI is local)
+_unit setVariable ["RECONDO_ELDESTSON_TAGGED", true];
 
 // Store the unit's side (for dead body scanning - side group becomes UNKNOWN after death)
 // Local only - scanner runs on server where bodies exist

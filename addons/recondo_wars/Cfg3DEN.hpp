@@ -610,6 +610,38 @@ class Cfg3DEN {
             };
             
             //==========================================
+            // SURVIVAL RADIO MODULE CATEGORIES
+            //==========================================
+            
+            // General Settings
+            class Recondo_SURV_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            // Hunter Settings
+            class Recondo_SURV_Hunters {
+                displayName = "Hunter Groups";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            // Exemptions
+            class Recondo_SURV_Exemptions {
+                displayName = "Exemptions";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            // Debug
+            class Recondo_SURV_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            //==========================================
             // TRACKERS MODULE CATEGORIES
             //==========================================
             
@@ -714,14 +746,14 @@ class Cfg3DEN {
             
             // Wave 1 Settings
             class Recondo_RW_Wave1 {
-                displayName = "Wave 1 (Main + Flankers)";
+                displayName = "Wave 1";
                 collapsed = 0;
                 class Attributes {};
             };
             
-            // Flanker Settings
-            class Recondo_RW_Flankers {
-                displayName = "Flanker Settings";
+            // Side Group Settings
+            class Recondo_RW_SideGroups {
+                displayName = "Side Groups";
                 collapsed = 1;
                 class Attributes {};
             };
@@ -1896,48 +1928,6 @@ class Cfg3DEN {
     };
     
     // ==========================================
-    // INTRO SCREEN MODULE CATEGORIES
-    // ==========================================
-    class Recondo_Module_IntroScreen {
-        class AttributeCategories {
-            // Title
-            class Recondo_Intro_Title {
-                displayName = "Title";
-                collapsed = 0;
-                class Attributes {};
-            };
-            
-            // Story
-            class Recondo_Intro_Story {
-                displayName = "Story Panels";
-                collapsed = 0;
-                class Attributes {};
-            };
-            
-            // Timing
-            class Recondo_Intro_Timing {
-                displayName = "Timing";
-                collapsed = 1;
-                class Attributes {};
-            };
-            
-            // Audio
-            class Recondo_Intro_Audio {
-                displayName = "Audio";
-                collapsed = 1;
-                class Attributes {};
-            };
-            
-            // Debug
-            class Recondo_Intro_Debug {
-                displayName = "Debug";
-                collapsed = 1;
-                class Attributes {};
-            };
-        };
-    };
-    
-    // ==========================================
     // AMBIENT SOUND TRIGGERS MODULE CATEGORIES
     // ==========================================
     class Recondo_Module_AmbientSound {
@@ -2435,6 +2425,34 @@ class Cfg3DEN {
                 class Attributes {};
             };
             class Recondo_Uprising_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+        };
+    };
+    
+    // ==========================================
+    // WAVE ATTACK MODULE CATEGORIES
+    // ==========================================
+    class Recondo_Module_WaveAttack {
+        class AttributeCategories {
+            class Recondo_WaveAtk_Area {
+                displayName = "Area Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_WaveAtk_Attackers {
+                displayName = "Attacker Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_WaveAtk_Waves {
+                displayName = "Wave Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_WaveAtk_Debug {
                 displayName = "Debug";
                 collapsed = 1;
                 class Attributes {};

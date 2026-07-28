@@ -50,6 +50,7 @@ _settings set ["triggerHeight", _logic getVariable ["triggerheight", 20]];
 // Performance Settings
 _settings set ["simulationDistance", _logic getVariable ["simulationdistance", 1000]];
 _settings set ["lambsReinforce", _logic getVariable ["lambsreinforce", true]];
+_settings set ["enableHC", _logic getVariable ["enablehc", false]];
 
 // Debug
 _settings set ["enableDebug", _logic getVariable ["enabledebug", false]];

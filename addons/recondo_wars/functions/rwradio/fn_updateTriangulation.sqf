@@ -1,11 +1,14 @@
 /*
     Recondo_fnc_updateTriangulation
-    Update triangulation markers based on cumulative transmission time
+    Track cumulative transmission time and trigger triangulation consequences
     
     Description:
         Server-side function that tracks cumulative transmission time per group.
-        Creates/updates triangulation markers that progressively get more accurate.
-        Markers are visible to all players (global).
+        Each time a group crosses a new threshold interval, the enabled
+        consequences fire:
+        - enableTriangulation: creates/updates a map area marker that
+          progressively gets more accurate (visible to opposing players).
+        - enableEnemySpawn: spawns an AI team near the transmitting player.
     
     Parameters:
         0: OBJECT - Player unit who transmitted
@@ -74,11 +77,19 @@ if (_groupTotalTime < _threshold1) exitWith {
 private _timesThresholdReached = floor (_groupTotalTime / _threshold1);
 private _lastMarkerCount = RECONDO_RWR_GROUP_MARKERS getOrDefault [_groupId + "_count", 0];
 
-// Only create/update marker if we've crossed a new threshold
+// Only fire consequences if we've crossed a new threshold
 if (_timesThresholdReached > _lastMarkerCount) then {
     
-    // Update marker count
+    // Update crossing count (shared by map markers and enemy spawns)
     RECONDO_RWR_GROUP_MARKERS set [_groupId + "_count", _timesThresholdReached];
+    
+    // Spawn an AI team on the same cumulative-time crossing
+    if (_settings get "enableEnemySpawn") then {
+        [_unit] call Recondo_fnc_spawnRadioEnemy;
+    };
+    
+    // Map area marker
+    if (_settings get "enableTriangulation") then {
     
     // Calculate marker radius
     private _radius = [_groupTotalTime] call _fnc_getRadius;
@@ -155,5 +166,7 @@ if (_timesThresholdReached > _lastMarkerCount) then {
                 diag_log format ["[RECONDO_RWR] Auto-deleted triangulation marker for group %1", _groupId];
             };
         };
+    };
+    
     };
 };

@@ -46,6 +46,7 @@ Recondo Wars is a comprehensive Arma 3 mod designed for SOG Prairie Fire operati
 [b]Radio & Communications[/b]
 [list]
 [*] [b]RW Radio[/b] — Radio transmission system with battery management and triangulation mechanics.
+[*] [b]Survival Radio[/b] — Triangulation for survival/emergency ACRE radios. Transmissions over 3 seconds spawn relentless hunter teams that follow the transmitter's footprints.
 [*] [b]Trackers[/b] — Enemy tracker teams with dogs that follow player footprints.
 [*] [b]Reinforcement Waves[/b] — Dynamic enemy reinforcement spawning triggered by combat or alerts.
 [*] [b]QRF Mounted[/b] — Vehicle-mounted quick reaction force. When the QRF side detects the target side, vehicles spawn at the nearest road, move towards the threat, and cargo passengers dismount at a configurable distance while drivers and gunners stay mounted.
@@ -80,7 +81,6 @@ Recondo Wars is a comprehensive Arma 3 mod designed for SOG Prairie Fire operati
 [*] [b]Player Persistence[/b] — Save and restore player positions, directions, and full loadouts across sessions. Tracks units by Eden variable name with configurable restore delay.
 [*] [b]Vehicle Persistence[/b] — Save and restore vehicle positions across sessions. Destroyed vehicles are removed on load.
 [*] [b]Inventory Persistence[/b] — Save and restore full cargo contents of containers and vehicles across sessions.
-[*] [b]Intro Screen[/b] — Configurable mission introduction screens.
 [*] [b]Terminal[/b] — Admin terminal for mission control, persistence reset, and master debug toggle.
 [*] [b]Arsenal Area[/b] — Configurable arsenal access zones.
 [*] [b]Disable Rations Area[/b] — Zones where ACE rations are disabled.

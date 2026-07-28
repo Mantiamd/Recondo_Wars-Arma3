@@ -1,11 +1,12 @@
 /*
     Recondo_fnc_spawnReinforcementParty
-    Spawns Wave 1 reinforcement party (main group + flankers)
+    Spawns Wave 1 reinforcement party (main group + side groups)
     
     Description:
-        Spawns the initial reinforcement wave consisting of a main group
-        and optional flanker groups. Main group can have a tracker dog.
-        All Wave 1 groups use tracker sounds.
+        Spawns the initial reinforcement wave: a main group that can have
+        a tracker dog, plus two optional 2-man side groups on the players'
+        flanks (90 degrees either side of the main approach) so Wave 1
+        converges from three directions. Wave 1 uses tracker sounds.
     
     Parameters:
         _moduleSettings - HashMap of module settings
@@ -30,7 +31,6 @@ private _safetyDistance = _moduleSettings get "safetyDistance";
 private _heightLimit = _moduleSettings get "heightLimit";
 private _wave1MinSize = _moduleSettings get "wave1MinSize";
 private _wave1MaxSize = _moduleSettings get "wave1MaxSize";
-private _enableFlankers = _moduleSettings get "enableFlankers";
 private _dogSpawnChance = _moduleSettings get "dogSpawnChance";
 private _numberOfWaves = _moduleSettings get "numberOfWaves";
 private _debugMarkers = _moduleSettings get "debugMarkers";
@@ -41,6 +41,14 @@ private _activeGroups = _moduleSettings get "activeGroups";
 if (_maxActiveGroups != -1 && count _activeGroups >= _maxActiveGroups) exitWith {
     if (_debugLogging) then {
         diag_log format ["[RECONDO_RW] Module %1: Max active groups reached, cannot spawn reinforcements", _moduleId];
+    };
+};
+
+// Global cap re-check: the wave spawn is delayed after detection, so other
+// modules may have filled the cap in the meantime.
+if ((call Recondo_fnc_getActiveRWPartyCount) >= RECONDO_RW_MAX_ACTIVE_PARTIES) exitWith {
+    if (_debugLogging) then {
+        diag_log format ["[RECONDO_RW] Module %1: Global party cap (%2) reached, cannot spawn reinforcements", _moduleId, RECONDO_RW_MAX_ACTIVE_PARTIES];
     };
 };
 
@@ -87,7 +95,6 @@ _mainGroup setVariable ["RECONDO_RW_targetGroup", _targetGroup];
 _mainGroup setVariable ["RECONDO_RW_targetGroupId", groupId _targetGroup];
 _mainGroup setVariable ["RECONDO_RW_waveNumber", 1];
 _mainGroup setVariable ["RECONDO_RW_isMainGroup", true];
-_mainGroup setVariable ["RECONDO_RW_isFlanker", false];
 _mainGroup setVariable ["RECONDO_RW_partyId", _partyId];
 _mainGroup setVariable ["RECONDO_RW_originPos", _spawnPos];
 _mainGroup setVariable ["RECONDO_RW_initialTargetPos", _initialTargetPos];
@@ -97,7 +104,8 @@ _mainGroup setVariable ["RECONDO_RW_moduleSettings", _moduleSettings];
 private _groupSize = _wave1MinSize + floor random ((_wave1MaxSize - _wave1MinSize) + 1);
 _groupSize = _groupSize max 1;
 
-// Create units
+// Create units. Brief pause between creations spreads the engine load
+// so simultaneous waves from multiple modules don't stall the server.
 private _unitsCreated = 0;
 for "_i" from 1 to _groupSize do {
     private _class = selectRandom _unitClassnames;
@@ -109,6 +117,7 @@ for "_i" from 1 to _groupSize do {
             _unitsCreated = _unitsCreated + 1;
         };
     };
+    sleep 0.1;
 };
 
 if (_unitsCreated == 0) exitWith {
@@ -152,50 +161,11 @@ if (_debugMarkers) then {
 };
 
 // ========================================
-// CREATE FLANKER GROUPS
-// ========================================
-
-private _leftFlanker = grpNull;
-private _rightFlanker = grpNull;
-
-if (_enableFlankers) then {
-    private _leftSpawnPos = _spawnPos vectorAdd [-50, 0, 0];
-    private _rightSpawnPos = _spawnPos vectorAdd [50, 0, 0];
-    
-    _leftFlanker = [_moduleSettings, _leftSpawnPos, _targetGroup, _mainGroup, "left", _partyId] call Recondo_fnc_createRWFlankerGroup;
-    _rightFlanker = [_moduleSettings, _rightSpawnPos, _targetGroup, _mainGroup, "right", _partyId] call Recondo_fnc_createRWFlankerGroup;
-    
-    if (!isNull _leftFlanker) then {
-        _activeGroups pushBack _leftFlanker;
-        RECONDO_RW_ACTIVE_GROUPS pushBack _leftFlanker;
-    };
-    if (!isNull _rightFlanker) then {
-        _activeGroups pushBack _rightFlanker;
-        RECONDO_RW_ACTIVE_GROUPS pushBack _rightFlanker;
-    };
-};
-
-// Link all groups for convergence
-private _allLinkedGroups = [_mainGroup, _leftFlanker, _rightFlanker] select {!isNull _x};
-{
-    _x setVariable ["RECONDO_RW_linkedGroups", _allLinkedGroups];
-} forEach _allLinkedGroups;
-
-_mainGroup setVariable ["RECONDO_RW_leftFlanker", _leftFlanker];
-_mainGroup setVariable ["RECONDO_RW_rightFlanker", _rightFlanker];
-
-// ========================================
 // ADD DETECTION HANDLERS FOR NEXT WAVE
 // ========================================
 
 if (_numberOfWaves > 0) then {
     [_mainGroup, _moduleSettings, _partyId, 2] call Recondo_fnc_addRWDetectionHandlers;
-    if (!isNull _leftFlanker) then {
-        [_leftFlanker, _moduleSettings, _partyId, 2] call Recondo_fnc_addRWDetectionHandlers;
-    };
-    if (!isNull _rightFlanker) then {
-        [_rightFlanker, _moduleSettings, _partyId, 2] call Recondo_fnc_addRWDetectionHandlers;
-    };
 };
 
 // ========================================
@@ -218,15 +188,48 @@ if (!(_targetGroupIdStr in RECONDO_TRACKERS_TRACKED_GROUPS)) then {
 // Start main group behavior (uses tracker behavior)
 [_mainGroup, _moduleSettings] spawn Recondo_fnc_rwTrackerBehavior;
 
-// Start flanker behaviors
-if (!isNull _leftFlanker) then {
-    [_leftFlanker, _moduleSettings] spawn Recondo_fnc_rwFlankerBehavior;
-};
-if (!isNull _rightFlanker) then {
-    [_rightFlanker, _moduleSettings] spawn Recondo_fnc_rwFlankerBehavior;
+// ========================================
+// CREATE SIDE GROUPS (pincer from the players' flanks)
+// ========================================
+
+private _sideGroupsCreated = 0;
+
+if (_moduleSettings getOrDefault ["enableSideGroups", true]) then {
+    // Anchor on the players: centroid of living target-group members
+    private _playerAnchor = _initialTargetPos;
+    private _aliveTargets = units _targetGroup select { alive _x };
+    if (count _aliveTargets > 0) then {
+        private _sum = [0, 0, 0];
+        { _sum = _sum vectorAdd (getPos _x); } forEach _aliveTargets;
+        _playerAnchor = _sum vectorMultiply (1 / count _aliveTargets);
+    };
+
+    if (count _playerAnchor > 0) then {
+        // Measure the actual main-group bearing as seen from the players -
+        // the safety scan may have moved the main spawn, and the +/-90
+        // flanks must stay symmetric around wherever it really is.
+        private _mainBearing = _playerAnchor getDir _spawnPos;
+
+        {
+            _x params ["_offsetDeg", "_label"];
+            
+            // Stagger creation to spread the spawn burst
+            sleep (0.3 + random 0.4);
+            
+            private _sideGroup = [_moduleSettings, _playerAnchor, _mainBearing + _offsetDeg, _targetGroup, _partyId, _label] call Recondo_fnc_createRWSideGroup;
+            if (!isNull _sideGroup) then {
+                _activeGroups pushBack _sideGroup;
+                RECONDO_RW_ACTIVE_GROUPS pushBack _sideGroup;
+                _sideGroupsCreated = _sideGroupsCreated + 1;
+                
+                // Side groups hunt independently; they never trigger Wave 2+
+                [_sideGroup, _moduleSettings] spawn Recondo_fnc_rwTrackerBehavior;
+            };
+        } forEach [[-90, "left"], [90, "right"]];
+    };
 };
 
 if (_debugLogging) then {
-    diag_log format ["[RECONDO_RW] Module %1: Wave 1 spawned - Main: %2 (%3 units), Left: %4, Right: %5, Dog: %6",
-        _moduleId, _mainGroup, _unitsCreated, _leftFlanker, _rightFlanker, _hasDog];
+    diag_log format ["[RECONDO_RW] Module %1: Wave 1 spawned - Main: %2 (%3 units), Side groups: %4, Dog: %5",
+        _moduleId, _mainGroup, _unitsCreated, _sideGroupsCreated, _hasDog];
 };

@@ -106,34 +106,11 @@ if ([_unit] call Recondo_fnc_isInSafeZone) exitWith {
 };
 
 // =========================================
-// TRIANGULATION
+// TRIANGULATION (map marker and/or enemy spawn)
 // =========================================
 
-if (_settings get "enableTriangulation") then {
+// Both consequences trigger off the same per-group cumulative
+// transmission time, each gated by its own toggle inside.
+if ((_settings get "enableTriangulation") || {_settings get "enableEnemySpawn"}) then {
     [_unit, _duration] call Recondo_fnc_updateTriangulation;
-};
-
-// =========================================
-// ENEMY SPAWN CHECK
-// =========================================
-
-if (_settings get "enableEnemySpawn") then {
-    // Increment global call counter
-    RECONDO_RWR_CALL_COUNT = RECONDO_RWR_CALL_COUNT + 1;
-    publicVariable "RECONDO_RWR_CALL_COUNT";
-    
-    private _spawnThreshold = _settings get "spawnThreshold";
-    private _timesThresholdReached = floor (RECONDO_RWR_CALL_COUNT / _spawnThreshold);
-    
-    if (_timesThresholdReached > RECONDO_RWR_LAST_ENEMY_COUNT) then {
-        RECONDO_RWR_LAST_ENEMY_COUNT = _timesThresholdReached;
-        
-        // Spawn enemy group
-        [_unit] call Recondo_fnc_spawnRadioEnemy;
-        
-        if (_debug) then {
-            diag_log format ["[RECONDO_RWR] Enemy spawn triggered - Call count: %1/%2", 
-                RECONDO_RWR_CALL_COUNT, _spawnThreshold];
-        };
-    };
 };

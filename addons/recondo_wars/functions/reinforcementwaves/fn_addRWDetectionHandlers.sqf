@@ -52,8 +52,8 @@ if (_debugLogging) then {
     private _heightLimit = _moduleSettings get "heightLimit";
     private _debugLogging = _moduleSettings get "debugLogging";
     
-    // Wait for units to initialize
-    sleep 3;
+    // Wait for units to initialize (jittered to stagger multiple handlers)
+    sleep (3 + random 2);
     
     private _triggered = false;
     
@@ -95,7 +95,7 @@ if (_debugLogging) then {
         } forEach (units _group);
         
         if (!_triggered) then {
-            sleep 5; // Check every 5 seconds
+            sleep (4 + random 2); // ~5s polling, jittered to stagger handlers
         };
     };
     

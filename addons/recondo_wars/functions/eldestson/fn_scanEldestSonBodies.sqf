@@ -124,9 +124,8 @@ while {true} do {
         private _addedChance = _itemsFound * _chancePerItem;
         private _newChance = (_currentChance + _addedChance) min _maxChance;
         
-        // Update global variable
+        // Update global variable (server only - sabotage rolls happen server-side)
         RECONDO_ELDESTSON_CHANCE = _newChance;
-        publicVariable "RECONDO_ELDESTSON_CHANCE";
         
         // Save to persistence
         [_persistenceKey + "_CHANCE", _newChance] call Recondo_fnc_setSaveData;

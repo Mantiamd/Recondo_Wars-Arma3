@@ -86,6 +86,12 @@ if (_debugLogging) then {
     // Track spawned object
     RECONDO_HUBSUBS_SPAWNED_OBJECTS pushBack _spawnedObject;
     
+    // Optionally surround the sub-site with elephant grass for concealment.
+    if (_settings get "subSiteElephantGrass") then {
+        private _grassResult = ["", "ElephantGrass.sqe", _markerPos, random 360, _debugLogging, true] call Recondo_fnc_loadComposition;
+        RECONDO_HUBSUBS_SPAWNED_OBJECTS append (_grassResult select 0);
+    };
+    
     // Mark sub-site as spawned
     {
         _x params ["_hm", "_ssm", "_spawned"];

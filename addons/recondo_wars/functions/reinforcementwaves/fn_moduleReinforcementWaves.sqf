@@ -49,15 +49,13 @@ private _safetyDistance = _logic getVariable ["safetydistance", 200];
 private _wave1MinSize = _logic getVariable ["wave1minsize", 2];
 private _wave1MaxSize = _logic getVariable ["wave1maxsize", 4];
 private _soundInterval = _logic getVariable ["soundinterval", 30];
+private _enableSilent = _logic getVariable ["enablesilent", false];
 private _enableBambooSticks = _logic getVariable ["enablebamboosticks", true];
 private _enableWhistling = _logic getVariable ["enablewhistling", false];
 
-// Flanker Settings
-private _enableFlankers = _logic getVariable ["enableflankers", true];
-private _flankerMinSize = _logic getVariable ["flankerminsize", 2];
-private _flankerMaxSize = _logic getVariable ["flankermaxsize", 2];
-private _flankerLateralOffset = _logic getVariable ["flankerlateraloffset", 120];
-private _flankerForwardOffset = _logic getVariable ["flankerforwardoffset", 75];
+// Side Group Settings (Wave 1 pincer from the players' flanks)
+private _enableSideGroups = _logic getVariable ["enablesidegroups", true];
+private _sideGroupDistance = _logic getVariable ["sidegroupdistance", 200];
 
 // Dog Settings
 private _dogSpawnChance = _logic getVariable ["dogspawnchance", 0.5];
@@ -71,6 +69,7 @@ private _dogHarassmentRange = _logic getVariable ["dogharassmentrange", 5];
 private _numberOfWaves = _logic getVariable ["numberofwaves", 3];
 private _pursuitMinSize = _logic getVariable ["pursuitminsize", 4];
 private _pursuitMaxSize = _logic getVariable ["pursuitmaxsize", 6];
+private _giveUpTime = _logic getVariable ["giveuptime", 360];
 
 // Debug Settings
 private _debugMarkers = _logic getVariable ["debugmarkers", false];
@@ -114,11 +113,11 @@ private _targetSide = switch (_targetSideNum) do {
 // Validate group sizes
 _wave1MinSize = _wave1MinSize max 1;
 _wave1MaxSize = _wave1MaxSize max _wave1MinSize;
-_flankerMinSize = _flankerMinSize max 1;
-_flankerMaxSize = _flankerMaxSize max _flankerMinSize;
 _pursuitMinSize = _pursuitMinSize max 1;
 _pursuitMaxSize = _pursuitMaxSize max _pursuitMinSize;
 _numberOfWaves = _numberOfWaves max 0 min 4;
+_giveUpTime = _giveUpTime max 0; // 0 disables give-up
+_sideGroupDistance = _sideGroupDistance max 50;
 
 // Generate unique module ID
 private _moduleId = format ["RW_%1_%2", getPos _logic, time];
@@ -127,14 +126,18 @@ private _moduleId = format ["RW_%1_%2", getPos _logic, time];
 // STORE SETTINGS FOR THIS MODULE INSTANCE
 // ========================================
 
-// Sound arrays (ambient pools can be toggled while dog sounds stay active when dogs exist)
+// Ambient sounds are organized as category pools so each checked option has an
+// equal chance per tick regardless of file count. Silent is an empty pool: when
+// drawn, the group plays nothing that interval. Dog sounds are always a category
+// for dog groups.
 private _bambooStickSounds = ["bamboo1", "mallet3hits", "mallet6hits", "sticks1"];
 private _whistlingSounds = ["enemy_whistle_2", "enemy_whistle_3", "enemy_whistle_4", "enemy_whistling_2", "enemy_whistling_3", "enemy_whistling_4"];
 private _dogGroupSounds = ["bark_hound", "bark1", "bark2"];
-private _soundsNoDog = [];
-if (_enableBambooSticks) then { _soundsNoDog append _bambooStickSounds; };
-if (_enableWhistling) then { _soundsNoDog append _whistlingSounds; };
-private _soundsWithDog = _soundsNoDog + _dogGroupSounds;
+private _soundPoolsNoDog = [];
+if (_enableSilent) then { _soundPoolsNoDog pushBack []; };
+if (_enableBambooSticks) then { _soundPoolsNoDog pushBack _bambooStickSounds; };
+if (_enableWhistling) then { _soundPoolsNoDog pushBack _whistlingSounds; };
+private _soundPoolsWithDog = _soundPoolsNoDog + [_dogGroupSounds];
 private _dogDetectionSounds = ["bark1", "bark2", "barkmean1", "barkmean2", "barkmean3", "dog_growl_vicious"];
 private _dogDeathSounds = ["boomerYelp", "boomerYelp2"];
 
@@ -163,15 +166,13 @@ private _moduleSettings = createHashMapFromArray [
     ["wave1MinSize", _wave1MinSize],
     ["wave1MaxSize", _wave1MaxSize],
     ["soundInterval", _soundInterval],
+    ["enableSilent", _enableSilent],
     ["enableBambooSticks", _enableBambooSticks],
     ["enableWhistling", _enableWhistling],
     
-    // Flankers
-    ["enableFlankers", _enableFlankers],
-    ["flankerMinSize", _flankerMinSize],
-    ["flankerMaxSize", _flankerMaxSize],
-    ["flankerLateralOffset", _flankerLateralOffset],
-    ["flankerForwardOffset", _flankerForwardOffset],
+    // Side Groups
+    ["enableSideGroups", _enableSideGroups],
+    ["sideGroupDistance", _sideGroupDistance],
     
     // Dogs
     ["dogSpawnChance", _dogSpawnChance],
@@ -185,10 +186,11 @@ private _moduleSettings = createHashMapFromArray [
     ["numberOfWaves", _numberOfWaves],
     ["pursuitMinSize", _pursuitMinSize],
     ["pursuitMaxSize", _pursuitMaxSize],
+    ["giveUpTime", _giveUpTime],
     
     // Sounds
-    ["soundsNoDog", _soundsNoDog],
-    ["soundsWithDog", _soundsWithDog],
+    ["soundPoolsNoDog", _soundPoolsNoDog],
+    ["soundPoolsWithDog", _soundPoolsWithDog],
     ["dogDetectionSounds", _dogDetectionSounds],
     ["dogDeathSounds", _dogDeathSounds],
     
@@ -217,6 +219,7 @@ if (isNil "RECONDO_RW_fnc_playSound") then {
     RECONDO_RW_fnc_playSound = compileFinal "
         if (!hasInterface) exitWith {};
         params ['_unit', '_sounds'];
+        if (_sounds isEqualTo []) exitWith {};
         if (player distance _unit > 300) exitWith {};
         private _sound = selectRandom _sounds;
         private _soundPath = '\recondo_wars\sounds\trackers\' + _sound + '.ogg';
@@ -247,7 +250,7 @@ if (_debugLogging) then {
     diag_log format ["[RECONDO_RW]   Reinforcement side: %1, Target side: %2", _reinforcementSide, _targetSide];
     diag_log format ["[RECONDO_RW]   Trigger radius: %1m, Detection threshold: %2", _triggerRadius, _detectionThreshold];
     diag_log format ["[RECONDO_RW]   Spawn distance: %1m, Safety distance: %2m", _spawnDistance, _safetyDistance];
-    diag_log format ["[RECONDO_RW]   Wave 1 size: %1-%2, Flankers: %3", _wave1MinSize, _wave1MaxSize, _enableFlankers];
+    diag_log format ["[RECONDO_RW]   Wave 1 size: %1-%2, Side groups: %3 (%4m)", _wave1MinSize, _wave1MaxSize, _enableSideGroups, _sideGroupDistance];
     diag_log format ["[RECONDO_RW]   Pursuit waves: %1, Size: %2-%3", _numberOfWaves, _pursuitMinSize, _pursuitMaxSize];
     diag_log format ["[RECONDO_RW]   Dog chance: %1%", round(_dogSpawnChance * 100)];
 };

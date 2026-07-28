@@ -262,6 +262,13 @@ if (!isNil "RECONDO_PP_SPAWNED_GROUPS") then {
     { RECONDO_PP_SPAWNED_GROUPS pushBack _x } forEach _spawnedGroups;
 };
 
+// Hand the groups to a Headless Client if one is connected. The server-side
+// patrol loop keeps working across locality because it only manages
+// waypoints, which are global commands.
+if (_settings getOrDefault ["enableHC", false]) then {
+    { [_x, _debug] call Recondo_fnc_transferGroupToHC } forEach _spawnedGroups;
+};
+
 if (_debug) then {
     diag_log format ["[RECONDO_PP] Spawned %1 patrol groups", count _spawnedGroups];
 };

@@ -166,8 +166,10 @@ publicVariable "RECONDO_SOIL_INSTANCES";
 // INIT CLIENT ACTIONS
 // ========================================
 
+// JIP id keeps one queued copy so clients that finish loading after module
+// init (always the case on dedicated) still receive the call.
 [{!isNil "RECONDO_SOIL_SETTINGS"}, {
-    remoteExecCall ["Recondo_fnc_initSoilSampleClient", [0, -2] select isDedicated];
+    [] remoteExecCall ["Recondo_fnc_initSoilSampleClient", [0, -2] select isDedicated, "RECONDO_SOIL_INIT_JIP"];
 }, []] call CBA_fnc_waitUntilAndExecute;
 
 // ========================================

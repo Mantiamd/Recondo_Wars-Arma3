@@ -45,6 +45,9 @@ if (_debug) then {
     diag_log format ["[RECONDO_SDR] Spawning at marker '%1' position: %2", _markerName, _pos];
 };
 
+// Generate random direction (shared by the static and any concealment composition)
+private _dir = random 360;
+
 // Clear terrain objects if radius > 0
 if (_clearRadius > 0) then {
     [_pos, _clearRadius] call Recondo_fnc_clearTerrainObjects;
@@ -55,9 +58,6 @@ private _staticClassname = selectRandom _staticClassnames;
 
 // Select random unit classname
 private _unitClassname = selectRandom _unitClassnames;
-
-// Generate random direction
-private _dir = random 360;
 
 // Create the static weapon
 private _static = createVehicle [_staticClassname, _pos, [], 0, "CAN_COLLIDE"];
@@ -104,6 +104,13 @@ _static setVariable ["RECONDO_SDR_SPAWNED", true, true];
 _unit setVariable ["RECONDO_SDR_SPAWNED", true, true];
 _static setVariable ["RECONDO_SDR_MARKER", _markerName, true];
 _unit setVariable ["RECONDO_SDR_MARKER", _markerName, true];
+
+// Optionally surround the position with elephant grass for concealment.
+// Spawned last (after the static + gunner are seated) so the simulated
+// static weapon is not ejected by PhysX from spawning into the grass.
+if (_settings get "elephantGrass") then {
+    ["", "ElephantGrass.sqe", _pos, _dir, _debug, true] call Recondo_fnc_loadComposition;
+};
 
 if (_debug) then {
     diag_log format ["[RECONDO_SDR] Spawned '%1' with gunner '%2' at marker '%3', facing %4 deg", 

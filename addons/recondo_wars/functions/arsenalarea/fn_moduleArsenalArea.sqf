@@ -92,6 +92,20 @@ if (_debug) then {
 
 // Start litter cleanup loop if enabled (server-side only)
 if (_enableCleanup) then {
+    // Tag player bodies at the moment of death, while isPlayer is still
+    // true. Once the player respawns the corpse loses its player status,
+    // so the cleanup loop can't identify it after the fact. Registered
+    // once no matter how many cleanup-enabled areas are placed.
+    if (!RECONDO_ARSENALAREA_CORPSE_EH) then {
+        RECONDO_ARSENALAREA_CORPSE_EH = true;
+        addMissionEventHandler ["EntityKilled", {
+            params ["_unit"];
+            if (_unit isKindOf "CAManBase" && {isPlayer _unit}) then {
+                _unit setVariable ["RECONDO_ARSENALAREA_PLAYER_CORPSE", true];
+            };
+        }];
+    };
+    
     // Cleanup function for this specific area
     private _cleanupCode = {
         params ["_pos", "_dir", "_width", "_length", "_height", "_debug"];
@@ -107,6 +121,15 @@ if (_enableCleanup) then {
             "WeaponHolderSimulated",
             "WeaponHolder"
         ];
+        
+        // Player corpses tagged by the EntityKilled handler. Skip bodies the
+        // player is still attached to (not yet respawned); they are caught
+        // on a later pass.
+        _nearObjects append (allDeadMen select {
+            (_x getVariable ["RECONDO_ARSENALAREA_PLAYER_CORPSE", false]) &&
+            {!isPlayer _x} &&
+            {_x distance2D _pos <= _searchRadius}
+        });
         
         private _deletedCount = 0;
         
@@ -134,7 +157,7 @@ if (_enableCleanup) then {
         } forEach _nearObjects;
         
         if (_debug && _deletedCount > 0) then {
-            diag_log format ["[RECONDO_ARSENALAREA] Cleanup: Deleted %1 ground items at %2", _deletedCount, _pos];
+            diag_log format ["[RECONDO_ARSENALAREA] Cleanup: Deleted %1 ground items/player corpses at %2", _deletedCount, _pos];
         };
     };
     

@@ -32,6 +32,7 @@ RECONDO_NOTEBOOK_KEYBIND_ADDED = false;
 
 // ACE Arsenal Area globals
 RECONDO_ARSENALAREAS = [];
+RECONDO_ARSENALAREA_CORPSE_EH = false;  // Server: EntityKilled corpse-tagging handler guard
 
 // Disable ACE Rations Area globals
 RECONDO_DISABLERATIONSAREAS = [];
@@ -82,8 +83,14 @@ RECONDO_RWR_BATTERY_LEVELS = nil;
 RECONDO_RWR_TRANSMISSION_STARTS = nil;
 RECONDO_RWR_GROUP_TIMES = nil;
 RECONDO_RWR_GROUP_MARKERS = nil;
-RECONDO_RWR_CALL_COUNT = 0;
-RECONDO_RWR_LAST_ENEMY_COUNT = 0;
+
+// Survival Radio globals
+RECONDO_SURV_SETTINGS = nil;
+RECONDO_SURV_TRANSMISSION_STARTS = nil;  // radioId -> serverTime when started
+RECONDO_SURV_COOLDOWNS = nil;  // player UID -> serverTime of last trigger
+RECONDO_SURV_TRACKED = nil;  // targetId -> [unit, lastFootprintPos] (hashmap, created in module init)
+RECONDO_SURV_ACTIVE_GROUPS = [];  // Active hunter groups
+RECONDO_SURV_FOOTPRINTS = [];  // Format: [position, time, targetId] - per-individual trails
 
 // Trackers globals
 RECONDO_TRACKERS_SETTINGS = nil;
@@ -99,6 +106,9 @@ RECONDO_TRACKERS_ALWAYS_TRACK_GROUPS = [];  // Group IDs that are always tracked
 RECONDO_RW_INSTANCES = [];  // Array of module instances (each with own settings)
 RECONDO_RW_ACTIVE_GROUPS = [];  // All active reinforcement groups
 RECONDO_RW_TRIGGERED_MODULES = [];  // Module IDs that have already triggered
+RECONDO_RW_GROUP_COOLDOWNS = createHashMap;  // Target group ID -> serverTime of last party trigger
+RECONDO_RW_GROUP_COOLDOWN_SECONDS = 120;  // Other RW modules cannot trigger on the same group within this window
+RECONDO_RW_MAX_ACTIVE_PARTIES = 6;  // Global cap on concurrent reinforcement parties across all RW modules
 
 // Intel System globals
 RECONDO_INTEL_SETTINGS = nil;  // Module settings hashmap
@@ -170,10 +180,6 @@ RECONDO_HVT_SMELL_TRIGGERED = [];  // Markers where smell hint already triggered
 
 // Weather System globals
 RECONDO_WEATHER_SETTINGS = nil;
-
-// Intro Screen globals
-RECONDO_INTRO_SETTINGS = nil;
-RECONDO_INTRO_COMPLETE = false;
 
 // Performance Monitor globals
 RECONDO_PERF_SETTINGS = nil;
@@ -345,5 +351,19 @@ RECONDO_CMD_CLIENT_SQUADS = [];               // [[group, label], ...] this offi
 RECONDO_CMD_SELECTED_GROUP = grpNull;         // Currently selected squad in the command map
 RECONDO_CMD_MARKER_COUNT = 0;                 // Squad label counter
 RECONDO_CMD_SQUAD_DEST = createHashMap;       // Client: netId group -> current move destination (for the command-map marker)
+
+// Headless Client support globals
+RECONDO_HC_SWEEP_RUNNING = false;  // Server: periodic re-transfer sweep guard
+
+// Headless Client support: disableAI flags do not survive locality transfer
+// (server -> HC, or back to server on HC disconnect). Re-apply them on
+// whatever machine the unit becomes local to, keyed off public marker
+// variables set at spawn. Fires only on locality changes, so it is cheap.
+["CAManBase", "Local", {
+    params ["_unit", "_local"];
+    if (_local && {_unit getVariable ["RECONDO_SDR_SPAWNED", false]}) then {
+        _unit disableAI "PATH";
+    };
+}] call CBA_fnc_addClassEventHandler;
 
 diag_log format ["[RECONDO_WARS] PreInit complete. Version: %1", RECONDO_WARS_VERSION];

@@ -89,6 +89,7 @@ private _subSiteMin = _logic getVariable ["subsitemin", 1];
 private _subSiteMax = _logic getVariable ["subsitemax", 3];
 private _subSiteClassnamesRaw = _logic getVariable ["subsiteclassnames", ""];
 private _subSiteClearRadius = _logic getVariable ["subsiteclearradius", 15];
+private _subSiteElephantGrass = _logic getVariable ["subsiteelephantgrass", false];
 private _subSiteSpawnMode = _logic getVariable ["subsitespawnmode", "proximity"];
 private _subSiteTriggerRadius = _logic getVariable ["subsitetriggerradius", 800];
 
@@ -223,6 +224,7 @@ private _settings = createHashMapFromArray [
     ["subSiteMax", _subSiteMax],
     ["subSiteClassnames", _subSiteClassnames],
     ["subSiteClearRadius", _subSiteClearRadius],
+    ["subSiteElephantGrass", _subSiteElephantGrass],
     ["subSiteSpawnMode", _subSiteSpawnMode],
     ["subSiteTriggerRadius", _subSiteTriggerRadius],
     ["subSiteAIClassnames", _subSiteAIClassnames],

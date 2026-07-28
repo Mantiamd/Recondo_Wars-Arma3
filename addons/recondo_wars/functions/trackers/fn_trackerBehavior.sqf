@@ -31,12 +31,13 @@ if (_targetGroupId == "") exitWith {
     diag_log format ["[RECONDO_TRACKERS] ERROR: Tracker group %1 has no assigned target group ID", _group];
 };
 
-// Get sounds based on whether group has dog
+// Get sound category pools based on whether group has dog.
+// Each tick draws a category with equal chance; an empty category means silence.
 private _hasDog = _group getVariable ["RECONDO_TRACKERS_hasDog", false];
-private _sounds = if (_hasDog) then {
-    _settings get "soundsWithDog"
+private _soundPools = if (_hasDog) then {
+    _settings get "soundPoolsWithDog"
 } else {
-    _settings get "soundsNoDog"
+    _settings get "soundPoolsNoDog"
 };
 
 private _leader = leader _group;
@@ -95,10 +96,10 @@ private _fnc_playTrackerSound = {
     };
 };
 
-// Spawn sound thread if sounds enabled
-if (_soundInterval > 0) then {
-    [_group, _soundInterval, _sounds, _fnc_playTrackerSound] spawn {
-        params ["_group", "_baseInterval", "_sounds", "_soundFunc"];
+// Spawn sound thread if sounds enabled and at least one category is checked
+if (_soundInterval > 0 && {count _soundPools > 0}) then {
+    [_group, _soundInterval, _soundPools, _fnc_playTrackerSound] spawn {
+        params ["_group", "_baseInterval", "_soundPools", "_soundFunc"];
         private _leader = leader _group;
         
         // Each group gets its own randomized interval (base ±10 seconds)
@@ -108,7 +109,11 @@ if (_soundInterval > 0) then {
         sleep (random _groupInterval);
         
         while {alive _leader} do {
-            [_leader, _sounds] call _soundFunc;
+            // Equal-weight category draw; empty pool = silent this interval
+            private _pool = selectRandom _soundPools;
+            if (!(_pool isEqualTo [])) then {
+                [_leader, _pool] call _soundFunc;
+            };
             sleep _groupInterval;
         };
     };

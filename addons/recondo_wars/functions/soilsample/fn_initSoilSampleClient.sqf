@@ -10,6 +10,9 @@
 
 if (!hasInterface) exitWith {};
 
+// Guard against double-add (e.g., broadcast fired both live and via JIP queue)
+if (missionNamespace getVariable ["RECONDO_SOIL_CLIENT_INIT", false]) exitWith {};
+
 private _settings = missionNamespace getVariable ["RECONDO_SOIL_SETTINGS", nil];
 if (isNil "_settings") exitWith {
     [{!isNil {missionNamespace getVariable "RECONDO_SOIL_SETTINGS"}}, {
@@ -66,6 +69,8 @@ private _action = [
 ] call ace_interact_menu_fnc_createAction;
 
 ["Man", 1, ["ACE_SelfActions"], _action, true] call ace_interact_menu_fnc_addActionToClass;
+
+RECONDO_SOIL_CLIENT_INIT = true;
 
 private _debugLogging = _settings getOrDefault ["debugLogging", false];
 if (_debugLogging) then {

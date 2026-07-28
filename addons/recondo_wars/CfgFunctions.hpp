@@ -25,6 +25,14 @@ class CfgFunctions {
             class simulationMonitorLoop {};
         };
         
+        // Headless Client Support Functions
+        class Headless {
+            file = "\recondo_wars\functions\headless";
+            class getHeadlessClients {};
+            class transferGroupToHC {};
+            class hcSweepLoop {};
+        };
+        
         // AI Tweaks Module Functions
         class AITweaks {
             file = "\recondo_wars\functions\aitweaks";
@@ -169,6 +177,20 @@ class CfgFunctions {
             class isInSafeZone {};
         };
         
+        // Survival Radio Module Functions
+        class SurvivalRadio {
+            file = "\recondo_wars\functions\survivalradio";
+            class moduleSurvivalRadio {};
+            class initSurvivalRadioClient {};
+            class survStartTransmission {};
+            class survStopTransmission {};
+            class spawnSurvHunters {};
+            class survFootprintLoop {};
+            class survHunterBehavior {};
+            class isSurvGroupExempt {};
+            class isSurvInSafeZone {};
+        };
+        
         // Trackers Module Functions
         class Trackers {
             file = "\recondo_wars\functions\trackers";
@@ -191,14 +213,16 @@ class CfgFunctions {
             class moduleReinforcementWaves {};
             class createRWDetectionTrigger {};
             class spawnReinforcementParty {};
-            class createRWFlankerGroup {};
-            class rwFlankerBehavior {};
             class spawnPursuitGroup {};
             class addRWDetectionHandlers {};
             class findSafeSpawnPos {};
+            class getActiveRWPartyCount {};
             class rwTrackerBehavior {};
             class createRWDog {};
             class rwFootprintLoop {};
+            class rwCheckGiveUp {};
+            class despawnRWGroup {};
+            class createRWSideGroup {};
         };
         
         // River Traffic Module Functions
@@ -406,12 +430,6 @@ class CfgFunctions {
             class addWeatherControlClient {};
             class setWeather {};
             class setTime {};
-        };
-        
-        class IntroScreen {
-            file = "\recondo_wars\functions\introscreen";
-            class moduleIntroScreen {};
-            class showIntroScreen {};
         };
         
         // Performance Monitor Module Functions
@@ -692,6 +710,15 @@ class CfgFunctions {
             class moduleVillageUprising {};
             class spawnUprisingCivilians {};
             class triggerUprising {};
+        };
+        
+        // Wave Attack Module Functions
+        class WaveAttack {
+            file = "\recondo_wars\functions\waveattack";
+            class moduleWaveAttack {};
+            class waveAttackWatcher {};
+            class runWaveAttack {};
+            class spawnWaveAttackGroup {};
         };
         
         // Player Persistence Module Functions

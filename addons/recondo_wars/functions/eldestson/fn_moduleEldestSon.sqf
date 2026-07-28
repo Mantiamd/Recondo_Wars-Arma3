@@ -72,9 +72,8 @@ private _poisonItemsRaw = _logic getVariable ["poisonitems", ""];
 private _poisonClassnames = [_poisonItemsRaw] call Recondo_fnc_parseClassnames;
 _settings set ["poisonClassnames", _poisonClassnames];
 
-// Store settings globally
+// Store settings globally (server only - no client ever reads these)
 RECONDO_ELDESTSON_SETTINGS = _settings;
-publicVariable "RECONDO_ELDESTSON_SETTINGS";
 
 if (_debug) then {
     diag_log "[RECONDO_ELDESTSON] === MODULE SETTINGS ===";
@@ -107,7 +106,6 @@ if (isNil "_savedChance") then {
 _savedChance = (_savedChance max 0) min _maxChance;
 
 RECONDO_ELDESTSON_CHANCE = _savedChance;
-publicVariable "RECONDO_ELDESTSON_CHANCE";
 
 if (_debug) then {
     diag_log format ["[RECONDO_ELDESTSON] Loaded sabotage chance: %1%%", _savedChance];

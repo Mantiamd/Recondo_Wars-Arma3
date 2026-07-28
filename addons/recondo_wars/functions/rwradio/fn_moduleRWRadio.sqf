@@ -55,8 +55,7 @@ _settings set ["triangRadius4", _logic getVariable ["triangradius4", 125]];
 _settings set ["markerDuration", _logic getVariable ["markerduration", 600]];
 _settings set ["markerColor", _logic getVariable ["markercolor", "ColorRed"]];
 
-// Enemy Spawn Settings
-_settings set ["spawnThreshold", _logic getVariable ["spawnthreshold", 15]];
+// Enemy Spawn Settings (triggered on the same cumulative-time thresholds as triangulation)
 private _enemyClassnamesStr = _logic getVariable ["enemyclassnames", ""];
 private _enemyClassnames = [_enemyClassnamesStr] call Recondo_fnc_parseClassnames;
 _settings set ["enemyClassnames", _enemyClassnames];
@@ -94,12 +93,10 @@ RECONDO_RWR_BATTERY_LEVELS = createHashMap;        // radioId -> remaining secon
 RECONDO_RWR_TRANSMISSION_STARTS = createHashMap;   // radioId -> serverTime when started
 RECONDO_RWR_GROUP_TIMES = createHashMap;           // groupId -> cumulative transmission seconds
 RECONDO_RWR_GROUP_MARKERS = createHashMap;         // groupId -> [markerName, textMarkerName]
-RECONDO_RWR_CALL_COUNT = 0;                        // Global radio call counter for enemy spawn
-RECONDO_RWR_LAST_ENEMY_COUNT = 0;                  // Track enemy spawn threshold
 
 // Load from persistence if enabled.
-// Only battery life persists; triangulation time and the enemy-spawn call
-// counter intentionally start fresh each mission so they never carry over.
+// Only battery life persists; triangulation time intentionally starts
+// fresh each mission so it never carries over.
 private _enablePersistence = _settings get "enablePersistence";
 if (_enablePersistence && {!isNil "RECONDO_PERSISTENCE_SETTINGS"}) then {
     private _savedBatteries = ["RWR_Batteries", createHashMap] call Recondo_fnc_getSaveData;
@@ -107,7 +104,7 @@ if (_enablePersistence && {!isNil "RECONDO_PERSISTENCE_SETTINGS"}) then {
     RECONDO_RWR_BATTERY_LEVELS = _savedBatteries;
     
     if (_debug) then {
-        diag_log format ["[RECONDO_RWR] Loaded from persistence - Batteries: %1 (triangulation/call count reset)", 
+        diag_log format ["[RECONDO_RWR] Loaded from persistence - Batteries: %1 (triangulation reset)", 
             count keys RECONDO_RWR_BATTERY_LEVELS];
     };
 };
@@ -115,7 +112,6 @@ if (_enablePersistence && {!isNil "RECONDO_PERSISTENCE_SETTINGS"}) then {
 // Broadcast tracking variables
 publicVariable "RECONDO_RWR_BATTERY_LEVELS";
 publicVariable "RECONDO_RWR_GROUP_TIMES";
-publicVariable "RECONDO_RWR_CALL_COUNT";
 
 // Debug logging
 if (_debug) then {
@@ -138,7 +134,6 @@ addMissionEventHandler ["PlayerConnected", {
         publicVariable "RECONDO_RWR_SETTINGS";
         publicVariable "RECONDO_RWR_BATTERY_LEVELS";
         publicVariable "RECONDO_RWR_GROUP_TIMES";
-        publicVariable "RECONDO_RWR_CALL_COUNT";
     };
 }];
 
@@ -154,7 +149,7 @@ if (_enablePersistence && {!isNil "RECONDO_PERSISTENCE_SETTINGS"}) then {
         if (isNil "RECONDO_RWR_SETTINGS") exitWith {};
         if !(RECONDO_RWR_SETTINGS get "enablePersistence") exitWith {};
         
-        // Only battery life persists; triangulation/call count are not saved.
+        // Only battery life persists; triangulation time is not saved.
         ["RWR_Batteries", RECONDO_RWR_BATTERY_LEVELS] call Recondo_fnc_setSaveData;
         call Recondo_fnc_queueSave;
         

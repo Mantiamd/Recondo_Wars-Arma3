@@ -974,8 +974,8 @@ class CfgVehicles {
                 category = "Recondo_PlayerOptions_Traits";
             };
             class CamouflageCoef {
-                displayName = "Camouflage Coefficient";
-                tooltip = "Player visibility to AI. Lower = harder to spot. 1.0 = normal, 0.5 = half as visible. Default: 0.6";
+                displayName = "Default Camouflage Coefficient";
+                tooltip = "Player visibility to AI, applied to all players unless overridden below. Lower = harder to spot. 1.0 = normal, 0.5 = half as visible. Default: 0.6";
                 control = "Edit";
                 property = "Recondo_PO_CamouflageCoef";
                 expression = "_this setVariable ['camouflagecoef', _value, true];";
@@ -984,11 +984,41 @@ class CfgVehicles {
                 category = "Recondo_PlayerOptions_Traits";
             };
             class AudibleCoef {
-                displayName = "Audible Coefficient";
-                tooltip = "Player sound level to AI. Lower = quieter. 1.0 = normal, 0.5 = half as loud. Default: 0.6";
+                displayName = "Default Audible Coefficient";
+                tooltip = "Player sound level to AI, applied to all players unless overridden below. Lower = quieter. 1.0 = normal, 0.5 = half as loud. Default: 0.6";
                 control = "Edit";
                 property = "Recondo_PO_AudibleCoef";
                 expression = "_this setVariable ['audiblecoef', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.6";
+                category = "Recondo_PlayerOptions_Traits";
+            };
+            class TraitOverrideClassnames {
+                displayName = "Override Unit Classnames";
+                tooltip = "Comma-separated list of player unit classnames (e.g., pilot slots) that use the override coefficients below instead of the defaults. Leave empty to apply defaults to everyone.";
+                control = "Edit";
+                property = "Recondo_PO_TraitOverrideClassnames";
+                expression = "_this setVariable ['traitoverrideclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_PlayerOptions_Traits";
+            };
+            class OverrideCamouflageCoef {
+                displayName = "Override Camouflage Coefficient";
+                tooltip = "Camouflage coefficient applied only to units listed in Override Unit Classnames. Default: 0.6";
+                control = "Edit";
+                property = "Recondo_PO_OverrideCamouflageCoef";
+                expression = "_this setVariable ['overridecamouflagecoef', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.6";
+                category = "Recondo_PlayerOptions_Traits";
+            };
+            class OverrideAudibleCoef {
+                displayName = "Override Audible Coefficient";
+                tooltip = "Audible coefficient applied only to units listed in Override Unit Classnames. Default: 0.6";
+                control = "Edit";
+                property = "Recondo_PO_OverrideAudibleCoef";
+                expression = "_this setVariable ['overrideaudiblecoef', _value, true];";
                 typeName = "NUMBER";
                 defaultValue = "0.6";
                 category = "Recondo_PlayerOptions_Traits";
@@ -1236,7 +1266,7 @@ class CfgVehicles {
             // CLEANUP SETTINGS
             class EnableCleanup {
                 displayName = "CLEANUP - Enable Litter Cleanup";
-                tooltip = "Automatically clean up dropped items (weapons, gear) in the cleanup area every 5 minutes. Runs server-side.";
+                tooltip = "Automatically clean up dropped items (weapons, gear) and player corpses in the cleanup area every 10 minutes. Corpses are only removed after the player has respawned. Runs server-side.";
                 control = "Checkbox";
                 property = "Recondo_ArsenalArea_EnableCleanup";
                 expression = "_this setVariable ['enablecleanup', _value, true];";
@@ -1837,6 +1867,28 @@ class CfgVehicles {
                 defaultValue = """10""";
                 category = "Recondo_SDR_Terrain";
             };
+            class SurroundElephantGrass {
+                displayName = "TERRAIN - Surround with Elephant Grass";
+                tooltip = "If enabled, spawns the ElephantGrass composition on top of each spawned static defense for extra concealment.";
+                control = "Checkbox";
+                property = "Recondo_SDR_ElephantGrass";
+                expression = "_this setVariable ['elephantgrass', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SDR_Terrain";
+            };
+            
+            // PERFORMANCE
+            class EnableHC {
+                displayName = "PERFORMANCE - Enable Headless Client Transfer";
+                tooltip = "Hand spawned static gunners to a connected Headless Client (least-loaded if several). If no HC is connected, they stay on the server as normal. Requires the HC to run the same mods as the server.";
+                control = "Checkbox";
+                property = "Recondo_SDR_EnableHC";
+                expression = "_this setVariable ['enablehc', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SDR_General";
+            };
             
             // PERSISTENCE SETTINGS
             class EnablePersistence {
@@ -2132,6 +2184,16 @@ class CfgVehicles {
                 expression = "_this setVariable ['lambsreinforce', _value, true];";
                 typeName = "BOOL";
                 defaultValue = "true";
+                category = "Recondo_FP_Performance";
+            };
+            class EnableHC {
+                displayName = "Enable Headless Client Transfer";
+                tooltip = "Hand spawned patrol groups to a connected Headless Client (least-loaded if several). If no HC is connected, groups stay on the server as normal. Requires the HC to run the same mods as the server.";
+                control = "Checkbox";
+                property = "Recondo_FP_EnableHC";
+                expression = "_this setVariable ['enablehc', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
                 category = "Recondo_FP_Performance";
             };
             
@@ -2709,6 +2771,16 @@ class CfgVehicles {
                 defaultValue = "true";
                 category = "Recondo_PP_Performance";
             };
+            class EnableHC {
+                displayName = "Enable Headless Client Transfer";
+                tooltip = "Hand spawned patrol groups to a connected Headless Client (least-loaded if several). If no HC is connected, groups stay on the server as normal. Requires the HC to run the same mods as the server.";
+                control = "Checkbox";
+                property = "Recondo_PP_EnableHC";
+                expression = "_this setVariable ['enablehc', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_PP_Performance";
+            };
             
             // DEBUG
             class EnableDebugPP {
@@ -2774,7 +2846,7 @@ class CfgVehicles {
             };
             class EnableEnemySpawn {
                 displayName = "Enable Enemy Spawn";
-                tooltip = "Enable enemy group spawning after excessive radio use.";
+                tooltip = "Spawn an enemy group near the transmitting player each time a group crosses the same cumulative transmission time thresholds used for triangulation markers.";
                 control = "Checkbox";
                 property = "Recondo_RWR_EnableEnemySpawn";
                 expression = "_this setVariable ['enableenemyspawn', _value, true];";
@@ -2959,16 +3031,6 @@ class CfgVehicles {
             };
             
             // ENEMY SPAWN SETTINGS
-            class SpawnThreshold {
-                displayName = "ENEMY - Spawn Threshold (calls)";
-                tooltip = "Number of radio transmissions before enemy group spawns.";
-                control = "Edit";
-                property = "Recondo_RWR_SpawnThreshold";
-                expression = "_this setVariable ['spawnthreshold', parseNumber _value, true];";
-                typeName = "STRING";
-                defaultValue = """15""";
-                category = "Recondo_RWR_EnemySpawn";
-            };
             class EnemyClassnames {
                 displayName = "Enemy Unit Classnames";
                 tooltip = "Comma-separated enemy unit classnames to spawn.";
@@ -3067,6 +3129,214 @@ class CfgVehicles {
                 typeName = "BOOL";
                 defaultValue = "false";
                 category = "Recondo_RWR_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    //==========================================
+    // SURVIVAL RADIO MODULE
+    //==========================================
+    
+    class Recondo_Module_SurvivalRadio: Module_F {
+        scope = 2;
+        displayName = "Survival Radio";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Main";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\radio_ca.paa";
+        function = "Recondo_fnc_moduleSurvivalRadio";
+        functionPriority = 5;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+
+        class ModuleDescription: ModuleDescription {
+            description = "Triangulation for survival/emergency ACRE radios (no battery). Transmissions longer than the threshold spawn a hunter group that moves to the triangulated position and follows the transmitter's footprints. Hunters never give up. Coexists with RW Radio - use different radio classnames.";
+            sync[] = {};
+        };
+
+        class Attributes: AttributesBase {
+            
+            // GENERAL SETTINGS
+            class SurvRadioClassnames {
+                displayName = "GENERAL - Radio Classnames";
+                tooltip = "Comma-separated ACRE radio base classnames tracked by this system. Use different classnames than the RW Radio module. Example: ACRE_SEM52SL";
+                control = "EditMulti3";
+                property = "Recondo_SURV_RadioClassnames";
+                expression = "_this setVariable ['radioclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """ACRE_SEM52SL""";
+                category = "Recondo_SURV_General";
+            };
+            class SurvTransmissionThreshold {
+                displayName = "Transmission Threshold (seconds)";
+                tooltip = "Any single transmission longer than this triangulates the transmitter.";
+                control = "Edit";
+                property = "Recondo_SURV_TransmissionThreshold";
+                expression = "_this setVariable ['transmissionthreshold', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """3""";
+                category = "Recondo_SURV_General";
+            };
+            class SurvCooldownSeconds {
+                displayName = "Per-Player Cooldown (seconds)";
+                tooltip = "Minimum time between hunter spawns triggered by the same player.";
+                control = "Edit";
+                property = "Recondo_SURV_CooldownSeconds";
+                expression = "_this setVariable ['cooldownseconds', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """300""";
+                category = "Recondo_SURV_General";
+            };
+            class SurvTargetSide {
+                displayName = "Hunted Side";
+                tooltip = "Only transmitters of this side are triangulated.";
+                control = "Combo";
+                property = "Recondo_SURV_TargetSide";
+                expression = "_this setVariable ['targetside', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "1";
+                category = "Recondo_SURV_General";
+                class Values {
+                    class East { name = "OPFOR (East)"; value = 0; };
+                    class West { name = "BLUFOR (West)"; value = 1; };
+                    class Guer { name = "Independent"; value = 2; };
+                };
+            };
+            
+            // HUNTER SETTINGS
+            class SurvHunterClassnames {
+                displayName = "HUNTERS - Unit Classnames";
+                tooltip = "Comma-separated unit classnames for hunter groups. Required.";
+                control = "EditMulti3";
+                property = "Recondo_SURV_HunterClassnames";
+                expression = "_this setVariable ['hunterclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_SURV_Hunters";
+            };
+            class SurvHunterSide {
+                displayName = "Hunter Side";
+                tooltip = "Side of spawned hunter groups.";
+                control = "Combo";
+                property = "Recondo_SURV_HunterSide";
+                expression = "_this setVariable ['hunterside', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                category = "Recondo_SURV_Hunters";
+                class Values {
+                    class East { name = "OPFOR (East)"; value = 0; };
+                    class West { name = "BLUFOR (West)"; value = 1; };
+                    class Guer { name = "Independent"; value = 2; };
+                };
+            };
+            class SurvHunterMinSize {
+                displayName = "Min Group Size";
+                tooltip = "Minimum hunters per group.";
+                control = "Edit";
+                property = "Recondo_SURV_HunterMinSize";
+                expression = "_this setVariable ['hunterminsize', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """2""";
+                category = "Recondo_SURV_Hunters";
+            };
+            class SurvHunterMaxSize {
+                displayName = "Max Group Size";
+                tooltip = "Maximum hunters per group.";
+                control = "Edit";
+                property = "Recondo_SURV_HunterMaxSize";
+                expression = "_this setVariable ['huntermaxsize', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """4""";
+                category = "Recondo_SURV_Hunters";
+            };
+            class SurvSpawnDistance {
+                displayName = "Spawn Distance (meters)";
+                tooltip = "Hunters spawn this far from the transmitter in a random direction. Directions in water or within 100m of another hunted-side unit are rerolled.";
+                control = "Edit";
+                property = "Recondo_SURV_SpawnDistance";
+                expression = "_this setVariable ['spawndistance', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """200""";
+                category = "Recondo_SURV_Hunters";
+            };
+            class SurvMaxHunterGroups {
+                displayName = "Max Concurrent Groups";
+                tooltip = "Global cap on simultaneous hunter groups. Triangulations while at the cap are ignored.";
+                control = "Edit";
+                property = "Recondo_SURV_MaxHunterGroups";
+                expression = "_this setVariable ['maxhuntergroups', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """4""";
+                category = "Recondo_SURV_Hunters";
+            };
+            class SurvSoundInterval {
+                displayName = "Whistle Interval (seconds)";
+                tooltip = "Base seconds between hunter whistle sounds (randomized per group, +/- 10s). 0 disables sounds.";
+                control = "Edit";
+                property = "Recondo_SURV_SoundInterval";
+                expression = "_this setVariable ['soundinterval', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """30""";
+                category = "Recondo_SURV_Hunters";
+            };
+            
+            // EXEMPTIONS
+            class SurvExemptGroupPrefixes {
+                displayName = "EXEMPTIONS - Exempt Group Prefixes";
+                tooltip = "Comma-separated group name prefixes exempt from triangulation. Example: ZEUS, STAFF";
+                control = "EditMulti3";
+                property = "Recondo_SURV_ExemptGroups";
+                expression = "_this setVariable ['exemptgroups', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_SURV_Exemptions";
+            };
+            class SurvNoCountMarkerPrefix {
+                displayName = "No-Count Marker Prefix";
+                tooltip = "Markers with this prefix define safe zones where radio use won't triangulate. Same default as RW Radio, so one marker can silence both systems. Leave empty to disable.";
+                control = "Edit";
+                property = "Recondo_SURV_NoCountPrefix";
+                expression = "_this setVariable ['nocountprefix', _value, true];";
+                typeName = "STRING";
+                defaultValue = """NO_RADIO_""";
+                category = "Recondo_SURV_Exemptions";
+            };
+            class SurvNoCountRadius {
+                displayName = "No-Count Zone Radius (meters)";
+                tooltip = "Radius around no-count markers where radio use is safe.";
+                control = "Edit";
+                property = "Recondo_SURV_NoCountRadius";
+                expression = "_this setVariable ['nocountradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """500""";
+                category = "Recondo_SURV_Exemptions";
+            };
+            
+            // DEBUG
+            class SurvDebugLogging {
+                displayName = "DEBUG - Enable Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_SURV_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SURV_Debug";
+            };
+            class SurvDebugMarkers {
+                displayName = "Enable Debug Markers";
+                tooltip = "Show map markers for spawn points, triangulated positions, and footprints.";
+                control = "Checkbox";
+                property = "Recondo_SURV_DebugMarkers";
+                expression = "_this setVariable ['debugmarkers', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SURV_Debug";
             };
             
             class ModuleDescription: ModuleDescription {};
@@ -3360,9 +3630,19 @@ class CfgVehicles {
                 defaultValue = """30""";
                 category = "Recondo_Trackers_Behavior";
             };
+            class EnableSilent {
+                displayName = "Enable Silent";
+                tooltip = "Adds silence to the ambient sound pool. When randomly selected, the tracker group plays no sound that interval. Each enabled option has an equal chance. Dog barks and detection sounds are unaffected.";
+                control = "Checkbox";
+                property = "Recondo_Trackers_EnableSilent";
+                expression = "_this setVariable ['enablesilent', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Trackers_Behavior";
+            };
             class EnableBambooSounds {
                 displayName = "Enable Bamboo Sounds";
-                tooltip = "If enabled, no-dog tracker groups play bamboo/wood ambience. Dog barks and detection sounds are unaffected.";
+                tooltip = "Adds bamboo/wood ambience to the sound pool for no-dog tracker groups. Each enabled option has an equal chance per interval. Dog barks and detection sounds are unaffected.";
                 control = "Checkbox";
                 property = "Recondo_Trackers_EnableBambooSounds";
                 expression = "_this setVariable ['enablebamboosounds', _value, true];";
@@ -3372,7 +3652,7 @@ class CfgVehicles {
             };
             class EnableWhistling {
                 displayName = "Enable Whistling";
-                tooltip = "If enabled, no-dog tracker groups can play enemy whistle/whistling ambience. Combines with Bamboo Sounds when both are enabled.";
+                tooltip = "Adds enemy whistle/whistling ambience to the sound pool for no-dog tracker groups. Each enabled option has an equal chance per interval.";
                 control = "Checkbox";
                 property = "Recondo_Trackers_EnableWhistling";
                 expression = "_this setVariable ['enablewhistling', _value, true];";
@@ -3683,7 +3963,7 @@ class CfgVehicles {
             };
             
             // ========================================
-            // WAVE 1 SETTINGS (Main + Flankers)
+            // WAVE 1 SETTINGS
             // ========================================
             class Wave1MinSize {
                 displayName = "WAVE 1 - Main Group Min Size";
@@ -3715,9 +3995,19 @@ class CfgVehicles {
                 defaultValue = """30""";
                 category = "Recondo_RW_Wave1";
             };
+            class EnableSilent {
+                displayName = "Enable Silent";
+                tooltip = "Adds silence to the ambient sound pool. When randomly selected, the Wave 1 group plays no sound that interval. Each enabled option has an equal chance. Dog bark/detection/death sounds are unaffected.";
+                control = "Checkbox";
+                property = "Recondo_RW_EnableSilent";
+                expression = "_this setVariable ['enablesilent', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_RW_Wave1";
+            };
             class EnableBambooSticks {
                 displayName = "Enable Bamboo Sticks";
-                tooltip = "If enabled, no-dog Wave 1 groups play bamboo stick ambience. Dog bark/detection/death sounds are unaffected.";
+                tooltip = "Adds bamboo stick ambience to the sound pool for no-dog Wave 1 groups. Each enabled option has an equal chance per interval. Dog bark/detection/death sounds are unaffected.";
                 control = "Checkbox";
                 property = "Recondo_RW_EnableBambooSticks";
                 expression = "_this setVariable ['enablebamboosticks', _value, true];";
@@ -3727,7 +4017,7 @@ class CfgVehicles {
             };
             class EnableWhistling {
                 displayName = "Enable Whistling";
-                tooltip = "If enabled, no-dog Wave 1 groups can play enemy whistle/whistling ambience. Combines with Bamboo Sticks when both are enabled.";
+                tooltip = "Adds enemy whistle/whistling ambience to the sound pool for no-dog Wave 1 groups. Each enabled option has an equal chance per interval.";
                 control = "Checkbox";
                 property = "Recondo_RW_EnableWhistling";
                 expression = "_this setVariable ['enablewhistling', _value, true];";
@@ -3737,57 +4027,27 @@ class CfgVehicles {
             };
             
             // ========================================
-            // FLANKER SETTINGS
+            // SIDE GROUP SETTINGS
             // ========================================
-            class EnableFlankers {
-                displayName = "FLANKERS - Enable Flankers";
-                tooltip = "Enable left and right flanker groups for Wave 1.";
+            class EnableSideGroups {
+                displayName = "SIDE GROUPS - Enable Side Groups";
+                tooltip = "Spawn two 2-man groups on the player group's flanks (90 degrees either side of the main group's approach) so Wave 1 converges from three directions.";
                 control = "Checkbox";
-                property = "Recondo_RW_EnableFlankers";
-                expression = "_this setVariable ['enableflankers', _value, true];";
+                property = "Recondo_RW_EnableSideGroups";
+                expression = "_this setVariable ['enablesidegroups', _value, true];";
                 typeName = "BOOL";
                 defaultValue = "true";
-                category = "Recondo_RW_Flankers";
+                category = "Recondo_RW_SideGroups";
             };
-            class FlankerMinSize {
-                displayName = "Flanker Min Size";
-                tooltip = "Minimum number of units per flanker group.";
+            class SideGroupDistance {
+                displayName = "Side Group Distance (m)";
+                tooltip = "How far from the player group the side groups spawn. If the spot is in water or on top of a player, it is pushed further out along the same bearing.";
                 control = "Edit";
-                property = "Recondo_RW_FlankerMinSize";
-                expression = "_this setVariable ['flankerminsize', parseNumber _value, true];";
+                property = "Recondo_RW_SideGroupDistance";
+                expression = "_this setVariable ['sidegroupdistance', parseNumber _value, true];";
                 typeName = "STRING";
-                defaultValue = """2""";
-                category = "Recondo_RW_Flankers";
-            };
-            class FlankerMaxSize {
-                displayName = "Flanker Max Size";
-                tooltip = "Maximum number of units per flanker group.";
-                control = "Edit";
-                property = "Recondo_RW_FlankerMaxSize";
-                expression = "_this setVariable ['flankermaxsize', parseNumber _value, true];";
-                typeName = "STRING";
-                defaultValue = """2""";
-                category = "Recondo_RW_Flankers";
-            };
-            class FlankerLateralOffset {
-                displayName = "Lateral Offset (m)";
-                tooltip = "Side offset distance for flanker groups from the main group.";
-                control = "Edit";
-                property = "Recondo_RW_FlankerLateralOffset";
-                expression = "_this setVariable ['flankerlateraloffset', parseNumber _value, true];";
-                typeName = "STRING";
-                defaultValue = """120""";
-                category = "Recondo_RW_Flankers";
-            };
-            class FlankerForwardOffset {
-                displayName = "Forward Offset (m)";
-                tooltip = "Forward offset distance for flanker groups ahead of the main group.";
-                control = "Edit";
-                property = "Recondo_RW_FlankerForwardOffset";
-                expression = "_this setVariable ['flankerforwardoffset', parseNumber _value, true];";
-                typeName = "STRING";
-                defaultValue = """75""";
-                category = "Recondo_RW_Flankers";
+                defaultValue = """200""";
+                category = "Recondo_RW_SideGroups";
             };
             
             // ========================================
@@ -3887,6 +4147,16 @@ class CfgVehicles {
                 expression = "_this setVariable ['pursuitmaxsize', parseNumber _value, true];";
                 typeName = "STRING";
                 defaultValue = """6""";
+                category = "Recondo_RW_Pursuit";
+            };
+            class GiveUpTime {
+                displayName = "Give Up Time (s)";
+                tooltip = "Seconds a reinforcement group will keep hunting a cold trail (no combat and no nearby footprints) before it deletes itself where it stands. Combat resets the timer. Set to 0 to never give up.";
+                control = "Edit";
+                property = "Recondo_RW_GiveUpTime";
+                expression = "_this setVariable ['giveuptime', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """360""";
                 category = "Recondo_RW_Pursuit";
             };
             
@@ -4174,7 +4444,7 @@ class CfgVehicles {
                 property = "Recondo_IntelItems_ItemsConfig";
                 expression = "_this setVariable ['intelitemsconfig', _value, true];";
                 typeName = "STRING";
-                defaultValue = """Enemy Map 01:rw_inv_enemy_map_01:5\nEnemy Map 02:rw_inv_enemy_map_02:5\nEnemy Map 03:rw_inv_enemy_map_03:5\nEnemy Map 04:rw_inv_enemy_map_04:5\nEnemy Map 05:rw_inv_enemy_map_05:5\nEnemy Map 06:rw_inv_enemy_map_06:5\nEnemy Map 07:rw_inv_enemy_map_07:5\nEnemy Map 08:rw_inv_enemy_map_08:5\nEnemy Map 09:rw_inv_enemy_map_09:5\nEnemy Map 10:rw_inv_enemy_map_10:5\nInfiltration Card 1:rw_inv_infil_card_1:5\nInfiltration Card 2:rw_inv_infil_card_2:5\nInfiltration Card 3:rw_inv_infil_card_3:5\nInfiltration Card 4:rw_inv_infil_card_4:5\nLedger:rw_inv_ledger:5\nOfficer ID Card 1:rw_inv_officer_id_1:5\nOfficer ID Card 2:rw_inv_officer_id_2:5\nOfficer ID Card 3:rw_inv_officer_id_3:5\nOfficer ID Card 4:rw_inv_officer_id_4:5\nJournal Page:rw_inv_page:5\nSR71 MADAR Box:rw_inv_madar:5\nTin Can:rw_inv_tin_can:5\n35mm Film Roll:rw_inv_film_roll:5""";
+                defaultValue = """Enemy Map 01:rw_inv_enemy_map_01:5\nEnemy Map 02:rw_inv_enemy_map_02:5\nEnemy Map 03:rw_inv_enemy_map_03:5\nEnemy Map 04:rw_inv_enemy_map_04:5\nEnemy Map 05:rw_inv_enemy_map_05:5\nEnemy Map 06:rw_inv_enemy_map_06:5\nEnemy Map 07:rw_inv_enemy_map_07:5\nEnemy Map 08:rw_inv_enemy_map_08:5\nEnemy Map 09:rw_inv_enemy_map_09:5\nEnemy Map 10:rw_inv_enemy_map_10:5\nInfiltration Card 1:rw_inv_infil_card_1:5\nInfiltration Card 2:rw_inv_infil_card_2:5\nInfiltration Card 3:rw_inv_infil_card_3:5\nInfiltration Card 4:rw_inv_infil_card_4:5\nLedger:rw_inv_ledger:5\nOfficer ID Card 1:rw_inv_officer_id_1:5\nOfficer ID Card 2:rw_inv_officer_id_2:5\nOfficer ID Card 3:rw_inv_officer_id_3:5\nOfficer ID Card 4:rw_inv_officer_id_4:5\nJournal Page:rw_inv_page:5\nSR71 MADAR Box:rw_inv_madar:5\n35mm Film Roll:rw_inv_film_roll:5""";
                 category = "Recondo_IntelItems_Items";
             };
             class TakeActionText {
@@ -6073,6 +6343,16 @@ class CfgVehicles {
                 expression = "_this setVariable ['subsiteclearradius', parseNumber _value, true];";
                 typeName = "STRING";
                 defaultValue = """15""";
+                category = "Recondo_HubSubs_SubSites";
+            };
+            class SubSiteElephantGrass {
+                displayName = "Sub-Site Surround with Elephant Grass";
+                tooltip = "If enabled, spawns the ElephantGrass composition on top of each sub-site for extra concealment.";
+                control = "Checkbox";
+                property = "Recondo_HubSubs_SubSiteElephantGrass";
+                expression = "_this setVariable ['subsiteelephantgrass', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
                 category = "Recondo_HubSubs_SubSites";
             };
             class SubSiteSpawnMode {
@@ -8850,227 +9130,6 @@ class CfgVehicles {
                 typeName = "BOOL";
                 defaultValue = "false";
                 category = "Recondo_Weather_Debug";
-            };
-            
-            class ModuleDescription: ModuleDescription {};
-        };
-    };
-    
-    //==========================================
-    // INTRO SCREEN MODULE
-    // Displays cinematic intro on mission start
-    //==========================================
-    class Recondo_Module_IntroScreen: Module_F {
-        scope = 2;
-        displayName = "Intro Screen";
-        author = "GoonSix";
-        vehicleClass = "Modules";
-        category = "Recondo_Tools";
-        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\whiteboard_ca.paa";
-        function = "Recondo_fnc_moduleIntroScreen";
-        functionPriority = 10;
-        isGlobal = 0;
-        isTriggerActivated = 0;
-        isDisposable = 0;
-        is3DEN = 0;
-        curatorCanAttach = 0;
-        canSetArea = 0;
-        
-        class ModuleDescription: ModuleDescription {
-            description = "Displays a cinematic intro screen with story panels and title card on mission start. Runs on all clients.";
-            sync[] = {};
-        };
-        
-        class Attributes: AttributesBase {
-            
-            // ========================================
-            // TITLE SETTINGS
-            // ========================================
-            class MissionTitle {
-                displayName = "TITLE - Mission Title";
-                tooltip = "Main title text displayed after story panels.";
-                control = "Edit";
-                property = "Recondo_Intro_MissionTitle";
-                expression = "_this setVariable ['missiontitle', _value, true];";
-                typeName = "STRING";
-                defaultValue = """MISSION TITLE""";
-                category = "Recondo_Intro_Title";
-            };
-            class TitleSize {
-                displayName = "Title Size";
-                tooltip = "Font size for title (1-7, larger = bigger).";
-                control = "Edit";
-                property = "Recondo_Intro_TitleSize";
-                expression = "_this setVariable ['titlesize', parseNumber _value, true];";
-                typeName = "STRING";
-                defaultValue = """5""";
-                category = "Recondo_Intro_Title";
-            };
-            class TitleColor {
-                displayName = "Title Color";
-                tooltip = "Hex color for title text (e.g., #FFFFFF for white).";
-                control = "Edit";
-                property = "Recondo_Intro_TitleColor";
-                expression = "_this setVariable ['titlecolor', _value, true];";
-                typeName = "STRING";
-                defaultValue = """#FFFFFF""";
-                category = "Recondo_Intro_Title";
-            };
-            class Subtitle {
-                displayName = "Subtitle";
-                tooltip = "Subtitle text (location, date, etc.). Displayed above title.";
-                control = "Edit";
-                property = "Recondo_Intro_Subtitle";
-                expression = "_this setVariable ['subtitle', _value, true];";
-                typeName = "STRING";
-                defaultValue = """""";
-                category = "Recondo_Intro_Title";
-            };
-            class SubtitleColor {
-                displayName = "Subtitle Color";
-                tooltip = "Hex color for subtitle text.";
-                control = "Edit";
-                property = "Recondo_Intro_SubtitleColor";
-                expression = "_this setVariable ['subtitlecolor', _value, true];";
-                typeName = "STRING";
-                defaultValue = """#FFFFFF""";
-                category = "Recondo_Intro_Title";
-            };
-            
-            // ========================================
-            // STORY PANELS
-            // ========================================
-            class StoryPanel1 {
-                displayName = "STORY - Panel 1";
-                tooltip = "First story panel text. Leave empty to skip.";
-                control = "EditCodeMulti5";
-                property = "Recondo_Intro_StoryPanel1";
-                expression = "_this setVariable ['storypanel1', _value, true];";
-                typeName = "STRING";
-                defaultValue = """""";
-                category = "Recondo_Intro_Story";
-            };
-            class StoryPanel2 {
-                displayName = "Panel 2";
-                tooltip = "Second story panel text. Leave empty to skip.";
-                control = "EditCodeMulti5";
-                property = "Recondo_Intro_StoryPanel2";
-                expression = "_this setVariable ['storypanel2', _value, true];";
-                typeName = "STRING";
-                defaultValue = """""";
-                category = "Recondo_Intro_Story";
-            };
-            class StoryPanel3 {
-                displayName = "Panel 3";
-                tooltip = "Third story panel text. Leave empty to skip.";
-                control = "EditCodeMulti5";
-                property = "Recondo_Intro_StoryPanel3";
-                expression = "_this setVariable ['storypanel3', _value, true];";
-                typeName = "STRING";
-                defaultValue = """""";
-                category = "Recondo_Intro_Story";
-            };
-            class StoryPanel4 {
-                displayName = "Panel 4";
-                tooltip = "Fourth story panel text. Leave empty to skip.";
-                control = "EditCodeMulti5";
-                property = "Recondo_Intro_StoryPanel4";
-                expression = "_this setVariable ['storypanel4', _value, true];";
-                typeName = "STRING";
-                defaultValue = """""";
-                category = "Recondo_Intro_Story";
-            };
-            class StoryPanel5 {
-                displayName = "Panel 5";
-                tooltip = "Fifth story panel text. Leave empty to skip.";
-                control = "EditCodeMulti5";
-                property = "Recondo_Intro_StoryPanel5";
-                expression = "_this setVariable ['storypanel5', _value, true];";
-                typeName = "STRING";
-                defaultValue = """""";
-                category = "Recondo_Intro_Story";
-            };
-            class StoryTextColor {
-                displayName = "Story Text Color";
-                tooltip = "Hex color for all story panel text.";
-                control = "Edit";
-                property = "Recondo_Intro_StoryTextColor";
-                expression = "_this setVariable ['storytextcolor', _value, true];";
-                typeName = "STRING";
-                defaultValue = """#FFFFFF""";
-                category = "Recondo_Intro_Story";
-            };
-            
-            // ========================================
-            // TIMING SETTINGS
-            // ========================================
-            class InitialDelay {
-                displayName = "TIMING - Initial Delay";
-                tooltip = "Seconds before intro starts (screen stays black).";
-                control = "Edit";
-                property = "Recondo_Intro_InitialDelay";
-                expression = "_this setVariable ['initialdelay', parseNumber _value, true];";
-                typeName = "STRING";
-                defaultValue = """3""";
-                category = "Recondo_Intro_Timing";
-            };
-            class PanelDuration {
-                displayName = "Panel Duration";
-                tooltip = "Seconds each story panel is displayed.";
-                control = "Edit";
-                property = "Recondo_Intro_PanelDuration";
-                expression = "_this setVariable ['panelduration', parseNumber _value, true];";
-                typeName = "STRING";
-                defaultValue = """10""";
-                category = "Recondo_Intro_Timing";
-            };
-            class TitleDuration {
-                displayName = "Title Duration";
-                tooltip = "Seconds the title card is displayed.";
-                control = "Edit";
-                property = "Recondo_Intro_TitleDuration";
-                expression = "_this setVariable ['titleduration', parseNumber _value, true];";
-                typeName = "STRING";
-                defaultValue = """6""";
-                category = "Recondo_Intro_Timing";
-            };
-            class FadeInTime {
-                displayName = "Fade In Time";
-                tooltip = "Seconds to fade from black to gameplay.";
-                control = "Edit";
-                property = "Recondo_Intro_FadeInTime";
-                expression = "_this setVariable ['fadeintime', parseNumber _value, true];";
-                typeName = "STRING";
-                defaultValue = """3""";
-                category = "Recondo_Intro_Timing";
-            };
-            
-            // ========================================
-            // AUDIO SETTINGS
-            // ========================================
-            class MuteAudio {
-                displayName = "AUDIO - Mute During Intro";
-                tooltip = "Mute all audio during intro sequence.";
-                control = "Checkbox";
-                property = "Recondo_Intro_MuteAudio";
-                expression = "_this setVariable ['muteaudio', _value, true];";
-                typeName = "BOOL";
-                defaultValue = "true";
-                category = "Recondo_Intro_Audio";
-            };
-            
-            // ========================================
-            // DEBUG SETTINGS
-            // ========================================
-            class DebugLogging {
-                displayName = "DEBUG - Enable Logging";
-                tooltip = "Log intro sequence to RPT file.";
-                control = "Checkbox";
-                property = "Recondo_Intro_DebugLogging";
-                expression = "_this setVariable ['debuglogging', _value, true];";
-                typeName = "BOOL";
-                defaultValue = "false";
-                category = "Recondo_Intro_Debug";
             };
             
             class ModuleDescription: ModuleDescription {};
@@ -15554,6 +15613,262 @@ class CfgVehicles {
                 typeName = "BOOL";
                 defaultValue = "false";
                 category = "Recondo_Uprising_Debug";
+            };
+            
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    //==========================================
+    // WAVE ATTACK MODULE
+    //==========================================
+    class Recondo_Module_WaveAttack: Module_F {
+        scope = 2;
+        displayName = "Wave Attack";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Misc";
+        icon = "\\a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\attack_ca.paa";
+        function = "Recondo_fnc_moduleWaveAttack";
+        functionPriority = 5;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+        canSetArea = 0;
+        
+        class ModuleDescription: ModuleDescription {
+            description = "When trigger-side players enter the radius around an invisible map marker, waves of attackers spawn at the selected compass bearings, move to the marker, and search within 100m. One group per checked bearing per wave. Waves continue on a countdown until the cap is reached or players leave the area. Each marker triggers once.";
+            sync[] = {};
+        };
+        
+        class Attributes: AttributesBase {
+            // ========================================
+            // AREA SETTINGS
+            // ========================================
+            class MarkerPrefix {
+                displayName = "AREA - Marker Prefix";
+                tooltip = "Prefix for invisible map markers that anchor wave attacks. Example: 'WAVEATK_' will find WAVEATK_1, WAVEATK_2, etc. Each marker triggers one time.";
+                control = "Edit";
+                property = "Recondo_WaveAtk_MarkerPrefix";
+                expression = "_this setVariable ['markerprefix', _value, true];";
+                typeName = "STRING";
+                defaultValue = """WAVEATK_""";
+                category = "Recondo_WaveAtk_Area";
+            };
+            class ActiveMarkerPercent {
+                displayName = "Active Marker Percent";
+                tooltip = "Percentage of found markers randomly selected to be active each mission (minimum 1 marker). Unselected markers never trigger. Default: 100";
+                control = "Edit";
+                property = "Recondo_WaveAtk_ActiveMarkerPercent";
+                expression = "_this setVariable ['activemarkerpercent', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """100""";
+                category = "Recondo_WaveAtk_Area";
+            };
+            class TriggerRadius {
+                displayName = "Trigger Radius (m)";
+                tooltip = "Trigger-side players within this distance of a marker arm it and keep the wave sequence alive. Default: 300";
+                control = "Edit";
+                property = "Recondo_WaveAtk_TriggerRadius";
+                expression = "_this setVariable ['triggerradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """300""";
+                category = "Recondo_WaveAtk_Area";
+            };
+            class TriggerSide {
+                displayName = "Trigger Side";
+                tooltip = "Side whose players trigger the wave attack.";
+                control = "Combo";
+                property = "Recondo_WaveAtk_TriggerSide";
+                expression = "_this setVariable ['triggerside', _value, true];";
+                typeName = "STRING";
+                defaultValue = """WEST""";
+                category = "Recondo_WaveAtk_Area";
+                class Values {
+                    class West { name = "BLUFOR"; value = "WEST"; };
+                    class East { name = "OPFOR"; value = "EAST"; };
+                    class Guer { name = "INDEPENDENT"; value = "GUER"; };
+                    class Any  { name = "ANY PLAYER"; value = "ANY"; };
+                };
+            };
+            class HeightLimit {
+                displayName = "Trigger Height Limit (m)";
+                tooltip = "Players higher than this above ground (e.g., flying over) do not trigger or sustain wave attacks. Default: 10";
+                control = "Edit";
+                property = "Recondo_WaveAtk_HeightLimit";
+                expression = "_this setVariable ['heightlimit', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """10""";
+                category = "Recondo_WaveAtk_Area";
+            };
+            
+            // ========================================
+            // ATTACKER SETTINGS
+            // ========================================
+            class AttackingSide {
+                displayName = "ATTACKERS - Attacking Side";
+                tooltip = "Side of the spawned wave groups.";
+                control = "Combo";
+                property = "Recondo_WaveAtk_AttackingSide";
+                expression = "_this setVariable ['attackingside', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                category = "Recondo_WaveAtk_Attackers";
+                class Values {
+                    class East { name = "OPFOR"; value = 0; };
+                    class West { name = "BLUFOR"; value = 1; };
+                    class Guer { name = "INDEPENDENT"; value = 2; };
+                };
+            };
+            class UnitClassnames {
+                displayName = "Unit Classnames";
+                tooltip = "Unit classnames for wave attackers. One per line or comma-separated. A random classname is picked for each unit.";
+                control = "EditCodeMulti5";
+                property = "Recondo_WaveAtk_UnitClassnames";
+                expression = "_this setVariable ['unitclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_WaveAtk_Attackers";
+            };
+            class UnitsMin {
+                displayName = "Units Per Group (Min)";
+                tooltip = "Minimum units in each spawned group. Default: 2";
+                control = "Edit";
+                property = "Recondo_WaveAtk_UnitsMin";
+                expression = "_this setVariable ['unitsmin', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """2""";
+                category = "Recondo_WaveAtk_Attackers";
+            };
+            class UnitsMax {
+                displayName = "Units Per Group (Max)";
+                tooltip = "Maximum units in each spawned group. Default: 4";
+                control = "Edit";
+                property = "Recondo_WaveAtk_UnitsMax";
+                expression = "_this setVariable ['unitsmax', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """4""";
+                category = "Recondo_WaveAtk_Attackers";
+            };
+            class SpawnDistance {
+                displayName = "Spawn Distance (m)";
+                tooltip = "How far out from the marker groups spawn along their bearing. Pushed further out along the same bearing if the spot is in water. Default: 400";
+                control = "Edit";
+                property = "Recondo_WaveAtk_SpawnDistance";
+                expression = "_this setVariable ['spawndistance', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """400""";
+                category = "Recondo_WaveAtk_Attackers";
+            };
+            class Bearing0 {
+                displayName = "Spawn Bearing 0 (North)";
+                tooltip = "Spawn a group north of the marker each wave. One group spawns per checked bearing every wave.";
+                control = "Checkbox";
+                property = "Recondo_WaveAtk_Bearing0";
+                expression = "_this setVariable ['bearing0', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_WaveAtk_Attackers";
+            };
+            class Bearing90 {
+                displayName = "Spawn Bearing 90 (East)";
+                tooltip = "Spawn a group east of the marker each wave.";
+                control = "Checkbox";
+                property = "Recondo_WaveAtk_Bearing90";
+                expression = "_this setVariable ['bearing90', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_WaveAtk_Attackers";
+            };
+            class Bearing180 {
+                displayName = "Spawn Bearing 180 (South)";
+                tooltip = "Spawn a group south of the marker each wave.";
+                control = "Checkbox";
+                property = "Recondo_WaveAtk_Bearing180";
+                expression = "_this setVariable ['bearing180', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_WaveAtk_Attackers";
+            };
+            class Bearing270 {
+                displayName = "Spawn Bearing 270 (West)";
+                tooltip = "Spawn a group west of the marker each wave.";
+                control = "Checkbox";
+                property = "Recondo_WaveAtk_Bearing270";
+                expression = "_this setVariable ['bearing270', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_WaveAtk_Attackers";
+            };
+            
+            // ========================================
+            // WAVE SETTINGS
+            // ========================================
+            class MaxWaves {
+                displayName = "WAVES - Max Waves";
+                tooltip = "Maximum number of waves per marker. Default: 3";
+                control = "Edit";
+                property = "Recondo_WaveAtk_MaxWaves";
+                expression = "_this setVariable ['maxwaves', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """3""";
+                category = "Recondo_WaveAtk_Waves";
+            };
+            class TimeBetweenWaves {
+                displayName = "Time Between Waves (sec)";
+                tooltip = "Countdown between waves. The next wave only spawns if trigger-side players are still within the trigger radius. Default: 120";
+                control = "Edit";
+                property = "Recondo_WaveAtk_TimeBetweenWaves";
+                expression = "_this setVariable ['timebetweenwaves', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """120""";
+                category = "Recondo_WaveAtk_Waves";
+            };
+            class EnableWhistles {
+                displayName = "Wave 2+ Whistle Sounds";
+                tooltip = "Wave 2 and later groups whistle roughly every 60 seconds while alive (timing varied per group). Wave 1 is always silent.";
+                control = "Checkbox";
+                property = "Recondo_WaveAtk_EnableWhistles";
+                expression = "_this setVariable ['enablewhistles', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_WaveAtk_Waves";
+            };
+            class EnableHC {
+                displayName = "Enable Headless Client Transfer";
+                tooltip = "Hand spawned wave groups to a connected Headless Client (least-loaded if several). If no HC is connected, groups stay on the server as normal. Requires the HC to run the same mods as the server.";
+                control = "Checkbox";
+                property = "Recondo_WaveAtk_EnableHC";
+                expression = "_this setVariable ['enablehc', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_WaveAtk_Waves";
+            };
+            
+            // ========================================
+            // DEBUG SETTINGS
+            // ========================================
+            class DebugLogging {
+                displayName = "DEBUG - Enable Debug Logging";
+                tooltip = "Log wave attack activity to the RPT file.";
+                control = "Checkbox";
+                property = "Recondo_WaveAtk_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_WaveAtk_Debug";
+            };
+            class DebugMarkers {
+                displayName = "Enable Debug Markers";
+                tooltip = "Show trigger radius circles and spawn point markers on the map.";
+                control = "Checkbox";
+                property = "Recondo_WaveAtk_DebugMarkers";
+                expression = "_this setVariable ['debugmarkers', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_WaveAtk_Debug";
             };
             
             class ModuleDescription: ModuleDescription {};
