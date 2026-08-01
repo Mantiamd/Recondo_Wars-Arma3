@@ -19,6 +19,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **Path Patrols** - Create patrols that follow specific marker paths. Optional Headless Client transfer
 - **Add AI Crew** - Dynamically add crew members to player vehicles
 - **Static Defense Randomized** - Spawn randomized static weapon positions. Optional Headless Client transfer
+- **Smarter AAA** - AI anti-aircraft crews hear aircraft coming and pre-aim at the sound, fire blind through jungle canopy with computed lead, and engage high loiterers vanilla AI ignores. Manages only the static gun classnames you whitelist, editor-placed or spawned. Original script by Dexter
 - **Eldest Son** - Sabotaged ammunition system that poisons enemy weapons over time
 - **Bad Civi** - Sync to AI units to create concealed-weapon civilians that pull a weapon when a configured side gets close, with configurable chance, distance, and weapon type
 - **Limit Static Weapon Movement** - Restrict ACE carry/drag on static weapons
@@ -82,6 +83,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **Disable Rations Area** - Zones where ACE rations are disabled
 - **Chat Control** - Control chat channel availability
 - **ACE Spectator Object** - Enter spectator mode from objects
+- **Spectator Cam** - Dead (and optionally ACE-unconscious) players automatically enter the End Game Spectator camera after a configurable delay. Closes automatically on respawn or revive. Affects all players, no sync needed. Optionally sync objects to the module: living players get an ACE action on them to open the camera, closed with Esc. Camera options (spectatable sides, AI viewing, free camera, 3rd person) are configurable separately for the death cam and the object cam; defaults are the locked-down anti-scouting view (own side only, players only, follow cam, first person)
 - **Convoy System** - Automated convoy spawning and routing
 - **Performance Monitor** - Mission performance monitoring
 - **Roleplay SOF Source** - Grants synced playable units ACE self-actions for viewing objective status, player statistics, and mission-maker-defined roleplayer instructions. Supports an "Allow All Players" mode that places interactions on a synced world object. Includes a "Populate Nearby with Civilian Presence" self-action for roleplayers to spawn wandering civilians with configurable classnames, count, radius, cooldown, and auto-despawn. Roleplayers can be defined by syncing units or by unit classname
@@ -255,6 +257,17 @@ Selected modules can offload their AI to a Headless Client: **Foot Patrols**, **
 - The HC launched with the same mods as the server (`-client -connect=...`).
 
 Other modules intentionally keep their AI on the server — their behavior (trackers, hunters, objectives, QRF) is driven by server-side scripts and event handlers that do not survive a locality transfer. If you use ACE's `acex_headless` auto-distribution instead, be aware it will transfer *all* non-blacklisted AI, including groups from those systems, and can break them.
+
+Note: when the **Smarter AAA** module is active, crews of whitelisted static guns are automatically kept on the server (the HC transfer helper refuses them) — the system steers those gunners with commands that require server locality. All other groups transfer normally.
+
+**Q: How do I control which guns Smarter AAA manages?**
+Place one module (RW - Main) and fill in the **Gun Whitelist** attribute (required) with the static weapon classnames that should use the system — any gun not on the list stays fully vanilla. Matching is inheritance-aware (a base class covers its variants) and applies to guns whether editor-placed or spawned by other modules (Static Defense Randomized, Custom Site Spawn, etc.). You can also set variables on individual guns (editor init field or composition, any time):
+- `this setVariable ["RECONDO_SAAA_ignore", true];` — fully vanilla (good for A/B comparison)
+- `this setVariable ["RECONDO_SAAA_noScriptFire", true];` — tracks and pre-aims, never script-fires
+- `this setVariable ["RECONDO_SAAA_noBlindfire", true];` — no through-canopy fire only
+- `this setVariable ["RECONDO_SAAA_manage", true];` — force-manage a specific gun without whitelisting its classname
+
+Guns with low elevation limits (e.g. DShK tripods, 20-35°) physically cannot engage steep overhead targets — high-angle guns (ZGU-1, ZPU-4) are the real overhead threats. Jets are ignored entirely (they arrive faster than their sound).
 
 **Q: Can I place multiple instances of the same module?**
 Many modules support multiple instances:

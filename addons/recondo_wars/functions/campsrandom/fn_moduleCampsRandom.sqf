@@ -204,6 +204,10 @@ private _settings = createHashMapFromArray [
 RECONDO_CAMPSRANDOM_INSTANCES pushBack _settings;
 publicVariable "RECONDO_CAMPSRANDOM_INSTANCES";
 
+// Camp sentries can carry intel without the Intel Items module being placed,
+// so make sure the class-based ACE loot actions are registered on clients too
+[] remoteExec ["Recondo_fnc_initIntelItemsClient", 0, "RECONDO_INTELITEMS_CLIENTINIT"];
+
 // ========================================
 // SELECT RANDOM MARKERS
 // ========================================

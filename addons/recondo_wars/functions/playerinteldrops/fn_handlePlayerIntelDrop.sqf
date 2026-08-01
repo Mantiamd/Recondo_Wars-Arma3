@@ -39,12 +39,12 @@ if (_unitSide != _affectedSide) exitWith {
 };
 
 // Check classname filter (if configured)
-if (count _unitClassnames > 0) then {
-    private _unitType = typeOf _unit;
-    if !(_unitType in _unitClassnames) exitWith {
-        if (_debug) then {
-            diag_log format ["[RECONDO_PLAYERINTELDROPS] %1 classname (%2) not in filter list. Skipping.", _unit, _unitType];
-        };
+// Single top-level exitWith: a nested exitWith would only leave the then-block,
+// not this script, and the filter would never actually skip anyone.
+// (findIf with == keeps the comparison case-insensitive, unlike "in")
+if (count _unitClassnames > 0 && {(_unitClassnames findIf {_x == typeOf _unit}) == -1}) exitWith {
+    if (_debug) then {
+        diag_log format ["[RECONDO_PLAYERINTELDROPS] %1 classname (%2) not in filter list. Skipping.", _unit, typeOf _unit];
     };
 };
 
@@ -74,22 +74,22 @@ if (!_isValid) exitWith {
 };
 
 // Add the intel item to the body's inventory
-_unit addItem _classname;
+// addItem requires a local argument - a dead player's body stays local to that
+// player's client on a dedicated server, so execute where the body is local
+if (local _unit) then {
+    _unit addItem _classname;
+} else {
+    [_unit, _classname] remoteExec ["addItem", _unit];
+};
 
-// Set up intel tracking variable (integrates with existing intel system)
+// Set up intel tracking variable (public - drives the class-based ACE loot
+// actions registered by fn_initIntelItemsClient)
 private _existingIntel = _unit getVariable ["RECONDO_INTELITEMS_inventory", []];
 _existingIntel pushBack [_displayName, _classname];
 _unit setVariable ["RECONDO_INTELITEMS_inventory", _existingIntel, true];
 
-// Reset the actions added flag so ACE actions will be created
-_unit setVariable ["RECONDO_INTELITEMS_actionsAdded", false, true];
-
-// Add ACE interactions for taking intel (uses existing intel system)
-// This broadcasts to all clients including JIP
-[_unit, _existingIntel] call Recondo_fnc_addTakeIntelAction;
-
 if (_debug) then {
-    diag_log format ["[RECONDO_PLAYERINTELDROPS] Successfully added '%1' (%2) to %3's body. ACE actions created.", 
+    diag_log format ["[RECONDO_PLAYERINTELDROPS] Successfully added '%1' (%2) to %3's body.", 
         _displayName, _classname, name _unit];
 };
 

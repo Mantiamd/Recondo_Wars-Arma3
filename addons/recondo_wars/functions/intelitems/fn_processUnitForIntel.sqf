@@ -44,7 +44,8 @@ private _unitClass = typeOf _unit;
 if (!isNil "_targetSide" && {side _unit != _targetSide}) exitWith { false };
 
 // Check classname whitelist - unit MUST be in the list to receive intel
-if !(_unitClass in _unitClassnames) exitWith {
+// (findIf with == keeps the comparison case-insensitive, unlike "in")
+if (_unitClassnames findIf {_x == _unitClass} == -1) exitWith {
     if (_debugLogging) then {
         diag_log format ["[RECONDO_INTELITEMS] Unit %1 (%2) - not in whitelist", _unit, _unitClass];
     };

@@ -120,6 +120,10 @@ publicVariable "RECONDO_INTELITEMS_SETTINGS";
 RECONDO_INTELITEMS_ITEM_DEFS = _itemDefs;
 publicVariable "RECONDO_INTELITEMS_ITEM_DEFS";
 
+// Register class-based ACE loot actions on every client (JIP-safe via static id).
+// Per-object action broadcasts raced entity streaming on dedicated servers.
+[] remoteExec ["Recondo_fnc_initIntelItemsClient", 0, "RECONDO_INTELITEMS_CLIENTINIT"];
+
 // ========================================
 // CHECK SYNC TO INTEL MODULE
 // ========================================

@@ -83,9 +83,10 @@ private _validPOWs = [];
     };
     
     // Check classname filter
+    // (findIf with == keeps the comparison case-insensitive, unlike "in")
     if (count _powClassnames > 0) then {
         private _unitType = typeOf _unit;
-        _matchesClassname = (_unitType in _powClassnames);
+        _matchesClassname = (_powClassnames findIf {_x == _unitType}) > -1;
     };
     
     // OR logic: matches if either condition is true

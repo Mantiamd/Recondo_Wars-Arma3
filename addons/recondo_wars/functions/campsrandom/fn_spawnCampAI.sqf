@@ -211,10 +211,10 @@ if (_enableIntelUnit && {count _intelItemPool > 0} && {count _spawnedUnits > 0})
         if (_displayName == "") then { _displayName = getText (configFile >> "CfgWeapons" >> _itemClass >> "displayName"); };
         if (_displayName == "") then { _displayName = _itemClass; };
 
-        // Track intel inventory and register the lootable take action (same pattern as IntelItems)
+        // Track intel inventory (public - the class-based ACE loot actions from
+        // fn_initIntelItemsClient pick this up, same pattern as IntelItems)
         private _unitIntelItems = [[_displayName, _itemClass]];
         _intelUnit setVariable ["RECONDO_INTELITEMS_inventory", _unitIntelItems, true];
-        [_intelUnit, _unitIntelItems] call Recondo_fnc_addTakeIntelAction;
 
         _intelUnit setVariable ["RECONDO_CAMPS_intelCarrier", true, true];
 

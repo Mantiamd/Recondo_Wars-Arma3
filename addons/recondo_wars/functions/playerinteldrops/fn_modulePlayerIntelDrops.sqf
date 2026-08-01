@@ -99,6 +99,10 @@ _settings set ["intelItems", _intelItems];
 RECONDO_PLAYERINTELDROPS_SETTINGS = _settings;
 publicVariable "RECONDO_PLAYERINTELDROPS_SETTINGS";
 
+// Register class-based ACE loot actions on every client (JIP-safe via static id).
+// Shared with Intel Items; the function guards against double registration.
+[] remoteExec ["Recondo_fnc_initIntelItemsClient", 0, "RECONDO_INTELITEMS_CLIENTINIT"];
+
 if (_debug) then {
     diag_log "[RECONDO_PLAYERINTELDROPS] === MODULE SETTINGS ===";
     diag_log format ["[RECONDO_PLAYERINTELDROPS] Affected Side: %1 (num: %2)", _affectedSide, _sideNum];

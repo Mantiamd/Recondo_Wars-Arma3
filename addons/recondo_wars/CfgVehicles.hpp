@@ -1919,6 +1919,441 @@ class CfgVehicles {
     };
     
     //==========================================
+    // SMARTER AAA MODULE
+    //==========================================
+    class Recondo_Module_SmarterAAA: Module_F {
+        scope = 2;
+        displayName = "Smarter AAA";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Main";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\takeoff_ca.paa";
+        function = "Recondo_fnc_moduleSmarterAAA";
+        functionPriority = 1;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+
+        class ModuleDescription: ModuleDescription {
+            description = "AI anti-aircraft crews hear aircraft coming and pre-aim at the sound, fire blind through jungle canopy with computed lead, and engage high loiterers vanilla AI ignores. Manages ONLY static weapons matching the Gun Whitelist classnames (REQUIRED attribute) - editor-placed or spawned, no sync needed. Per-gun opt-out: this setVariable ['RECONDO_SAAA_ignore', true].";
+            sync[] = {};
+        };
+
+        class Attributes: AttributesBase {
+
+            // HEARING
+            class AudibleRangeHelo {
+                displayName = "HEARING - Helicopter Audible Range (m)";
+                tooltip = "Distance in METERS at which gun crews hear helicopters (engine on) and pre-aim at the sound. Default: 2500";
+                control = "Edit";
+                property = "Recondo_SAAA_AudibleRangeHelo";
+                expression = "_this setVariable ['audiblerangehelo', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "2500";
+                category = "Recondo_SAAA_Hearing";
+            };
+            class AudibleRangePlane {
+                displayName = "Prop Plane Audible Range (m)";
+                tooltip = "Distance in METERS at which gun crews hear propeller planes. Jets are ignored entirely (they arrive faster than their sound). Default: 2000";
+                control = "Edit";
+                property = "Recondo_SAAA_AudibleRangePlane";
+                expression = "_this setVariable ['audiblerangeplane', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "2000";
+                category = "Recondo_SAAA_Hearing";
+            };
+
+            // SCRIPT FIRE
+            class EnableBlindfire {
+                displayName = "SCRIPT FIRE - Enable Blind Fire";
+                tooltip = "Sound-directed bursts through jungle canopy at aircraft the crew can hear but not see. Real rounds - trunks eat some, the rest crack past the airframe.";
+                control = "Checkbox";
+                property = "Recondo_SAAA_Blindfire";
+                expression = "_this setVariable ['blindfire', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SAAA_ScriptFire";
+            };
+            class BlindfireRange {
+                displayName = "Blind Fire Release Range (m)";
+                tooltip = "Slant range in METERS inside which an unseen audible aircraft draws blind fire. Default: 800";
+                control = "Edit";
+                property = "Recondo_SAAA_BlindfireRange";
+                expression = "_this setVariable ['blindfirerange', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "800";
+                category = "Recondo_SAAA_ScriptFire";
+            };
+            class EnableAimedFire {
+                displayName = "Enable Aimed Fire";
+                tooltip = "Scripted aimed bursts at aircraft the crew can SEE but vanilla AI refuses to engage (outside its ~800m willingness range). Kills the 'orbit safely at 1500m' exploit.";
+                control = "Checkbox";
+                property = "Recondo_SAAA_AimedFire";
+                expression = "_this setVariable ['aimedfire', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SAAA_ScriptFire";
+            };
+            class AimedRange {
+                displayName = "Aimed Fire Max Range (m)";
+                tooltip = "Slant range in METERS out to which visible-but-unengaged aircraft draw scripted aimed fire. Default: 1800";
+                control = "Edit";
+                property = "Recondo_SAAA_AimedRange";
+                expression = "_this setVariable ['aimedrange', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "1800";
+                category = "Recondo_SAAA_ScriptFire";
+            };
+
+            // TARGET FILTERS
+            class ScriptFireHelos {
+                displayName = "FILTERS - Script Fire vs Helicopters";
+                tooltip = "Allow blind/aimed script fire at helicopters. Hearing and tracking always cover everything; this only withholds the scripted trigger.";
+                control = "Checkbox";
+                property = "Recondo_SAAA_ScriptFireHelos";
+                expression = "_this setVariable ['scriptfirehelos', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SAAA_Filters";
+            };
+            class ScriptFirePlanes {
+                displayName = "Script Fire vs Prop Planes";
+                tooltip = "Allow blind/aimed script fire at propeller planes. Default OFF: the high-orbiting FAC gets tracked, not shot. Enable to punish him.";
+                control = "Checkbox";
+                property = "Recondo_SAAA_ScriptFirePlanes";
+                expression = "_this setVariable ['scriptfireplanes', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SAAA_Filters";
+            };
+            class ScriptFireBlacklist {
+                displayName = "Aircraft Blacklist";
+                tooltip = "Comma-separated aircraft classnames NEVER script-fired at (inheritance-aware). Example: vn_b_air_ov10a_01, UH1_base_F";
+                control = "Edit";
+                property = "Recondo_SAAA_ScriptFireBlacklist";
+                expression = "_this setVariable ['scriptfireblacklist', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_SAAA_Filters";
+            };
+            class GunWhitelist {
+                displayName = "Gun Whitelist (REQUIRED)";
+                tooltip = "REQUIRED - comma-separated static weapon classnames to manage (inheritance-aware, a base class covers its variants). Only these guns use the system; all others stay vanilla. Empty = module disabled. Example: vn_o_static_dshkm_high_01, vn_o_static_zgu1_01";
+                control = "Edit";
+                property = "Recondo_SAAA_GunWhitelist";
+                expression = "_this setVariable ['gunwhitelist', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_SAAA_Filters";
+            };
+            // ACCURACY
+            class BfBaseError {
+                displayName = "ACCURACY - Base Aim Error (m)";
+                tooltip = "Aim error in METERS vs a stationary/hovering target. A hover is lethal to sit in. Default: 7";
+                control = "Edit";
+                property = "Recondo_SAAA_BfBaseError";
+                expression = "_this setVariable ['bfbaseerror', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "7";
+                category = "Recondo_SAAA_Accuracy";
+            };
+            class BfErrorPerMs {
+                displayName = "Error per m/s Crossing Speed (m)";
+                tooltip = "Extra aim error in METERS per m/s of target crossing speed. 'Speed is armor': a fast low pass draws wild suppression instead of hits. Default: 0.5";
+                control = "Edit";
+                property = "Recondo_SAAA_BfErrorPerMs";
+                expression = "_this setVariable ['bferrorperms', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.5";
+                category = "Recondo_SAAA_Accuracy";
+            };
+            class BfMaxError {
+                displayName = "Max Aim Error (m)";
+                tooltip = "Error cap in METERS - misses stay close enough to feel (cracks and tracers past the airframe). Default: 45";
+                control = "Edit";
+                property = "Recondo_SAAA_BfMaxError";
+                expression = "_this setVariable ['bfmaxerror', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "45";
+                category = "Recondo_SAAA_Accuracy";
+            };
+            class BfRampTime {
+                displayName = "Tracking Ramp Time (s)";
+                tooltip = "SECONDS of continuous tracking to reach best accuracy. The crew walks fire onto anything that loiters. Default: 60";
+                control = "Edit";
+                property = "Recondo_SAAA_BfRampTime";
+                expression = "_this setVariable ['bframptime', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "60";
+                category = "Recondo_SAAA_Accuracy";
+            };
+            class BfRampStart {
+                displayName = "Ramp Start Multiplier";
+                tooltip = "Error MULTIPLIER on first contact (wild opening bursts). Default: 1.5";
+                control = "Edit";
+                property = "Recondo_SAAA_BfRampStart";
+                expression = "_this setVariable ['bframpstart', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "1.5";
+                category = "Recondo_SAAA_Accuracy";
+            };
+            class BfRampEnd {
+                displayName = "Ramp End Multiplier";
+                tooltip = "Error MULTIPLIER once the crew has fully walked onto the target. Default: 0.45";
+                control = "Edit";
+                property = "Recondo_SAAA_BfRampEnd";
+                expression = "_this setVariable ['bframpend', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.45";
+                category = "Recondo_SAAA_Accuracy";
+            };
+            class AimedErrFactor {
+                displayName = "Aimed Fire Error Factor";
+                tooltip = "Aimed (visual) fire error = blind fire error x this MULTIPLIER. Visual tracking is much tighter than sound. Default: 0.35";
+                control = "Edit";
+                property = "Recondo_SAAA_AimedErrFactor";
+                expression = "_this setVariable ['aimederrfactor', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.35";
+                category = "Recondo_SAAA_Accuracy";
+            };
+
+            // FIRE RHYTHM
+            class BfBurstMin {
+                displayName = "RHYTHM - Burst Rounds Min";
+                tooltip = "Minimum ROUNDS per burst. Default: 6";
+                control = "Edit";
+                property = "Recondo_SAAA_BfBurstMin";
+                expression = "_this setVariable ['bfburstmin', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "6";
+                category = "Recondo_SAAA_Rhythm";
+            };
+            class BfBurstMax {
+                displayName = "Burst Rounds Max";
+                tooltip = "Maximum ROUNDS per burst. Default: 12";
+                control = "Edit";
+                property = "Recondo_SAAA_BfBurstMax";
+                expression = "_this setVariable ['bfburstmax', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "12";
+                category = "Recondo_SAAA_Rhythm";
+            };
+            class BfShotInterval {
+                displayName = "Shot Interval (s)";
+                tooltip = "SECONDS between shots within a burst. Default: 0.15";
+                control = "Edit";
+                property = "Recondo_SAAA_BfShotInterval";
+                expression = "_this setVariable ['bfshotinterval', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.15";
+                category = "Recondo_SAAA_Rhythm";
+            };
+            class BfPauseMin {
+                displayName = "Pause Between Bursts Min (s)";
+                tooltip = "Minimum SECONDS between bursts. Default: 3";
+                control = "Edit";
+                property = "Recondo_SAAA_BfPauseMin";
+                expression = "_this setVariable ['bfpausemin', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "3";
+                category = "Recondo_SAAA_Rhythm";
+            };
+            class BfPauseMax {
+                displayName = "Pause Between Bursts Max (s)";
+                tooltip = "Maximum SECONDS between bursts. Default: 7";
+                control = "Edit";
+                property = "Recondo_SAAA_BfPauseMax";
+                expression = "_this setVariable ['bfpausemax', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "7";
+                category = "Recondo_SAAA_Rhythm";
+            };
+
+            // DEBUG
+            class EnableDebugSAAA {
+                displayName = "DEBUG - Enable Logging";
+                tooltip = "Local map markers per gun (state colors + turret bearing + why-silent flags), chat state transitions, and RPT trace ('[RECONDO_SAAA] BF |' lines). Markers only visible in SP/hosted, not on dedicated clients.";
+                control = "Checkbox";
+                property = "Recondo_SAAA_Debug";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SAAA_Debug";
+            };
+
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    //==========================================
+    // SPECTATOR CAM MODULE
+    //==========================================
+    class Recondo_Module_SpectatorCam: Module_F {
+        scope = 2;
+        displayName = "Spectator Cam";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Main";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\scout_ca.paa";
+        function = "Recondo_fnc_moduleSpectatorCam";
+        functionPriority = 10;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+
+        class ModuleDescription: ModuleDescription {
+            description = "Dead (and optionally ACE-unconscious) players enter the End Game Spectator camera; closes automatically on respawn or revive. Affects ALL players. OPTIONAL: sync objects to the module - living players get an ACE action on them to open the camera (Esc closes it). Camera options (sides, AI, free cam, 3rd person) are configurable separately for the Death Cam and the Object Cam; defaults are the locked-down anti-scouting view.";
+            sync[] = {};
+        };
+
+        class Attributes: AttributesBase {
+
+            // GENERAL
+            class SpectatorDelay {
+                displayName = "GENERAL - Delay Before Spectator (s)";
+                tooltip = "SECONDS between death (or knock-out) and the spectator camera opening - lets the player see how they went down. Default: 3";
+                control = "Edit";
+                property = "Recondo_SPECCAM_SpectatorDelay";
+                expression = "_this setVariable ['spectatordelay', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "3";
+                category = "Recondo_SPECCAM_General";
+            };
+            class UnconsciousCam {
+                displayName = "Spectate While Unconscious (ACE)";
+                tooltip = "Also open the spectator camera while ACE-unconscious, closing it on revive. Note: unconscious players can see where teammates are and whether a medic is coming. Ignored if ACE Medical is not loaded.";
+                control = "Checkbox";
+                property = "Recondo_SPECCAM_UnconsciousCam";
+                expression = "_this setVariable ['unconsciouscam', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SPECCAM_General";
+            };
+            class ObjectActionText {
+                displayName = "Synced Object Action Text";
+                tooltip = "ACE interaction text shown on objects SYNCED to this module. Living players use it to open the spectator camera; Esc closes it. No synced objects = no action.";
+                control = "Edit";
+                property = "Recondo_SPECCAM_ObjectActionText";
+                expression = "_this setVariable ['objectactiontext', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Enter Spectator Cam""";
+                category = "Recondo_SPECCAM_General";
+            };
+
+            // DEATH CAM (dead/unconscious players)
+            class DeathFreeCam {
+                displayName = "DEATH CAM - Allow Free Camera";
+                tooltip = "Dead/unconscious players may detach into the free-flight camera. OFF keeps them locked to following units (anti-scouting).";
+                control = "Checkbox";
+                property = "Recondo_SPECCAM_DeathFreeCam";
+                expression = "_this setVariable ['deathfreecam', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SPECCAM_DeathCam";
+            };
+            class DeathThirdPerson {
+                displayName = "Allow 3rd Person Camera";
+                tooltip = "Dead/unconscious players may switch the follow camera to 3rd person.";
+                control = "Checkbox";
+                property = "Recondo_SPECCAM_DeathThirdPerson";
+                expression = "_this setVariable ['deaththirdperson', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SPECCAM_DeathCam";
+            };
+            class DeathSides {
+                displayName = "Spectatable Sides";
+                tooltip = "Which sides dead/unconscious players can spectate. Own side only prevents scouting the enemy.";
+                control = "Combo";
+                property = "Recondo_SPECCAM_DeathSides";
+                expression = "_this setVariable ['deathsides', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                category = "Recondo_SPECCAM_DeathCam";
+                class Values {
+                    class OwnSide { name = "Own Side Only"; value = 0; };
+                    class AllSides { name = "All Sides"; value = 1; };
+                };
+            };
+            class DeathAllowAI {
+                displayName = "Allow Viewing AI";
+                tooltip = "Dead/unconscious players may also spectate AI units, not just players. Useful when the whole player side can be down - the camera always has valid subjects.";
+                control = "Checkbox";
+                property = "Recondo_SPECCAM_DeathAllowAI";
+                expression = "_this setVariable ['deathallowai', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SPECCAM_DeathCam";
+            };
+
+            // OBJECT CAM (living players via synced objects)
+            class ObjectFreeCam {
+                displayName = "OBJECT CAM - Allow Free Camera";
+                tooltip = "Living players using a synced spectator object may detach into the free-flight camera.";
+                control = "Checkbox";
+                property = "Recondo_SPECCAM_ObjectFreeCam";
+                expression = "_this setVariable ['objectfreecam', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SPECCAM_ObjectCam";
+            };
+            class ObjectThirdPerson {
+                displayName = "Allow 3rd Person Camera";
+                tooltip = "Living players using a synced spectator object may switch the follow camera to 3rd person.";
+                control = "Checkbox";
+                property = "Recondo_SPECCAM_ObjectThirdPerson";
+                expression = "_this setVariable ['objectthirdperson', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SPECCAM_ObjectCam";
+            };
+            class ObjectSides {
+                displayName = "Spectatable Sides";
+                tooltip = "Which sides living players can spectate from a synced object.";
+                control = "Combo";
+                property = "Recondo_SPECCAM_ObjectSides";
+                expression = "_this setVariable ['objectsides', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                category = "Recondo_SPECCAM_ObjectCam";
+                class Values {
+                    class OwnSide { name = "Own Side Only"; value = 0; };
+                    class AllSides { name = "All Sides"; value = 1; };
+                };
+            };
+            class ObjectAllowAI {
+                displayName = "Allow Viewing AI";
+                tooltip = "Living players using a synced spectator object may also spectate AI units, not just players.";
+                control = "Checkbox";
+                property = "Recondo_SPECCAM_ObjectAllowAI";
+                expression = "_this setVariable ['objectallowai', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SPECCAM_ObjectCam";
+            };
+
+            // DEBUG
+            class EnableDebugSPECCAM {
+                displayName = "DEBUG - Enable Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_SPECCAM_Debug";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SPECCAM_Debug";
+            };
+
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+    
+    //==========================================
     // FOOT PATROLS MODULE
     //==========================================
     class Recondo_Module_FootPatrols: Module_F {
@@ -15628,7 +16063,7 @@ class CfgVehicles {
         author = "GoonSix";
         vehicleClass = "Modules";
         category = "Recondo_Misc";
-        icon = "\\a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\attack_ca.paa";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\attack_ca.paa";
         function = "Recondo_fnc_moduleWaveAttack";
         functionPriority = 5;
         isGlobal = 0;

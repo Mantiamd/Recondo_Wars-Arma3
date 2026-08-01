@@ -38,6 +38,20 @@ if (isNull _group || {(units _group) isEqualTo []}) exitWith { false };
 // Never transfer groups containing players
 if ((units _group) findIf { isPlayer _x } != -1) exitWith { false };
 
+// Smarter AAA steers managed AA gun crews from the server (doWatch/disableAI/
+// fire are local-argument commands) - those crews must never move to an HC
+if (!isNil "RECONDO_SAAA_INITIALIZED" && {
+    (units _group) findIf {
+        private _veh = vehicle _x;
+        _veh != _x && {_veh isKindOf "StaticWeapon"} && {[_veh] call Recondo_fnc_saaaIsManagedGun}
+    } != -1
+}) exitWith {
+    if (_debug) then {
+        diag_log format ["[RECONDO_HC] Group %1 crews a Smarter AAA managed gun - staying on server", _group];
+    };
+    false
+};
+
 // Tag as HC-eligible and make sure the sweep loop is running, so the group
 // is picked up later if no HC is connected yet, or re-transferred after an
 // HC disconnect returns it to the server.

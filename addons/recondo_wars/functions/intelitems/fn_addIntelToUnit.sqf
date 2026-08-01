@@ -4,8 +4,9 @@
     
     Description:
         Adds a random number of intel items (between min and max) to the unit.
-        Uses weighted selection to choose which items to add.
-        Adds ACE interactions for each intel item.
+        Uses weighted selection to choose which items to add. Looting happens
+        through the class-based ACE actions (see fn_initIntelItemsClient),
+        driven by the public RECONDO_INTELITEMS_inventory variable.
     
     Parameters:
         _unit - OBJECT - The unit to add intel to
@@ -85,8 +86,13 @@ for "_i" from 1 to _numItems do {
     
     // Validate classname exists
     if (isClass (configFile >> "CfgWeapons" >> _classname) || isClass (configFile >> "CfgMagazines" >> _classname) || isClass (configFile >> "CfgVehicles" >> _classname)) then {
-        // Add to unit's inventory
-        _unit addItem _classname;
+        // addItem requires a local argument - the unit may already be owned by
+        // a headless client by the time the delayed EntityCreated processing runs
+        if (local _unit) then {
+            _unit addItem _classname;
+        } else {
+            [_unit, _classname] remoteExec ["addItem", _unit];
+        };
         
         // Track for ACE actions
         _unitIntelItems pushBack [_displayName, _classname];
@@ -101,8 +107,5 @@ for "_i" from 1 to _numItems do {
     };
 };
 
-// Store intel inventory on unit
+// Store intel inventory on unit (public - drives the class-based ACE loot actions)
 _unit setVariable ["RECONDO_INTELITEMS_inventory", _unitIntelItems, true];
-
-// Add ACE interactions for each unique intel item
-[_unit, _unitIntelItems] call Recondo_fnc_addTakeIntelAction;

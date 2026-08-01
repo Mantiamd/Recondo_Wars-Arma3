@@ -341,6 +341,74 @@ class Cfg3DEN {
             };
             
             //==========================================
+            // SMARTER AAA MODULE CATEGORIES
+            //==========================================
+            
+            class Recondo_SAAA_Hearing {
+                displayName = "Hearing";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_SAAA_ScriptFire {
+                displayName = "Script Fire";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_SAAA_Filters {
+                displayName = "Target & Gun Filters";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_SAAA_Accuracy {
+                displayName = "Accuracy Model";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            class Recondo_SAAA_Rhythm {
+                displayName = "Fire Rhythm";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            class Recondo_SAAA_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            //==========================================
+            // SPECTATOR CAM MODULE CATEGORIES
+            //==========================================
+            
+            class Recondo_SPECCAM_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_SPECCAM_DeathCam {
+                displayName = "Death Cam";
+                collapsed = 0;
+                class Attributes {};
+            };
+            
+            class Recondo_SPECCAM_ObjectCam {
+                displayName = "Object Cam";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            class Recondo_SPECCAM_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            //==========================================
             // STATIC DEFENSE RANDOMIZED MODULE CATEGORIES
             //==========================================
             

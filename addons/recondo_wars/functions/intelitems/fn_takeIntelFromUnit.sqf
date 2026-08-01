@@ -55,7 +55,8 @@ if (_foundIndex == -1) exitWith {
 };
 
 // Verify item actually exists in unit's actual inventory (not already manually looted)
-if !(_classname in (items _unit + magazines _unit)) exitWith {
+// (findIf with == keeps the comparison case-insensitive, unlike "in")
+if ((items _unit + magazines _unit) findIf {_x == _classname} == -1) exitWith {
     // Item was manually looted - clean up tracking array but don't give duplicate
     _inventory deleteAt _foundIndex;
     _unit setVariable ["RECONDO_INTELITEMS_inventory", _inventory, true];
@@ -73,7 +74,12 @@ _inventory deleteAt _foundIndex;
 _unit setVariable ["RECONDO_INTELITEMS_inventory", _inventory, true];
 
 // Remove item from unit's actual inventory
-_unit removeItem _classname;
+// removeItem requires a local argument - the unit may be owned by a headless client
+if (local _unit) then {
+    _unit removeItem _classname;
+} else {
+    [_unit, _classname] remoteExec ["removeItem", _unit];
+};
 
 // Add item to player's inventory - must execute where player is local
 [_classname] remoteExec ["Recondo_fnc_addItemToPlayerClient", _player];

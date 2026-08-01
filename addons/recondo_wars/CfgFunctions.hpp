@@ -94,6 +94,15 @@ class CfgFunctions {
             class initSpectatorObjects {};
             class enterSpectator {};
         };
+
+        // Spectator Cam Module Functions (death/unconscious spectator)
+        class SpectatorCam {
+            file = "\recondo_wars\functions\spectatorcam";
+            class moduleSpectatorCam {};
+            class initSpectatorCamClient {};
+            class enterSpectatorCam {};
+            class exitSpectatorCam {};
+        };
         
         // Persistence Module Functions
         class Persistence {
@@ -119,6 +128,27 @@ class CfgFunctions {
             class moduleStaticDefenseRandomized {};
             class spawnStaticDefense {};
             class clearTerrainObjects {};
+        };
+        
+        // Smarter AAA Module Functions
+        class SmarterAAA {
+            file = "\recondo_wars\functions\smarteraaa";
+            class moduleSmarterAAA {};
+            class saaaMainTick {};
+            class saaaPrepTick {};
+            class saaaScanGuns {};
+            class saaaIsManagedGun {};
+            class saaaGetAudibleAir {};
+            class saaaAirAudibleRange {};
+            class saaaCanSee {};
+            class saaaCanReach {};
+            class saaaEngineMaxRange {};
+            class saaaBfReleasable {};
+            class saaaAimedReleasable {};
+            class saaaScriptFireAllowed {};
+            class saaaBfSolution {};
+            class saaaBlindfireLoop {};
+            class saaaDebugDraw {};
         };
         
         // Foot Patrols Module Functions
@@ -261,8 +291,7 @@ class CfgFunctions {
             class processUnitForIntel {};
             class addIntelToUnit {};
             class parseIntelItemsConfig {};
-            class addTakeIntelAction {};
-            class addTakeIntelActionClient {};
+            class initIntelItemsClient {};
             class takeIntelFromUnit {};
             class addItemToPlayerClient {};
             class addPOWTurnIn {};
