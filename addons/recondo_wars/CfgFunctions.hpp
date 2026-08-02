@@ -8,6 +8,7 @@ class CfgFunctions {
             class preInit {};
             class postInit {};
             class parseClassnames {};
+            class applyCustomInventory {};
             class registerCustomComposition {};
             class validateModules {};
         };

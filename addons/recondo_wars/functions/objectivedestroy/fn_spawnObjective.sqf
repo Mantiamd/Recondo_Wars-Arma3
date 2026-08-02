@@ -126,6 +126,9 @@ if (_debugLogging) then {
             [_instanceId, _markerId, _objectiveName] call Recondo_fnc_handleObjectiveDestroyed;
         }];
         
+        // Replace target inventory if the mission maker pasted classnames (empty = keep default)
+        [_targetObject, _settings getOrDefault ["targetInventory", []], "RECONDO_OBJDESTROY"] call Recondo_fnc_applyCustomInventory;
+        
         if (_debugLogging) then {
             diag_log format ["[RECONDO_OBJDESTROY] Added destruction handler to %1 at %2", typeOf _targetObject, _markerId];
         };

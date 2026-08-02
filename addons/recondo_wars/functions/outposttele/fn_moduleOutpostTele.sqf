@@ -56,6 +56,9 @@ private _clearRadius = _logic getVariable ["clearradius", 15];
 // Destruction Settings
 private _destroyableClassname = _logic getVariable ["destroyableclassname", ""];
 _destroyableClassname = _destroyableClassname trim [" ", 0];
+private _targetInventoryRaw = _logic getVariable ["targetinventory", ""];
+// Split on commas and newlines so multi-line pastes work too
+private _targetInventory = ((_targetInventoryRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" };
 
 // Persistence Settings
 private _enablePersistence = _logic getVariable ["enablepersistence", true];
@@ -138,6 +141,7 @@ private _settings = createHashMapFromArray [
     ["useModCompositions", _useModCompositions],
     ["clearRadius", _clearRadius],
     ["destroyableClassname", _destroyableClassname],
+    ["targetInventory", _targetInventory],
     ["enablePersistence", _enablePersistence],
     ["debugLogging", _debugLogging],
     ["debugMarkers", _debugMarkers],

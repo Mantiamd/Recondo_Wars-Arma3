@@ -79,7 +79,7 @@ private _logEntry = createHashMapFromArray [
     ["fullLog", _formattedLog]
 ];
 
-_intelLog pushBack _logEntry;
+_intelLog insert [0, [_logEntry]];   // newest first, matching processTurnIn
 missionNamespace setVariable ["RECONDO_INTEL_LOG", _intelLog];
 // Broadcast only the new entry; clients append locally via event handler
 RECONDO_INTEL_LOG_LATEST = _logEntry;

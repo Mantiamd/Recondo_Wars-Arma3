@@ -25,12 +25,12 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **Limit Static Weapon Movement** - Restrict ACE carry/drag on static weapons
 
 ### Mission Objectives
-- **Objective Destroy** - Destructible target objectives with composition support (6 cache + 10 bivouac compositions)
+- **Objective Destroy** - Destructible target objectives with composition support (6 cache + 10 bivouac compositions). Optional custom target inventory (comma-separated classnames replace the target object's default cargo)
 - **Objective HVT** - High-Value Target capture/kill objectives with custom profiles, optional Bad Civi spawns at real HVT locations, wandering civilians, and roving sentries
 - **Objective Hostages** - Hostage rescue objectives with AI guards, optional Bad Civi spawns at real hostage locations, and wandering civilians
 - **Objective Photographs** - Reconnaissance photography objectives using the SOG PF camera system with configurable compositions, target validation, and Intel Board integration
 - **Objective Jammer** - Radio jammer objectives that affect communications
-- **Objective Hub & Subs** - Connected hub and sub-site objective systems
+- **Objective Hub & Subs** - Connected hub and sub-site objective systems. Optional custom hub target inventory (comma-separated classnames replace the target object's default cargo)
 - **POO Site Hunt** - Randomized Point-of-Origin artillery hunt with configurable marker pools, proximity-triggered spawning, persistent destruction tracking, and terrain clearing
 
 ### Intel & Reconnaissance
@@ -53,7 +53,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 
 ### Extraction & Movement
 - **STABO Extraction** - Helicopter extraction via STABO rig with body/casualty attachment
-- **Outpost Teleport** - Base-to-outpost teleportation with optional destroyable outposts and compositions
+- **Outpost Teleport** - Base-to-outpost teleportation with optional destroyable outposts and compositions. Optional custom inventory for the destroyable object (comma-separated classnames replace its default cargo)
 - **Deployable Rally Point** - Player-deployable rally points with ACE interactions
 - **JIP Area** - Join-In-Progress spawn areas
 

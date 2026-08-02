@@ -6,11 +6,39 @@
         Handles client-side initialization after mission start.
 */
 
+// Broadcast the server's mod version so clients can detect mismatches (JIP-safe)
+if (isServer) then {
+    RECONDO_SERVER_VERSION = RECONDO_WARS_VERSION;
+    publicVariable "RECONDO_SERVER_VERSION";
+};
+
 // Display version to all players on mission start
 if (hasInterface) then {
     [{
         systemChat format ["Recondo Wars v%1 loaded", RECONDO_WARS_VERSION];
     }, [], 5] call CBA_fnc_waitAndExecute;
+};
+
+// Version check: warn this client if its RW version differs from the server's.
+// Runs entirely on the client - compare the locally baked-in version against
+// the server broadcast once the player is actually in-game (chat fired during
+// the loading screen is lost). Warns twice, then stays quiet.
+if (hasInterface) then {
+    [{
+        !isNil "RECONDO_SERVER_VERSION" && {!isNull player}
+    }, {
+        if (RECONDO_SERVER_VERSION isEqualTo RECONDO_WARS_VERSION) exitWith {};
+
+        private _warn = {
+            systemChat format ["Recondo Wars version mismatch! Server: %1 - You: %2",
+                RECONDO_SERVER_VERSION, RECONDO_WARS_VERSION];
+        };
+        [_warn, [], 10] call CBA_fnc_waitAndExecute;
+        [_warn, [], 70] call CBA_fnc_waitAndExecute;
+
+        diag_log format ["[RECONDO_WARS] VERSION MISMATCH - Server: %1, Client: %2",
+            RECONDO_SERVER_VERSION, RECONDO_WARS_VERSION];
+    }, [], 120] call CBA_fnc_waitUntilAndExecute;
 };
 
 // AI Tweaks: Mine knowledge system needs to run on clients with interface

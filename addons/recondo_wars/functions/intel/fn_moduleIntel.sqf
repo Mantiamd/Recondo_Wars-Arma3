@@ -103,13 +103,17 @@ if (_enablePersistence) then {
     private _savedIntelLog = ["INTEL_LOG"] call Recondo_fnc_getSaveData;
     if (!isNil "_savedIntelLog" && {_savedIntelLog isEqualType []}) then {
         RECONDO_INTEL_LOG = _savedIntelLog;
-        publicVariable "RECONDO_INTEL_LOG";
         
         if (_debugLogging) then {
             diag_log format ["[RECONDO_INTEL] Loaded %1 intel log entries from save", count _savedIntelLog];
         };
     };
 };
+
+// Always broadcast the full log once, even when empty. This registers the
+// variable for JIP sync, so mid-session joiners receive the server's current
+// log automatically - deltas alone only reach clients connected at the time.
+publicVariable "RECONDO_INTEL_LOG";
 
 // ========================================
 // SETUP TURN-IN POINTS

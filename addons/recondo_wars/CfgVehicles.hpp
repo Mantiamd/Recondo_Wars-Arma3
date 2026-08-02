@@ -5825,6 +5825,16 @@ class CfgVehicles {
                 defaultValue = """""";
                 category = "Recondo_ObjDestroy_Target";
             };
+            class TargetInventory {
+                displayName = "TARGET - Custom Inventory";
+                tooltip = "Optional. Comma-separated item classnames placed inside the target object, replacing its default inventory. Repeat a classname to add multiple copies. Leave empty to keep the default inventory. Weapons, magazines, items and backpacks are detected automatically. Only works if the target object has an inventory (crates, boxes, etc).";
+                control = "EditCodeMulti5";
+                property = "Recondo_ObjDestroy_TargetInventory";
+                expression = "_this setVariable ['targetinventory', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_ObjDestroy_Target";
+            };
             class DisableSimulation {
                 displayName = "TARGET - Disable Simulation";
                 tooltip = "Disable simulation on composition objects (except the destroyable target). Improves performance but objects won't react to physics/explosions.";
@@ -6518,6 +6528,16 @@ class CfgVehicles {
                 control = "Edit";
                 property = "Recondo_HubSubs_TargetClassname";
                 expression = "_this setVariable ['targetclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_HubSubs_HubTarget";
+            };
+            class TargetInventory {
+                displayName = "HUB TARGET - Custom Inventory";
+                tooltip = "Optional. Comma-separated item classnames placed inside the hub target object, replacing its default inventory. Repeat a classname to add multiple copies. Leave empty to keep the default inventory. Weapons, magazines, items and backpacks are detected automatically. Only works if the target object has an inventory (crates, boxes, etc).";
+                control = "EditCodeMulti5";
+                property = "Recondo_HubSubs_TargetInventory";
+                expression = "_this setVariable ['targetinventory', _value, true];";
                 typeName = "STRING";
                 defaultValue = """""";
                 category = "Recondo_HubSubs_HubTarget";
@@ -11333,6 +11353,16 @@ class CfgVehicles {
                 control = "Edit";
                 property = "Recondo_OutpostTele_DestroyableClassname";
                 expression = "_this setVariable ['destroyableclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_OutpostTele_Destruction";
+            };
+            class DestroyableInventory {
+                displayName = "DESTRUCTION - Custom Inventory";
+                tooltip = "Optional. Comma-separated item classnames placed inside the destroyable object, replacing its default inventory. Repeat a classname to add multiple copies. Leave empty to keep the default inventory. Weapons, magazines, items and backpacks are detected automatically. Only works if the object has an inventory (crates, boxes, etc).";
+                control = "EditCodeMulti5";
+                property = "Recondo_OutpostTele_DestroyableInventory";
+                expression = "_this setVariable ['targetinventory', _value, true];";
                 typeName = "STRING";
                 defaultValue = """""";
                 category = "Recondo_OutpostTele_Destruction";

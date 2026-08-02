@@ -60,6 +60,9 @@ private _disableSimulation = _logic getVariable ["disablesimulation", true];
 
 // Hub Target
 private _targetClassname = _logic getVariable ["targetclassname", ""];
+private _targetInventoryRaw = _logic getVariable ["targetinventory", ""];
+// Split on commas and newlines so multi-line pastes work too
+private _targetInventory = ((_targetInventoryRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" };
 
 // Hub Spawning
 private _hubSpawnMode = _logic getVariable ["hubspawnmode", "proximity"];
@@ -203,6 +206,7 @@ private _settings = createHashMapFromArray [
     ["clearRadius", _clearRadius],
     ["disableSimulation", _disableSimulation],
     ["targetClassname", _targetClassname],
+    ["targetInventory", _targetInventory],
     ["hubSpawnMode", _hubSpawnMode],
     ["hubTriggerRadius", _hubTriggerRadius],
     ["hubTriggerSide", _hubTriggerSide],

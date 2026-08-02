@@ -79,7 +79,7 @@ if (!isNil "RECONDO_INTEL_LOG") then {
         ["grid", mapGridPosition (getMarkerPos _markerId)],
         ["source", "camera"]
     ];
-    RECONDO_INTEL_LOG pushBack _logEntry;
+    RECONDO_INTEL_LOG insert [0, [_logEntry]];   // newest first, matching processTurnIn
     // Broadcast only the new entry; clients append locally via event handler
     RECONDO_INTEL_LOG_LATEST = _logEntry;
     publicVariable "RECONDO_INTEL_LOG_LATEST";

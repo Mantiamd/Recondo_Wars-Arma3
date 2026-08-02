@@ -120,12 +120,21 @@ RECONDO_INTEL_TURNIN_OBJECTS = [];  // Objects with turn-in ACE actions
 RECONDO_INTEL_LOG = [];  // Intel reveal history log: [{message, timestamp, targetType, targetName, grid, source}]
 RECONDO_INTEL_LOG_LATEST = nil;  // Latest log entry (delta broadcast to avoid sending full log)
 
-// Client-side handler: append new entries broadcast via RECONDO_INTEL_LOG_LATEST
+// Client-side handler: prepend new entries broadcast via RECONDO_INTEL_LOG_LATEST.
+// Insert at 0 to match the server's newest-first ordering. Skip entries already
+// present: on JIP the full log sync and the LATEST sync both deliver the newest
+// entry, which would otherwise duplicate it.
 if (!isServer) then {
     "RECONDO_INTEL_LOG_LATEST" addPublicVariableEventHandler {
         params ["_varName", "_value"];
         if (!isNil "_value") then {
-            RECONDO_INTEL_LOG pushBack _value;
+            private _isDuplicate = RECONDO_INTEL_LOG findIf {
+                (_x getOrDefault ["timestamp", ""]) isEqualTo (_value getOrDefault ["timestamp", ""])
+                && {(_x getOrDefault ["message", ""]) isEqualTo (_value getOrDefault ["message", ""])}
+            } != -1;
+            if (!_isDuplicate) then {
+                RECONDO_INTEL_LOG insert [0, [_value]];
+            };
         };
     };
 };

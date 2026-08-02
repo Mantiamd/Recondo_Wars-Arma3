@@ -57,6 +57,7 @@ private _customDestroyedData = _logic getVariable ["customdestroyeddata", ""];
 private _clearRadius = _logic getVariable ["clearradius", 25];
 
 private _targetClassname = _logic getVariable ["targetclassname", ""];
+private _targetInventoryRaw = _logic getVariable ["targetinventory", ""];
 private _disableSimulation = _logic getVariable ["disablesimulation", true];
 
 private _spawnMode = _logic getVariable ["spawnmode", 1];
@@ -104,6 +105,9 @@ private _sentryClassnames = if (_sentryClassnamesRaw != "") then {
 private _patrolClassnames = if (_patrolClassnamesRaw != "") then {
     [_patrolClassnamesRaw] call Recondo_fnc_parseClassnames
 } else { [] };
+
+// Split on commas and newlines so multi-line pastes work too
+private _targetInventory = ((_targetInventoryRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" };
 
 // ========================================
 // BUILD COMPOSITION POOL
@@ -199,6 +203,7 @@ private _settings = createHashMapFromArray [
     ["customCompPath", _customCompPath],
     ["clearRadius", _clearRadius],
     ["targetClassname", _targetClassname],
+    ["targetInventory", _targetInventory],
     ["disableSimulation", _disableSimulation],
     ["spawnMode", _spawnMode],
     ["triggerRadius", _triggerRadius],

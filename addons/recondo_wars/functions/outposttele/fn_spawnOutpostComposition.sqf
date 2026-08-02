@@ -97,6 +97,9 @@ if (_debugLogging) then {
                 [_instanceId, _markerId] call Recondo_fnc_outpostDestroyed;
             }];
             
+            // Replace destroyable object inventory if the mission maker pasted classnames (empty = keep default)
+            [_destroyableObj, _settings getOrDefault ["targetInventory", []], "RECONDO_OUTPOSTTELE"] call Recondo_fnc_applyCustomInventory;
+            
             if (_debugLogging) then {
                 diag_log format ["[RECONDO_OUTPOSTTELE] Tagged destroyable object: %1 at marker '%2' (Killed EH registered)", typeOf _destroyableObj, _markerId];
             };
