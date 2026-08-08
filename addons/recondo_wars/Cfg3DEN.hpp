@@ -407,6 +407,44 @@ class Cfg3DEN {
                 collapsed = 1;
                 class Attributes {};
             };
+
+            //==========================================
+            // NPC DIALOG MODULE CATEGORIES
+            //==========================================
+
+            class Recondo_NPCDIALOG_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+
+            class Recondo_NPCDIALOG_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+
+            //==========================================
+            // OPFOR SIDE MARKERS MODULE CATEGORIES
+            //==========================================
+
+            class Recondo_SIDEMARKERS_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+
+            class Recondo_SIDEMARKERS_Systems {
+                displayName = "Marked Systems";
+                collapsed = 0;
+                class Attributes {};
+            };
+
+            class Recondo_SIDEMARKERS_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
             
             //==========================================
             // STATIC DEFENSE RANDOMIZED MODULE CATEGORIES

@@ -13,6 +13,12 @@
           Registered only when ACE Medical is loaded; the module toggle is
           checked at event time so settings sync order never matters
 
+        Also mirrors the Death Cam restrictions into the player-namespace
+        variables (WhitelistedSides etc.) that configure any EG spectator
+        instance the RESPAWN SYSTEM launches on its own - that instance
+        ignores our Initialize parameters and defaults to free camera with
+        no side restriction. Re-applied on every body swap.
+
         Everything runs locally on the affected player's machine -
         BIS_fnc_EGSpectator is client UI, so no remoteExec at event time.
 
@@ -30,6 +36,33 @@ RECONDO_SPECTATORCAM_CLIENT_INIT = true;
 
 RECONDO_SPECTATORCAM_ACTIVE = false;
 
+// The respawn system can launch its OWN EG spectator behind the respawn
+// screen (e.g. the "Spectator" respawn template). That instance ignores our
+// module and reads only these player-namespace variables - and its defaults
+// are permissive (free camera on, no side restriction), which let players
+// watch the enemy's POV while waiting to respawn. Mirror the Death Cam
+// restrictions onto the unit. The namespace variant expects side NAMES as
+// strings, unlike the Initialize call.
+RECONDO_SPECTATORCAM_APPLY_AUTOCONF = {
+    private _settings = missionNamespace getVariable ["RECONDO_SPECTATORCAM_SETTINGS", createHashMap];
+    private _sides = if (_settings getOrDefault ["deathAllSides", false]) then {
+        ["WEST", "EAST", "GUER", "CIV"]
+    } else {
+        [str playerSide]
+    };
+    player setVariable ["WhitelistedSides", _sides];
+    player setVariable ["AllowFreeCamera", _settings getOrDefault ["deathFreeCam", false]];
+    player setVariable ["Allow3PPCamera", _settings getOrDefault ["deathThirdPerson", false]];
+    player setVariable ["AllowAi", _settings getOrDefault ["deathAllowAI", false]];
+};
+
+// Apply once module settings have synced (order with postInit is not guaranteed)
+[{
+    !isNil "RECONDO_SPECTATORCAM_SETTINGS" && {!isNull player}
+}, {
+    [] call RECONDO_SPECTATORCAM_APPLY_AUTOCONF;
+}, []] call CBA_fnc_waitUntilAndExecute;
+
 // Death of own unit (fires on every machine; player still points at the corpse here)
 addMissionEventHandler ["EntityKilled", {
     params ["_unit"];
@@ -37,11 +70,16 @@ addMissionEventHandler ["EntityKilled", {
     [] call Recondo_fnc_enterSpectatorCam;
 }];
 
-// Body swap (respawn / team switch): a new living body means we are back in the game
+// Body swap (respawn / team switch): a new living body means we are back in
+// the game. Also re-apply the auto-spectator config - the namespace variables
+// sit on the unit, so every new body starts without them.
 ["unit", {
     params ["_newUnit"];
     if (!isNull _newUnit && {alive _newUnit}) then {
         [] call Recondo_fnc_exitSpectatorCam;
+    };
+    if (!isNull _newUnit && {!isNil "RECONDO_SPECTATORCAM_SETTINGS"}) then {
+        [] call RECONDO_SPECTATORCAM_APPLY_AUTOCONF;
     };
 }] call CBA_fnc_addPlayerEventHandler;
 

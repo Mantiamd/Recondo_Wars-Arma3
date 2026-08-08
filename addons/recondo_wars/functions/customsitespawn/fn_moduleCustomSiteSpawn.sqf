@@ -230,6 +230,11 @@ if (count _selectedMarkers == 0) then {
     };
 };
 
+// Expose the chosen markers for other systems (e.g. OPFOR Side Markers).
+// The settings hashmap is already registered in RECONDO_CSS_INSTANCES by
+// reference, so this update is visible server-side without re-broadcasting.
+_settings set ["selectedMarkers", _selectedMarkers];
+
 // ========================================
 // SPAWN OR CREATE TRIGGERS
 // ========================================

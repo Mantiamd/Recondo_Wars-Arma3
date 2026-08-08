@@ -30,6 +30,12 @@
         entry is restricted to own side, the map control is disabled and kept
         hidden for the camera's lifetime.
 
+        DAMAGE: the EG spectator protects the spectating unit, which made
+        unconscious bodies bulletproof while their player was in the camera.
+        Death/unconscious entries re-assert allowDamage true (and clear the
+        ACE medical override) after initialization so the body stays
+        vulnerable.
+
         playerSide is used instead of side player because a corpse's side
         reads as CIVILIAN, which would empty the spectate whitelist.
 
@@ -99,6 +105,18 @@ private _delay = [_settings getOrDefault ["spectatorDelay", 3], 0] select _manua
     [{
         params ["_before", "_manual", "_ownSideOnly", "_debug"];
         if (!RECONDO_SPECTATORCAM_ACTIVE) exitWith {};
+
+        // The EG spectator applies damage protection to the spectating unit
+        // (harmless for the corpses it was built around, but it makes an
+        // unconscious body bulletproof). Re-assert vulnerability so the body
+        // can still be hit while its player watches. The unconscious unit
+        // stays local to this client, so a local command is correct. Done in
+        // this delayed block because the spectator script may apply its
+        // protection after Initialize returns.
+        if (!_manual) then {
+            player allowDamage true;
+            player setVariable ["ace_medical_allowDamage", nil];   // clear any override, ACE default applies
+        };
 
         private _disp = (allDisplays - _before) param [0, displayNull];
         if (isNull _disp) exitWith {

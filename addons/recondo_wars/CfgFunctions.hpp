@@ -104,6 +104,22 @@ class CfgFunctions {
             class enterSpectatorCam {};
             class exitSpectatorCam {};
         };
+
+        // NPC Dialog Module Functions
+        class NPCDialog {
+            file = "\recondo_wars\functions\npcdialog";
+            class moduleNPCDialog {};
+            class initNPCDialogClient {};
+            class npcDialogTalk {};
+        };
+
+        // OPFOR Side Markers Module Functions
+        class SideMarkers {
+            file = "\recondo_wars\functions\sidemarkers";
+            class moduleSideMarkers {};
+            class sideMarkersSweep {};
+            class initSideMarkersClient {};
+        };
         
         // Persistence Module Functions
         class Persistence {

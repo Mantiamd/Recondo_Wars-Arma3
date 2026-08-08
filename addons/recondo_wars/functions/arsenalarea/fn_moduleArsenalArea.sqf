@@ -106,6 +106,28 @@ if (_enableCleanup) then {
         }];
     };
     
+    // Editor-placed decor protection: items placed on the ground in Eden ARE
+    // weapon holders, so anything already inside the zone at mission start is
+    // tagged persistent and survives the sweep. Mission makers can use the
+    // same tag on spawned objects: this setVariable ["persistent", true].
+    // Delayed a few seconds so init-created holders exist before the snapshot.
+    [{
+        params ["_pos", "_searchRadius"];
+        private _tagged = 0;
+        {
+            {
+                if !(_x getVariable ["persistent", false]) then {
+                    _x setVariable ["persistent", true];
+                    _tagged = _tagged + 1;
+                };
+            } forEach (_pos nearObjects [_x, _searchRadius]);
+        } forEach ["GroundWeaponHolder", "WeaponHolderSimulated", "WeaponHolder"];
+        
+        if (_tagged > 0) then {
+            diag_log format ["[RECONDO_ARSENALAREA] Protected %1 editor-placed ground item container(s) from cleanup", _tagged];
+        };
+    }, [_pos, (_cleanupWidth max _cleanupLength) / 2 + 10], 5] call CBA_fnc_waitAndExecute;
+    
     // Cleanup function for this specific area
     private _cleanupCode = {
         params ["_pos", "_dir", "_width", "_length", "_height", "_debug"];
@@ -134,6 +156,10 @@ if (_enableCleanup) then {
         private _deletedCount = 0;
         
         {
+            // Opt-out tag (also set automatically on editor-placed ground
+            // items at init): this setVariable ["persistent", true]
+            if (_x getVariable ["persistent", false]) then { continue };
+            
             private _objPos = getPosATL _x;
             
             // Calculate relative position accounting for area rotation
@@ -141,16 +167,20 @@ if (_enableCleanup) then {
             private _relY = (_objPos select 1) - (_pos select 1);
             private _relZ = (_objPos select 2) - (_pos select 2);
             
-            // Rotate relative position to align with area direction
-            private _dirRad = -_dir * (pi / 180);
-            private _rotX = _relX * cos(_dirRad) - _relY * sin(_dirRad);
-            private _rotY = _relX * sin(_dirRad) + _relY * cos(_dirRad);
+            // Rotate into the area's local frame. SQF trig works in DEGREES -
+            // converting to radians first (as this used to) effectively
+            // disabled the rotation and mis-aimed non-square zones.
+            private _rotX = _relX * cos(-_dir) - _relY * sin(-_dir);
+            private _rotY = _relX * sin(-_dir) + _relY * cos(-_dir);
             
-            // Check if within bounds (centered on module position)
+            // Check if within bounds (centered on module position).
+            // Z floor has tolerance: corpses ragdoll into the ground and
+            // weapon holders sit at terrain level, so their ATL height is
+            // often slightly negative - a hard >= 0 floor skipped them all.
             private _halfWidth = _width / 2;
             private _halfLength = _length / 2;
             
-            if (abs(_rotX) <= _halfWidth && abs(_rotY) <= _halfLength && _relZ >= 0 && _relZ <= _height) then {
+            if (abs(_rotX) <= _halfWidth && abs(_rotY) <= _halfLength && _relZ >= -5 && _relZ <= _height) then {
                 deleteVehicle _x;
                 _deletedCount = _deletedCount + 1;
             };
@@ -172,4 +202,11 @@ if (_enableCleanup) then {
     };
 };
 
-diag_log format ["[RECONDO_ARSENALAREA] Arsenal area initialized. Reference: %1", _referenceBoxVar];
+// Cleanup state logs unconditionally (not debug-gated) so a missing/disabled
+// cleanup is diagnosable from any server RPT
+private _cleanupInfo = if (_enableCleanup) then {
+    format ["ENABLED (%1x%2x%3m zone, 10 min interval)", _cleanupWidth, _cleanupLength, _cleanupHeight]
+} else {
+    "disabled"
+};
+diag_log format ["[RECONDO_ARSENALAREA] Arsenal area initialized. Reference: %1 | Cleanup: %2", _referenceBoxVar, _cleanupInfo];

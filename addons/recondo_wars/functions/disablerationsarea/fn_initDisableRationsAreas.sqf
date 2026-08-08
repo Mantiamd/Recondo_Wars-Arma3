@@ -49,10 +49,10 @@ if (!hasInterface) exitWith {};
             private _relY = (_playerPos select 1) - (_pos select 1);
             private _relZ = (_playerPos select 2) - (_pos select 2);
             
-            // Rotate relative position to align with area direction
-            private _dirRad = -_dir * (pi / 180);
-            private _rotX = _relX * cos(_dirRad) - _relY * sin(_dirRad);
-            private _rotY = _relX * sin(_dirRad) + _relY * cos(_dirRad);
+            // Rotate into the area's local frame. SQF trig works in
+            // DEGREES - the old radian conversion disabled the rotation
+            private _rotX = _relX * cos(-_dir) - _relY * sin(-_dir);
+            private _rotY = _relX * sin(-_dir) + _relY * cos(-_dir);
             
             // Check if within bounds (centered on module position)
             private _halfWidth = _width / 2;

@@ -60,6 +60,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 ### Environment & Ambiance
 - **Weather Control** - Dynamic weather and time control
 - **Ambient Sound** - Configurable ambient sound zones
+- **NPC Dialog** - Sync AI units to give them an ACE "Talk to" interaction. Each use shows the player the next line of a module-defined dialog (one line per row) on an intel card; the NPC stops and faces the player while talking. Each player progresses through the dialog independently
 - **Civilians Working** - Working civilians in fields and villages
 - **Civilian Traffic** - Ambient civilian vehicle traffic on roads with optional vehicle invincibility
 - **River Traffic** - Marker-driven dynamic boat patrols (civilian/OPFOR/BLUFOR) that spawn near players and follow designer-placed river paths on **any** map. Fully dedicated-server safe. See [River Traffic (Marker-Driven)](#river-traffic-marker-driven)
@@ -84,6 +85,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - **Chat Control** - Control chat channel availability
 - **ACE Spectator Object** - Enter spectator mode from objects
 - **Spectator Cam** - Dead (and optionally ACE-unconscious) players automatically enter the End Game Spectator camera after a configurable delay. Closes automatically on respawn or revive. Affects all players, no sync needed. Optionally sync objects to the module: living players get an ACE action on them to open the camera, closed with Esc. Camera options (spectatable sides, AI viewing, free camera, 3rd person) are configurable separately for the death cam and the object cam; defaults are the locked-down anti-scouting view (own side only, players only, follow cam, first person)
+- **OPFOR Side Markers** - Marks active AI-occupied positions (Objective Destroy/Hub & Subs/Jammer/HVT/Hostages/Photographs sites, static defenses, outposts, camps, POO sites, custom sites) on the map, visible ONLY to players of the chosen viewing side (default OPFOR). Lets a small OPFOR player element know where their AI allies are without revealing anything to BLUFOR. Each system is toggled by checkbox; marker color, icon, and labels are configurable. Markers appear as sites become active (late spawns included) and remain until mission restart. HVT/hostage decoy sites share the real site's label so the true objective is not leaked. Place once per mission
 - **Convoy System** - Automated convoy spawning and routing
 - **Performance Monitor** - Mission performance monitoring
 - **Roleplay SOF Source** - Grants synced playable units ACE self-actions for viewing objective status, player statistics, and mission-maker-defined roleplayer instructions. Supports an "Allow All Players" mode that places interactions on a synced world object. Includes a "Populate Nearby with Civilian Presence" self-action for roleplayers to spawn wandering civilians with configurable classnames, count, radius, cooldown, and auto-despawn. Roleplayers can be defined by syncing units or by unit classname

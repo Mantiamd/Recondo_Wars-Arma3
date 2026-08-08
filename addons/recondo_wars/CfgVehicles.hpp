@@ -1266,7 +1266,7 @@ class CfgVehicles {
             // CLEANUP SETTINGS
             class EnableCleanup {
                 displayName = "CLEANUP - Enable Litter Cleanup";
-                tooltip = "Automatically clean up dropped items (weapons, gear) and player corpses in the cleanup area every 10 minutes. Corpses are only removed after the player has respawned. Runs server-side.";
+                tooltip = "Automatically clean up dropped items (weapons, gear) and player corpses in the cleanup area every 10 minutes. Corpses are only removed after the player has respawned. Editor-placed ground items are protected automatically; exempt spawned objects with: this setVariable ['persistent', true]. Runs server-side.";
                 control = "Checkbox";
                 property = "Recondo_ArsenalArea_EnableCleanup";
                 expression = "_this setVariable ['enablecleanup', _value, true];";
@@ -2352,7 +2352,275 @@ class CfgVehicles {
             class ModuleDescription: ModuleDescription {};
         };
     };
-    
+
+    //==========================================
+    // NPC DIALOG MODULE
+    //==========================================
+    class Recondo_Module_NPCDialog: Module_F {
+        scope = 2;
+        displayName = "NPC Dialog";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Main";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\talk_ca.paa";
+        function = "Recondo_fnc_moduleNPCDialog";
+        functionPriority = 10;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+
+        class ModuleDescription: ModuleDescription {
+            description = "Gives synced AI units an ACE 'Talk to' interaction. Each use shows the player the next line of the dialog defined below; the NPC stops and faces the player while talking. Sync one or more AI units to the module. Each player progresses through the dialog independently.";
+            sync[] = {};
+        };
+
+        class Attributes: AttributesBase {
+            class DialogLines {
+                displayName = "Dialog Lines";
+                tooltip = "The NPC's dialog, ONE LINE PER ROW (press Enter between lines). Each 'Talk to' interaction shows the player the next line in order; after the last line the NPC has nothing more to say. Commas are fine within a line.";
+                control = "EditCodeMulti5";
+                property = "Recondo_NPCDIALOG_DialogLines";
+                expression = "_this setVariable ['dialoglines', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_NPCDIALOG_General";
+            };
+
+            // DEBUG
+            class EnableDebugNPCDIALOG {
+                displayName = "DEBUG - Enable Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_NPCDIALOG_Debug";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_NPCDIALOG_Debug";
+            };
+
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+
+    //==========================================
+    // OPFOR SIDE MARKERS MODULE
+    //==========================================
+    class Recondo_Module_SideMarkers: Module_F {
+        scope = 2;
+        displayName = "OPFOR Side Markers";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Main";
+        icon = "\a3\ui_f\data\map\markers\military\unknown_ca.paa";
+        function = "Recondo_fnc_moduleSideMarkers";
+        functionPriority = 10;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+
+        class ModuleDescription: ModuleDescription {
+            description = "Marks active AI-occupied positions (objectives, static defenses, camps, outposts...) on the map, visible ONLY to players of the chosen viewing side (default OPFOR). Lets OPFOR players know where their AI allies are without revealing anything to BLUFOR. Markers appear as sites become active and remain until mission restart. Place once per mission.";
+            sync[] = {};
+        };
+
+        class Attributes: AttributesBase {
+
+            // GENERAL SETTINGS
+            class ViewSide {
+                displayName = "Viewing Side";
+                tooltip = "Only players of this side see the markers. All other sides never receive them.";
+                control = "Combo";
+                property = "Recondo_SIDEMARKERS_ViewSide";
+                expression = "_this setVariable ['viewside', _value, true];";
+                typeName = "STRING";
+                defaultValue = """EAST""";
+                category = "Recondo_SIDEMARKERS_General";
+                class Values {
+                    class East { name = "OPFOR (East)"; value = "EAST"; };
+                    class West { name = "BLUFOR (West)"; value = "WEST"; };
+                    class Guer { name = "Independent"; value = "GUER"; };
+                };
+            };
+            class MarkerColor {
+                displayName = "Marker Color";
+                tooltip = "Color of the side markers on the map.";
+                control = "Combo";
+                property = "Recondo_SIDEMARKERS_MarkerColor";
+                expression = "_this setVariable ['markercolor', _value, true];";
+                typeName = "STRING";
+                defaultValue = """ColorGreen""";
+                category = "Recondo_SIDEMARKERS_General";
+                class Values {
+                    class Green { name = "Green"; value = "ColorGreen"; };
+                    class Red { name = "Red"; value = "ColorRed"; };
+                    class Blue { name = "Blue"; value = "ColorBlue"; };
+                    class Yellow { name = "Yellow"; value = "ColorYellow"; };
+                    class Orange { name = "Orange"; value = "ColorOrange"; };
+                    class Black { name = "Black"; value = "ColorBlack"; };
+                    class White { name = "White"; value = "ColorWhite"; };
+                };
+            };
+            class MarkerType {
+                displayName = "Marker Icon";
+                tooltip = "Map icon used for the side markers.";
+                control = "Combo";
+                property = "Recondo_SIDEMARKERS_MarkerType";
+                expression = "_this setVariable ['markertype', _value, true];";
+                typeName = "STRING";
+                defaultValue = """o_unknown""";
+                category = "Recondo_SIDEMARKERS_General";
+                class Values {
+                    class OUnknown { name = "Unknown (NATO frame)"; value = "o_unknown"; };
+                    class OInstallation { name = "Installation"; value = "o_installation"; };
+                    class OSupport { name = "Support"; value = "o_support"; };
+                    class MilDot { name = "Dot"; value = "mil_dot"; };
+                    class MilUnknown { name = "Unknown (question mark)"; value = "mil_unknown"; };
+                    class MilWarning { name = "Warning"; value = "mil_warning"; };
+                };
+            };
+            class ShowLabels {
+                displayName = "Show Labels";
+                tooltip = "Show a short text label next to each marker (e.g. 'Objective', 'Static Defense', outpost/site names).";
+                control = "Checkbox";
+                property = "Recondo_SIDEMARKERS_ShowLabels";
+                expression = "_this setVariable ['showlabels', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SIDEMARKERS_General";
+            };
+
+            // MARKED SYSTEMS
+            class SysObjDestroy {
+                displayName = "Objective - Destroy";
+                tooltip = "Mark active Objective - Destroy sites.";
+                control = "Checkbox";
+                property = "Recondo_SIDEMARKERS_SysObjDestroy";
+                expression = "_this setVariable ['sysobjdestroy', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SIDEMARKERS_Systems";
+            };
+            class SysHubSubs {
+                displayName = "Objective - Hub & Subs";
+                tooltip = "Mark active hub sites and their sub-sites.";
+                control = "Checkbox";
+                property = "Recondo_SIDEMARKERS_SysHubSubs";
+                expression = "_this setVariable ['syshubsubs', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SIDEMARKERS_Systems";
+            };
+            class SysJammer {
+                displayName = "Objective - Jammer";
+                tooltip = "Mark active jammer sites.";
+                control = "Checkbox";
+                property = "Recondo_SIDEMARKERS_SysJammer";
+                expression = "_this setVariable ['sysjammer', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SIDEMARKERS_Systems";
+            };
+            class SysHVT {
+                displayName = "Objective - HVT";
+                tooltip = "Mark HVT sites. Real and decoy sites get the SAME label, so OPFOR players cannot tell which is the real one.";
+                control = "Checkbox";
+                property = "Recondo_SIDEMARKERS_SysHVT";
+                expression = "_this setVariable ['syshvt', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SIDEMARKERS_Systems";
+            };
+            class SysHostages {
+                displayName = "Objective - Hostages";
+                tooltip = "Mark hostage sites. Real and decoy sites get the SAME label, so OPFOR players cannot tell which is the real one.";
+                control = "Checkbox";
+                property = "Recondo_SIDEMARKERS_SysHostages";
+                expression = "_this setVariable ['syshostages', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SIDEMARKERS_Systems";
+            };
+            class SysPhotos {
+                displayName = "Objective - Photographs";
+                tooltip = "Mark active photo objective sites.";
+                control = "Checkbox";
+                property = "Recondo_SIDEMARKERS_SysPhotos";
+                expression = "_this setVariable ['sysphotos', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SIDEMARKERS_Systems";
+            };
+            class SysStatics {
+                displayName = "Static Defense Randomized";
+                tooltip = "Mark each spawned static defense gun (one marker per gun).";
+                control = "Checkbox";
+                property = "Recondo_SIDEMARKERS_SysStatics";
+                expression = "_this setVariable ['sysstatics', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SIDEMARKERS_Systems";
+            };
+            class SysOutposts {
+                displayName = "Outpost Tele";
+                tooltip = "Mark active outposts (labeled with the outpost display name).";
+                control = "Checkbox";
+                property = "Recondo_SIDEMARKERS_SysOutposts";
+                expression = "_this setVariable ['sysoutposts', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SIDEMARKERS_Systems";
+            };
+            class SysCamps {
+                displayName = "Camps Random";
+                tooltip = "Mark active camp sites.";
+                control = "Checkbox";
+                property = "Recondo_SIDEMARKERS_SysCamps";
+                expression = "_this setVariable ['syscamps', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SIDEMARKERS_Systems";
+            };
+            class SysPOO {
+                displayName = "POO Site Hunt";
+                tooltip = "Mark active artillery POO sites.";
+                control = "Checkbox";
+                property = "Recondo_SIDEMARKERS_SysPOO";
+                expression = "_this setVariable ['syspoo', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SIDEMARKERS_Systems";
+            };
+            class SysCustom {
+                displayName = "Custom Site Spawn";
+                tooltip = "Mark selected Custom Site Spawn sites (labeled with the site name).";
+                control = "Checkbox";
+                property = "Recondo_SIDEMARKERS_SysCustom";
+                expression = "_this setVariable ['syscustom', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_SIDEMARKERS_Systems";
+            };
+
+            // DEBUG
+            class EnableDebugSIDEMARKERS {
+                displayName = "DEBUG - Enable Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_SIDEMARKERS_Debug";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SIDEMARKERS_Debug";
+            };
+
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+
     //==========================================
     // FOOT PATROLS MODULE
     //==========================================
