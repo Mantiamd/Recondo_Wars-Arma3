@@ -273,8 +273,10 @@ private _compositions = _compositionPool apply { _x select 0 };
 private _garrisonClassnames = [_garrisonClassnamesRaw] call _fnc_parseClassnames;
 private _civilianClassnames = [_civilianClassnamesRaw] call _fnc_parseClassnames;
 private _animalClassnames = [_animalClassnamesRaw] call _fnc_parseClassnames;
-private _intelRevealMessagesDoc = [_intelRevealMessagesDocRaw] call _fnc_parseClassnames;
-private _intelRevealMessagesPOW = [_intelRevealMessagesPOWRaw] call _fnc_parseClassnames;
+// Prose parser (newline-separated) - the classname parser would split
+// messages at every comma
+private _intelRevealMessagesDoc = [_intelRevealMessagesDocRaw] call Recondo_fnc_parseMessages;
+private _intelRevealMessagesPOW = [_intelRevealMessagesPOWRaw] call Recondo_fnc_parseMessages;
 
 // Validate hostage classnames
 if (count _hostageClassnames == 0) then {

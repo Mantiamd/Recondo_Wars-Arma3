@@ -22,6 +22,8 @@ private _movementSpeed = _settings get "movementSpeed";
 private _soundInterval = _settings get "soundInterval";
 private _predictiveDistanceMin = _settings get "predictiveDistanceMin";
 private _predictiveDistanceMax = _settings get "predictiveDistanceMax";
+private _enableSignalShots = _settings getOrDefault ["enableSignalShots", false];
+private _signalShotInterval = (_settings getOrDefault ["signalShotInterval", 5]) max 1;
 private _debugLogging = _settings get "debugLogging";
 private _debugMarkers = _settings get "debugMarkers";
 
@@ -44,6 +46,7 @@ private _leader = leader _group;
 private _currentFootprintIndex = 0;
 private _hasCompletedPredictiveMovement = false;
 private _lastKnownDirection = [0, 1, 0]; // Default north
+private _footprintsReached = 0; // For signal shots every Nth footprint
 
 // Function to calculate average direction from footprints
 private _fnc_calculateAverageDirection = {
@@ -84,6 +87,20 @@ private _fnc_calculateAverageDirection = {
     
     _avgVector = _avgVector vectorMultiply (1 / (count _vectors max 1));
     _avgVector
+};
+
+// Hold the loop while a signal shot sequence is running - a group move
+// issued mid-sequence re-tasks the shooter and the forced fire is dropped.
+// Mirrors SOG's FSM, which waits in its Alarm_shot state until the air
+// shoot script is done. Capped so a stuck flag can't park the group
+// (up to 4 air shoot runs of ~3-5s each, ~35s absolute worst case).
+private _fnc_waitForSignalShot = {
+    params ["_group"];
+    private _cap = time + 40;
+    waitUntil {
+        sleep 0.5;
+        !(_group getVariable ["RECONDO_TRACKERS_signalShotActive", false]) || {time > _cap}
+    };
 };
 
 // Function to play tracker sound
@@ -164,6 +181,12 @@ while {alive _leader} do {
             };
             
             if (_newFootprintsFound) then {
+                // Trail re-acquired - signal it (cooldown in the function
+                // prevents stacking with the every-Nth-footprint shot)
+                if (_enableSignalShots) then {
+                    [_group] call Recondo_fnc_trackerSignalShot;
+                    [_group] call _fnc_waitForSignalShot;
+                };
                 if (_debugLogging) then {
                     diag_log format ["[RECONDO_TRACKERS] Group %1 found new footprints to follow", _group];
                 };
@@ -202,16 +225,31 @@ while {alive _leader} do {
                     _group move _targetPos;
                     _group setVariable ["RECONDO_TRACKERS_currentTargetPos", _targetPos, true];
                     
-                    // Wait until we reach the target
-                    while {_leader distance _targetPos > 5 && alive _leader} do {
+                    // Wait until we reach the target - same re-issue/timeout
+                    // guard as trail-following so a dropped move can't park
+                    // the group short of the predictive point forever
+                    private _predTimeout = time + (((_predictiveDistance * 1.5) max 120) min 600);
+                    private _predMoveIssued = time;
+                    private _abandonedForTrail = false;
+                    while {_leader distance _targetPos > 5 && {alive _leader} && {time < _predTimeout} && {!_abandonedForTrail}} do {
                         _group setSpeedMode _movementSpeed;
+
+                        if (time - _predMoveIssued > 10) then {
+                            _group move _targetPos;
+                            _predMoveIssued = time;
+                        };
                         
                         // Check for new footprints while moving
                         private _newFootprints = RECONDO_TRACKERS_FOOTPRINTS select {_x select 2 == _targetGroupId};
                         if (count _newFootprints > count _targetFootprints) then {
                             // New footprints found, abandon predictive movement
+                            _abandonedForTrail = true;
                             _hasCompletedPredictiveMovement = false;
                             _currentFootprintIndex = count _targetFootprints;
+                            if (_enableSignalShots) then {
+                                [_group] call Recondo_fnc_trackerSignalShot;
+                                [_group] call _fnc_waitForSignalShot;
+                            };
                             if (_debugLogging) then {
                                 diag_log format ["[RECONDO_TRACKERS] Group %1 abandoning predictive movement for new footprints", _group];
                             };
@@ -219,6 +257,10 @@ while {alive _leader} do {
                         
                         sleep 1;
                     };
+
+                    // Fresh trail found: skip the area search and resume
+                    // trail-following from the top of the main loop
+                    if (_abandonedForTrail) then { continue };
                     
                     _hasCompletedPredictiveMovement = true;
                     
@@ -276,6 +318,11 @@ while {alive _leader} do {
                                 _hasCompletedPredictiveMovement = false;
                                 _currentFootprintIndex = count _targetFootprints;
                                 
+                                if (_enableSignalShots) then {
+                                    [_group] call Recondo_fnc_trackerSignalShot;
+                                    [_group] call _fnc_waitForSignalShot;
+                                };
+                                
                                 if (_debugLogging) then {
                                     diag_log format ["[RECONDO_TRACKERS] Group %1 found fresh trail during area search!", _group];
                                 };
@@ -312,9 +359,20 @@ while {alive _leader} do {
             _group setVariable ["RECONDO_TRACKERS_currentTargetPos", _footprintPos, true];
             _group setSpeedMode _movementSpeed;
             
-            // Wait until we reach the footprint
-            while {_leader distance _footprintPos > 2 && alive _leader} do {
+            // Wait until we reach the footprint. The engine completes or
+            // drops group moves with the leader still meters short
+            // (formation spacing, danger reactions, signal shots freezing
+            // PATH), so the order is re-issued periodically and a timeout
+            // advances the trail rather than parking the group forever.
+            private _arriveTimeout = time + 60;
+            private _lastMoveIssued = time;
+            while {_leader distance _footprintPos > 5 && {alive _leader} && {time < _arriveTimeout}} do {
                 _group setSpeedMode _movementSpeed;
+
+                if (time - _lastMoveIssued > 10) then {
+                    _group move _footprintPos;
+                    _lastMoveIssued = time;
+                };
                 
                 // Check for new footprints while moving
                 private _newFootprints = RECONDO_TRACKERS_FOOTPRINTS select {_x select 2 == _targetGroupId};
@@ -328,6 +386,20 @@ while {alive _leader} do {
                 };
                 
                 sleep 1;
+            };
+
+            if (_debugLogging && {alive _leader} && {_leader distance _footprintPos > 5}) then {
+                diag_log format ["[RECONDO_TRACKERS] Group %1 timed out short of footprint %2/%3 - advancing", _group, _currentFootprintIndex + 1, count _targetFootprints];
+            };
+            
+            // Signal shots: fire skyward every Nth footprint reached, so
+            // players hear the trackers marking their trail (SOG PF style)
+            if (alive _leader) then {
+                _footprintsReached = _footprintsReached + 1;
+                if (_enableSignalShots && {_footprintsReached mod _signalShotInterval == 0}) then {
+                    [_group] call Recondo_fnc_trackerSignalShot;
+                    [_group] call _fnc_waitForSignalShot;
+                };
             };
             
             // Move to next footprint index

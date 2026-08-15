@@ -71,9 +71,12 @@ private _rivers = [];
     // Each entry is [seqNumber, markerName]; take the ordered marker positions.
     private _positions = _entries apply { getMarkerPos (_x select 1) };
 
-    // Downstream code discards segments with <= 10 points; skip and warn.
-    if (count _positions <= 10) then {
-        diag_log format ["[RECONDO_RIVERTRAFFIC] Skipping river '%1': only %2 markers (need >= 11).", _riverId, count _positions];
+    // A route needs a start, an end, and at least one point between them.
+    // (The old 11-marker floor came from the baked coordinate tables this
+    // system replaced, where points were dense and short segments were noise;
+    // with hand-placed markers, marker count says nothing about river length.)
+    if (count _positions < 3) then {
+        diag_log format ["[RECONDO_RIVERTRAFFIC] Skipping river '%1': only %2 markers (need >= 3).", _riverId, count _positions];
     } else {
         _rivers pushBack [_riverId, _positions];
     };

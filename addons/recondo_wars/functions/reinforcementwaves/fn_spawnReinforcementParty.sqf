@@ -135,6 +135,18 @@ _mainGroup setSpeedMode "LIMITED";
 _activeGroups pushBack _mainGroup;
 RECONDO_RW_ACTIVE_GROUPS pushBack _mainGroup;
 
+// Optional opt-out from AI Tweaks force walk - delayed past the 0.1s
+// EntityCreated configuration so the walk is applied before it is removed.
+// Dog-led groups are exempt: the tracking element stays at walking pace
+// (normal dynamic force walk) while side/pursuit groups run free.
+if (_moduleSettings getOrDefault ["releaseForceWalk", false]) then {
+    [{
+        params ["_group"];
+        if (_group getVariable ["RECONDO_RW_hasDog", false]) exitWith {};
+        { [_x] call Recondo_fnc_releaseForceWalk; } forEach units _group;
+    }, [_mainGroup], 5] call CBA_fnc_waitAndExecute;
+};
+
 // Determine if this group has a dog
 private _hasDog = random 1 < _dogSpawnChance;
 _mainGroup setVariable ["RECONDO_RW_hasDog", _hasDog];
@@ -227,6 +239,16 @@ if (_moduleSettings getOrDefault ["enableSideGroups", true]) then {
             };
         } forEach [[-90, "left"], [90, "right"]];
     };
+};
+
+// ========================================
+// CREATE TRACKER TEAM (Trackers module)
+// ========================================
+
+if (_moduleSettings getOrDefault ["spawnTrackerTeam", true]) then {
+    // Stagger creation to spread the spawn burst
+    sleep (0.3 + random 0.4);
+    [_moduleSettings, _targetGroup] call Recondo_fnc_spawnRWTrackerTeam;
 };
 
 if (_debugLogging) then {

@@ -56,7 +56,9 @@ private _customCompData = _logic getVariable ["customcompdata", ""];
 private _customDestroyedData = _logic getVariable ["customdestroyeddata", ""];
 private _clearRadius = _logic getVariable ["clearradius", 25];
 
-private _targetClassname = _logic getVariable ["targetclassname", ""];
+// Fallback matches the Eden default: attributes equal to the config default
+// are not stored in mission.sqm, so this is what blank/untouched fields get
+private _targetClassname = _logic getVariable ["targetclassname", "vn_o_ammobox_full_06"];
 private _targetInventoryRaw = _logic getVariable ["targetinventory", ""];
 private _disableSimulation = _logic getVariable ["disablesimulation", true];
 
@@ -155,8 +157,8 @@ if (_debugLogging) then {
 private _smellHintMessages = ((_smellHintMessagesRaw splitString ",") apply { _x trim [" ", 0] }) select { _x != "" };
 
 // Parse intel reveal messages (split by newlines)
-private _intelRevealMessagesDoc = ((_intelRevealMessagesDocRaw splitString (toString [10, 13])) apply { _x trim [" ", 0] }) select { _x != "" };
-private _intelRevealMessagesPOW = ((_intelRevealMessagesPOWRaw splitString (toString [10, 13])) apply { _x trim [" ", 0] }) select { _x != "" };
+private _intelRevealMessagesDoc = [_intelRevealMessagesDocRaw] call Recondo_fnc_parseMessages;
+private _intelRevealMessagesPOW = [_intelRevealMessagesPOWRaw] call Recondo_fnc_parseMessages;
 
 // Convert sides
 private _triggerSide = switch (_triggerSideNum) do {

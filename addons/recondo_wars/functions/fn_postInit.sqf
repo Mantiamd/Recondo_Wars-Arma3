@@ -41,6 +41,13 @@ if (hasInterface) then {
     }, [], 120] call CBA_fnc_waitUntilAndExecute;
 };
 
+// AI Tweaks: dynamic force walk sweep runs on every machine that owns AI -
+// the server and each Headless Client (the function guards internally).
+// Idles cheaply when no AI Tweaks force walk is enabled.
+if (isServer || !hasInterface) then {
+    call Recondo_fnc_forceWalkSweep;
+};
+
 // AI Tweaks: Mine knowledge system needs to run on clients with interface
 if (hasInterface && {!isNil "RECONDO_AITWEAKS_MINE_KNOWLEDGE_ENABLED"} && {RECONDO_AITWEAKS_MINE_KNOWLEDGE_ENABLED}) then {
     call Recondo_fnc_initMineKnowledge;

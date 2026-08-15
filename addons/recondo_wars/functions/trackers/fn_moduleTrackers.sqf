@@ -59,6 +59,8 @@ private _enableBambooSounds = _logic getVariable ["enablebamboosounds", true];
 private _enableWhistling = _logic getVariable ["enablewhistling", false];
 private _predictiveDistanceMin = _logic getVariable ["predictivedistancemin", 200];
 private _predictiveDistanceMax = _logic getVariable ["predictivedistancemax", 300];
+private _enableSignalShots = _logic getVariable ["enablesignalshots", false];
+private _signalShotInterval = (_logic getVariable ["signalshotinterval", 5]) max 1;
 
 // Dog Settings
 private _dogSpawnChance = _logic getVariable ["dogspawnchance", 0.5];
@@ -161,6 +163,8 @@ RECONDO_TRACKERS_SETTINGS = createHashMapFromArray [
     ["enableWhistling", _enableWhistling],
     ["predictiveDistanceMin", _predictiveDistanceMin],
     ["predictiveDistanceMax", _predictiveDistanceMax],
+    ["enableSignalShots", _enableSignalShots],
+    ["signalShotInterval", _signalShotInterval],
     
     // Dog
     ["dogSpawnChance", _dogSpawnChance],

@@ -425,6 +425,28 @@ class Cfg3DEN {
             };
 
             //==========================================
+            // KIT CARSON SYSTEM MODULE CATEGORIES
+            //==========================================
+
+            class Recondo_KITCARSON_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+
+            class Recondo_KITCARSON_Dialog {
+                displayName = "Dialog Lines";
+                collapsed = 0;
+                class Attributes {};
+            };
+
+            class Recondo_KITCARSON_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+
+            //==========================================
             // OPFOR SIDE MARKERS MODULE CATEGORIES
             //==========================================
 
@@ -795,6 +817,26 @@ class Cfg3DEN {
             
             // Debug
             class Recondo_Trackers_Debug {
+                displayName = "Debug";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
+            //==========================================
+            // NEAR AMBUSH MODULE CATEGORIES
+            //==========================================
+            
+            class Recondo_NEARAMBUSH_General {
+                displayName = "General Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_NEARAMBUSH_Markers {
+                displayName = "Marker Settings";
+                collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_NEARAMBUSH_Debug {
                 displayName = "Debug";
                 collapsed = 1;
                 class Attributes {};

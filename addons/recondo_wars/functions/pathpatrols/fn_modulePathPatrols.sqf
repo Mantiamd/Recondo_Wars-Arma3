@@ -34,6 +34,7 @@ _settings set ["aiSide", _sideMap select _aiSideNum];
 _settings set ["markerPrefix", _logic getVariable ["markerprefix", ""]];
 _settings set ["numberOfGroups", _logic getVariable ["numberofgroups", 1]];
 _settings set ["spawnPercentage", _logic getVariable ["spawnpercentage", 1]];
+_settings set ["patrolBehaviour", _logic getVariable ["patrolbehaviour", "SAFE"]];
 
 // Unit Settings
 private _unitClassnamesStr = _logic getVariable ["unitclassnames", ""];

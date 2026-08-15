@@ -3,10 +3,13 @@
     Server-side scan tick for the River Traffic module.
 
     Description:
-        Runs once per second on the server. Despawns boats with no players in
-        range, then for each module instance (throttled by its scan interval)
-        finds qualifying players, builds candidate river spawn points, and rolls
+        Runs once per second on the server. Cleans up derelict boats (wrecks,
+        dead-crew hulls, beached-and-abandoned boats) once no player is near,
+        then for each module instance (throttled by its scan interval) finds
+        qualifying players, builds candidate river spawn points, and rolls
         each enabled boat type's spawn chance under the global boat cap.
+        Live boats are never distance-despawned: once spawned they complete
+        their route and are retired at the far end by the movement engine.
 
     Parameters (CBA PFH):
         _args   - unused
@@ -25,7 +28,7 @@ private _hc = entities "HeadlessClient_F";
 private _allP = allPlayers select { alive _x && {!(_x in _hc)} };
 
 // ========================================
-// DESPAWN PASS (global, every tick)
+// DERELICT CLEANUP PASS (global, every tick)
 // ========================================
 
 if (count RECONDO_RIVERTRAFFIC_BOATS > 0) then {
@@ -41,8 +44,15 @@ if (count RECONDO_RIVERTRAFFIC_BOATS > 0) then {
             if (!isNull _g) then { deleteGroup _g };
             continue;
         };
-        // Only distance despawn deletes a boat now. This also cleans up
-        // destroyed or dead-crew boats, but only once no player is nearby, so
+        // Live boats always complete their route (the movement engine retires
+        // them at the far end), regardless of where players are.
+        if (alive _boat && {{alive _x} count (crew _boat) > 0}) then {
+            _survivors pushBack _rec;
+            continue;
+        };
+        // Derelicts - wrecks, dead-crew hulls, and beached boats whose crew
+        // disembarked to fight on foot - can never finish a route. They are
+        // removed by distance, but only once no player is nearby, so
         // wrecks/corpses persist for players in the area.
         private _dd = _rec get "despawnDist";
         // Reference points: the boat plus any disembarked crew now fighting on
@@ -92,7 +102,7 @@ if (_allP isEqualTo []) exitWith {};
     // in the area don't block new spawns.
     private _activeBoats = {
         private _b = _x get "boat";
-        !isNull _b && {alive _b} && {{alive _y} count (crew _b) > 0}
+        !isNull _b && {alive _b} && {{alive _x} count (crew _b) > 0}
     } count RECONDO_RIVERTRAFFIC_BOATS;
     if (_activeBoats >= _maxBoats) then { continue };
 
@@ -148,7 +158,7 @@ if (_allP isEqualTo []) exitWith {};
         // fleet (spawns add one; kills/wrecks are excluded).
         private _activeNow = {
             private _b = _x get "boat";
-            !isNull _b && {alive _b} && {{alive _y} count (crew _b) > 0}
+            !isNull _b && {alive _b} && {{alive _x} count (crew _b) > 0}
         } count RECONDO_RIVERTRAFFIC_BOATS;
         if (_activeNow >= _maxBoats) exitWith {};
         if (_chance <= 0 || {count _classes == 0}) then { continue };

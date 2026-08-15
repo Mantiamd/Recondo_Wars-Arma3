@@ -4,7 +4,10 @@
     
     Description:
         Implements force walk and force stand behaviors per category.
-        Force walk is released when combat starts.
+        Force walk is dynamic: released when combat starts (shots, hits,
+        or COMBAT behaviour) and re-applied by the sweep loop 30 minutes
+        after the release (see fn_forceWalkSweep). Survives Headless
+        Client transfers via the CBA "Local" handler in fn_preInit.sqf.
         Also applies animation speed coefficient.
     
     Parameters:
@@ -38,6 +41,9 @@ private _animSpeedCoef = switch (_unitType) do {
     default { _settings get "baseAnimSpeedCoef" };
 };
 
+// Remembered (public) so force walk releases can restore the configured
+// coef instead of a hardcoded 1, on whichever machine owns the unit
+_unit setVariable ["RECONDO_BASE_ANIMCOEF", _animSpeedCoef, true];
 [_unit, _animSpeedCoef] remoteExec ["setAnimSpeedCoef", 0, _unit];
 
 if (_forceStand) then {
@@ -45,26 +51,15 @@ if (_forceStand) then {
 };
 
 if (_forceWalk) then {
-    _unit forceWalk true;
-    
-    _unit addEventHandler ["FiredNear", {
-        params ["_unit"];
-        if (_unit getVariable ["RECONDO_WALK_RELEASED", false]) exitWith {};
-        _unit forceWalk false;
-        _unit setVariable ["RECONDO_WALK_RELEASED", true];
-    }];
-    
-    _unit addEventHandler ["Hit", {
-        params ["_unit"];
-        if (_unit getVariable ["RECONDO_WALK_RELEASED", false]) exitWith {};
-        _unit forceWalk false;
-        _unit setVariable ["RECONDO_WALK_RELEASED", true];
-    }];
-    
-    _unit addEventHandler ["Fired", {
-        params ["_unit"];
-        if (_unit getVariable ["RECONDO_WALK_RELEASED", false]) exitWith {};
-        _unit forceWalk false;
-        _unit setVariable ["RECONDO_WALK_RELEASED", true];
-    }];
+    // Public marker so whichever machine owns the unit (server or HC)
+    // knows to manage its walk state after a locality transfer
+    _unit setVariable ["RECONDO_FORCEWALK", true, true];
+
+    // The unit may already sit on an HC by the time the delayed
+    // EntityCreated processing runs - apply on the owning machine
+    if (local _unit) then {
+        [_unit] call Recondo_fnc_applyForceWalkLocal;
+    } else {
+        [_unit] remoteExec ["Recondo_fnc_applyForceWalkLocal", _unit];
+    };
 };

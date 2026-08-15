@@ -59,7 +59,9 @@ private _clearRadius = _logic getVariable ["clearradius", 30];
 private _disableSimulation = _logic getVariable ["disablesimulation", true];
 
 // Hub Target
-private _targetClassname = _logic getVariable ["targetclassname", ""];
+// Fallback matches the Eden default: attributes equal to the config default
+// are not stored in mission.sqm, so this is what blank/untouched fields get
+private _targetClassname = _logic getVariable ["targetclassname", "vn_o_ammobox_full_06"];
 private _targetInventoryRaw = _logic getVariable ["targetinventory", ""];
 // Split on commas and newlines so multi-line pastes work too
 private _targetInventory = ((_targetInventoryRaw splitString (toString [10, 13] + ",")) apply { _x trim [" ", 0] }) select { _x != "" };
@@ -172,8 +174,8 @@ private _subSiteClassnames = [_subSiteClassnamesRaw] call _fnc_parseClassnames;
 private _subSiteAIClassnames = [_subSiteAIClassnamesRaw] call _fnc_parseClassnames;
 
 // Parse intel reveal messages (split by newlines)
-private _intelRevealMessagesDoc = ((_intelRevealMessagesDocRaw splitString (toString [10, 13])) apply { _x trim [" ", 0] }) select { _x != "" };
-private _intelRevealMessagesPOW = ((_intelRevealMessagesPOWRaw splitString (toString [10, 13])) apply { _x trim [" ", 0] }) select { _x != "" };
+private _intelRevealMessagesDoc = [_intelRevealMessagesDocRaw] call Recondo_fnc_parseMessages;
+private _intelRevealMessagesPOW = [_intelRevealMessagesPOWRaw] call Recondo_fnc_parseMessages;
 
 // Convert side strings
 private _hubAISideEnum = switch (toUpper _hubAISide) do {

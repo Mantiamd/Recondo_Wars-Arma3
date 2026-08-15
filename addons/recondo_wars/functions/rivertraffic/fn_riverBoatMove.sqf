@@ -6,10 +6,11 @@
         Drives every active river boat along its baked path. Each frame the boat
         is rotated toward its current target point (rate-limited for a smooth
         turn) and pushed forward horizontally while vertical velocity is left to
-        buoyancy. Boats that reach the end of their river are retired here.
-        Destroyed hulls and dead-crew boats are left in place (they drift to a
-        stop); their deletion, and despawn-by-distance, are handled in the scan
-        loop, not here.
+        buoyancy. Boats that reach the end of their river are retired here -
+        this is the only way a live boat leaves the mission, they are never
+        distance-despawned. Destroyed hulls and dead-crew boats are left in
+        place (they drift to a stop); their distance-based cleanup is handled
+        in the scan loop, not here.
 
         Contact reaction (SOG AI style) via a per-boat state machine:
           CRUISE      - normal path following.
@@ -46,8 +47,8 @@ private _toRemove = [];
     private _boat = _rec get "boat";
 
     // Only drop the record if the boat object itself is gone. Destroyed hulls
-    // and dead-crew boats are left in place (cleaned up later by distance
-    // despawn) rather than deleted here.
+    // and dead-crew boats are left in place (cleaned up by the scan loop's
+    // derelict pass once no player is near) rather than deleted here.
     if (isNull _boat) then {
         _toRemove pushBack _rec;
         continue;

@@ -115,6 +115,15 @@ _pursuitGroup setSpeedMode "NORMAL"; // Faster than Wave 1
 _activeGroups pushBack _pursuitGroup;
 RECONDO_RW_ACTIVE_GROUPS pushBack _pursuitGroup;
 
+// Optional opt-out from AI Tweaks force walk - delayed past the 0.1s
+// EntityCreated configuration so the walk is applied before it is removed
+if (_moduleSettings getOrDefault ["releaseForceWalk", false]) then {
+    [{
+        params ["_group"];
+        { [_x] call Recondo_fnc_releaseForceWalk; } forEach units _group;
+    }, [_pursuitGroup], 5] call CBA_fnc_waitAndExecute;
+};
+
 // Create debug marker
 if (_debugMarkers) then {
     private _markerName = format ["RECONDO_RW_pursuit_%1_%2_%3", _waveNumber, _moduleId, time];

@@ -31,6 +31,8 @@ private _soundInterval = _moduleSettings get "soundInterval";
 private _debugLogging = _moduleSettings get "debugLogging";
 private _soundPoolsNoDog = _moduleSettings get "soundPoolsNoDog";
 private _soundPoolsWithDog = _moduleSettings get "soundPoolsWithDog";
+private _enableRadio = _moduleSettings getOrDefault ["enableRadio", false];
+private _radioSounds = _moduleSettings getOrDefault ["radioSounds", []];
 
 private _waveNumber = _group getVariable ["RECONDO_RW_waveNumber", 1];
 private _hasDog = _group getVariable ["RECONDO_RW_hasDog", false];
@@ -63,6 +65,9 @@ private _groupSoundInterval = if (_soundInterval <= 0) then {
     (_soundInterval + (random 20) - 10) max 5 
 };
 private _lastSoundTime = if (_groupSoundInterval > 0) then { time - (random _groupSoundInterval) } else { 0 };  // Random initial offset so groups don't sync up
+// Starts expired: the first time the group closes within 100m of a player it
+// chatters immediately, then settles into the interval cadence
+private _lastRadioTime = time - _groupSoundInterval;
 private _lastMoveTime = 0;
 private _lastKnownPos = if (count _initialTargetPos > 0) then { _initialTargetPos } else { getPos _leader };
 private _searching = false;
@@ -204,7 +209,19 @@ while {!isNull _group && {count (units _group select {alive _x}) > 0}} do {
         };
         _lastSoundTime = time;
     };
-    
+
+    // Radio chatter: separate proximity channel for ALL waves - only while the
+    // group is within 100m of a player, on its own timer at the same interval.
+    // The timer only resets when a sound plays, so the first close contact
+    // chatters immediately and then settles into the interval cadence
+    if (_enableRadio && _groupSoundInterval > 0 && time - _lastRadioTime >= _groupSoundInterval) then {
+        if (_radioSounds isNotEqualTo [] && {!isNull _leader && alive _leader}
+            && {allPlayers findIf { alive _x && {_x distance2D _leader <= 100} } >= 0}) then {
+            [_leader, _radioSounds] remoteExec ["RECONDO_RW_fnc_playRadioSound", 0];
+            _lastRadioTime = time;
+        };
+    };
+
     sleep 3;
 };
 

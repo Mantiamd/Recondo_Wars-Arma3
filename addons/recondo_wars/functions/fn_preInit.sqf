@@ -364,14 +364,19 @@ RECONDO_CMD_SQUAD_DEST = createHashMap;       // Client: netId group -> current 
 // Headless Client support globals
 RECONDO_HC_SWEEP_RUNNING = false;  // Server: periodic re-transfer sweep guard
 
-// Headless Client support: disableAI flags do not survive locality transfer
-// (server -> HC, or back to server on HC disconnect). Re-apply them on
-// whatever machine the unit becomes local to, keyed off public marker
-// variables set at spawn. Fires only on locality changes, so it is cheap.
+// Headless Client support: disableAI flags and forceWalk do not survive
+// locality transfer (server -> HC, or back to server on HC disconnect).
+// Re-apply them on whatever machine the unit becomes local to, keyed off
+// public marker variables set at spawn. Fires only on locality changes,
+// so it is cheap.
 ["CAManBase", "Local", {
     params ["_unit", "_local"];
-    if (_local && {_unit getVariable ["RECONDO_SDR_SPAWNED", false]}) then {
+    if (!_local) exitWith {};
+    if (_unit getVariable ["RECONDO_SDR_SPAWNED", false]) then {
         _unit disableAI "PATH";
+    };
+    if (_unit getVariable ["RECONDO_FORCEWALK", false]) then {
+        [_unit] call Recondo_fnc_applyForceWalkLocal;
     };
 }] call CBA_fnc_addClassEventHandler;
 

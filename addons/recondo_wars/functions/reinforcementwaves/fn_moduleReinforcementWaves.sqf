@@ -35,6 +35,8 @@ private _targetSideNum = _logic getVariable ["targetside", 1];
 private _reinforcementChance = _logic getVariable ["reinforcementchance", 1];
 private _unitClassnamesRaw = _logic getVariable ["unitclassnames", ""];
 private _maxActiveGroups = _logic getVariable ["maxactivegroups", 20];
+private _releaseForceWalk = _logic getVariable ["releaseforcewalk", false];
+private _spawnTrackerTeam = _logic getVariable ["spawntrackerteam", true];
 
 // Detection Settings
 private _triggerRadius = _logic getVariable ["triggerradius", 500];
@@ -52,6 +54,7 @@ private _soundInterval = _logic getVariable ["soundinterval", 30];
 private _enableSilent = _logic getVariable ["enablesilent", false];
 private _enableBambooSticks = _logic getVariable ["enablebamboosticks", true];
 private _enableWhistling = _logic getVariable ["enablewhistling", false];
+private _enableRadio = _logic getVariable ["enableradio", false];
 
 // Side Group Settings (Wave 1 pincer from the players' flanks)
 private _enableSideGroups = _logic getVariable ["enablesidegroups", true];
@@ -141,6 +144,17 @@ private _soundPoolsWithDog = _soundPoolsNoDog + [_dogGroupSounds];
 private _dogDetectionSounds = ["bark1", "bark2", "barkmean1", "barkmean2", "barkmean3", "dog_growl_vicious"];
 private _dogDeathSounds = ["boomerYelp", "boomerYelp2"];
 
+// Radio chatter is a separate proximity channel, not part of the category
+// pools above: groups within 100m of a player play one of these on their own
+// timer (see fn_rwTrackerBehavior). Two series of 20 files each
+private _radioSounds = [];
+{
+    private _series = _x;
+    for "_i" from 1 to 20 do {
+        _radioSounds pushBack format ["vn-radio-%1-%2%3", _series, ["", "0"] select (_i < 10), _i];
+    };
+} forEach ["n", "y"];
+
 private _moduleSettings = createHashMapFromArray [
     // Identity
     ["moduleId", _moduleId],
@@ -152,6 +166,8 @@ private _moduleSettings = createHashMapFromArray [
     ["reinforcementChance", _reinforcementChance],
     ["unitClassnames", _unitClassnames],
     ["maxActiveGroups", _maxActiveGroups],
+    ["releaseForceWalk", _releaseForceWalk],
+    ["spawnTrackerTeam", _spawnTrackerTeam],
     
     // Detection
     ["triggerRadius", _triggerRadius],
@@ -193,6 +209,8 @@ private _moduleSettings = createHashMapFromArray [
     ["soundPoolsWithDog", _soundPoolsWithDog],
     ["dogDetectionSounds", _dogDetectionSounds],
     ["dogDeathSounds", _dogDeathSounds],
+    ["enableRadio", _enableRadio],
+    ["radioSounds", _radioSounds],
     
     // Target Filter
     ["ignoreHeight", _targetFilterHeight],
@@ -226,6 +244,21 @@ if (isNil "RECONDO_RW_fnc_playSound") then {
         playSound3D [_soundPath, _unit, false, getPosASL _unit, 5, 1, 300];
     ";
     publicVariable "RECONDO_RW_fnc_playSound";
+};
+
+// Radio chatter is quieter than the whistle/mallet ambience - a manpack radio
+// should read as close-range noise, not jungle-wide sound
+if (isNil "RECONDO_RW_fnc_playRadioSound") then {
+    RECONDO_RW_fnc_playRadioSound = compileFinal "
+        if (!hasInterface) exitWith {};
+        params ['_unit', '_sounds'];
+        if (_sounds isEqualTo []) exitWith {};
+        if (player distance _unit > 150) exitWith {};
+        private _sound = selectRandom _sounds;
+        private _soundPath = '\recondo_wars\sounds\trackers\' + _sound + '.ogg';
+        playSound3D [_soundPath, _unit, false, getPosASL _unit, 2, 1, 150];
+    ";
+    publicVariable "RECONDO_RW_fnc_playRadioSound";
 };
 
 // ========================================

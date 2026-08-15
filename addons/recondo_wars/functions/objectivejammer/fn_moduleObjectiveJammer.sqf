@@ -108,8 +108,8 @@ private _patrolClassnames = if (_patrolClassnamesRaw != "") then {
 } else { [] };
 
 // Parse intel reveal messages (split by newlines)
-private _intelRevealMessagesDoc = ((_intelRevealMessagesDocRaw splitString (toString [10, 13])) apply { _x trim [" ", 0] }) select { _x != "" };
-private _intelRevealMessagesPOW = ((_intelRevealMessagesPOWRaw splitString (toString [10, 13])) apply { _x trim [" ", 0] }) select { _x != "" };
+private _intelRevealMessagesDoc = [_intelRevealMessagesDocRaw] call Recondo_fnc_parseMessages;
+private _intelRevealMessagesPOW = [_intelRevealMessagesPOWRaw] call Recondo_fnc_parseMessages;
 
 // ========================================
 // BUILD COMPOSITION POOL

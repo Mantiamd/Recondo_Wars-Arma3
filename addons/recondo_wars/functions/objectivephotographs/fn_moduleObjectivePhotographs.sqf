@@ -132,8 +132,8 @@ if (_debugLogging) then {
 
 // Parse other settings
 private _smellHintMessages = ((_smellHintMessagesRaw splitString ",") apply { _x trim [" ", 0] }) select { _x != "" };
-private _intelRevealMessagesDoc = ((_intelRevealMessagesDocRaw splitString (toString [10, 13])) apply { _x trim [" ", 0] }) select { _x != "" };
-private _intelRevealMessagesPOW = ((_intelRevealMessagesPOWRaw splitString (toString [10, 13])) apply { _x trim [" ", 0] }) select { _x != "" };
+private _intelRevealMessagesDoc = [_intelRevealMessagesDocRaw] call Recondo_fnc_parseMessages;
+private _intelRevealMessagesPOW = [_intelRevealMessagesPOWRaw] call Recondo_fnc_parseMessages;
 
 private _triggerSide = switch (_triggerSideNum) do {
     case 0: { "EAST" };

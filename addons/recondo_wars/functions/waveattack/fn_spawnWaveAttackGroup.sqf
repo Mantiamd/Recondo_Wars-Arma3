@@ -8,8 +8,8 @@
         the marker. The bearing sells the attack direction, so if the spot
         is in water it is only pushed further out along the same bearing.
         The group moves to the marker, then searches within 100m of it.
-        Wave 2+ groups run a jittered 60-second whistle loop while alive
-        so players hear follow-on waves closing in. Server-only.
+        Every group runs a jittered 60-second whistle loop while alive
+        so players hear the attacking waves closing in. Server-only.
 
     Parameters:
         0: HASHMAP - Module settings
@@ -34,6 +34,8 @@ private _unitsMax = _settings get "unitsMax";
 private _spawnDistance = _settings get "spawnDistance";
 private _enableWhistles = _settings get "enableWhistles";
 private _whistleSounds = _settings get "whistleSounds";
+private _enableRadio = _settings getOrDefault ["enableRadio", false];
+private _radioSounds = _settings getOrDefault ["radioSounds", []];
 private _debugMarkers = _settings get "debugMarkers";
 private _debugLogging = _settings get "debugLogging";
 
@@ -91,9 +93,9 @@ private _wpSearch = _group addWaypoint [_markerPos, 100];
 _wpSearch setWaypointType "SAD";
 _wpSearch setWaypointCompletionRadius 100;
 
-// Wave 2+ whistle loop: jittered interval and random start offset so
+// Whistle loop (all waves): jittered interval and random start offset so
 // multiple groups never whistle in unison
-if (_enableWhistles && _waveNumber >= 2) then {
+if (_enableWhistles) then {
     [_group, _whistleSounds] spawn {
         params ["_group", "_whistleSounds"];
 
@@ -113,9 +115,32 @@ if (_enableWhistles && _waveNumber >= 2) then {
     };
 };
 
+// Radio chatter loop (all waves), independent of the whistles: quiet chatter
+// only while the group is within 100m of a player. The timer starts expired,
+// so the first close contact chatters immediately, then it settles into a
+// jittered ~60s cadence like the whistles
+if (_enableRadio && {_radioSounds isNotEqualTo []}) then {
+    [_group, _radioSounds] spawn {
+        params ["_group", "_radioSounds"];
+
+        private _interval = (60 + (random 20) - 10) max 30;
+        private _lastRadioTime = time - _interval;
+
+        while {!isNull _group && {(units _group findIf { alive _x }) != -1}} do {
+            private _leader = leader _group;
+            if (!isNull _leader && {alive _leader} && {time - _lastRadioTime >= _interval}
+                && {allPlayers findIf { alive _x && {_x distance2D _leader <= 100} } >= 0}) then {
+                [_leader, _radioSounds] remoteExec ["RECONDO_WAVEATK_fnc_playRadioSound", 0];
+                _lastRadioTime = time;
+            };
+            sleep 3;
+        };
+    };
+};
+
 // Hand the group to a Headless Client if one is connected. The attack is
-// waypoint-driven and the whistle loop only reads positions, so both keep
-// working across locality.
+// waypoint-driven and the whistle and radio loops only read positions, so all
+// keep working across locality.
 if (_settings getOrDefault ["enableHC", false]) then {
     [_group, _debugLogging] call Recondo_fnc_transferGroupToHC;
 };

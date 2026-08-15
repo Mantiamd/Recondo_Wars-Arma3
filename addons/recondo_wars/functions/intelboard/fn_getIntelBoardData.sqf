@@ -405,7 +405,9 @@ if (_enableSoilSample && !isNil "RECONDO_SOIL_INSTANCES" && {count RECONDO_SOIL_
 
         if (count _markerAreas > 0) then {
             {
-                private _markerName = _x;
+                // markerAreas entries are [markerName, geometry] pairs - the
+                // turned-in hashmap is keyed by the name string only
+                _x params ["_markerName", "_geometry"];
                 private _objData = _turnedIn getOrDefault [_markerName, createHashMapFromArray [["turnedIn", 0], ["complete", false], ["grid", ""], ["position", [0,0,0]]]];
                 private _count = _objData get "turnedIn";
                 private _isComplete = _objData get "complete";

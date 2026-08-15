@@ -8,6 +8,7 @@ class CfgFunctions {
             class preInit {};
             class postInit {};
             class parseClassnames {};
+            class parseMessages {};
             class applyCustomInventory {};
             class registerCustomComposition {};
             class validateModules {};
@@ -42,6 +43,9 @@ class CfgFunctions {
             class applySkills {};
             class removeItems {};
             class setupBehavior {};
+            class applyForceWalkLocal {};
+            class forceWalkSweep {};
+            class releaseForceWalk {};
             class initMineKnowledge {};
             class getAITweaksUnitType {};
         };
@@ -111,6 +115,24 @@ class CfgFunctions {
             class moduleNPCDialog {};
             class initNPCDialogClient {};
             class npcDialogTalk {};
+        };
+
+        // Kit Carson System Module Functions
+        class KitCarson {
+            file = "\recondo_wars\functions\kitcarson";
+            class moduleKitCarson {};
+            class initKitCarsonClient {};
+            class kitCarsonTalk {};
+            class kitCarsonProcess {};
+            class kitCarsonConsume {};
+        };
+
+        // Near Ambush Module Functions
+        class NearAmbush {
+            file = "\recondo_wars\functions\nearambush";
+            class moduleNearAmbush {};
+            class spawnNearAmbush {};
+            class springNearAmbush {};
         };
 
         // OPFOR Side Markers Module Functions
@@ -252,6 +274,7 @@ class CfgFunctions {
             class trackerDogBehavior {};
             class assignDogBulletMagnet {};
             class filterAirTargets {};
+            class trackerSignalShot {};
         };
         
         // Reinforcement Waves Module Functions
@@ -270,6 +293,7 @@ class CfgFunctions {
             class rwCheckGiveUp {};
             class despawnRWGroup {};
             class createRWSideGroup {};
+            class spawnRWTrackerTeam {};
         };
         
         // River Traffic Module Functions

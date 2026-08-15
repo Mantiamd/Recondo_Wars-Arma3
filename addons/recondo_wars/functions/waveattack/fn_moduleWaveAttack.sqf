@@ -9,7 +9,7 @@
         bearings from the marker, move to it, and search within 100m.
         One group spawns per checked bearing each wave. Waves continue on
         a countdown until the wave cap is reached or no trigger-side
-        players remain in the radius. Wave 2+ groups whistle on a jittered
+        players remain in the radius. All groups whistle on a jittered
         60-second loop (same sounds as the Trackers system).
 
     Priority: 5 (feature module — spawns entities, no dependencies)
@@ -56,6 +56,7 @@ private _bearing270 = _logic getVariable ["bearing270", true];
 private _maxWaves = _logic getVariable ["maxwaves", 3];
 private _timeBetweenWaves = _logic getVariable ["timebetweenwaves", 120];
 private _enableWhistles = _logic getVariable ["enablewhistles", true];
+private _enableRadio = _logic getVariable ["enableradio", false];
 private _enableHC = _logic getVariable ["enablehc", false];
 
 // ========================================
@@ -125,6 +126,17 @@ for "_i" from 1 to _activeCount do {
 // STORE SETTINGS
 // ========================================
 
+// Radio chatter pool: two series of 20 files each (vn-radio-n-01..20 and
+// vn-radio-y-01..20), played by a separate proximity loop per group (see
+// fn_spawnWaveAttackGroup)
+private _radioSounds = [];
+{
+    private _series = _x;
+    for "_i" from 1 to 20 do {
+        _radioSounds pushBack format ["vn-radio-%1-%2%3", _series, ["", "0"] select (_i < 10), _i];
+    };
+} forEach ["n", "y"];
+
 private _instanceId = format ["waveatk_%1_%2", _markerPrefix, count (missionNamespace getVariable ["RECONDO_WAVEATK_INSTANCES", []])];
 
 private _settings = createHashMapFromArray [
@@ -142,8 +154,10 @@ private _settings = createHashMapFromArray [
     ["maxWaves", _maxWaves],
     ["timeBetweenWaves", _timeBetweenWaves],
     ["enableWhistles", _enableWhistles],
+    ["enableRadio", _enableRadio],
     ["enableHC", _enableHC],
     ["whistleSounds", ["enemy_whistle_2", "enemy_whistle_3", "enemy_whistle_4", "enemy_whistling_2", "enemy_whistling_3", "enemy_whistling_4"]],
+    ["radioSounds", _radioSounds],
     ["pendingMarkers", _activeMarkers],
     ["debugLogging", _debugLogging],
     ["debugMarkers", _debugMarkers]
@@ -169,6 +183,21 @@ if (isNil "RECONDO_WAVEATK_fnc_playSound") then {
         playSound3D [_soundPath, _unit, false, getPosASL _unit, 5, 1, 300];
     ";
     publicVariable "RECONDO_WAVEATK_fnc_playSound";
+};
+
+// Radio chatter is quieter than the whistles - a manpack radio should read as
+// close-range noise, not jungle-wide sound
+if (isNil "RECONDO_WAVEATK_fnc_playRadioSound") then {
+    RECONDO_WAVEATK_fnc_playRadioSound = compileFinal "
+        if (!hasInterface) exitWith {};
+        params ['_unit', '_sounds'];
+        if (_sounds isEqualTo []) exitWith {};
+        if (player distance _unit > 150) exitWith {};
+        private _sound = selectRandom _sounds;
+        private _soundPath = '\recondo_wars\sounds\trackers\' + _sound + '.ogg';
+        playSound3D [_soundPath, _unit, false, getPosASL _unit, 2, 1, 150];
+    ";
+    publicVariable "RECONDO_WAVEATK_fnc_playRadioSound";
 };
 
 // ========================================

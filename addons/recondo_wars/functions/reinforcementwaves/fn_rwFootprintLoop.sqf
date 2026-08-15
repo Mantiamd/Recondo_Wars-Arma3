@@ -7,6 +7,10 @@
         RW strict footprint pursuit works even when the Trackers module is not
         running. Uses the same footprint payload format:
         [position, time, groupIdString, trackerGroups[]].
+
+        Fallback only: stands down (idles) while the Trackers module is
+        active, since its own loop already produces and prunes footprints
+        for the same shared array - both running would lay double trails.
 */
 
 if (!isServer) exitWith {};
@@ -21,6 +25,14 @@ private _fallbackLifetime = 20 * 60; // seconds
 
 while {true} do {
     if (isNil "RECONDO_RW_INSTANCES" || {count RECONDO_RW_INSTANCES == 0}) exitWith {};
+
+    // Trackers module active: its loop already lays and prunes footprints
+    // for the shared array - idle so the same group isn't tracked twice.
+    // Checked per-iteration because module init order isn't guaranteed.
+    if (!isNil "RECONDO_TRACKERS_SETTINGS") then {
+        sleep 5;
+        continue;
+    };
 
     if (isNil "RECONDO_TRACKERS_FOOTPRINTS") then { RECONDO_TRACKERS_FOOTPRINTS = []; };
     if (isNil "RECONDO_TRACKERS_TRACKED_GROUPS") then { RECONDO_TRACKERS_TRACKED_GROUPS = []; };

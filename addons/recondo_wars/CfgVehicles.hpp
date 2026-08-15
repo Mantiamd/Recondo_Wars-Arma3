@@ -200,7 +200,7 @@ class CfgVehicles {
             };
             class Base_ForceWalk {
                 displayName = "Force Walk";
-                tooltip = "Force AI to walk instead of run. Released when combat starts.";
+                tooltip = "Force AI to walk instead of run (at 1.5x walk animation speed for a brisk pace). Released when combat starts (shots, hits, or enemy detected) and re-applied 30 minutes later (waits for the current fight to end first).";
                 control = "Checkbox";
                 property = "Recondo_AITweaks_Base_ForceWalk";
                 expression = "_this setVariable ['base_forcewalk', _value, true];";
@@ -452,7 +452,7 @@ class CfgVehicles {
             };
             class Elite_ForceWalk {
                 displayName = "Force Walk";
-                tooltip = "Force AI to walk instead of run. Released when combat starts.";
+                tooltip = "Force AI to walk instead of run (at 1.5x walk animation speed for a brisk pace). Released when combat starts (shots, hits, or enemy detected) and re-applied 30 minutes later (waits for the current fight to end first).";
                 control = "Checkbox";
                 property = "Recondo_AITweaks_Elite_ForceWalk";
                 expression = "_this setVariable ['elite_forcewalk', _value, true];";
@@ -704,7 +704,7 @@ class CfgVehicles {
             };
             class AA_ForceWalk {
                 displayName = "Force Walk";
-                tooltip = "Force AI to walk instead of run. Released when combat starts.";
+                tooltip = "Force AI to walk instead of run (at 1.5x walk animation speed for a brisk pace). Released when combat starts (shots, hits, or enemy detected) and re-applied 30 minutes later (waits for the current fight to end first).";
                 control = "Checkbox";
                 property = "Recondo_AITweaks_AA_ForceWalk";
                 expression = "_this setVariable ['aa_forcewalk', _value, true];";
@@ -2405,6 +2405,120 @@ class CfgVehicles {
     };
 
     //==========================================
+    // KIT CARSON SYSTEM MODULE
+    //==========================================
+    class Recondo_Module_KitCarson: Module_F {
+        scope = 2;
+        displayName = "Kit Carson System";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Main";
+        icon = "\a3\ui_f\data\igui\cfg\simpletasks\types\intel_ca.paa";
+        function = "Recondo_fnc_moduleKitCarson";
+        functionPriority = 10;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+
+        class ModuleDescription: ModuleDescription {
+            description = "Informant NPCs that reveal intel targets. Sync one or more AI units; using the ACE interaction reveals one target from the campaign's intel pool to the player's group, exactly like an intel item turn-in. Options: a required item (classname) the player must hand over (consumed), and a translator restriction limiting who can talk to the informant. Each informant reveals ONCE per mission start - a server restart resets them.";
+            sync[] = {};
+        };
+
+        class Attributes: AttributesBase {
+            // GENERAL
+            class ActionText {
+                displayName = "Interaction Text";
+                tooltip = "Text of the ACE interaction on the informant, e.g. 'Talk to' or 'Ask about enemy activity'.";
+                control = "Edit";
+                property = "Recondo_KITCARSON_ActionText";
+                expression = "_this setVariable ['actiontext', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Ask about enemy activity""";
+                category = "Recondo_KITCARSON_General";
+            };
+            class RequiredItem {
+                displayName = "Required Item Classname";
+                tooltip = "Optional. Item, magazine, or weapon classname the player must hand over to receive the intel - money, a rifle, water... One instance is consumed. Leave empty for free intel.";
+                control = "Edit";
+                property = "Recondo_KITCARSON_RequiredItem";
+                expression = "_this setVariable ['requireditem', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_KITCARSON_General";
+            };
+            class AllowedClassnames {
+                displayName = "Allowed Player Classnames";
+                tooltip = "Optional, comma-separated. When set, only players of these unit classnames can talk to the informant (simulates needing a translator); everyone else gets the refusal line. Leave empty to allow all players.";
+                control = "EditMulti3";
+                property = "Recondo_KITCARSON_AllowedClassnames";
+                expression = "_this setVariable ['allowedclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_KITCARSON_General";
+            };
+
+            // DIALOG
+            class IntelLine {
+                displayName = "Intel Line";
+                tooltip = "What the informant says as he gives up the intel. Shown above the reveal on the intel card.";
+                control = "EditMulti3";
+                property = "Recondo_KITCARSON_IntelLine";
+                expression = "_this setVariable ['intelline', _value, true];";
+                typeName = "STRING";
+                defaultValue = """I hear things. Listen closely...""";
+                category = "Recondo_KITCARSON_Dialog";
+            };
+            class DemandLine {
+                displayName = "Demand Line";
+                tooltip = "What the informant says when the player does not carry the required item. Use it to tell players what he wants.";
+                control = "EditMulti3";
+                property = "Recondo_KITCARSON_DemandLine";
+                expression = "_this setVariable ['demandline', _value, true];";
+                typeName = "STRING";
+                defaultValue = """Bring me something worth my time first.""";
+                category = "Recondo_KITCARSON_Dialog";
+            };
+            class DepletedLine {
+                displayName = "Depleted Line";
+                tooltip = "What the informant says once his one reveal for this mission is spent.";
+                control = "EditMulti3";
+                property = "Recondo_KITCARSON_DepletedLine";
+                expression = "_this setVariable ['depletedline', _value, true];";
+                typeName = "STRING";
+                defaultValue = """I have no more intel for you today.""";
+                category = "Recondo_KITCARSON_Dialog";
+            };
+            class RefusalLine {
+                displayName = "Refusal Line";
+                tooltip = "What players NOT on the allowed classname list are told (only used when the translator restriction is set).";
+                control = "EditMulti3";
+                property = "Recondo_KITCARSON_RefusalLine";
+                expression = "_this setVariable ['refusalline', _value, true];";
+                typeName = "STRING";
+                defaultValue = """He looks at you blankly. You need a translator.""";
+                category = "Recondo_KITCARSON_Dialog";
+            };
+
+            // DEBUG
+            class EnableDebugKITCARSON {
+                displayName = "DEBUG - Enable Logging";
+                tooltip = "Enable detailed logging to RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_KITCARSON_Debug";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_KITCARSON_Debug";
+            };
+
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+
+    //==========================================
     // OPFOR SIDE MARKERS MODULE
     //==========================================
     class Recondo_Module_SideMarkers: Module_F {
@@ -3381,6 +3495,22 @@ class CfgVehicles {
                 sliderStep = 0.05;
                 category = "Recondo_PP_General";
             };
+            class PatrolBehaviour {
+                displayName = "Patrol Behaviour";
+                tooltip = "Default behaviour mode while patrolling. Patrols automatically switch to COMBAT when they know about an enemy and return to this behaviour once the contact is over.";
+                control = "Combo";
+                property = "Recondo_PP_PatrolBehaviour";
+                expression = "_this setVariable ['patrolbehaviour', _value, true];";
+                typeName = "STRING";
+                defaultValue = """SAFE""";
+                category = "Recondo_PP_General";
+                class Values {
+                    class Safe { name = "SAFE"; value = "SAFE"; };
+                    class Aware { name = "AWARE"; value = "AWARE"; };
+                    class Combat { name = "COMBAT"; value = "COMBAT"; };
+                    class Stealth { name = "STEALTH"; value = "STEALTH"; };
+                };
+            };
             
             // UNIT SETTINGS
             class UnitClassnames {
@@ -4333,6 +4463,26 @@ class CfgVehicles {
                 defaultValue = """30""";
                 category = "Recondo_Trackers_Behavior";
             };
+            class EnableSignalShots {
+                displayName = "Enable Signal Shots";
+                tooltip = "Trackers fire 4 rounds into the air when they come across the trail: every X footprints reached (below) and whenever they re-acquire a lost trail. Real gunfire audible to nearby players. Skipped while the group is in combat.";
+                control = "Checkbox";
+                property = "Recondo_Trackers_EnableSignalShots";
+                expression = "_this setVariable ['enablesignalshots', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Trackers_Behavior";
+            };
+            class SignalShotInterval {
+                displayName = "Signal Shot Every X Footprints";
+                tooltip = "Fire a signal shot each time this many footprints have been reached. Lower = more frequent signaling. A 30-second per-group cooldown prevents back-to-back shots.";
+                control = "Edit";
+                property = "Recondo_Trackers_SignalShotInterval";
+                expression = "_this setVariable ['signalshotinterval', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """5""";
+                category = "Recondo_Trackers_Behavior";
+            };
             class EnableSilent {
                 displayName = "Enable Silent";
                 tooltip = "Adds silence to the ambient sound pool. When randomly selected, the tracker group plays no sound that interval. Each enabled option has an equal chance. Dog barks and detection sounds are unaffected.";
@@ -4604,6 +4754,26 @@ class CfgVehicles {
                 defaultValue = """20""";
                 category = "Recondo_RW_General";
             };
+            class ReleaseForceWalk {
+                displayName = "Release Force Walk After Spawn";
+                tooltip = "Exempts reinforcement groups from AI Tweaks Force Walk 5 seconds after they spawn, so they pursue at full speed without waiting for combat. Groups led by a tracker dog are NOT released - they keep the normal walking pace. Does nothing if AI Tweaks Force Walk is disabled for their side.";
+                control = "Checkbox";
+                property = "Recondo_RW_ReleaseForceWalk";
+                expression = "_this setVariable ['releaseforcewalk', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_RW_General";
+            };
+            class SpawnTrackerTeam {
+                displayName = "Spawn Tracker Team";
+                tooltip = "Spawns a tracker team 150m from the target group in a random direction when Wave 1 spawns. The team uses the Trackers module for all its settings (side, classnames, size, dog chance, give-up rules) and counts against its group cap. Requires a Trackers module in the mission - skipped with an RPT warning otherwise.";
+                control = "Checkbox";
+                property = "Recondo_RW_SpawnTrackerTeam";
+                expression = "_this setVariable ['spawntrackerteam', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_RW_General";
+            };
             
             // ========================================
             // DETECTION SETTINGS
@@ -4728,7 +4898,17 @@ class CfgVehicles {
                 defaultValue = "false";
                 category = "Recondo_RW_Wave1";
             };
-            
+            class EnableRadio {
+                displayName = "Enable Radio Chatter";
+                tooltip = "Groups from ANY wave play quiet Vietnamese radio chatter (audible to ~150m) while within 100m of a player, on the same Sound Interval as the ambient sounds but on its own timer. Plays alongside the other enabled sounds.";
+                control = "Checkbox";
+                property = "Recondo_RW_EnableRadio";
+                expression = "_this setVariable ['enableradio', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_RW_Wave1";
+            };
+
             // ========================================
             // SIDE GROUP SETTINGS
             // ========================================
@@ -6085,12 +6265,12 @@ class CfgVehicles {
             // ========================================
             class TargetClassname {
                 displayName = "TARGET - Object Classname";
-                tooltip = "Classname of the object to destroy. Must exist in your composition. First object matching this classname will be the target.";
+                tooltip = "Classname of the object to destroy. Must exist in your composition. First object matching this classname will be the target. Default: vn_o_ammobox_full_06 (NVA ammo crate).";
                 control = "Edit";
                 property = "Recondo_ObjDestroy_TargetClassname";
                 expression = "_this setVariable ['targetclassname', _value, true];";
                 typeName = "STRING";
-                defaultValue = """""";
+                defaultValue = """vn_o_ammobox_full_06""";
                 category = "Recondo_ObjDestroy_Target";
             };
             class TargetInventory {
@@ -6792,12 +6972,12 @@ class CfgVehicles {
             // ========================================
             class TargetClassname {
                 displayName = "HUB TARGET - Target Classname";
-                tooltip = "Classname of the object in the composition that must be destroyed to complete the objective.";
+                tooltip = "Classname of the object in the composition that must be destroyed to complete the objective. Default: vn_o_ammobox_full_06 (NVA ammo crate).";
                 control = "Edit";
                 property = "Recondo_HubSubs_TargetClassname";
                 expression = "_this setVariable ['targetclassname', _value, true];";
                 typeName = "STRING";
-                defaultValue = """""";
+                defaultValue = """vn_o_ammobox_full_06""";
                 category = "Recondo_HubSubs_HubTarget";
             };
             class TargetInventory {
@@ -16560,13 +16740,23 @@ class CfgVehicles {
                 category = "Recondo_WaveAtk_Waves";
             };
             class EnableWhistles {
-                displayName = "Wave 2+ Whistle Sounds";
-                tooltip = "Wave 2 and later groups whistle roughly every 60 seconds while alive (timing varied per group). Wave 1 is always silent.";
+                displayName = "Whistle Sounds";
+                tooltip = "Attacking groups whistle roughly every 60 seconds while alive (timing varied per group), starting with the first wave.";
                 control = "Checkbox";
                 property = "Recondo_WaveAtk_EnableWhistles";
                 expression = "_this setVariable ['enablewhistles', _value, true];";
                 typeName = "BOOL";
                 defaultValue = "true";
+                category = "Recondo_WaveAtk_Waves";
+            };
+            class EnableRadio {
+                displayName = "Enable Radio Chatter";
+                tooltip = "Attacking groups play quiet Vietnamese radio chatter (audible to ~150m) while within 100m of a player - immediately on first close contact, then roughly every 60 seconds (timing varied per group). Plays alongside the whistles.";
+                control = "Checkbox";
+                property = "Recondo_WaveAtk_EnableRadio";
+                expression = "_this setVariable ['enableradio', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
                 category = "Recondo_WaveAtk_Waves";
             };
             class EnableHC {
@@ -18347,8 +18537,8 @@ class CfgVehicles {
                 category = "Recondo_RiverTraffic_General";
             };
             class DespawnDistance {
-                displayName = "Despawn Distance (m)";
-                tooltip = "A boat is removed once no player is within this distance of it.";
+                displayName = "Wreck Cleanup Distance (m)";
+                tooltip = "Derelict boats (destroyed, crew dead, or beached with the crew fighting ashore) are removed once no player is within this distance. Live boats always complete their full route and are never distance-despawned.";
                 control = "Edit";
                 property = "Recondo_RiverTraffic_DespawnDistance";
                 expression = "_this setVariable ['despawndistance', parseNumber _value, true];";
@@ -18743,6 +18933,151 @@ class CfgVehicles {
                 typeName = "BOOL";
                 defaultValue = "false";
                 category = "Recondo_CMD_Debug";
+            };
+
+            class ModuleDescription: ModuleDescription {};
+        };
+    };
+
+    //==========================================
+    // NEAR AMBUSH MODULE
+    //==========================================
+    class Recondo_Module_NearAmbush: Module_F {
+        scope = 2;
+        displayName = "Near Ambush";
+        author = "GoonSix";
+        vehicleClass = "Modules";
+        category = "Recondo_Main";
+        icon = "\a3\ui_f\data\map\markers\military\ambush_ca.paa";
+        function = "Recondo_fnc_moduleNearAmbush";
+        functionPriority = 5;
+        isGlobal = 0;
+        isTriggerActivated = 0;
+        isDisposable = 0;
+        is3DEN = 0;
+        curatorCanAttach = 0;
+
+        class ModuleDescription: ModuleDescription {
+            description = "OPFOR AI ambushes against BLUFOR players on foot. Place invisible (empty) map markers with the configured prefix as candidate ambush sites; a percentage of them is randomly active each mission. When a BLUFOR player on foot enters the trigger radius of an active site, an OPFOR group spawns at the REQUIRED staging marker (place it in an unused map corner), goes prone out of sight, then teleports into a hold-fire line - either across the players' path 50m ahead, or parallel to it 35m off to one side - and springs (crouch + open fire) when the players walk into the kill zone or make early contact. The spring is signaled: by day a whistle 1 second before the volley, by night a red flare over the nearest BLUFOR player 3 seconds before (early contact skips the delay). Sprung sites are spent; if the players leave first, the ambush despawns and the site re-arms. Place once per mission.";
+            sync[] = {};
+        };
+
+        class Attributes: AttributesBase {
+
+            // GENERAL SETTINGS
+            class UnitClassnames {
+                displayName = "OPFOR Unit Classnames";
+                tooltip = "REQUIRED. Comma-separated unit classnames the ambush groups are built from (e.g. vn_o_men_nva_65_01,vn_o_men_nva_65_02). Each ambusher is a random pick from this list.";
+                control = "EditMulti3";
+                property = "Recondo_NEARAMBUSH_UnitClassnames";
+                expression = "_this setVariable ['unitclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_NEARAMBUSH_General";
+            };
+            class TripFlareClassname {
+                displayName = "Trip Flare Classname";
+                tooltip = "Mine classname of the trip flare used as the night signal: it pops right at the feet of the ambushed group's leader 3 seconds before the volley, as if he just tripped it.";
+                control = "Edit";
+                property = "Recondo_NEARAMBUSH_TripFlareClassname";
+                expression = "_this setVariable ['tripflareclassname', _value, true];";
+                typeName = "STRING";
+                defaultValue = """ACE_FlareTripMineRed""";
+                category = "Recondo_NEARAMBUSH_General";
+            };
+            class AutoRifleClassnames {
+                displayName = "Automatic Rifleman Classnames";
+                tooltip = "Optional, comma-separated. When set, every ambush group includes one unit from this list (use full-auto/MG-armed classnames). On spring, that unit fires full auto for 5 seconds at a point 3m above the head of the ambushed group's leader - grazing fire over the kill zone - then joins the fight. Leave empty to disable the overhead fire.";
+                control = "EditMulti3";
+                property = "Recondo_NEARAMBUSH_AutoRifleClassnames";
+                expression = "_this setVariable ['autorifleclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_NEARAMBUSH_General";
+            };
+            class MinGroupSize {
+                displayName = "Min Group Size";
+                tooltip = "Minimum number of ambushers spawned per ambush.";
+                control = "Edit";
+                property = "Recondo_NEARAMBUSH_MinGroupSize";
+                expression = "_this setVariable ['mingroupsize', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "4";
+                category = "Recondo_NEARAMBUSH_General";
+            };
+            class MaxGroupSize {
+                displayName = "Max Group Size";
+                tooltip = "Maximum number of ambushers spawned per ambush.";
+                control = "Edit";
+                property = "Recondo_NEARAMBUSH_MaxGroupSize";
+                expression = "_this setVariable ['maxgroupsize', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "6";
+                category = "Recondo_NEARAMBUSH_General";
+            };
+
+            // MARKER SETTINGS
+            class MarkerPrefix {
+                displayName = "Marker Prefix";
+                tooltip = "Invisible (empty) map markers whose names start with this prefix are candidate ambush sites (e.g. AMBUSH_1, AMBUSH_2...).";
+                control = "Edit";
+                property = "Recondo_NEARAMBUSH_MarkerPrefix";
+                expression = "_this setVariable ['markerprefix', _value, true];";
+                typeName = "STRING";
+                defaultValue = """AMBUSH_""";
+                category = "Recondo_NEARAMBUSH_Markers";
+            };
+            class StagingMarker {
+                displayName = "Staging Marker";
+                tooltip = "REQUIRED. Name of an invisible marker where ambush squads first spawn and go prone out of sight before teleporting into the ambush line already flat. Place it on dry land in an unused corner of the map, far from any playable area. The module does not spawn AI without it. Default: STAGING.";
+                control = "Edit";
+                property = "Recondo_NEARAMBUSH_StagingMarker";
+                expression = "_this setVariable ['stagingmarker', _value, true];";
+                typeName = "STRING";
+                defaultValue = """STAGING""";
+                category = "Recondo_NEARAMBUSH_Markers";
+            };
+            class ActivationChance {
+                displayName = "Activation Chance (0-1)";
+                tooltip = "Chance for each candidate marker to be an active ambush site this mission. 0.5 = roughly half the markers are live. Re-rolled every mission start (not persistent).";
+                control = "Edit";
+                property = "Recondo_NEARAMBUSH_ActivationChance";
+                expression = "_this setVariable ['activationchance', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0.5";
+                category = "Recondo_NEARAMBUSH_Markers";
+            };
+            class TriggerRadius {
+                displayName = "Trigger Radius (m)";
+                tooltip = "When a BLUFOR player ON FOOT comes within this distance of an active site, the ambush group spawns (prone, holding fire). Minimum 50m.";
+                control = "Edit";
+                property = "Recondo_NEARAMBUSH_TriggerRadius";
+                expression = "_this setVariable ['triggerradius', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "150";
+                category = "Recondo_NEARAMBUSH_Markers";
+            };
+
+            // DEBUG
+            class DebugMarkers {
+                displayName = "DEBUG - Show Map Markers";
+                tooltip = "Show ambush site states on the map for all players: green = armed, orange = spawned/waiting, red = sprung. Testing only.";
+                control = "Checkbox";
+                property = "Recondo_NEARAMBUSH_DebugMarkers";
+                expression = "_this setVariable ['debugmarkers', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_NEARAMBUSH_Debug";
+            };
+            class DebugLogging {
+                displayName = "DEBUG - Enable Logging";
+                tooltip = "Enable detailed logging to the RPT file for troubleshooting.";
+                control = "Checkbox";
+                property = "Recondo_NEARAMBUSH_DebugLogging";
+                expression = "_this setVariable ['debuglogging', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_NEARAMBUSH_Debug";
             };
 
             class ModuleDescription: ModuleDescription {};

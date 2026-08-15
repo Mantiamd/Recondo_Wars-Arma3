@@ -38,6 +38,7 @@ private _spawnPercentage = _settings get "spawnPercentage";
 private _simulationDistance = _settings get "simulationDistance";
 private _lambsReinforce = _settings get "lambsReinforce";
 private _pathMarkers = _settings get "pathMarkers";
+private _patrolBehaviour = _settings getOrDefault ["patrolBehaviour", "SAFE"];
 
 if (_debug) then {
     diag_log format ["[RECONDO_PP] Trigger activated. Spawning up to %1 groups.", _numberOfGroups];
@@ -117,8 +118,8 @@ for "_i" from 1 to _numberOfGroups do {
         continue;
     };
     
-    // Set group behavior - SAFE behavior, normal speed
-    _group setBehaviour "SAFE";
+    // Set group behavior - relaxed patrol by default, normal speed
+    _group setBehaviour _patrolBehaviour;
     _group setSpeedMode "NORMAL";
     _group setCombatMode "YELLOW";
     _group setFormation "STAG COLUMN";
@@ -138,10 +139,18 @@ for "_i" from 1 to _numberOfGroups do {
     _spawnedGroups pushBack _group;
     
     // Create initial waypoints for this group
-    [_group, _pathMarkers, _startMarkerIndex, _movingAscending, _debug] spawn {
-        params ["_group", "_pathMarkers", "_currentIndex", "_ascending", "_debug"];
+    [_group, _pathMarkers, _startMarkerIndex, _movingAscending, _patrolBehaviour, _debug] spawn {
+        params ["_group", "_pathMarkers", "_currentIndex", "_ascending", "_patrolBehaviour", "_debug"];
         
         private _markerCount = count _pathMarkers;
+
+        // Contact tracking: while the group knows about an enemy it fights in
+        // COMBAT; the patrol behaviour is only restored after a calm period,
+        // so the loop's waypoint resets never drag a fighting group back to
+        // relaxed SAFE mode (which suppressed engagement entirely).
+        private _inContact = false;
+        private _lastContactTime = -1e6;
+        private _calmDelay = 60;
         
         // Main patrol loop - continues until group is destroyed
         while {!isNull _group && {count units _group > 0}} do {
@@ -190,10 +199,12 @@ for "_i" from 1 to _numberOfGroups do {
                 deleteWaypoint [_group, 0];
             };
             
-            // Add waypoint to next marker
+            // Add waypoint to next marker. Waypoint behaviour is the reliable
+            // cross-locality channel (waypoints are global commands), so it
+            // carries COMBAT during contact even for HC-owned groups.
             private _wp = _group addWaypoint [_nextPos, 0];
             _wp setWaypointType "MOVE";
-            _wp setWaypointBehaviour "SAFE";
+            _wp setWaypointBehaviour ([_patrolBehaviour, "COMBAT"] select _inContact);
             _wp setWaypointSpeed "NORMAL";
             _wp setWaypointFormation "STAG COLUMN";
             _wp setWaypointCompletionRadius 10;
@@ -216,6 +227,31 @@ for "_i" from 1 to _numberOfGroups do {
                 // Check if reached waypoint
                 private _leader = leader _group;
                 if (isNull _leader) exitWith { true };
+
+                // Contact check: known enemy, or the owning machine's danger
+                // FSM escalated the group itself. The behaviour test only
+                // counts while not in contact - we set COMBAT ourselves, so
+                // during contact only actual enemy knowledge refreshes the
+                // timer, letting the group settle once knowledge decays.
+                if (!isNull (_leader findNearestEnemy _leader) || {!_inContact && {behaviour _leader == "COMBAT"}}) then {
+                    _lastContactTime = time;
+                    if (!_inContact) then {
+                        _inContact = true;
+                        _group setBehaviour "COMBAT";
+                        if (_debug) then {
+                            diag_log format ["[RECONDO_PP] Group %1 in contact - switching to COMBAT", _group];
+                        };
+                    };
+                };
+
+                // Contact over: settle back to patrol behaviour after a calm period
+                if (_inContact && {time - _lastContactTime > _calmDelay}) then {
+                    _inContact = false;
+                    _group setBehaviour _patrolBehaviour;
+                    if (_debug) then {
+                        diag_log format ["[RECONDO_PP] Group %1 contact over - resuming %2 patrol", _group, _patrolBehaviour];
+                    };
+                };
                 
                 (_leader distance _nextPos) < 20
             };
