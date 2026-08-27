@@ -99,7 +99,9 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 - Arma 3 (v2.10+)
 - [CBA_A3](https://steamcommunity.com/sharedfiles/filedetails/?id=450814997)
 - [ACE3](https://steamcommunity.com/sharedfiles/filedetails/?id=463939057)
-- [SOG Prairie Fire](https://store.steampowered.com/app/1227700/Arma_3_Creator_DLC_SOG_Prairie_Fire/) (recommended)
+- [SOG Prairie Fire](https://store.steampowered.com/app/1227700/Arma_3_Creator_DLC_SOG_Prairie_Fire/)
+- [Unsung Redux](https://steamcommunity.com/sharedfiles/filedetails/?id=2554978758)
+- [Nickel Steel Precision](https://steamcommunity.com/sharedfiles/filedetails/?id=3083451905)
 - [LAMBS Danger](https://steamcommunity.com/sharedfiles/filedetails/?id=1858075458) (required for Outpost System module)
 - [Hanoi Hannah Loudspeakers Mod](https://steamcommunity.com/sharedfiles/filedetails/?id=3696734884) (required for Hanoi Hannah module only)
 
