@@ -137,6 +137,11 @@ for "_i" from 1 to _numberOfGroups do {
     
     // Store spawned group
     _spawnedGroups pushBack _group;
+
+    // Idle chatter while players are close (server-side loop, HC-safe)
+    if (_settings getOrDefault ["enableVoicelines", true]) then {
+        [_group] call Recondo_fnc_startVoicelineLoop;
+    };
     
     // Create initial waypoints for this group
     [_group, _pathMarkers, _startMarkerIndex, _movingAscending, _patrolBehaviour, _debug] spawn {

@@ -1890,10 +1890,92 @@ class CfgVehicles {
                 category = "Recondo_SDR_General";
             };
             
+            // QUICK REACTION AA
+            class EnableQRAA {
+                displayName = "QRAA - Enable Quick Reaction AA";
+                tooltip = "If enabled, static defenses do not spawn at mission start. Instead, all randomly-selected sites spawn simultaneously the first time any Detector Side AI unit within Detection Radius of a selected site spots (knowsAbout) a Target Side unit. Bypasses persistence and Headless Client transfer when active.";
+                control = "Checkbox";
+                property = "Recondo_SDR_EnableQRAA";
+                expression = "_this setVariable ['enableqraa', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_SDR_QRAA";
+            };
+            class QRAA_DetectorSide {
+                displayName = "Detector Side";
+                tooltip = "Which side's AI units act as detectors. When one of these units (alive, within Detection Radius of a selected site, and below Height Limit) spots a Target Side unit, the layout arms.";
+                control = "Combo";
+                property = "Recondo_SDR_QRAA_DetectorSide";
+                expression = "_this setVariable ['qraa_detectorside', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "0";
+                category = "Recondo_SDR_QRAA";
+                class Values {
+                    class East { name = "OPFOR (East)"; value = 0; };
+                    class West { name = "BLUFOR (West)"; value = 1; };
+                    class Guer { name = "Independent"; value = 2; };
+                };
+            };
+            class QRAA_TargetSide {
+                displayName = "Target Side";
+                tooltip = "Which side is being detected. Any unit of this side (AI or player) below the Height Limit is a valid target for detection checks.";
+                control = "Combo";
+                property = "Recondo_SDR_QRAA_TargetSide";
+                expression = "_this setVariable ['qraa_targetside', _value, true];";
+                typeName = "NUMBER";
+                defaultValue = "1";
+                category = "Recondo_SDR_QRAA";
+                class Values {
+                    class East { name = "OPFOR (East)"; value = 0; };
+                    class West { name = "BLUFOR (West)"; value = 1; };
+                    class Guer { name = "Independent"; value = 2; };
+                };
+            };
+            class QRAA_Radius {
+                displayName = "Detection Radius (m)";
+                tooltip = "Radius around each selected site. Only Detector Side units inside this radius of any selected site are considered when checking knowsAbout on targets. Default 500m.";
+                control = "Edit";
+                property = "Recondo_SDR_QRAA_Radius";
+                expression = "_this setVariable ['qraa_radius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """500""";
+                category = "Recondo_SDR_QRAA";
+            };
+            class QRAA_DetectionThreshold {
+                displayName = "Detection Threshold";
+                tooltip = "knowsAbout value a detector must reach on a target to arm the layout. 1.5 = 'identified as enemy' (Arma's standard threshold, matches Reinforcement Waves).";
+                control = "Edit";
+                property = "Recondo_SDR_QRAA_DetectionThreshold";
+                expression = "_this setVariable ['qraa_detectionthreshold', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """1.5""";
+                category = "Recondo_SDR_QRAA";
+            };
+            class QRAA_HeightLimit {
+                displayName = "Height Limit (m)";
+                tooltip = "Maximum altitude above ground at which both detectors and targets still count. Meant to catch helicopters and low-flying aircraft while ignoring high-altitude jets. Default 500m.";
+                control = "Edit";
+                property = "Recondo_SDR_QRAA_HeightLimit";
+                expression = "_this setVariable ['qraa_heightlimit', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """500""";
+                category = "Recondo_SDR_QRAA";
+            };
+            class QRAA_SafetyRadius {
+                displayName = "Safety Radius (m)";
+                tooltip = "Prevents sites from popping in front of the enemy. When the layout trips, any individual site with a Target Side unit within this radius is skipped (not spawned) and does not retry - it is lost for the mission. Other sites in the layout spawn normally. Default 200m.";
+                control = "Edit";
+                property = "Recondo_SDR_QRAA_SafetyRadius";
+                expression = "_this setVariable ['qraa_safetyradius', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """200""";
+                category = "Recondo_SDR_QRAA";
+            };
+            
             // PERSISTENCE SETTINGS
             class EnablePersistence {
                 displayName = "PERSISTENCE - Enable Persistence";
-                tooltip = "If enabled, the same markers will spawn statics after server restart. If disabled, markers are re-randomized each mission start.";
+                tooltip = "If enabled, the same markers will spawn statics after server restart. If disabled, markers are re-randomized each mission start. Ignored when Quick Reaction AA is enabled.";
                 control = "Checkbox";
                 property = "Recondo_SDR_EnablePersistence";
                 expression = "_this setVariable ['enablepersistence', _value, true];";
@@ -3013,6 +3095,16 @@ class CfgVehicles {
                 defaultValue = "false";
                 category = "Recondo_FP_Performance";
             };
+            class EnableVoicelines {
+                displayName = "Enable Voicelines";
+                tooltip = "Patrol members quietly talk in Vietnamese when players are within 100m (audible to ~120m), on a jittered 30-60s cadence.";
+                control = "Checkbox";
+                property = "Recondo_FP_EnableVoicelines";
+                expression = "_this setVariable ['enablevoicelines', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_FP_General";
+            };
             
             // PERSISTENCE SETTINGS
             class EnablePersistence {
@@ -3613,6 +3705,16 @@ class CfgVehicles {
                 typeName = "BOOL";
                 defaultValue = "false";
                 category = "Recondo_PP_Performance";
+            };
+            class EnableVoicelines {
+                displayName = "Enable Voicelines";
+                tooltip = "Patrol members quietly talk in Vietnamese when players are within 100m (audible to ~120m), on a jittered 30-60s cadence.";
+                control = "Checkbox";
+                property = "Recondo_PP_EnableVoicelines";
+                expression = "_this setVariable ['enablevoicelines', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_PP_General";
             };
             
             // DEBUG
@@ -12949,6 +13051,17 @@ class CfgVehicles {
                 category = "Recondo_CampsRandom_AI";
             };
             
+            class EnableVoicelines {
+                displayName = "Enable Voicelines";
+                tooltip = "Camp sentries quietly talk in Vietnamese when players are within 100m (audible to ~120m), on a jittered 30-60s cadence.";
+                control = "Checkbox";
+                property = "Recondo_CampsRandom_EnableVoicelines";
+                expression = "_this setVariable ['enablevoicelines', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "true";
+                category = "Recondo_CampsRandom_AI";
+            };
+            
             // ========================================
             // INTEL - UNIT INVENTORY
             // ========================================
@@ -16719,9 +16832,19 @@ class CfgVehicles {
             // ========================================
             // WAVE SETTINGS
             // ========================================
+            class InitialDelay {
+                displayName = "WAVES - Initial Delay (sec)";
+                tooltip = "Delay between the trigger firing and the first wave spawning. Applies to chargers too. Default: 10";
+                control = "Edit";
+                property = "Recondo_WaveAtk_InitialDelay";
+                expression = "_this setVariable ['initialdelay', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """10""";
+                category = "Recondo_WaveAtk_Waves";
+            };
             class MaxWaves {
-                displayName = "WAVES - Max Waves";
-                tooltip = "Maximum number of waves per marker. Default: 3";
+                displayName = "Max Waves";
+                tooltip = "Maximum number of waves per marker. Once triggered, all waves always spawn. Default: 3";
                 control = "Edit";
                 property = "Recondo_WaveAtk_MaxWaves";
                 expression = "_this setVariable ['maxwaves', parseNumber _value, true];";
@@ -16731,7 +16854,7 @@ class CfgVehicles {
             };
             class TimeBetweenWaves {
                 displayName = "Time Between Waves (sec)";
-                tooltip = "Countdown between waves. The next wave only spawns if trigger-side players are still within the trigger radius. Default: 120";
+                tooltip = "Countdown between waves. Default: 120";
                 control = "Edit";
                 property = "Recondo_WaveAtk_TimeBetweenWaves";
                 expression = "_this setVariable ['timebetweenwaves', parseNumber _value, true];";
@@ -16770,6 +16893,70 @@ class CfgVehicles {
                 category = "Recondo_WaveAtk_Waves";
             };
             
+            // ========================================
+            // CHARGER SETTINGS
+            // ========================================
+            class EnableChargers {
+                displayName = "CHARGERS - Enable Chargers";
+                tooltip = "Second attack tier alongside the normal waves: charger groups spawn on their own schedule, sprint straight at players (CARELESS, full speed, no fleeing, force walk removed) and use LAMBS Danger's rush system when it is loaded. Within 100m of players they scream charging war cries every ~15 seconds. Chargers stay on the server (no HC transfer).";
+                control = "Checkbox";
+                property = "Recondo_WaveAtk_EnableChargers";
+                expression = "_this setVariable ['enablechargers', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_WaveAtk_Chargers";
+            };
+            class ChargerClassnames {
+                displayName = "Charger Unit Classnames";
+                tooltip = "Unit classnames for the charger groups - pick units with bayonets fixed. One per line or comma-separated; a random classname is picked for each unit. REQUIRED when chargers are enabled.";
+                control = "EditCodeMulti5";
+                property = "Recondo_WaveAtk_ChargerClassnames";
+                expression = "_this setVariable ['chargerclassnames', _value, true];";
+                typeName = "STRING";
+                defaultValue = """""";
+                category = "Recondo_WaveAtk_Chargers";
+            };
+            class ChargerUnitsMin {
+                displayName = "Charger Units Per Group (Min)";
+                tooltip = "Minimum units in each charger group, independent of the normal wave group size. Default: 2";
+                control = "Edit";
+                property = "Recondo_WaveAtk_ChargerUnitsMin";
+                expression = "_this setVariable ['chargerunitsmin', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """2""";
+                category = "Recondo_WaveAtk_Chargers";
+            };
+            class ChargerUnitsMax {
+                displayName = "Charger Units Per Group (Max)";
+                tooltip = "Maximum units in each charger group, independent of the normal wave group size. Default: 6";
+                control = "Edit";
+                property = "Recondo_WaveAtk_ChargerUnitsMax";
+                expression = "_this setVariable ['chargerunitsmax', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """6""";
+                category = "Recondo_WaveAtk_Chargers";
+            };
+            class ChargerMaxWaves {
+                displayName = "Charger Max Waves";
+                tooltip = "Maximum number of charger waves per marker, independent of the normal wave count. Default: 2";
+                control = "Edit";
+                property = "Recondo_WaveAtk_ChargerMaxWaves";
+                expression = "_this setVariable ['chargermaxwaves', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """2""";
+                category = "Recondo_WaveAtk_Chargers";
+            };
+            class ChargerTimeBetweenWaves {
+                displayName = "Charger Time Between Waves (sec)";
+                tooltip = "Countdown between charger waves, independent of the normal wave countdown. Both schedules start at the same trigger moment and run in parallel. Default: 180";
+                control = "Edit";
+                property = "Recondo_WaveAtk_ChargerTimeBetweenWaves";
+                expression = "_this setVariable ['chargertimebetweenwaves', parseNumber _value, true];";
+                typeName = "STRING";
+                defaultValue = """180""";
+                category = "Recondo_WaveAtk_Chargers";
+            };
+
             // ========================================
             // DEBUG SETTINGS
             // ========================================

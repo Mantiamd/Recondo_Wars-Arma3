@@ -72,10 +72,10 @@ _savedCompleted pushBack _markerToComplete;
 [_persistenceKey + "_COMPLETED", _savedCompleted] call Recondo_fnc_setSaveData;
 call Recondo_fnc_queueSave;
 
-// Notify all players
+// Build turn-in entry. Completion is surfaced via the Intel Board rather
+// than a mission-wide broadcast; _msg is still consumed by the intel log.
 private _grid = mapGridPosition (getMarkerPos _markerToComplete);
 private _msg = format ["%1 turned in reconnaissance photo. Grid: %2", name _player, _grid];
-[_msg] remoteExec ["systemChat", 0];
 
 // Update debug markers
 private _dbgMarkerName = format ["RECONDO_PHOTO_DEBUG_%1", _markerToComplete];
@@ -121,14 +121,9 @@ if (!isNil "RECONDO_INTEL_LOG") then {
     publicVariable "RECONDO_INTEL_LOG_LATEST";
 };
 
-// Check if all objectives complete
+// Intel Board reflects remaining/total counts; no mission-wide broadcast here.
 private _counts = [_objectiveName] call Recondo_fnc_getPhotoObjectiveCount;
 _counts params ["_remaining", "_total"];
-
-if (_remaining == 0) then {
-    private _completeMsg = format ["All %1 objectives completed! (%2/%2)", _objectiveName, _total];
-    [_completeMsg] remoteExec ["systemChat", 0];
-};
 
 if (_debugLogging) then {
     diag_log format ["[RECONDO_PHOTO] %1 turned in photo for %2 at %3. Remaining: %4/%5", 

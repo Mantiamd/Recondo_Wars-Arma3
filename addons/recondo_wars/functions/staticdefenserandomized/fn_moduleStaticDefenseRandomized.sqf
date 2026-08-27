@@ -48,6 +48,15 @@ _settings set ["elephantGrass", _logic getVariable ["elephantgrass", false]];
 // Performance Settings
 _settings set ["enableHC", _logic getVariable ["enablehc", false]];
 
+// Quick Reaction AA Settings
+_settings set ["enableQRAA", _logic getVariable ["enableqraa", false]];
+_settings set ["qraaDetectorSideNum", _logic getVariable ["qraa_detectorside", 0]];
+_settings set ["qraaTargetSideNum", _logic getVariable ["qraa_targetside", 1]];
+_settings set ["qraaRadius", _logic getVariable ["qraa_radius", 500]];
+_settings set ["qraaDetectionThreshold", _logic getVariable ["qraa_detectionthreshold", 1.5]];
+_settings set ["qraaHeightLimit", _logic getVariable ["qraa_heightlimit", 500]];
+_settings set ["qraaSafetyRadius", _logic getVariable ["qraa_safetyradius", 200]];
+
 // Persistence Settings
 _settings set ["enablePersistence", _logic getVariable ["enablepersistence", false]];
 
@@ -62,6 +71,12 @@ private _debug = _settings get "enableDebug";
 private _markerPrefix = _settings get "markerPrefix";
 private _spawnPercentage = _settings get "spawnPercentage";
 private _enablePersistence = _settings get "enablePersistence";
+private _enableQRAA = _settings get "enableQRAA";
+
+// QRAA and persistence are mutually exclusive - QRAA re-randomizes each
+// mission so its arming behaviour is meaningful. Persistence is silently
+// bypassed when QRAA is on.
+if (_enableQRAA) then { _enablePersistence = false; };
 
 // Validate settings
 if (_markerPrefix == "") exitWith {
@@ -157,6 +172,22 @@ if (count _selectedMarkers == 0) then {
 RECONDO_SDR_SELECTED_MARKERS = _selectedMarkers;
 RECONDO_SDR_SPAWNED_STATICS = [];
 RECONDO_SDR_SPAWNED_UNITS = [];
+
+// Quick Reaction AA path: hold selected markers and arm a global watcher.
+// The whole layout spawns the moment any detection-side player enters the
+// detection radius of any single selected site. HC transfer is bypassed
+// intentionally - QRAA sites stay server-side.
+if (_enableQRAA) exitWith {
+    _settings set ["qraaPendingMarkers", +_selectedMarkers];
+    [_settings] spawn Recondo_fnc_qraaWatcher;
+
+    private _sideMap = [east, west, independent];
+    private _detectorSide = _sideMap select ((_settings get "qraaDetectorSideNum") max 0 min 2);
+    private _targetSide = _sideMap select ((_settings get "qraaTargetSideNum") max 0 min 2);
+    diag_log format ["[RECONDO_SDR] QRAA armed at prefix '%1' - %2 sites, %3 detectors within %4m of any site spot %5 targets (threshold %6, height limit %7m).",
+        _markerPrefix, count _selectedMarkers, _detectorSide, _settings get "qraaRadius",
+        _targetSide, _settings get "qraaDetectionThreshold", _settings get "qraaHeightLimit"];
+};
 
 // Spawn static defenses at selected markers
 {

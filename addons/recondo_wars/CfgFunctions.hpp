@@ -117,6 +117,12 @@ class CfgFunctions {
             class npcDialogTalk {};
         };
 
+        // Shared AI voiceline chatter (Foot Patrols, Path Patrols, Camps Random)
+        class Voicelines {
+            file = "\recondo_wars\functions\voicelines";
+            class startVoicelineLoop {};
+        };
+
         // Kit Carson System Module Functions
         class KitCarson {
             file = "\recondo_wars\functions\kitcarson";
@@ -167,6 +173,7 @@ class CfgFunctions {
             class moduleStaticDefenseRandomized {};
             class spawnStaticDefense {};
             class clearTerrainObjects {};
+            class qraaWatcher {};
         };
         
         // Smarter AAA Module Functions
@@ -789,6 +796,7 @@ class CfgFunctions {
             class waveAttackWatcher {};
             class runWaveAttack {};
             class spawnWaveAttackGroup {};
+            class spawnWaveChargerGroup {};
         };
         
         // Player Persistence Module Functions

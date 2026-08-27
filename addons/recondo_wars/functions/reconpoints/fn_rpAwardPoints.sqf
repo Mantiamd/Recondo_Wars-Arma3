@@ -11,7 +11,8 @@
         _type - STRING - Reward type: "hvt", "hostage", "intel", "wiretap", "destroy", "pow", "kill", "custom"
         _recipient - OBJECT or GROUP - Player or group to receive points
         _customAmount - NUMBER - (Optional) Custom point amount if type is "custom"
-        _notifyMsg - STRING - (Optional) Custom notification message
+        _notifyMsg - STRING - (Optional) Custom notification message (ignored when _silent is true)
+        _silent - BOOL - (Optional) If true, points are awarded silently with no chat/hint notification. Used by objective completion handlers so players learn of completions via the Intel Board rather than pop-ups.
     
     Returns:
         NUMBER - Total points awarded (0 if system not active)
@@ -20,13 +21,15 @@
         ["hvt", group player] call Recondo_fnc_rpAwardPoints;
         ["intel", player] call Recondo_fnc_rpAwardPoints;
         ["custom", player, 50, "Bonus objective completed!"] call Recondo_fnc_rpAwardPoints;
+        ["destroy", _group, 0, "", true] call Recondo_fnc_rpAwardPoints; // Silent
 */
 
 params [
     ["_type", "", [""]],
     ["_recipient", objNull, [objNull, grpNull]],
     ["_customAmount", 0, [0]],
-    ["_notifyMsg", "", [""]]
+    ["_notifyMsg", "", [""]],
+    ["_silent", false, [false]]
 ];
 
 // Server only
@@ -100,14 +103,18 @@ private _debug = RECONDO_RP_SETTINGS getOrDefault ["debugLogging", false];
     
     _totalAwarded = _totalAwarded + _amount;
     
-    // Send notification to player
-    private _msg = if (_notifyMsg != "") then { 
-        _notifyMsg 
-    } else { 
-        format ["+%1 Recon Points (%2)", _amount, _type] 
+    // Send notification to player (skipped for silent awards - objective
+    // completion handlers pass _silent so players learn from the Intel Board
+    // instead of a pop-up)
+    if (!_silent) then {
+        private _msg = if (_notifyMsg != "") then {
+            _notifyMsg
+        } else {
+            format ["+%1 Recon Points (%2)", _amount, _type]
+        };
+
+        [_msg, _amount] remoteExec ["Recondo_fnc_rpShowNotification", _player];
     };
-    
-    [_msg, _amount] remoteExec ["Recondo_fnc_rpShowNotification", _player];
     
     if (_debug) then {
         diag_log format ["[RECONDO_RP] Awarded %1 RP to %2 (%3). Total: %4", 

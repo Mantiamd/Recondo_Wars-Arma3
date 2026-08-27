@@ -157,6 +157,11 @@ if (!isNil "RECONDO_FP_SPAWNED_GROUPS") then {
     RECONDO_FP_SPAWNED_GROUPS pushBack _group;
 };
 
+// Idle chatter while players are close (server-side loop, HC-safe)
+if (_settings getOrDefault ["enableVoicelines", true]) then {
+    [_group] call Recondo_fnc_startVoicelineLoop;
+};
+
 // Hand the group to a Headless Client if one is connected. The patrol is
 // fully waypoint-driven, so nothing else needs to follow it across.
 if (_settings getOrDefault ["enableHC", false]) then {

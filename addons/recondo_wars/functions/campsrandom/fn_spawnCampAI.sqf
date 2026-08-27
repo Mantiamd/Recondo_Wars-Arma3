@@ -245,6 +245,13 @@ if (_enableIntelUnit && {count _intelItemPool > 0} && {count _spawnedUnits > 0})
 private _varName = format ["RECONDO_CAMPS_%1_units", _markerId];
 missionNamespace setVariable [_varName, _spawnedUnits, true];
 
+// Idle chatter around the campfire while players are close. The loop skips
+// simulation-disabled units, so frozen camps stay silent until players
+// approach and the simulation monitor wakes the sentries.
+if (_settings getOrDefault ["enableVoicelines", true]) then {
+    [_sentryGroup] call Recondo_fnc_startVoicelineLoop;
+};
+
 if (_debugLogging) then {
     diag_log format ["[RECONDO_CAMPS] Spawned %1 sentries at %2", count _spawnedUnits, _markerId];
 };

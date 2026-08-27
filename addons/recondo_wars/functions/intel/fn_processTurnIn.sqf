@@ -165,9 +165,10 @@ if (!_success) then {
         ["INTEL_LOG", RECONDO_INTEL_LOG] call Recondo_fnc_setSaveData;
     };
     
-    // Still award points for turning in intel even if no targets remain
+    // Still award points for turning in intel even if no targets remain.
+    // Silent - the intel card is the completion signal; skip the RP toast.
     if (!isNil "RECONDO_RP_SETTINGS" && _source == "document") then {
-        ["intel", _player] call Recondo_fnc_rpAwardPoints;
+        ["intel", _player, 0, "", true] call Recondo_fnc_rpAwardPoints;
     };
 } else {
     // Successfully revealed a target
@@ -328,8 +329,9 @@ if (!_success) then {
         diag_log format ["[RECONDO_INTEL] Added to intel log: %1", _logMessage];
     };
     
-    // Award Recon Points for successful intel turn-in
+    // Award Recon Points for successful intel turn-in. Silent - the intel
+    // card is the completion signal; skip the RP toast.
     if (!isNil "RECONDO_RP_SETTINGS" && _source == "document") then {
-        ["intel", _player] call Recondo_fnc_rpAwardPoints;
+        ["intel", _player, 0, "", true] call Recondo_fnc_rpAwardPoints;
     };
 };

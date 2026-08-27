@@ -53,6 +53,9 @@ _settings set ["simulationDistance", _logic getVariable ["simulationdistance", 1
 _settings set ["lambsReinforce", _logic getVariable ["lambsreinforce", true]];
 _settings set ["enableHC", _logic getVariable ["enablehc", false]];
 
+// Sound Settings
+_settings set ["enableVoicelines", _logic getVariable ["enablevoicelines", true]];
+
 // Debug
 _settings set ["enableDebug", _logic getVariable ["enabledebug", false]];
 if (RECONDO_MASTER_DEBUG) then { _settings set ["enableDebug", true]; };

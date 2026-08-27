@@ -118,12 +118,13 @@ diag_log format ["[RECONDO_JAMMER] Jammer destroyed: %1 at %2", _objectiveName, 
 private _counts = [_objectiveName] call Recondo_fnc_getJammerCount;
 _counts params ["_remaining", "_total"];
 
-// Award Recon Points to nearby players
+// Award Recon Points to nearby players. Silent - completion is surfaced via
+// the Intel Board rather than pop-ups.
 if (!isNil "RECONDO_RP_SETTINGS") then {
     private _markerPos = getMarkerPos _markerId;
     private _nearbyPlayers = allPlayers select { alive _x && (_x distance2D _markerPos) < 100 };
     {
-        ["destroy", _x, 0, format ["Jammer %1 destroyed!", _objectiveName]] call Recondo_fnc_rpAwardPoints;
+        ["destroy", _x, 0, "", true] call Recondo_fnc_rpAwardPoints;
     } forEach _nearbyPlayers;
 };
 

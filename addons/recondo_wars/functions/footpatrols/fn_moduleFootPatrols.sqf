@@ -60,6 +60,9 @@ _settings set ["simulationDistance", _logic getVariable ["simulationdistance", 1
 _settings set ["lambsReinforce", _logic getVariable ["lambsreinforce", true]];
 _settings set ["enableHC", _logic getVariable ["enablehc", false]];
 
+// Sound Settings
+_settings set ["enableVoicelines", _logic getVariable ["enablevoicelines", true]];
+
 // Persistence Settings
 _settings set ["enablePersistence", _logic getVariable ["enablepersistence", false]];
 

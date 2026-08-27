@@ -500,6 +500,13 @@ class Cfg3DEN {
                 class Attributes {};
             };
             
+            // Quick Reaction AA
+            class Recondo_SDR_QRAA {
+                displayName = "Quick Reaction AA";
+                collapsed = 1;
+                class Attributes {};
+            };
+            
             // Persistence Settings
             class Recondo_SDR_Persistence {
                 displayName = "Persistence";
@@ -2598,6 +2605,11 @@ class Cfg3DEN {
             class Recondo_WaveAtk_Waves {
                 displayName = "Wave Settings";
                 collapsed = 0;
+                class Attributes {};
+            };
+            class Recondo_WaveAtk_Chargers {
+                displayName = "Charger Settings";
+                collapsed = 1;
                 class Attributes {};
             };
             class Recondo_WaveAtk_Debug {

@@ -66,6 +66,7 @@ private _intelUnitChance = _logic getVariable ["intelunitchance", 0.5];
 private _intelWeight = _logic getVariable ["intelweight", 3];
 
 // Smell Hints
+private _enableVoicelines = _logic getVariable ["enablevoicelines", true];
 private _enableSmellHints = _logic getVariable ["enablesmellhints", true];
 private _smellHintRadius = _logic getVariable ["smellhintradius", 150];
 private _smellHintMessagesRaw = _logic getVariable ["smellhintmessages", "The smell of woodsmoke drifts on the breeze...,A faint campfire scent hangs in the air...,You catch a whiff of smoke nearby...,Something is burning nearby..."];
@@ -194,6 +195,7 @@ private _settings = createHashMapFromArray [
     ["intelItemPool", _intelItemPool],
     ["intelUnitChance", _intelUnitChance],
     ["intelWeight", _intelWeight],
+    ["enableVoicelines", _enableVoicelines],
     ["enableSmellHints", _enableSmellHints],
     ["smellHintRadius", _smellHintRadius],
     ["smellHintMessages", _smellHintMessages],

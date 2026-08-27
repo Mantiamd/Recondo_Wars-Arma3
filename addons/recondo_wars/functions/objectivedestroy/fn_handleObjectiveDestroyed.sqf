@@ -96,12 +96,13 @@ if (getMarkerColor _debugMarker != "") then {
 private _counts = [_objectiveName] call Recondo_fnc_getObjectiveCount;
 _counts params ["_remaining", "_total"];
 
-// Award Recon Points to nearby players (within 100m of objective)
+// Award Recon Points to nearby players (within 100m of objective). Silent -
+// completion is surfaced via the Intel Board rather than pop-ups.
 if (!isNil "RECONDO_RP_SETTINGS") then {
     private _markerPos = getMarkerPos _markerId;
     private _nearbyPlayers = allPlayers select { alive _x && (_x distance2D _markerPos) < 100 };
     {
-        ["destroy", _x, 0, format ["Objective %1 destroyed!", _objectiveName]] call Recondo_fnc_rpAwardPoints;
+        ["destroy", _x, 0, "", true] call Recondo_fnc_rpAwardPoints;
     } forEach _nearbyPlayers;
 };
 

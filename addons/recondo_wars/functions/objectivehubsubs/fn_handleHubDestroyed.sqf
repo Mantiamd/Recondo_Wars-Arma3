@@ -100,15 +100,12 @@ if (!isNil "_settings") then {
     };
 };
 
-// Broadcast notification
-private _notificationMsg = format ["%1 has been destroyed!", _objectiveName];
-_notificationMsg remoteExec ["systemChat", 0];
-
-// Award Recon Points to nearby players
+// Award Recon Points to nearby players. Silent - completion is surfaced
+// via the Intel Board (remaining/completed counts) rather than pop-ups.
 if (!isNil "RECONDO_RP_SETTINGS") then {
     private _markerPos = getMarkerPos _hubMarker;
     private _nearbyPlayers = allPlayers select { alive _x && (_x distance2D _markerPos) < 100 };
     {
-        ["destroy", _x, 0, format ["%1 destroyed!", _objectiveName]] call Recondo_fnc_rpAwardPoints;
+        ["destroy", _x, 0, "", true] call Recondo_fnc_rpAwardPoints;
     } forEach _nearbyPlayers;
 };

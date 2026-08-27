@@ -79,13 +79,10 @@ if (isNil "RECONDO_INTEL_TARGETS") then {
     };
 };
 
-// Notify all players
-private _notifyMsg = format ["%1 turned in a prisoner.", name _player];
-[_notifyMsg] remoteExec ["systemChat", 0];
-
-// Award Recon Points for POW turn-in
+// Award Recon Points for POW turn-in. Silent - completion is surfaced via
+// the Intel Board / revealed intel rather than a mission-wide broadcast.
 if (!isNil "RECONDO_RP_SETTINGS") then {
-    ["pow", _player] call Recondo_fnc_rpAwardPoints;
+    ["pow", _player, 0, "", true] call Recondo_fnc_rpAwardPoints;
 };
 
 diag_log format ["[RECONDO_INTELITEMS] POW turn-in complete: %1 by %2", _powName, name _player];

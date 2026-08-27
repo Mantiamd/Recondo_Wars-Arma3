@@ -89,30 +89,19 @@ if (_hvtMarker != "") then {
     diag_log format ["[RECONDO_HVT] Completed intel target: %1", _targetId];
 };
 
-// Notify all players
-private _captureMsg = format ["%1 has been captured!", _hvtName];
-[_captureMsg] remoteExec ["systemChat", 0];
-
-// Show visual notification
-private _titleText = format [
-    "<t size='1.5' color='#00ff00'>%1 Captured!</t><br/><t size='1'>The target has been secured.</t>",
-    _hvtName
-];
-[_titleText, "PLAIN", 3, true, true] remoteExec ["titleText", 0];
-
-// Mark HVT as captured (unit left as-is)
+// Mark HVT as captured (unit left as-is). Completion is surfaced via the
+// Intel Board (remaining/completed counts) rather than pop-ups.
 if (!isNull _hvt) then {
     _hvt setVariable ["RECONDO_HVT_captured", true, true];
     diag_log format ["[RECONDO_HVT] HVT unit marked as captured, left in place"];
 };
 
-// Award Recon Points to the capturing player's group
+// Award Recon Points to the capturing player's group. Silent.
 if (!isNil "RECONDO_RP_SETTINGS") then {
-    // Find the player who captured the HVT by checking nearby players or last interaction
     private _capturingPlayer = _hvt getVariable ["RECONDO_HVT_capturedBy", objNull];
     if (!isNull _capturingPlayer && isPlayer _capturingPlayer) then {
         private _capturingGroup = group _capturingPlayer;
-        ["hvt", _capturingGroup, 0, format ["HVT %1 captured!", _hvtName]] call Recondo_fnc_rpAwardPoints;
+        ["hvt", _capturingGroup, 0, "", true] call Recondo_fnc_rpAwardPoints;
     };
 };
 

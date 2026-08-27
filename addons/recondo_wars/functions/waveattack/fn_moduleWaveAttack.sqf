@@ -12,6 +12,12 @@
         players remain in the radius. All groups whistle on a jittered
         60-second loop (same sounds as the Trackers system).
 
+        Optional second tier: charger groups with their own classname
+        pool, wave count, and countdown, running in parallel from the
+        same trigger moment. Chargers sprint straight at players
+        (CARELESS / FULL / no fleeing, force walk removed) and use LAMBS
+        Danger's taskRush when it is loaded (see fn_spawnWaveChargerGroup).
+
     Priority: 5 (feature module — spawns entities, no dependencies)
 
     Parameters:
@@ -53,11 +59,19 @@ private _bearing90 = _logic getVariable ["bearing90", true];
 private _bearing180 = _logic getVariable ["bearing180", true];
 private _bearing270 = _logic getVariable ["bearing270", true];
 
+private _initialDelay = _logic getVariable ["initialdelay", 10];
 private _maxWaves = _logic getVariable ["maxwaves", 3];
 private _timeBetweenWaves = _logic getVariable ["timebetweenwaves", 120];
 private _enableWhistles = _logic getVariable ["enablewhistles", true];
 private _enableRadio = _logic getVariable ["enableradio", false];
 private _enableHC = _logic getVariable ["enablehc", false];
+
+private _enableChargers = _logic getVariable ["enablechargers", false];
+private _chargerClassnamesRaw = _logic getVariable ["chargerclassnames", ""];
+private _chargerUnitsMin = _logic getVariable ["chargerunitsmin", 2];
+private _chargerUnitsMax = _logic getVariable ["chargerunitsmax", 6];
+private _chargerMaxWaves = _logic getVariable ["chargermaxwaves", 2];
+private _chargerTimeBetweenWaves = _logic getVariable ["chargertimebetweenwaves", 180];
 
 // ========================================
 // VALIDATE
@@ -84,10 +98,22 @@ if (count _bearings == 0) exitWith {
 
 _unitsMin = _unitsMin max 1;
 _unitsMax = _unitsMax max _unitsMin;
+_initialDelay = _initialDelay max 0;
 _maxWaves = _maxWaves max 1;
 _timeBetweenWaves = _timeBetweenWaves max 10;
 _triggerRadius = _triggerRadius max 50;
 _spawnDistance = _spawnDistance max 100;
+_chargerUnitsMin = _chargerUnitsMin max 1;
+_chargerUnitsMax = _chargerUnitsMax max _chargerUnitsMin;
+_chargerMaxWaves = _chargerMaxWaves max 1;
+_chargerTimeBetweenWaves = _chargerTimeBetweenWaves max 10;
+
+// Chargers are optional; a missing pool disables the tier, not the module
+private _chargerClassnames = [_chargerClassnamesRaw] call Recondo_fnc_parseClassnames;
+if (_enableChargers && {_chargerClassnames isEqualTo []}) then {
+    diag_log "[RECONDO_WAVEATK] WARNING: Chargers enabled but no charger classnames configured. Chargers disabled.";
+    _enableChargers = false;
+};
 
 private _attackingSide = switch (_attackingSideNum) do {
     case 1: { west };
@@ -137,6 +163,13 @@ private _radioSounds = [];
     };
 } forEach ["n", "y"];
 
+// Charge scream pool (vn-talks-y-01..30): screamed by charger groups within
+// 100m of players (see fn_spawnWaveChargerGroup). Always on when chargers are
+private _screamSounds = [];
+for "_i" from 1 to 30 do {
+    _screamSounds pushBack format ["vn-talks-y-%1%2", ["", "0"] select (_i < 10), _i];
+};
+
 private _instanceId = format ["waveatk_%1_%2", _markerPrefix, count (missionNamespace getVariable ["RECONDO_WAVEATK_INSTANCES", []])];
 
 private _settings = createHashMapFromArray [
@@ -151,13 +184,21 @@ private _settings = createHashMapFromArray [
     ["unitsMax", _unitsMax],
     ["spawnDistance", _spawnDistance],
     ["bearings", _bearings],
+    ["initialDelay", _initialDelay],
     ["maxWaves", _maxWaves],
     ["timeBetweenWaves", _timeBetweenWaves],
     ["enableWhistles", _enableWhistles],
     ["enableRadio", _enableRadio],
     ["enableHC", _enableHC],
+    ["enableChargers", _enableChargers],
+    ["chargerClassnames", _chargerClassnames],
+    ["chargerUnitsMin", _chargerUnitsMin],
+    ["chargerUnitsMax", _chargerUnitsMax],
+    ["chargerMaxWaves", _chargerMaxWaves],
+    ["chargerTimeBetweenWaves", _chargerTimeBetweenWaves],
     ["whistleSounds", ["enemy_whistle_2", "enemy_whistle_3", "enemy_whistle_4", "enemy_whistling_2", "enemy_whistling_3", "enemy_whistling_4"]],
     ["radioSounds", _radioSounds],
+    ["screamSounds", _screamSounds],
     ["pendingMarkers", _activeMarkers],
     ["debugLogging", _debugLogging],
     ["debugMarkers", _debugMarkers]
@@ -183,6 +224,22 @@ if (isNil "RECONDO_WAVEATK_fnc_playSound") then {
         playSound3D [_soundPath, _unit, false, getPosASL _unit, 5, 1, 300];
     ";
     publicVariable "RECONDO_WAVEATK_fnc_playSound";
+};
+
+// Charge screams: loud like the whistles - a banzai scream should carry.
+// The 100m proximity gate in the charger loop controls when screaming
+// STARTS, not how far it is heard
+if (isNil "RECONDO_WAVEATK_fnc_playScreamSound") then {
+    RECONDO_WAVEATK_fnc_playScreamSound = compileFinal "
+        if (!hasInterface) exitWith {};
+        params ['_unit', '_sounds'];
+        if (_sounds isEqualTo []) exitWith {};
+        if (player distance _unit > 300) exitWith {};
+        private _sound = selectRandom _sounds;
+        private _soundPath = '\recondo_wars\sounds\vn_y\' + _sound + '.ogg';
+        playSound3D [_soundPath, _unit, false, getPosASL _unit, 5, 1, 300];
+    ";
+    publicVariable "RECONDO_WAVEATK_fnc_playScreamSound";
 };
 
 // Radio chatter is quieter than the whistles - a manpack radio should read as
@@ -230,8 +287,9 @@ if (_debugMarkers) then {
 // FINAL LOG
 // ========================================
 
-diag_log format ["[RECONDO_WAVEATK] Module initialized: %1/%2 markers active (prefix '%3', %4%5), trigger %6 within %7m, %8 waves of %9-%10 units from bearings %11, %12s between waves",
-    count _activeMarkers, count _markers, _markerPrefix, _activeMarkerPercent, "%", _triggerSideStr, _triggerRadius, _maxWaves, _unitsMin, _unitsMax, _bearings, _timeBetweenWaves];
+diag_log format ["[RECONDO_WAVEATK] Module initialized: %1/%2 markers active (prefix '%3', %4%5), trigger %6 within %7m, %8 waves of %9-%10 units from bearings %11, %12s between waves, chargers: %13",
+    count _activeMarkers, count _markers, _markerPrefix, _activeMarkerPercent, "%", _triggerSideStr, _triggerRadius, _maxWaves, _unitsMin, _unitsMax, _bearings, _timeBetweenWaves,
+    if (_enableChargers) then { format ["%1 waves every %2s", _chargerMaxWaves, _chargerTimeBetweenWaves] } else { "off" }];
 
 if (_debugLogging) then {
     diag_log format ["[RECONDO_WAVEATK] Active markers: %1", _activeMarkers];

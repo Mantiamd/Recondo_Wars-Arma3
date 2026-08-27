@@ -67,7 +67,9 @@ private _groupSoundInterval = if (_soundInterval <= 0) then {
 private _lastSoundTime = if (_groupSoundInterval > 0) then { time - (random _groupSoundInterval) } else { 0 };  // Random initial offset so groups don't sync up
 // Starts expired: the first time the group closes within 100m of a player it
 // chatters immediately, then settles into the interval cadence
-private _lastRadioTime = time - _groupSoundInterval;
+// Random initial offset so groups don't all clear the 100m radio gate on
+// the same tick and chatter in unison (same rationale as _lastSoundTime above)
+private _lastRadioTime = if (_groupSoundInterval > 0) then { time - (random _groupSoundInterval) } else { 0 };
 private _lastMoveTime = 0;
 private _lastKnownPos = if (count _initialTargetPos > 0) then { _initialTargetPos } else { getPos _leader };
 private _searching = false;

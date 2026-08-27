@@ -3,11 +3,15 @@
     Runs the full wave sequence for one triggered marker
 
     Description:
-        Spawns waves on a fixed countdown. Each wave spawns one group per
-        selected bearing simultaneously. Before every wave after the
-        first, trigger-side players must still be inside the trigger
-        radius or the sequence stops and surviving groups that are away
-        from players are despawned. Server-only.
+        After the trigger fires, waits the configured initial delay, then
+        spawns waves on a fixed countdown. Each wave spawns one group per
+        selected bearing simultaneously. Once triggered, the sequence
+        always runs to completion - there is no players-still-in-area
+        requirement. Server-only.
+
+        When chargers are enabled, a second schedule with its own wave
+        count and countdown runs in parallel after the same initial
+        delay, spawning charger groups (fn_spawnWaveChargerGroup).
 
     Parameters:
         0: HASHMAP - Module settings
@@ -22,9 +26,7 @@ if (!isServer) exitWith {};
 params ["_settings", "_marker"];
 
 private _instanceId = _settings get "instanceId";
-private _triggerRadius = _settings get "triggerRadius";
-private _triggerSideStr = _settings get "triggerSideStr";
-private _heightLimit = _settings get "heightLimit";
+private _initialDelay = _settings getOrDefault ["initialDelay", 10];
 private _bearings = _settings get "bearings";
 private _maxWaves = _settings get "maxWaves";
 private _timeBetweenWaves = _settings get "timeBetweenWaves";
@@ -32,40 +34,55 @@ private _debugLogging = _settings get "debugLogging";
 
 private _markerPos = getMarkerPos _marker;
 
-private _triggerSide = switch (_triggerSideStr) do {
-    case "EAST": { east };
-    case "WEST": { west };
-    case "GUER": { independent };
-    default { sideUnknown }; // ANY
-};
-
-// Players still in the area keep the sequence alive
-private _fnc_playersInArea = {
-    private _players = allPlayers select {
-        alive _x
-        && {_triggerSideStr == "ANY" || side _x == _triggerSide}
-        && {((getPosATL _x) select 2) <= _heightLimit}
+// Both tiers hold for the same initial delay, keeping them synchronized
+// from the same trigger moment
+if (_initialDelay > 0) then {
+    if (_debugLogging) then {
+        diag_log format ["[RECONDO_WAVEATK] %1: Marker %2 triggered - first spawn in %3s",
+            _instanceId, _marker, _initialDelay];
     };
-    (_players findIf { _x distance2D _markerPos <= _triggerRadius }) != -1
+    sleep _initialDelay;
 };
 
-private _spawnedGroups = [];
-private _waveNumber = 0;
-private _aborted = false;
+// Charger tier: own wave count and countdown, running in parallel
+if (_settings getOrDefault ["enableChargers", false]) then {
+    [_settings, _marker, _markerPos] spawn {
+        params ["_settings", "_marker", "_markerPos"];
 
-while {_waveNumber < _maxWaves && !_aborted} do {
+        private _instanceId = _settings get "instanceId";
+        private _bearings = _settings get "bearings";
+        private _chargerMaxWaves = _settings get "chargerMaxWaves";
+        private _chargerTimeBetweenWaves = _settings get "chargerTimeBetweenWaves";
+        private _debugLogging = _settings get "debugLogging";
+
+        private _waveNumber = 0;
+
+        while {_waveNumber < _chargerMaxWaves} do {
+            _waveNumber = _waveNumber + 1;
+
+            {
+                [_settings, _marker, _markerPos, _x, _waveNumber] call Recondo_fnc_spawnWaveChargerGroup;
+            } forEach _bearings;
+
+            if (_debugLogging) then {
+                diag_log format ["[RECONDO_WAVEATK] %1: Marker %2 charger wave %3/%4 spawned (%5 groups)",
+                    _instanceId, _marker, _waveNumber, _chargerMaxWaves, count _bearings];
+            };
+
+            if (_waveNumber < _chargerMaxWaves) then {
+                sleep _chargerTimeBetweenWaves;
+            };
+        };
+    };
+};
+
+private _waveNumber = 0;
+
+while {_waveNumber < _maxWaves} do {
     _waveNumber = _waveNumber + 1;
 
-    // Wave 1 spawns on trigger; later waves require players still in the area
-    if (_waveNumber > 1 && {!(call _fnc_playersInArea)}) exitWith {
-        _aborted = true;
-    };
-
     {
-        private _group = [_settings, _marker, _markerPos, _x, _waveNumber] call Recondo_fnc_spawnWaveAttackGroup;
-        if (!isNull _group) then {
-            _spawnedGroups pushBack _group;
-        };
+        [_settings, _marker, _markerPos, _x, _waveNumber] call Recondo_fnc_spawnWaveAttackGroup;
     } forEach _bearings;
 
     if (_debugLogging) then {
@@ -78,32 +95,6 @@ while {_waveNumber < _maxWaves && !_aborted} do {
     };
 };
 
-if (_aborted) then {
-    if (_debugLogging) then {
-        diag_log format ["[RECONDO_WAVEATK] %1: Marker %2 sequence stopped after wave %3 - no players in area",
-            _instanceId, _marker, _waveNumber - 1];
-    };
-
-    // Despawn surviving groups, but never in front of players
-    {
-        private _group = _x;
-        if (!isNull _group) then {
-            private _units = units _group select { alive _x };
-            private _nearPlayers = (_units findIf {
-                private _unit = _x;
-                (allPlayers findIf { _x distance _unit < 300 }) != -1
-            }) != -1;
-
-            if (!_nearPlayers) then {
-                { deleteVehicle _x } forEach _units;
-                if (_debugLogging) then {
-                    diag_log format ["[RECONDO_WAVEATK] %1: Despawned group at marker %2", _instanceId, _marker];
-                };
-            };
-        };
-    } forEach _spawnedGroups;
-} else {
-    if (_debugLogging) then {
-        diag_log format ["[RECONDO_WAVEATK] %1: Marker %2 sequence complete (%3 waves)", _instanceId, _marker, _maxWaves];
-    };
+if (_debugLogging) then {
+    diag_log format ["[RECONDO_WAVEATK] %1: Marker %2 sequence complete (%3 waves)", _instanceId, _marker, _maxWaves];
 };

@@ -124,7 +124,9 @@ if (_enableRadio && {_radioSounds isNotEqualTo []}) then {
         params ["_group", "_radioSounds"];
 
         private _interval = (60 + (random 20) - 10) max 30;
-        private _lastRadioTime = time - _interval;
+        // Random initial offset so groups spawned in the same wave don't
+        // all clear the 100m gate in the same tick and chatter in unison
+        private _lastRadioTime = time - (random _interval);
 
         while {!isNull _group && {(units _group findIf { alive _x }) != -1}} do {
             private _leader = leader _group;

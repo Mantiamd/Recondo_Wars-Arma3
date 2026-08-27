@@ -97,27 +97,9 @@ for "_i" from 0 to (_hostageCount - 1) do {
 // Check if all hostages rescued
 private _allRescued = _rescuedCount >= _hostageCount;
 
-// Notify all players
-private _rescueMsg = if (_allRescued) then {
-    format ["%1 rescued! All hostages have been saved! (%2/%3)", _hostageName, _rescuedCount, _hostageCount]
-} else {
-    format ["%1 has been rescued! (%2/%3 hostages saved)", _hostageName, _rescuedCount, _hostageCount]
-};
-[_rescueMsg] remoteExec ["systemChat", 0];
-
-// Show visual notification
-private _titleText = if (_allRescued) then {
-    format [
-        "<t size='1.5' color='#00ff00'>All Hostages Rescued!</t><br/><t size='1'>%1 hostages have been saved.</t>",
-        _hostageCount
-    ]
-} else {
-    format [
-        "<t size='1.5' color='#00ff00'>%1 Rescued!</t><br/><t size='1'>%2 of %3 hostages saved.</t>",
-        _hostageName, _rescuedCount, _hostageCount
-    ]
-};
-[_titleText, "PLAIN", 3, true, true] remoteExec ["titleText", 0];
+// Completion is surfaced via the Intel Board (remaining/completed counts)
+// rather than pop-ups; the _allRescued state still drives Intel target
+// completion below.
 
 // If all hostages at a location are rescued, complete the Intel target for that location
 if (!isNil "_settings") then {
@@ -166,7 +148,7 @@ if (!isNil "RECONDO_RP_SETTINGS") then {
     private _rescuingPlayer = _hostage getVariable ["RECONDO_HOSTAGE_rescuedBy", objNull];
     if (!isNull _rescuingPlayer && isPlayer _rescuingPlayer) then {
         private _rescuingGroup = group _rescuingPlayer;
-        ["hostage", _rescuingGroup, 0, format ["Hostage %1 rescued!", _hostageName]] call Recondo_fnc_rpAwardPoints;
+        ["hostage", _rescuingGroup, 0, "", true] call Recondo_fnc_rpAwardPoints;
     };
 };
 
