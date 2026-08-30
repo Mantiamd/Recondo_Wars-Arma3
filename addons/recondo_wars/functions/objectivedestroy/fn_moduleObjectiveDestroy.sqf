@@ -50,6 +50,7 @@ private _compBivouac7 = _logic getVariable ["comp_bivouac_7", false];
 private _compBivouac8 = _logic getVariable ["comp_bivouac_8", false];
 private _compNVABivouac9 = _logic getVariable ["comp_nva_bivouac_9", false];
 private _compBivouac10 = _logic getVariable ["comp_bivouac_10", false];
+private _compVCBoatLaunch = _logic getVariable ["comp_vc_boat_launch", false];
 private _customCompPath = "compositions";
 private _customCompEnabled = _logic getVariable ["customcompenabled", false];
 private _customCompData = _logic getVariable ["customcompdata", ""];
@@ -135,6 +136,7 @@ if (_compBivouac7) then { _compositionPool pushBack ["Bivouac_7.sqe", "Bivouac_d
 if (_compBivouac8) then { _compositionPool pushBack ["Bivouac_8.sqe", "Bivouac_destroyed.sqe", true]; };
 if (_compNVABivouac9) then { _compositionPool pushBack ["NVA_Bivouac_9.sqe", "Bivouac_destroyed.sqe", true]; };
 if (_compBivouac10) then { _compositionPool pushBack ["Bivouac_10.sqe", "Bivouac_destroyed.sqe", true]; };
+if (_compVCBoatLaunch) then { _compositionPool pushBack ["VC_BoatLaunch.sqe", "VC_BoatLaunch_destroyed.sqe", true]; };
 
 // Register the pasted custom composition (if enabled) and add it to the pool.
 private _customTokens = [_customCompEnabled, _customCompData, _customDestroyedData, format ["%1_%2", _markerPrefix, _objectiveName]] call Recondo_fnc_registerCustomComposition;

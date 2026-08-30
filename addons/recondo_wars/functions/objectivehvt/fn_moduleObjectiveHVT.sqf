@@ -57,6 +57,7 @@ private _compShack5 = _logic getVariable ["comp_shack_5", false];
 private _compShack6 = _logic getVariable ["comp_shack_6", false];
 private _compShack7 = _logic getVariable ["comp_shack_7", false];
 private _compShack8 = _logic getVariable ["comp_shack_8", false];
+private _compVCBoatLaunch = _logic getVariable ["comp_vc_boat_launch", false];
 private _customCompPath = "compositions";
 private _customCompEnabled = _logic getVariable ["customcompenabled", false];
 private _customCompData = _logic getVariable ["customcompdata", ""];
@@ -259,6 +260,7 @@ if (_compShack5) then { _compositionPool pushBack ["Shack_5.sqe", true]; };
 if (_compShack6) then { _compositionPool pushBack ["Shack_6.sqe", true]; };
 if (_compShack7) then { _compositionPool pushBack ["Shack_7.sqe", true]; };
 if (_compShack8) then { _compositionPool pushBack ["Shack_8.sqe", true]; };
+if (_compVCBoatLaunch) then { _compositionPool pushBack ["VC_BoatLaunch.sqe", true]; };
 
 // Register the pasted custom composition (if enabled) and add it to the pool.
 private _customTokens = [_customCompEnabled, _customCompData, "", format ["%1_%2", _markerPrefix, _objectiveName]] call Recondo_fnc_registerCustomComposition;

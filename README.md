@@ -27,7 +27,7 @@ A comprehensive Arma 3 mod designed for SOG Prairie Fire operations, providing E
 ### Mission Objectives
 > All objective completions are silent by design: no `systemChat` broadcast, no `titleText` popup, no Recon Points toast. Status (remaining/completed counts, grid references, turn-ins) is surfaced through the Intel Board. Recon Points are still awarded to the credited player/group, just without the on-screen notification.
 
-- **Objective Destroy** - Destructible target objectives with composition support (6 cache + 10 bivouac compositions). Optional custom target inventory (comma-separated classnames replace the target object's default cargo)
+- **Objective Destroy** - Destructible target objectives with composition support (6 cache, 10 bivouac, and a VC boat launch composition). Optional custom target inventory (comma-separated classnames replace the target object's default cargo)
 - **Objective HVT** - High-Value Target capture/kill objectives with custom profiles, optional Bad Civi spawns at real HVT locations, wandering civilians, and roving sentries
 - **Objective Hostages** - Hostage rescue objectives with AI guards, optional Bad Civi spawns at real hostage locations, and wandering civilians
 - **Objective Photographs** - Reconnaissance photography objectives using the SOG PF camera system with configurable compositions, target validation, and Intel Board integration

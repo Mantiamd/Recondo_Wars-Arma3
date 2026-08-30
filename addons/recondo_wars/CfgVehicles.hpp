@@ -6317,6 +6317,16 @@ class CfgVehicles {
                 defaultValue = "false";
                 category = "Recondo_ObjDestroy_CompPool";
             };
+            class Comp_VCBoatLaunch {
+                displayName = "VC Boat Launch";
+                tooltip = "Enable this composition in the selection pool (VC_BoatLaunch.sqe / VC_BoatLaunch_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_ObjDestroy_Comp_VCBoatLaunch";
+                expression = "_this setVariable ['comp_vc_boat_launch', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_ObjDestroy_CompPool";
+            };
 
             // ========================================
             // CUSTOM COMPOSITIONS
@@ -7010,6 +7020,16 @@ class CfgVehicles {
                 control = "Checkbox";
                 property = "Recondo_HubSubs_Comp_HVTBASE3";
                 expression = "_this setVariable ['comp_hvtbase_3', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HubSubs_CompPool";
+            };
+            class Comp_VCBoatLaunch {
+                displayName = "VC Boat Launch";
+                tooltip = "Enable this composition in the selection pool (VC_BoatLaunch.sqe / VC_BoatLaunch_destroyed.sqe).";
+                control = "Checkbox";
+                property = "Recondo_HubSubs_Comp_VCBoatLaunch";
+                expression = "_this setVariable ['comp_vc_boat_launch', _value, true];";
                 typeName = "BOOL";
                 defaultValue = "false";
                 category = "Recondo_HubSubs_CompPool";
@@ -7825,7 +7845,17 @@ class CfgVehicles {
                 defaultValue = "false";
                 category = "Recondo_HVT_CompositionPool";
             };
-            
+            class Comp_VCBoatLaunch {
+                displayName = "VC Boat Launch";
+                tooltip = "Enable this composition in the selection pool.";
+                control = "Checkbox";
+                property = "Recondo_HVT_Comp_VCBoatLaunch";
+                expression = "_this setVariable ['comp_vc_boat_launch', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_HVT_CompositionPool";
+            };
+
             // ========================================
             // CUSTOM COMPOSITION SETTINGS
             // ========================================
@@ -8777,7 +8807,17 @@ class CfgVehicles {
                 defaultValue = "false";
                 category = "Recondo_Hostage_CompositionPool";
             };
-            
+            class Comp_VCBoatLaunch {
+                displayName = "VC Boat Launch";
+                tooltip = "Enable this composition in the selection pool (VC_BoatLaunch.sqe).";
+                control = "Checkbox";
+                property = "Recondo_Hostage_Comp_VCBoatLaunch";
+                expression = "_this setVariable ['comp_vc_boat_launch', _value, true];";
+                typeName = "BOOL";
+                defaultValue = "false";
+                category = "Recondo_Hostage_CompositionPool";
+            };
+
             // ========================================
             // CUSTOM COMPOSITION SETTINGS
             // ========================================
