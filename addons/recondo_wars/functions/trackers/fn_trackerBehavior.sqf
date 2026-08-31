@@ -393,8 +393,15 @@ while {alive _leader} do {
             };
             
             // Signal shots: fire skyward every Nth footprint reached, so
-            // players hear the trackers marking their trail (SOG PF style)
-            if (alive _leader) then {
+            // players hear the trackers marking their trail (SOG PF style).
+            // Gated on actual arrival - the 60s move timeout can advance
+            // _currentFootprintIndex while the leader is still hundreds
+            // of meters short (chronic on dedicated with slower path
+            // ticks), and firing from that stuck position misrepresents
+            // the tracker's real progress. Timeouts still advance the
+            // index above so the group tries the next footprint - they
+            // just don't emit a false signal
+            if (alive _leader && {_leader distance _footprintPos <= 5}) then {
                 _footprintsReached = _footprintsReached + 1;
                 if (_enableSignalShots && {_footprintsReached mod _signalShotInterval == 0}) then {
                     [_group] call Recondo_fnc_trackerSignalShot;
