@@ -6676,7 +6676,7 @@ class CfgVehicles {
                 property = "Recondo_ObjDestroy_SmellHintRadius";
                 expression = "_this setVariable ['smellhintradius', parseNumber _value, true];";
                 typeName = "STRING";
-                defaultValue = """200""";
+                defaultValue = """100""";
                 category = "Recondo_ObjDestroy_SmellHints";
             };
             class SmellHintMessages {
@@ -7529,7 +7529,7 @@ class CfgVehicles {
                 property = "Recondo_HubSubs_SmellHintRadius";
                 expression = "_this setVariable ['smellhintradius', parseNumber _value, true];";
                 typeName = "STRING";
-                defaultValue = """200""";
+                defaultValue = """100""";
                 category = "Recondo_HubSubs_SmellHints";
             };
             class SmellHintMessages {
@@ -8245,7 +8245,7 @@ class CfgVehicles {
                 property = "Recondo_HVT_SmellHintRadius";
                 expression = "_this setVariable ['smellhintradius', parseNumber _value, true];";
                 typeName = "STRING";
-                defaultValue = """200""";
+                defaultValue = """100""";
                 category = "Recondo_HVT_SmellHints";
             };
             class SmellHintMessages {
@@ -9207,7 +9207,7 @@ class CfgVehicles {
                 property = "Recondo_Hostage_SmellHintRadius";
                 expression = "_this setVariable ['smellhintradius', parseNumber _value, true];";
                 typeName = "STRING";
-                defaultValue = """200""";
+                defaultValue = """100""";
                 category = "Recondo_Hostage_SmellHints";
             };
             class SmellHintMessages {
@@ -10036,7 +10036,7 @@ class CfgVehicles {
                 property = "Recondo_Jammer_SmellHintRadius";
                 expression = "_this setVariable ['smellhintradius', parseNumber _value, true];";
                 typeName = "STRING";
-                defaultValue = """200""";
+                defaultValue = """100""";
                 category = "Recondo_Jammer_SmellHints";
             };
             class SmellHintMessages {
@@ -13180,7 +13180,7 @@ class CfgVehicles {
                 property = "Recondo_CampsRandom_SmellHintRadius";
                 expression = "_this setVariable ['smellhintradius', parseNumber _value, true];";
                 typeName = "STRING";
-                defaultValue = """150""";
+                defaultValue = """100""";
                 category = "Recondo_CampsRandom_SmellHints";
             };
             
@@ -16233,7 +16233,7 @@ class CfgVehicles {
                 property = "Recondo_Photo_SmellHintRadius";
                 expression = "_this setVariable ['smellhintradius', parseNumber _value, true];";
                 typeName = "STRING";
-                defaultValue = """200""";
+                defaultValue = """100""";
                 category = "Recondo_Photo_Hints";
             };
             class SmellHintMessages {
