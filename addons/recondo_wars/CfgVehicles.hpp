@@ -6392,7 +6392,7 @@ class CfgVehicles {
                 property = "Recondo_ObjDestroy_TargetInventory";
                 expression = "_this setVariable ['targetinventory', _value, true];";
                 typeName = "STRING";
-                defaultValue = """""";
+                defaultValue = """vn_type56_mag,vn_type56_mag,vn_type56_mag,vn_t67_grenade_mag,vn_t67_grenade_mag,vn_t67_grenade_mag,vn_rpd_125_mag,vn_rpg7_mag""";
                 category = "Recondo_ObjDestroy_Target";
             };
             class DisableSimulation {
@@ -7109,7 +7109,7 @@ class CfgVehicles {
                 property = "Recondo_HubSubs_TargetInventory";
                 expression = "_this setVariable ['targetinventory', _value, true];";
                 typeName = "STRING";
-                defaultValue = """""";
+                defaultValue = """vn_type56_mag,vn_type56_mag,vn_type56_mag,vn_t67_grenade_mag,vn_t67_grenade_mag,vn_t67_grenade_mag,vn_rpd_125_mag,vn_rpg7_mag""";
                 category = "Recondo_HubSubs_HubTarget";
             };
             
@@ -11954,7 +11954,7 @@ class CfgVehicles {
                 property = "Recondo_OutpostTele_DestroyableInventory";
                 expression = "_this setVariable ['targetinventory', _value, true];";
                 typeName = "STRING";
-                defaultValue = """""";
+                defaultValue = """vn_type56_mag,vn_type56_mag,vn_type56_mag,vn_t67_grenade_mag,vn_t67_grenade_mag,vn_t67_grenade_mag,vn_rpd_125_mag,vn_rpg7_mag""";
                 category = "Recondo_OutpostTele_Destruction";
             };
             
